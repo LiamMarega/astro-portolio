@@ -17,8 +17,12 @@ const { title } = Astro.props;
 </body>
 </html>
 
-<style>
+<style is:global>
+	html {
+		color-scheme: dark light;
+	}
 	body {
+		background-color: black;
 		font-family: Arial, sans-serif;
 		color: black
 	}
