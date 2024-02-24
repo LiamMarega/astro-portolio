@@ -1,4 +1,6 @@
 ---
+import SvgBackground from '../utils/SvgBackground.astro';
+import Navbar from '../components/Navbar.astro';
 interface Props {
 	title: string;
 }
@@ -13,17 +15,81 @@ const { title } = Astro.props;
 	<title>{title}</title>
 </head>
 <body>
+	<Navbar />
 	<slot />
+	<SvgBackground />
 </body>
 </html>
 
 <style is:global>
+
+	@font-face {
+		font-family: 'HelveticaNeue';
+		src: url('fonts/HelveticaNeueBold.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 700;
+	}
+	@font-face {
+		font-family: 'HelveticaNeue';
+		src: url('fonts/HelveticaNeueBold.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 700;
+	}
+	@font-face {
+		font-family: 'HelveticaNeue';
+		src: url('fonts/HelveticaBlkIt.ttf') format('truetype');
+		font-style: italic;
+		font-display: swap;
+		font-weight: 800;
+	}
+	@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 400;
+	}
+	@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/OpenSans-Medium.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 500;
+	}
+	@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/OpenSans-Light.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 300;
+	}
+	@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/OpenSans-ExtraBold.ttf') format('truetype');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 800;
+	}
+	@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/OpenSans-ExtraBoldItalic.ttf') format('truetype');
+		font-style: italic;
+		font-display: swap;
+		font-weight: 800;
+	}
+	
 	html {
 		color-scheme: dark light;
+
 	}
 	body {
 		background-color: black;
-		font-family: Arial, sans-serif;
-		color: black
+		font-family: "OpenSans", sans-serif;
+	}
+
+	h1 {
+		font-family: "HelveticaNeue", sans-serif;
 	}
 </style>
