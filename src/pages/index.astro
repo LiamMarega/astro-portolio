@@ -5,7 +5,7 @@ import About from '../components/About.astro';
 ---
 
 <Layout title='Liam Marega'>
-  <main class='flex min-h-screen flex-col items-start justify-between px-20 relative text-white'>
+  <main class='flex h-screen flex-col items-start justify-between px-20 relative text-white'>
     <div>
       <h1 class='text-4xl md:text-9xl font-extrabold italic'>FRONTEND DEVELOPER</h1>
       <div class='container mx-auto p-4 mb-12 md:p-0'>
@@ -48,9 +48,12 @@ import About from '../components/About.astro';
       </div>
       <InformativeBox />
     </div>
-    <div class='w-full h-full flex justify-end items-center pb-20 pr-20'>
-      <img src='/images/draws/arrowBucle.svg' alt='bottom-arrow' class='size-36' />
-    </div>
+    <img
+      src='/images/draws/arrowBucle.svg'
+      alt='bottom-arrow'
+      class='size-36 absolute bottom-32 right-32 md:right-40 lg:right-64 xl:right-40'
+    />
   </main>
+  <hr class='mx-40 opacity-25' />
   <About />
 </Layout>
