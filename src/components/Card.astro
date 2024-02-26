@@ -8,7 +8,7 @@ interface Props {
 const { title, description, image } = Astro.props;
 ---
 
-<div class='card'>
+<div class='card h-72 w-60'>
   <div class='circle'></div>
   <div class='circle'></div>
   <div class='card-inner'>
@@ -22,8 +22,6 @@ const { title, description, image } = Astro.props;
 
 <style>
   .card {
-    width: 190px;
-    height: 254px;
     transition: all 0.2s;
     position: relative;
     cursor: pointer;
