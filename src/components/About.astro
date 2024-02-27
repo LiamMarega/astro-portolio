@@ -1,96 +1,22 @@
 ---
-
+import Terminal from '../components/ui/Terminal.astro';
+import AboutMe1 from '../components/AboutParts/AboutMe1.astro';
+import AboutMe2 from '../components/AboutParts/AboutMe2.astro';
+import AboutMe3 from '../components/AboutParts/AboutMe3.astro';
 ---
 
-<section class='absolute w-full h-full' id='about'>
-  <!-- about me 1 -->
-
-  <div
-    id='about_me_1'
-    class='flex
-	absolute
-  justify-center
-  items-center
-  h-screen
-  w-screen
-  min-w-screen
-  text-white'
-  >
-    <div class='flex justify-between flex-col w-7/12 gap-6'>
-      <div class='flex flex-col gap-5'>
-        <h5
-          class='text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
-        >
-          Develop Anything
-        </h5>
-
-        <h5
-          class='text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
-        >
-          Together
-        </h5>
-      </div>
-      <p class='text-balance text-2xl md:text-4xl w-10/12'>
-        My name is Liam and I'm a Developer based in Argentina. Technology lover, willing to grow
-        and challenge myself in every project
-        <!-- I love to create websites
-        and mobile websites and mobile applications that are attractive, functional and easy to use.
-        I specialize in developing pixel-perfect user interfaces and using the latest technologies,
-        such as React, Next technologies such as React, Next, Astro, Flutter and Firebase. My goal
-        is to offer innovative and quality solutions to my clients, and keep learning and improving
-        my skills as a developer. I hope you like my work! -->
-      </p>
-    </div>
-    <div class='flex justify-center items-start w-[30rem]'>
-      <img src='/images/draws/arg.webp' alt='argentina-map' loading='lazy' />
-    </div>
-  </div>
-  <!-- about me 2 -->
-  <div
-    id='about_me_2'
-    class='flex
-	absolute
-   justify-center
-   items-center
-   h-screen
-   w-screen
-   text-white'
-  >
-    <div class='px-36 h-screen bg-orange-400 flex items-center justify-center'>
-      <div class='flex justify-between items-center'>
-        <div class='flex'>
-          <div class='relative w-fit'>
-            <h5
-              class='text-8xl text-nowrap font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
-            >
-              Nice and
-            </h5>
-
-            <h5
-              class='absolute z-10 shadow-2xl -right-16 -top-10 text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
-            >
-              Fast
-            </h5>
-            <h5
-              class='absolute -right-44 top-10 rotate-12 text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500'
-            >
-              Scalable
-            </h5>
-          </div>
-        </div>
-        <div class='relative w-fit h-fit'>
-          <p class='pl-80 text-balance text-2xl md:text-7xl w-10/12'>
-            Create responsive, attractive, functional and easy to use <b>applications.</b>
-          </p>
-          <img
-            src='/images/draws/Highlight_04.svg'
-            alt='highlight'
-            class='absolute -top-28 right-52 rotate-180 fill-white'
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+<section class='w-full h-full' id='about'>
+  <AboutMe1 />
+  <AboutMe2 />
+  <AboutMe3 />
 </section>
+
+<style>
+  #about {
+    width: 300%;
+    height: 100vh;
+    display: flex;
+  }
+</style>
 
 <script src='../utils/gsap.js'></script>

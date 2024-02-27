@@ -4,17 +4,20 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const tl = gsap.timeline();
+let sections = gsap.utils.toArray('.section');
 
-tl.from('#about_me_2', {
-  xPercent: -200,
+tl.to(sections, {
+  xPercent: -100 * (sections.length - 1),
   duration: 2,
+  ease: 'none',
 });
 
 ScrollTrigger.create({
   animation: tl,
+  markers: true,
   trigger: '#about',
-  start: 'top top',
-  end: '+=1000', // 1500px + 2500px = 4000px
+  start: '5% top',
   pin: true,
-  scrub: 2,
+  scrub: 0.5,
+  end: () => '+=' + document.querySelector('#about').offsetWidth - window.innerWidth,
 });
