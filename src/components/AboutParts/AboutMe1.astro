@@ -1,23 +1,30 @@
 <!-- about me 1 -->
-<div id='about_me_1' class='flex
+<div
+  id='about_me_1'
+  class='flex
+flex-col
+md:flex-row
 section
 justify-center
 items-center
 h-screen
-w-screen'>
-  <div class='flex justify-between flex-col w-5/12 gap-6'>
+w-screen'
+>
+  <div
+    class='flex justify-center items-center md:items-start md:justify-between flex-col w-12/12 md:w-5/12 gap-6'
+  >
     <h5
-      class='text-6xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
+      class='text-3xl md:text-6xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
     >
       Who is
     </h5>
 
     <h5
-      class='text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
+      class='text-xl md:text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
     >
       Liam?
     </h5>
-    <p class='text-balance text-2xl md:text-4xl w-10/12'>
+    <p class='text-center text-balance md:text-start text-2xl md:text-4xl w-10/12'>
       My name is Liam and I'm a Developer based in Argentina. Technology lover, willing to grow and
       challenge myself in every project
       <!-- I love to create websites
@@ -28,7 +35,7 @@ w-screen'>
 	my skills as a developer. I hope you like my work! -->
     </p>
   </div>
-  <div class='flex justify-center items-start w-[30rem]'>
+  <div class='flex justify-center items-start w-40 md:w-[30rem]'>
     <img src='/images/draws/arg.webp' alt='argentina-map' loading='lazy' />
   </div>
 </div>

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import InformativeBox from '../components/ui/InfoBox.astro';
 import About from '../components/About.astro';
+import CardWorks from '../components/ui/Cards/CardWorks.astro';
 ---
 
 <Layout title='Liam Marega'>
@@ -14,7 +15,7 @@ import About from '../components/About.astro';
         <div class='grid grid-cols-1 md:grid-cols-3 gap-4'>
           {/* Primera parte */}
           <div
-            class='font-extralight text-center md:text-balance opacity-70 text-white p-4 rounded'
+            class='font-extralight text-center md:text-start text-balance opacity-70 text-white p-4 rounded'
           >
             <p>
               who’s code with art and Empowering startups with visually stunning and functionally
@@ -22,10 +23,8 @@ import About from '../components/About.astro';
             </p>
           </div>
           {/* Segunda parte */}
-          <div
-            class='font-extralight text-center md:text-balance opacity-70 text-white p-4 rounded'
-          >
-            <p>
+          <div class='font-extralight text-center text-balance opacity-70 text-white p-4 rounded'>
+            <p class='text-center md:text-start md:text-balance'>
               I’m a passionate developer with only year experience who uses research, data, and
               thoughtful design to create delightful products that scale.
             </p>
@@ -62,4 +61,44 @@ import About from '../components/About.astro';
   </main>
   <hr class='mx-40 opacity-25' />
   <About />
+  <div
+    class='grid grid-cols-1 md:grid-cols-3 gap-5 gap-y-20 justify-items-center items-center h-screen w-screen mb-5'
+  >
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+    <CardWorks
+      title='Ferox APP'
+      description='Ferox is a hunting social network whose objective is to unify the sector and create links between hunters. Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.'
+      image='/images/works/feroxPage.webp'
+      frameworks={['Flutter', 'Dart', 'React', 'Rest API']}
+    />
+  </div>
 </Layout>
