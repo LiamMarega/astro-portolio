@@ -1,22 +1,13 @@
 ---
-import Terminal from '../components/ui/Terminal.astro';
 import AboutMe1 from '../components/AboutParts/AboutMe1.astro';
 import AboutMe2 from '../components/AboutParts/AboutMe2.astro';
 import AboutMe3 from '../components/AboutParts/AboutMe3.astro';
 ---
 
-<section class='w-full h-full' id='about'>
+<section class='flex flex-col h-52 md:flex-row md:w-[300%] md:h-screen' id='about'>
   <AboutMe1 />
   <AboutMe2 />
   <AboutMe3 />
 </section>
-
-<style>
-  #about {
-    width: 300%;
-    height: 100vh;
-    display: flex;
-  }
-</style>
 
 <script src='../utils/gsap.js'></script>
