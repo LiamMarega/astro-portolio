@@ -2,30 +2,35 @@
 import ButtonMore from '../../ui/buttons/ButtonMore.astro';
 ---
 
-<div id='advantisAI' class='flex h-screen w-full bg-[#22a7f2bf]'>
+<div id='advantisAI' class='flex flex-row-reverse relative h-screen w-full bg-[#22A7F2]'>
   <img
-    src='/images/works/feroxMock.webp'
+    src='/images/works/advantis-scan.webp'
     alt='ferox-app-mock'
-    class='absolute right-10 bottom-0 h-[45rem]'
+    class='absolute left-10 top-20 h-60 md:h-[38rem]'
+  />
+  <img
+    src='/images/works/advantis-home.webp'
+    alt='ferox-app-mock'
+    class='absolute left-64 top-80 h-60 md:h-[35rem]'
   />
   <div class='w-3/6 h-5/6 flex flex-col justify-between gap-20 p-20'>
     <div class='flex flex-col justify-around gap-5'>
       <h5
-        class='text-3xl mb-7 md:text-6xl font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center text-[#15432b] bg-[#E4F4E4]'
+        class='text-3xl mb-7 md:text-6xl font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center text-[#22A7F2] bg-[#E4F4E4]'
       >
-        FEROX APP
+        ADVANTIS.AI
       </h5>
 
       <p class='text-[#E4F4E4] font-semibold text-3xl'>
-        Ferox is a hunting social network whose objective is to unify the sector and create links
-        between hunters.
+        Advantis AI is at the forefront of revolutionizing the decentralized finance (DeFi) industry
+        through the power of artificial intelligence (AI).
       </p>
       <p class='text-[#E4F4E4] font-semibold text-3xl'>
-        Since there is strength in numbers, it is the perfect place to come together and show that
-        we are a united sector capable of great things.
+        Your mission is to bridge the gap between technology and users, providing comprehensive
+        tools, educational resources, and a thriving community.
       </p>
       <p class='mb-2 text-[#E4F4E4] font-semibold text-3xl'>
-        We offer a series of features designed specifically for your comfort as hunters, always
+        Offering a series of features designed specifically for your comfort as hunters, always
         being attentive to the needs that arise in the sector.
       </p>
 
@@ -38,13 +43,20 @@ import ButtonMore from '../../ui/buttons/ButtonMore.astro';
         TECH STACK
       </h5>
       <div class='flex flex-row items-center p-2 gap-x-5'>
-        <img src='/images/icons/Apple_dark.svg' alt='Apple' class='size-14' />
-        <img src='/images/icons/android-icon.svg' alt='Android' class='size-14' />
-        <img src='/images/icons/flutter.svg' alt='Flutter' class='size-14' />
-        <img src='/images/icons/dart.svg' alt='dart' class='size-14' />
+        <img src='/images/icons/react.svg' alt='React-icon' class='size-14' />
+        <img src='/images/icons/typescript.svg' alt='typescript-icon' class='size-14' />
+        <img src='/images/icons/html5.svg' alt='HTML-Icon' class='size-14' />
+        <img src='/images/icons/css.svg' alt='css-icon' class='size-14' />
         <img src='/images/icons/firebase.svg' alt='firebase' class='size-14' />
-        <img src='/images/icons/stripe.svg' alt='stripe' class='size-14' />
+        <img src='/images/icons/btc.svg' alt='Bitcoin-Icon' class='size-14' />
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  img.absolute {
+    -webkit-filter: drop-shadow(-35px 35px 35px #000000);
+    filter: drop-shadow(-35px 35px 35px #000000);
+  }
+</style>
