@@ -1,0 +1,51 @@
+---
+import ButtonMore from '../../ui/buttons/ButtonMore.astro';
+---
+
+<div id='ferox' class='relative flex h-screen w-full bg-gradient-to-r from-[#629A48] to-[#F7DB49]'>
+  <img
+    src='/images/works/fmoney.webp'
+    alt='ferox-app-mock'
+    class='absolute right-10 bottom-32 h-60 md:h-[45rem]'
+  />
+  <div class='w-12/12 md:w-3/6 h-5/6 flex flex-col justify-between gap-20 p-20'>
+    <div class='flex flex-col justify-around gap-5'>
+      <h5
+        class='text-balance text-3xl mb-7 md:text-6xl font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center text-[#629A48] to-[#F7DB49] bg-[#E4F4E4]'
+      >
+        FMoney raffle
+      </h5>
+
+      <p class='text-balanc etext-[#E4F4E4] font-semibold text-lg md:text-3xl'>
+        FMoney is a blockchain technology currently applied to raffles.
+      </p>
+      <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-3xl'>
+        The platform guarantees greater transparency, instant traceability, security, greater speed,
+        and efficiency to all processes (purchase, selection of the winner, and prize claim).
+      </p>
+      <ButtonMore />
+    </div>
+    <div class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit'>
+      <h5
+        class='text-3xl md:text-4xl font-bold w-fit h-fit p-5 flex justify-center items-center text-[#E4F4E4]'
+      >
+        TECH STACK
+      </h5>
+      <div class='flex flex-row items-center p-2 gap-x-5'>
+        <img src='/images/icons/react.svg' alt='React-icon' class='size-14' />
+        <img src='/images/icons/typescript.svg' alt='typescript-icon' class='size-14' />
+        <img src='/images/icons/html5.svg' alt='HTML-Icon' class='size-14' />
+        <img src='/images/icons/css.svg' alt='css-icon' class='size-14' />
+        <img src='/images/icons/firebase.svg' alt='firebase' class='size-14' />
+        <img src='/images/icons/btc.svg' alt='Bitcoin-Icon' class='size-14' />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  img.absolute {
+    -webkit-filter: drop-shadow(-35px 35px 35px #000000);
+    filter: drop-shadow(-35px 35px 35px #000000);
+  }
+</style>
