@@ -2,18 +2,18 @@
 import ButtonMore from '../../ui/buttons/ButtonMore.astro';
 ---
 
-<div id='advantisAI' class='relative flex flex-row-reverse h-screen w-full bg-[#22A7F2]'>
+<div id='advantisAI' class='relative flex md:flex-row-reverse h-screen w-full bg-[#22A7F2]'>
   <img
     src='/images/works/advantis-scan.webp'
     alt='ferox-app-mock'
-    class='absolute left-10 top-20 h-60 md:h-[38rem]'
+    class='hidden md:block absolute left-10 top-20 h-60 md:h-[38rem]'
   />
   <img
     src='/images/works/advantis-home.webp'
     alt='ferox-app-mock'
-    class='absolute left-64 top-80 h-60 md:h-[35rem]'
+    class='hidden md:block absolute left-64 top-80 h-60 md:h-[35rem]'
   />
-  <div class='w-3/6 h-5/6 flex flex-col justify-between gap-20 p-20'>
+  <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-20 p-10 md:p-20'>
     <div class='flex flex-col justify-around gap-5'>
       <h5
         class='text-3xl mb-7 md:text-6xl font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center text-[#22A7F2] bg-[#E4F4E4]'
@@ -21,15 +21,15 @@ import ButtonMore from '../../ui/buttons/ButtonMore.astro';
         ADVANTIS.AI
       </h5>
 
-      <p class='text-balance text-[#E4F4E4] font-semibold text-3xl'>
+      <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-3xl'>
         Advantis AI is at the forefront of revolutionizing the decentralized finance (DeFi) industry
         through the power of artificial intelligence (AI).
       </p>
-      <p class='text-balance text-[#E4F4E4] font-semibold text-3xl'>
+      <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-3xl'>
         Your mission is to bridge the gap between technology and users, providing comprehensive
         tools, educational resources, and a thriving community.
       </p>
-      <p class='text-balance mb-2 text-[#E4F4E4] font-semibold text-3xl'>
+      <p class='text-balance mb-2 text-[#E4F4E4] font-semibold text-lg md:text-3xl'>
         Offering a series of features designed specifically for your comfort as hunters, always
         being attentive to the needs that arise in the sector.
       </p>
@@ -38,17 +38,17 @@ import ButtonMore from '../../ui/buttons/ButtonMore.astro';
     </div>
     <div class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit'>
       <h5
-        class='text-3xl md:text-4xl font-bold w-fit h-fit p-5 flex justify-center items-center text-[#E4F4E4]'
+        class='text-lg md:text-4xl font-bold w-fit h-fit p-5 flex justify-center items-center text-[#E4F4E4]'
       >
         TECH STACK
       </h5>
-      <div class='flex flex-row items-center p-2 gap-x-5'>
-        <img src='/images/icons/react.svg' alt='React-icon' class='size-14' />
-        <img src='/images/icons/typescript.svg' alt='typescript-icon' class='size-14' />
-        <img src='/images/icons/html5.svg' alt='HTML-Icon' class='size-14' />
-        <img src='/images/icons/css.svg' alt='css-icon' class='size-14' />
-        <img src='/images/icons/firebase.svg' alt='firebase' class='size-14' />
-        <img src='/images/icons/btc.svg' alt='Bitcoin-Icon' class='size-14' />
+      <div class='flex flex-row items-center p-2 gap-x-5 md:pb-0'>
+        <img src='/images/icons/react.svg' alt='React-icon' class='size-6 md:size-14' />
+        <img src='/images/icons/typescript.svg' alt='typescript-icon' class='size-6 md:size-14' />
+        <img src='/images/icons/html5.svg' alt='HTML-Icon' class='size-6 md:size-14' />
+        <img src='/images/icons/css.svg' alt='css-icon' class='size-6 md:size-14' />
+        <img src='/images/icons/firebase.svg' alt='firebase' class='size-6 md:size-14' />
+        <img src='/images/icons/btc.svg' alt='Bitcoin-Icon' class='size-6 md:size-14' />
       </div>
     </div>
   </div>

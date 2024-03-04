@@ -3,13 +3,19 @@ import Terminal from '../../ui/Terminal.astro';
 ---
 
 <!-- about me 3 -->
-<div id='about_me_3' class='flex
+<div
+  id='about_me_3'
+  class='flex
  section
+ overflow-x-hidden
 justify-center
 items-center
 w-screen
-h-screen
-px-36'>
+h-3/6
+md:h-screen
+px-0.5
+md:px-36'
+>
   <div class='relative w-3/6'>
     <h5 class='text-2xl md:text-6xl'>
       I specialize in developing &nbsp;
@@ -44,7 +50,7 @@ px-36'>
       >.
     </h5>
   </div>
-  <div class='relative w-3/6 h-fit'>
+  <div class='relative w-10 md:w-3/6 h-fit'>
     <Terminal />
   </div>
 
