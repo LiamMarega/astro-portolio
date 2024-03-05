@@ -11,13 +11,14 @@ import Terminal from '../../ui/Terminal.astro';
 justify-center
 items-center
 w-screen
-h-3/6
+h-[50vh]
 md:h-screen
 px-0.5
-md:px-36'
+md:px-36
+gap-10'
 >
-  <div class='relative w-3/6'>
-    <h5 class='text-2xl md:text-6xl'>
+  <div class='relative w-5/6 md:w-3/6 z-20'>
+    <h5 class='text-2xl mt-5 md:mt-0 md:text-6xl'>
       I specialize in developing &nbsp;
       <strong class='text-green-300'>pixel-perfect</strong>
       user interfaces and using the latest technologies, such as <br />
@@ -50,7 +51,7 @@ md:px-36'
       >.
     </h5>
   </div>
-  <div class='relative w-10 md:w-3/6 h-fit'>
+  <div class='w-10 md:w-3/6 absolute left-5 md:relative z-10'>
     <Terminal />
   </div>
 
