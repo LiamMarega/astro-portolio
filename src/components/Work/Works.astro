@@ -1,13 +1,93 @@
 ---
-import FeroxWork from '../Work/parts/FeroxWork.astro';
-import AdvantisWork from '../Work/parts/AdvantisWork.astro';
-import FMoneyWork from '../Work/parts/FMoneyWork.astro';
-import LamShoesWork from '../Work/parts/LamShoesWork.astro';
+import WorkCard from '../Work/parts/WorkCard.astro';
 ---
 
 <section id='work' class='relative rounded-t-3xl h-screen w-full'>
-  <FeroxWork />
-  <AdvantisWork />
-  <FMoneyWork />
-  <LamShoesWork />
+  <WorkCard
+    {...{
+      id: 'ferox',
+      title: 'Ferox app',
+      color: '#15432b',
+      description: [
+        'Ferox is a hunting social network whose objective is to unify the sector and create links between hunters.',
+        'Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.',
+        'We offer a series of features designed specifically for your comfort as hunters, always being attentive to the needs that arise in the sector.',
+      ],
+      images: [
+        {
+          src: '/images/works/feroxMock.webp',
+          alt: 'ferox-app-mock',
+          class: 'hidden md:block absolute right-10 bottom-0 h-60 md:h-[45rem]',
+        },
+      ],
+      techStack: [
+        { src: '/images/icons/react.svg', alt: 'react-icon' },
+        { src: '/images/icons/typescript.svg', alt: 'typescript-icon' },
+        { src: '/images/icons/html5.svg', alt: 'html5-icon' },
+        { src: '/images/icons/css.svg', alt: 'css-icon' },
+        { src: '/images/icons/firebase.svg', alt: 'firebase-icon' },
+        { src: '/images/icons/stripe.svg', alt: 'stripe-icon' },
+      ],
+    }}
+  />
+  <WorkCard
+    {...{
+      id: 'advantisAI',
+      title: 'ADVANTIS.AI',
+      color: '#22A7F2',
+      reverse: true,
+      description: [
+        'Advantis AI is at the forefront of revolutionizing the decentralized finance (DeFi) industry through the power of artificial intelligence (AI).',
+        'Your mission is to bridge the gap between technology and users, providing comprehensive tools, educational resources, and a thriving community.',
+        'Offering a series of features designed specifically for your comfort as hunters, always being attentive to the needs that arise in the sector.',
+      ],
+      images: [
+        {
+          src: '/images/works/advantis-scan.webp',
+          alt: 'advantis-mockup-scan',
+          class: 'hidden md:block absolute md:left-3 xl:left-10 top-20 md:h-3/6 xl:h-[38rem]',
+        },
+        {
+          src: '/images/works/advantis-home.webp',
+          alt: 'advantis-mockup-home',
+          class: 'hidden md:block absolute md:left-3 xl:left-64 top-80 md:h-2/6 xl:h-[35rem]',
+        },
+      ],
+      techStack: [
+        { src: '/images/icons/react.svg', alt: 'Apple-icon' },
+        { src: '/images/icons/android-icon.svg', alt: 'android-icon' },
+        { src: '/images/icons/flutter.svg', alt: 'flutter-icon' },
+        { src: '/images/icons/dart.svg', alt: 'dart-icon' },
+        { src: '/images/icons/firebase.svg', alt: 'firebase-icon' },
+        { src: '/images/icons/btc.svg', alt: 'btc-icon' },
+      ],
+    }}
+  />
+  <WorkCard
+    {...{
+      id: 'fmoney',
+      title: 'FMoney raffle',
+      color: '#15432b',
+      description: [
+        'FMoney is a blockchain technology currently applied to raffles.',
+        'The platform guarantees greater transparency, instant traceability, security, greater speed, and efficiency to all processes (purchase, selection of the winner, and prize claim).',
+      ],
+      images: [
+        {
+          src: '/images/works/fmoney.webp',
+          alt: 'ferox-app-mock',
+          class: 'hidden md:block absolute right-10 bottom-32 h-60 md:h-[45rem]',
+        },
+      ],
+      techStack: [
+        { src: '/images/icons/react.svg', alt: 'Apple-icon' },
+        { src: '/images/icons/android-icon.svg', alt: 'android-icon' },
+        { src: '/images/icons/flutter.svg', alt: 'flutter-icon' },
+        { src: '/images/icons/dart.svg', alt: 'dart-icon' },
+        { src: '/images/icons/firebase.svg', alt: 'firebase-icon' },
+        { src: '/images/icons/metamask.svg', alt: 'stripe-icon' },
+      ],
+    }}
+  />
+  <!-- <LamShoesWork /> -->
 </section>
