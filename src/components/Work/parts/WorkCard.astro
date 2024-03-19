@@ -6,7 +6,8 @@ interface Props {
   title: string;
   description: string[];
   techStack: TechStack[];
-  color: string;
+  bgColor: string;
+  textColor: string;
   images: Image[];
   reverse?: boolean;
 }
@@ -22,18 +23,27 @@ type Image = {
   class: string;
 };
 
-const { id, title, description, images, techStack, color, reverse = false } = Astro.props;
+const {
+  id,
+  title,
+  description,
+  images,
+  techStack,
+  bgColor,
+  textColor,
+  reverse = false,
+} = Astro.props;
 ---
 
 <div
   id={id}
-  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} h-screen w-full bg-[${color}]`}
+  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} h-screen w-full ${bgColor}`}
 >
   {images.map((image) => <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />)}
   <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-20 p-10 md:p-20'>
     <div class='flex flex-col justify-around gap-5'>
       <h5
-        class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center text-[${color}] bg-[#E4F4E4] md:text-4xl xl:text-6xl`}
+        class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl xl:text-6xl`}
       >
         {title}
       </h5>
