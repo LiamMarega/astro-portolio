@@ -6,15 +6,16 @@
 flex-col
 md:flex-row
 section
-justify-center
-items-center
+justify-start
+items-start
+md:items-center
 h-3/6
 md:h-screen
 w-screen
 py-20
 md:py-0'
 >
-  <div class='relative w-fit gap-6'>
+  <div class='relative w-fit gap-6 pl-10 md:pl-0'>
     <h5
       class='text-4xl md:text-8xl text-nowrap font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
     >
@@ -22,12 +23,12 @@ md:py-0'
     </h5>
 
     <h5
-      class='absolute z-10 shadow-2xl -right-20 md:-right-16 -top-10 text-xl md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
+      class='absolute z-10 shadow-2xl -right-20 md:-right-16 -top-2 md:-top-10 text-xl md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
     >
       Fast
     </h5>
     <h5
-      class='absolute -right-24 md:-right-44 top-10 rotate-12 text-lg md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500'
+      class='absolute -right-24 md:-right-44 -bottom-10 md:top-10 rotate-12 text-lg md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500'
     >
       Scalable
     </h5>
@@ -39,7 +40,7 @@ md:py-0'
     <img
       src='/images/draws/Highlight_04.svg'
       alt='highlight'
-      class='absolute -top-28 right-52 rotate-180 fill-white'
+      class='absolute -top-28 right-52 rotate-180 fill-white hidden md:block'
     />
   </div>
 </div>
