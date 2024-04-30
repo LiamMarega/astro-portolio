@@ -1,47 +1,47 @@
-# Astro Starter Kit: Minimal
+# Astro and TailwindCSS Portfolio
 
-```sh
-npm create astro@latest -- --template minimal
-```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This portfolio is a showcase of a project built with **Astro** and **TailwindCSS**, leveraging the latest web development technologies.
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+The folder structure follows a modular pattern to facilitate scalability and maintenance:
 
 ```text
-/
-├── public/
+├── public/                  # Static resources like images
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/          # Astro/React/Vue/Svelte/Preact components
+│   │   ├── About/           # 'About' section
+│   │   ├── Contact/         # Contact section
+│   │   ├── UI/              # User interface components
+│   │   └── Work/            # Featured works and projects
+│   ├── layouts/             # Layout templates
+│   ├── pages/               # Site pages, each exposed as a route
+│   └── utils/               # Utility functions and helpers
+└── package.json             # Dependency management and scripts
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+The commands to interact with the project are:
 
 | Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| ------------------------- | ------------------------------------------------ |
+| `npm install`             | Install dependencies                             |
+| `npm run dev`             | Start the development server at `localhost:4321` |
+| `npm run build`           | Build your site for production in `./dist/`      |
+| `npm run preview`         | Preview your build locally                       |
+| `npm run astro ...`       | CLI commands like `astro add`, `astro check`     |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
+## 📦 Dependencies
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The project utilizes the following key dependencies:
+
+- `@astrojs/check`: Verification tool for Astro
+- `@astrojs/tailwind`: TailwindCSS integration with Astro
+- `astro`: Build framework
+- `gsap`: Animation library
+- `tailwindcss`: CSS framework
+- `typescript`: JavaScript superset
+
+To get started with this portfolio, clone the repository and follow the provided commands. Enjoy creating and customizing your portfolio! 🚀
