@@ -10,7 +10,6 @@ let sections = gsap.utils.toArray('.section');
 if (window.outerWidth > 768) {
   ScrollTrigger.create({
     animation: tl,
-    markers: true,
     trigger: '#about',
     start: '5% top',
     pin: true,
