@@ -7,14 +7,15 @@ const tl = gsap.timeline();
 const tlWork = gsap.timeline();
 let sections = gsap.utils.toArray('.section');
 
-if (window.innerWidth > 859) {
+if (window.outerWidth > 768) {
   ScrollTrigger.create({
     animation: tl,
+    markers: true,
     trigger: '#about',
     start: '5% top',
     pin: true,
     scrub: 0.5,
-    end: () => '+=' + document.querySelector('#about').offsetWidth - window.innerWidth,
+    end: () => '+=' + document.querySelector('#about').offsetWidth - window.outerWidth,
   });
 
   ScrollTrigger.create({
