@@ -2,6 +2,10 @@
 
 This portfolio is a showcase of a project built with **Astro** and **TailwindCSS**, leveraging the latest web development technologies.
 
+![portfolio-gif](https://github.com/LiamMarega/astro-portolio/assets/86364396/febef1cf-175b-44e2-9f5a-f90506c3e749)
+**Live Preview**: [Liam Marega's Portfolio](https://www.liammarega.com/)
+
+
 ## 🚀 Project Structure
 
 The folder structure follows a modular pattern to facilitate scalability and maintenance:
