@@ -37,22 +37,20 @@ const {
 
 <div
   id={id}
-  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} h-screen w-full ${bgColor}`}
+  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} p-5 min-h-screen h-full w-full ${bgColor}`}
 >
   {images.map((image) => <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />)}
-  <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-10 md:gap-20 p-5 md:p-20'>
+  <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-10 md:gap-20 p-10'>
     <div class='flex flex-col justify-around gap-5'>
       <h5
-        class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl xl:text-6xl`}
+        class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl `}
       >
         {title}
       </h5>
 
       {
         description.map((desc) => (
-          <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl xl:text-3xl'>
-            {desc}
-          </p>
+          <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl'>{desc}</p>
         ))
       }
 
@@ -60,14 +58,14 @@ const {
     </div>
     <div class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit'>
       <h5
-        class='text-[#E4F4E4] text-lg font-bold w-fit h-fit p-5 flex justify-center items-center md:text-2xl xl:text-4xl'
+        class='text-[#E4F4E4] text-lg font-bold w-fit h-fit p-5 flex justify-center items-center md:text-2xl'
       >
         TECH STACK
       </h5>
       <div class='flex flex-row items-center p-2 gap-x-5 md:pb-0'>
         {
           techStack.map((tech) => (
-            <img src={tech.src} alt={tech.alt} class='w-8 h-8 md:w-14 md:h-14 xl:' />
+            <img src={tech.src} alt={tech.alt} class='w-8 h-8 md:w-12 md:h-12 ' />
           ))
         }
       </div>
