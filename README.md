@@ -1,4 +1,4 @@
-# Astro and TailwindCSS Portfolio
+# Astro, TailwindCSS and GSAP Portfolio
 
 This portfolio is a showcase of a project built with **Astro** and **TailwindCSS**, leveraging the latest web development technologies.
 
