@@ -10,6 +10,7 @@ interface Props {
   textColor: string;
   images: Image[];
   reverse?: boolean;
+  link?: string;
 }
 
 type TechStack = {
@@ -32,12 +33,13 @@ const {
   bgColor,
   textColor,
   reverse = false,
+  link,
 } = Astro.props;
 ---
 
 <div
   id={id}
-  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} p-5 min-h-screen h-full w-full ${bgColor}`}
+  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} p-5 min-h-screen md:h-full w-full ${bgColor}`}
 >
   {images.map((image) => <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />)}
   <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-10 md:gap-20 p-10'>
@@ -50,13 +52,15 @@ const {
 
       {
         description.map((desc) => (
-          <p class='text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl'>{desc}</p>
+          <p class='md:text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl'>{desc}</p>
         ))
       }
 
-      <ButtonMore />
+      <ButtonMore link={link} />
     </div>
-    <div class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit'>
+    <div
+      class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit md:justify-center md:items-start items-center justify-start'
+    >
       <h5
         class='text-[#E4F4E4] text-lg font-bold w-fit h-fit p-5 flex justify-center items-center md:text-2xl'
       >

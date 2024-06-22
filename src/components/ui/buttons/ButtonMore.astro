@@ -1,4 +1,12 @@
-<button class='learn-more'>
+---
+interface Props {
+  link?: string;
+}
+
+const { link = 'www.google.com' } = Astro.props;
+---
+
+<button class='learn-more' id={link}>
   <span class='circle bg-[#E4F4E4]' aria-hidden='true'>
     <span class='icon arrow'></span>
   </span>
@@ -94,3 +102,12 @@
     color: #15432b;
   }
 </style>
+
+<script define:vars={{ link }} is:inline>
+  function openLink(e) {
+    console.log(link);
+    window.open(link, '_blank');
+  }
+  const button = document.getElementById(link);
+  button.addEventListener('click', openLink);
+</script>
