@@ -11,6 +11,7 @@ export default {
     extend: {
       animation: {
         text: 'text 5s ease infinite',
+        draw: 'reveal 2s linear forwards',
       },
       keyframes: {
         text: {
@@ -21,6 +22,15 @@ export default {
           '50%': {
             'background-size': '200% 200%',
             'background-position': 'right center',
+          },
+        },
+
+        reveal: {
+          from: {
+            'clip-path': 'polygon(0 0, 100% 0, 100% 0, 0 0)',
+          },
+          to: {
+            'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
           },
         },
       },
