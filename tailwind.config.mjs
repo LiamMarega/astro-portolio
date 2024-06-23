@@ -6,6 +6,7 @@ export default {
     screens: {
       mini: { raw: '(min-height: 800px)' },
       // => @media (min-height: 800px) { ... }
+      ...defaultTheme.screens,
     },
     extend: {
       animation: {
