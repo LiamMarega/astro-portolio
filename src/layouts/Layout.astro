@@ -1,7 +1,8 @@
 ---
-import SvgBackground from '../utils/SvgBackground.astro';
 import Navbar from '../components/ui/Navbar.astro';
 import { ViewTransitions } from 'astro:transitions';
+import 'lenis/dist/lenis.css';
+
 interface Props {
   title: string;
 }
@@ -99,4 +100,17 @@ const { title } = Astro.props;
       font-family: 'HelveticaNeue', sans-serif;
     }
   </style>
+
+  <script>
+    import Lenis from 'lenis';
+
+    const lenis = new Lenis();
+
+    function raf(time: any) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  </script>
 </html>
