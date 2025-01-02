@@ -43,7 +43,7 @@ const {
 >
   {images.map((image) => <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />)}
   <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-10 md:gap-20 md:p-10 p-1'>
-    <div class='flex flex-col justify-around gap-5'>
+    <div class='flex flex-col justify-around gap-10'>
       <h5
         class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl `}
       >
@@ -57,22 +57,23 @@ const {
       }
 
       <ButtonMore link={link} />
-    </div>
-    <div
-      class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] p-3 w-fit md:justify-center md:items-start items-center justify-start'
+	  <div
+      class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] w-fit md:justify-center md:items-start items-center justify-start'
     >
       <h5
         class='text-[#E4F4E4] text-lg font-bold w-fit h-fit p-5 flex justify-center items-center md:text-2xl'
       >
         TECH STACK
       </h5>
-      <div class='flex flex-row items-center p-2 gap-x-5 md:pb-0'>
+      <div class='flex flex-row items-center p-2 gap-x-5 '>
         {
           techStack.map((tech) => (
-            <img src={tech.src} alt={tech.alt} class='w-8 h-8 md:w-12 md:h-12 ' />
+            <img src={tech.src} alt={tech.alt} class='w-8 h-8 md:w-12 md:h-12 hover:scale-105 duration-150 ' />
           ))
         }
       </div>
+    </div>
+   
     </div>
   </div>
 </div>
