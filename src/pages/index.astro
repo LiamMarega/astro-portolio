@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import InformativeBox from '../components/ui/InfoBox.astro';
 import About from '../components/About/About.astro';
-import CardWorks from '../components/ui/Cards/CardWorks.astro';
 import Works from '../components/Work/Works.astro';
 import Contact from '../components/Contact/Contact.astro';
 import CursorFollow from '../components/ui/CursorFollow.astro';
@@ -14,11 +13,9 @@ import CursorFollow from '../components/ui/CursorFollow.astro';
   >
     <CursorFollow />
     <div>
-      <h1 class='text-5xl md:text-9xl  font-extrabold italic'>FRONTEND DEVELOPER</h1>
+      <h1 class='text-5xl md:text-8xl 2xl:text-9xl font-extrabold italic'>FRONTEND <br> DEVELOPER</h1>
       <div class='container mx-auto p-4 mb-12 md:p-0'>
         <div class='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          {/* Primera parte */}
-
           <p
             class='font-extralight text-lg text-center md:text-start text-balance opacity-70 text-white p-4 rounded'
           >
@@ -27,7 +24,7 @@ import CursorFollow from '../components/ui/CursorFollow.astro';
           </p>
           {/* Segunda parte */}
           <p
-            class='text-center text-lg md:text-start md:text-balance font-extralight text-balance opacity-70 text-white p-4'
+            class='text-center text-base 2xl:text-lg md:text-start md:text-balance font-extralight text-balance opacity-70 text-white p-4'
           >
             I’m a passionate developer with only year experience who uses research, data, and
             thoughtful design to create delightful products that scale.
@@ -59,7 +56,7 @@ import CursorFollow from '../components/ui/CursorFollow.astro';
     <img
       src='/images/draws/arrowBucle.svg'
       alt='bottom-arrow'
-      class='animate-draw size-20 md:size-36 absolute bottom-72 md:bottom-32 right-0 md:right-40 lg:right-64 xl:right-40'
+      class='animate-draw size-20 md:size-36 absolute bottom-72 md:bottom-32 right-0 md:right-40 lg:right-0 2xl:right-40'
     />
   </main>
   <hr class='mx-40 opacity-25' />
