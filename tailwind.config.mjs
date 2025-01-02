@@ -12,6 +12,7 @@ export default {
       animation: {
         text: 'text 5s ease infinite',
         draw: 'reveal 2s linear forwards',
+        revealLTR: 'revealLeftToRight 0.5s linear forwards',
       },
       keyframes: {
         text: {
@@ -31,6 +32,14 @@ export default {
           },
           to: {
             'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          },
+        },
+        revealLeftToRight: {
+          from: {
+            'clip-path': 'inset(0 100% 0 0)',
+          },
+          to: {
+            'clip-path': 'inset(0 0 0 0)',
           },
         },
       },
