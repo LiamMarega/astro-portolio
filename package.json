@@ -13,7 +13,7 @@
     "@astrojs/check": "^0.5.5",
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^4.4.4",
-    "gsap": "^3.12.5",
+    "gsap": "^3.13.0",
     "lenis": "^1.1.13",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"

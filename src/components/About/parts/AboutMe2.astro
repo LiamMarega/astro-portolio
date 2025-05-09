@@ -1,8 +1,8 @@
 <!-- about me 2 -->
 <div
-  id='about_me_2'
-  id='about_me_1'
-  class='flex
+  id="about_me_2"
+  id="about_me_1"
+  class="flex
 flex-col
 md:flex-row
 section
@@ -13,34 +13,142 @@ h-3/6
 md:h-screen
 w-screen
 py-20
-md:py-0'
+md:py-0"
 >
-  <div class='relative w-fit gap-6 pl-10 md:pl-0'>
+  <div class="relative w-fit gap-6 pl-10 md:pl-0">
     <h5
-      class='text-4xl md:text-8xl text-nowrap font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
+      class="text-4xl md:text-8xl text-nowrap font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200"
     >
       Nice and
     </h5>
 
     <h5
-      class='absolute z-10 shadow-2xl -right-20 md:-right-16 -top-2 md:-top-10 text-xl md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
+      class="absolute z-10 shadow-2xl -right-20 md:-right-16 -top-2 md:-top-10 text-xl md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300"
     >
       Fast
     </h5>
     <h5
-      class='absolute -right-24 md:-right-44 -bottom-10 md:top-10 rotate-12 text-lg md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500'
+      id="scalableCard"
+      class="absolute -right-24 md:-right-44 -bottom-10 md:top-10 rotate-12 text-lg md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500"
     >
       Scalable
     </h5>
   </div>
-  <div class='relative w-full h-fit pt-10 flex justify-center'>
-    <p class='md:pl-80 text-balance text-2xl md:text-6xl w-10/12'>
-      Create responsive, attractive, functional and easy to use <b>applications.</b>
+  <div class="relative w-full h-fit pt-10 flex justify-center">
+    <p class="md:pl-80 text-balance text-2xl md:text-6xl w-10/12">
+      Create responsive, attractive, functional and easy to use <b
+        >applications.</b
+      >
     </p>
     <img
-      src='/images/draws/Highlight_04.svg'
-      alt='highlight'
-      class='animate-draw absolute -top-28 right-52 rotate-180 fill-white hidden md:block'
+      id="highlightSvg"
+      src="/images/draws/Highlight_04.svg"
+      alt="highlight"
+      class="absolute -top-28 right-52 rotate-180 fill-white hidden md:block"
     />
   </div>
 </div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Physics effect for Scalable card
+    const scalableCard = document.getElementById("scalableCard");
+
+    if (scalableCard) {
+      // Initial position (hidden above)
+      gsap.set(scalableCard, {
+        y: -150,
+        opacity: 0,
+        rotation: -10,
+      });
+
+      // Custom bounce animation to simulate physics
+      ScrollTrigger.create({
+        trigger: "#about_me_2",
+        start: "top 40%",
+        onEnter: () => {
+          setTimeout(() => {
+            // First make it visible
+            gsap.to(scalableCard, {
+              opacity: 1,
+              duration: 0.3,
+              onComplete: () => {
+                // Drop animation with bounce
+                gsap.to(scalableCard, {
+                  y: 0,
+                  rotation: 12,
+                  duration: 1,
+                  ease: "bounce.out", // Built-in bounce effect
+                  onComplete: () => {
+                    // Small wobble effect after landing
+                    gsap.to(scalableCard, {
+                      rotation: 8,
+                      duration: 0.3,
+                      ease: "power1.inOut",
+                      onComplete: () => {
+                        gsap.to(scalableCard, {
+                          rotation: 12,
+                          duration: 0.2,
+                          ease: "power1.inOut",
+                        });
+                      },
+                    });
+                  },
+                });
+              },
+            });
+          }, 400);
+        },
+        onLeaveBack: () => {
+          gsap.to(scalableCard, {
+            y: -150,
+            opacity: 0,
+            rotation: -10,
+            duration: 0.5,
+          });
+        },
+      });
+    }
+
+    // Pop-in effect for SVG highlight
+    const highlightSvg = document.getElementById("highlightSvg");
+
+    if (highlightSvg) {
+      gsap.set(highlightSvg, {
+        scale: 0,
+        opacity: 0,
+        transformOrigin: "center center",
+      });
+
+      ScrollTrigger.create({
+        trigger: "#about_me_2",
+        start: "top 45%",
+        onEnter: () => {
+          setTimeout(() => {
+            gsap.to(highlightSvg, {
+              scale: 1,
+              opacity: 1,
+              duration: 0.6,
+              delay: 0.8,
+              ease: "back.out(1.7)",
+              className:
+                "animate-draw absolute -top-28 right-52 rotate-180 fill-white hidden md:block",
+            });
+          }, 600);
+        },
+        onLeaveBack: () => {
+          gsap.to(highlightSvg, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.4,
+          });
+        },
+      });
+    }
+  });
+</script>

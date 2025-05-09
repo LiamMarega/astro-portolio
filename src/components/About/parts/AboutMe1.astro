@@ -1,7 +1,7 @@
 <!-- about me 1 -->
 <div
-  id='about_me_1'
-  class='flex
+  id="about_me_1"
+  class="flex
 flex-col
 md:flex-row
 section
@@ -9,40 +9,98 @@ justify-center
 items-center
 h-3/6
 md:h-screen
-w-screen'
+w-screen"
 >
   <div
-    class='flex justify-center items-center md:items-start md:justify-between flex-col w-12/12 md:w-5/12 gap-6'
+    class="flex justify-center items-center md:items-start md:justify-between flex-col w-12/12 md:w-5/12 gap-6"
   >
     <h5
-      class='text-3xl md:text-6xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200'
+      id="aboutTitle1"
+      class="text-3xl md:text-6xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200"
     >
       Who is
     </h5>
 
     <h5
-      class='text-xl md:text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300'
+      id="aboutTitle2"
+      class="text-xl md:text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300 opacity-0"
     >
       Liam?
     </h5>
-    <p class='text-center text-balance md:text-start text-2xl md:text-4xl w-10/12'>
-      My name is Liam and I'm a Developer based in Argentina. Technology lover, willing to grow and
+    <p
+      id="aboutDesc"
+      class="text-center text-balance md:text-start text-2xl md:text-4xl w-10/12 opacity-0"
+    >
+      Developer based in Argentina. <br /> Technology lover, willing to grow and
       challenge myself in every project
-      <!-- I love to create websites
-	and mobile websites and mobile applications that are attractive, functional and easy to use.
-	I specialize in developing pixel-perfect user interfaces and using the latest technologies,
-	such as React, Next technologies such as React, Next, Astro, Flutter and Firebase. My goal
-	is to offer innovative and quality solutions to my clients, and keep learning and improving
-	my skills as a developer. I hope you like my work! -->
     </p>
   </div>
-  <!-- <img
-    src='/images/draws/arrowRight.svg'
-    alt='highlight-draw'
-    class='animate-draw absolute size-40 top-52 right-52 fill-white hidden md:block'
-    '
-  /> -->
-  <div class='flex justify-center items-start w-40 md:w-[30rem]'>
-    <img src='/images/draws/arg.webp' alt='argentina-map' loading='lazy' />
+
+  <div
+    id="aboutMap"
+    class="flex justify-center items-start w-40 md:w-[30rem] opacity-0"
+  >
+    <img src="/images/draws/arg.webp" alt="argentina-map" loading="lazy" />
   </div>
 </div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // 3D Sign/Billboard effect animation
+
+    gsap.fromTo(
+      "#aboutTitle2",
+      { opacity: 0, rotationX: 90 },
+      {
+        opacity: 1,
+        rotationX: 0,
+        duration: 1,
+        transformOrigin: "center top",
+        ease: "back.out(1.7)",
+        delay: 0.3,
+        scrollTrigger: {
+          trigger: "#about_me_1",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+
+    gsap.fromTo(
+      "#aboutDesc",
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        delay: 0.6,
+        scrollTrigger: {
+          trigger: "#about_me_1",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+
+    gsap.fromTo(
+      "#aboutMap",
+      { opacity: 0, scale: 0.8 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        delay: 0.9,
+        scrollTrigger: {
+          trigger: "#about_me_1",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+  });
+</script>

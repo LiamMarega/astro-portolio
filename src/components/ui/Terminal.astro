@@ -1,19 +1,21 @@
-<div class='container opacity-80 w-[85vw] h-72 md:w-[550px] md:h-[450px] md:opacity-100'>
-  <div class='terminal_toolbar'>
-    <div class='butt'>
-      <button class='btn btn-color'></button>
-      <button class='btn'></button>
-      <button class='btn'></button>
+<div
+  class="container opacity-90 w-full max-w-[85vw] md:max-w-[550px] h-[220px] sm:h-[300px] md:h-[450px] md:opacity-100 shadow-lg"
+>
+  <div class="terminal_toolbar">
+    <div class="butt">
+      <button class="btn btn-color"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
     </div>
-    <p class='user'>liammarega@admin: ~</p>
-    <div class='add_tab'>+</div>
+    <p class="user">liammarega@admin: ~</p>
+    <div class="add_tab">+</div>
   </div>
-  <div class='terminal_body'>
-    <div class='terminal_promt'>
-      <span class='terminal_user'>liammarega@admin:</span>
-      <span class='terminal_location'>~</span>
-      <span class='terminal_bling'>$</span>
-      <span class='terminal_cursor'></span>
+  <div class="terminal_body">
+    <div class="terminal_promt">
+      <span class="terminal_user">liammarega@admin:</span>
+      <span class="terminal_location">~</span>
+      <span class="terminal_bling">$</span>
+      <span class="terminal_cursor"></span>
     </div>
   </div>
 </div>
@@ -83,12 +85,18 @@
   .user {
     color: #d5d0ce;
     margin-left: 6px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+
+    @media (min-width: 640px) {
+      font-size: 14px;
+    }
   }
 
   .terminal_body {
-    background: rgba(28, 28, 28, 0.6);
+    background: rgba(28, 28, 28, 0.8);
     height: calc(100% - 30px);
     padding-top: 2px;
     margin-top: -1px;
@@ -99,6 +107,13 @@
 
   .terminal_promt {
     display: flex;
+    padding: 6px;
+    font-size: 10px;
+
+    @media (min-width: 640px) {
+      font-size: 12px;
+      padding: 8px;
+    }
   }
 
   .terminal_promt span {
