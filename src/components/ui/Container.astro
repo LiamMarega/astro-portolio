@@ -1,0 +1,55 @@
+---
+/**
+ * Responsive Container Component
+ *
+ * A reusable container with consistent padding and max-width across the site.
+ * Use this to maintain layout consistency between sections.
+ *
+ * Usage example:
+ * <Container>
+ *   <YourContent />
+ * </Container>
+ */
+
+interface Props {
+  /**
+   * Optional class names to add to the container
+   */
+  class?: string;
+
+  /**
+   * Whether the container should be full width on mobile (defaults to false)
+   */
+  fullWidthMobile?: boolean;
+
+  /**
+   * Optional max width override (defaults to responsive scaling)
+   */
+  maxWidth?: string;
+
+  /**
+   * Optional padding override (defaults to responsive padding)
+   */
+  padding?: string;
+}
+
+const {
+  class: className = "",
+  fullWidthMobile = false,
+  maxWidth = "max-w-[90rem]",
+  padding = "px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16",
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "mx-auto w-full",
+    fullWidthMobile ? "" : "max-w-[100vw]",
+    maxWidth,
+    padding,
+    className,
+  ]}
+>
+  <slot />
+</div>
+

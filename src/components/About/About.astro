@@ -1,16 +1,20 @@
 ---
-import AboutMe1 from '../About/parts/AboutMe1.astro';
-import AboutMe2 from '../About/parts/AboutMe2.astro';
-import AboutMe3 from '../About/parts/AboutMe3.astro';
+import AboutMe1 from "../About/parts/AboutMe1.astro";
+import AboutMe2 from "../About/parts/AboutMe2.astro";
+import AboutMe3 from "../About/parts/AboutMe3.astro";
+import Container from "../ui/Container.astro";
 ---
 
-<section
-  class='flex flex-col pt-80 mini:pt-28 md:pt-0 md:flex-row w-screen md:w-[300%] h-full md:h-screen'
-  id='about'
->
-  <AboutMe1 />
-  <AboutMe2 />
-  <AboutMe3 />
+<section id="about" class="w-full relative overflow-hidden">
+  <Container class="py-16 sm:py-24 md:py-32">
+    <h2 class="sr-only">About Me</h2>
+
+    <div class="flex flex-col gap-24 sm:gap-32 md:gap-48 lg:gap-64">
+      <AboutMe1 />
+      <AboutMe2 />
+      <AboutMe3 />
+    </div>
+  </Container>
 </section>
 
-<script src='../../utils/gsap.js'></script>
+<script src="../../utils/gsap.js"></script>

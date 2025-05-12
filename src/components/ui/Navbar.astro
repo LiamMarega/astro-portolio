@@ -2,31 +2,138 @@
 
 ---
 
-<header>
-  <nav class='text-xl font-light px-2 md:px-12 py-8 flex items-center md:justify-between'>
-    <div class='flex gap-x-5 w-24 md:w-48'>
-      <div class='bg-white w-8 py-5 border-gray-300 rounded-r-full md:w-12'></div>
-      <a href='/' class='hidden md:bolck'> <h3>Liam Marega</h3></a>
+<header class="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-sm">
+  <nav
+    class="text-xl font-light px-4 sm:px-8 md:px-12 py-4 md:py-8 flex items-center justify-between"
+  >
+    <div class="flex gap-x-3 md:gap-x-5 items-center">
+      <div class="bg-white w-8 h-8 md:w-12 md:h-12 rounded-r-full"></div>
+      <a href="/" class="text-base md:text-xl">
+        <h3>Liam Marega</h3>
+      </a>
     </div>
-    <ul class='flex gap-10'>
-      <li><a href='#about'>About</a></li>
-      <li><a href='#work'>Work</a></li>
-      <li><a href='#contact'>Contact</a></li>
+
+    <button id="mobile-menu-button" class="md:hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <ul id="desktop-menu" class="hidden md:flex gap-5 lg:gap-10">
+      <li>
+        <a href="#about" class="hover:text-yellow-300 transition-colors"
+          >About</a
+        >
+      </li>
+      <li>
+        <a href="#work" class="hover:text-yellow-300 transition-colors">Work</a>
+      </li>
+      <li>
+        <a href="#contact" class="hover:text-yellow-300 transition-colors"
+          >Contact</a
+        >
+      </li>
     </ul>
   </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 bg-black/95 flex items-center justify-center hidden z-50"
+  >
+    <button id="close-menu-button" class="absolute top-6 right-6">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    <ul class="flex flex-col gap-8 text-center text-2xl">
+      <li>
+        <a
+          href="#about"
+          class="hover:text-yellow-300 transition-colors mobile-link">About</a
+        >
+      </li>
+      <li>
+        <a
+          href="#work"
+          class="hover:text-yellow-300 transition-colors mobile-link">Work</a
+        >
+      </li>
+      <li>
+        <a
+          href="#contact"
+          class="hover:text-yellow-300 transition-colors mobile-link">Contact</a
+        >
+      </li>
+    </ul>
+  </div>
 </header>
 
 <style>
   @font-face {
-    font-family: 'ShantellSans';
-    src: url('fonts/ShantellSans-Light.ttf') format('truetype');
+    font-family: "ShantellSans";
+    src: url("fonts/ShantellSans-Light.ttf") format("truetype");
     font-style: normal;
     font-display: swap;
     font-weight: lighter;
   }
   header,
   nav {
-    font-family: 'ShantellSans', sans-serif;
+    font-family: "ShantellSans", sans-serif;
     font-weight: lighter;
   }
 </style>
+
+<script>
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const closeMenuButton = document.getElementById("close-menu-button");
+  const mobileLinks = document.querySelectorAll(".mobile-link");
+
+  function toggleMenu() {
+    if (mobileMenu && mobileMenu.classList.contains("hidden")) {
+      mobileMenu.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    } else if (mobileMenu) {
+      mobileMenu.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+  }
+
+  if (mobileMenuButton) {
+    mobileMenuButton.addEventListener("click", toggleMenu);
+  }
+
+  if (closeMenuButton) {
+    closeMenuButton.addEventListener("click", toggleMenu);
+  }
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (mobileMenu) {
+        mobileMenu.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+    });
+  });
+</script>

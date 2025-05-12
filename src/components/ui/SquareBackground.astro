@@ -1,30 +1,111 @@
 ---
-const rows = new Array(150).fill(1);
-const cols = new Array(100).fill(1);
-let colors = ['--white'];
+// Dynamic grid based on viewport size
+const mobileRows = new Array(50).fill(1);
+const mobileCols = new Array(30).fill(1);
+
+const tabletRows = new Array(80).fill(1);
+const tabletCols = new Array(50).fill(1);
+
+const desktopRows = new Array(120).fill(1);
+const desktopCols = new Array(80).fill(1);
 ---
 
-<div class='absolute left-1/4 p-4 -top-1/4 flex -translate-x-1/2 -translate-y-1/2 w-full h-full z-0'>
-  {
-    rows.map((_, i) => (
-      <div class='w-16 h-8  border-l  border-slate-700 relative'>
-        {cols.map((_, j) => (
-          <div class='hover:bg-gray-100 w-16 h-8  border-r border-t border-slate-700 relative'>
-            {j % 2 === 0 && i % 2 === 0 ? (
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke-width='1.5'
-                stroke='currentColor'
-                class='absolute h-6 w-10 -top-[14px] -left-[22px] text-slate-700 stroke-[1px] pointer-events-none'
-              >
-                <path stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6' />
-              </svg>
-            ) : null}
-          </div>
-        ))}
-      </div>
-    ))
-  }
+<div
+  class="fixed left-0 top-0 w-full h-full -z-10 overflow-hidden pointer-events-none"
+>
+  <!-- Mobile grid (hidden on larger screens) -->
+  <div
+    class="block sm:hidden absolute left-1/4 -top-1/4 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%]"
+  >
+    {
+      mobileRows.map((_, i) => (
+        <div class="w-8 h-4 border-l border-slate-700/30 relative">
+          {mobileCols.map((_, j) => (
+            <div class="w-8 h-4 border-r border-t border-slate-700/30 relative">
+              {j % 4 === 0 && i % 4 === 0 ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  class="absolute h-3 w-5 -top-[7px] -left-[11px] text-slate-700/40 pointer-events-none"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6v12m6-6H6"
+                  />
+                </svg>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Tablet grid (hidden on mobile and desktop) -->
+  <div
+    class="hidden sm:block md:hidden absolute left-1/4 -top-1/4 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%]"
+  >
+    {
+      tabletRows.map((_, i) => (
+        <div class="w-12 h-6 border-l border-slate-700/30 relative">
+          {tabletCols.map((_, j) => (
+            <div class="w-12 h-6 border-r border-t border-slate-700/30 relative">
+              {j % 3 === 0 && i % 3 === 0 ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  class="absolute h-4 w-8 -top-[10px] -left-[16px] text-slate-700/40 pointer-events-none"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6v12m6-6H6"
+                  />
+                </svg>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Desktop grid (hidden on smaller screens) -->
+  <div
+    class="hidden md:block absolute left-1/4 -top-1/4 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%]"
+  >
+    {
+      desktopRows.map((_, i) => (
+        <div class="w-16 h-8 border-l border-slate-700/30 relative">
+          {desktopCols.map((_, j) => (
+            <div class="w-16 h-8 border-r border-t border-slate-700/30 relative">
+              {j % 2 === 0 && i % 2 === 0 ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  class="absolute h-6 w-10 -top-[14px] -left-[22px] text-slate-700/40 pointer-events-none"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6v12m6-6H6"
+                  />
+                </svg>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
 </div>

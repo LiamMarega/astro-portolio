@@ -1,46 +1,48 @@
-<!-- about me 1 -->
-<div
-  id="about_me_1"
-  class="flex
-flex-col
-md:flex-row
-section
-justify-center
-items-center
-h-3/6
-md:h-screen
-w-screen"
->
-  <div
-    class="flex justify-center items-center md:items-start md:justify-between flex-col w-12/12 md:w-5/12 gap-6"
-  >
-    <h5
-      id="aboutTitle1"
-      class="text-3xl md:text-6xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200"
+<!-- About Me Section 1 -->
+<div id="about_me_1" class="relative w-full">
+  <div class="flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16">
+    <!-- Text content -->
+    <div
+      class="flex justify-center md:justify-start items-center md:items-start flex-col w-full md:w-1/2 gap-4 md:gap-6 lg:gap-8"
     >
-      Who is
-    </h5>
+      <h3
+        id="aboutTitle1"
+        class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-black w-fit
+        p-4 rounded-2xl flex justify-center items-center bg-green-200 mx-auto md:mx-0"
+      >
+        Who is
+      </h3>
 
-    <h5
-      id="aboutTitle2"
-      class="text-xl md:text-4xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300 opacity-0"
-    >
-      Liam?
-    </h5>
-    <p
-      id="aboutDesc"
-      class="text-center text-balance md:text-start text-2xl md:text-4xl w-10/12 opacity-0"
-    >
-      Developer based in Argentina. <br /> Technology lover, willing to grow and
-      challenge myself in every project
-    </p>
-  </div>
+      <h4
+        id="aboutTitle2"
+        class="text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold text-black w-fit
+        p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-yellow-300 opacity-0 mx-auto md:mx-0"
+      >
+        Liam?
+      </h4>
 
-  <div
-    id="aboutMap"
-    class="flex justify-center items-start w-40 md:w-[30rem] opacity-0"
-  >
-    <img src="/images/draws/arg.webp" alt="argentina-map" loading="lazy" />
+      <p
+        id="aboutDesc"
+        class="text-center md:text-start text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        max-w-full md:max-w-[90%] opacity-0"
+      >
+        Developer based in Argentina. <br />
+        Technology lover, willing to grow and challenge myself in every project
+      </p>
+    </div>
+
+    <!-- Map image -->
+    <div
+      id="aboutMap"
+      class="flex justify-center items-center md:items-start w-full md:w-1/2 opacity-0"
+    >
+      <img
+        src="/images/draws/arg.webp"
+        alt="Argentina map"
+        loading="lazy"
+        class="w-40 sm:w-48 md:w-64 lg:w-[30rem] object-contain"
+      />
+    </div>
   </div>
 </div>
 
@@ -51,8 +53,10 @@ w-screen"
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
-    // 3D Sign/Billboard effect animation
+    // Create responsive breakpoint context for animations
+    const isMobile = window.innerWidth < 768;
 
+    // 3D Sign/Billboard effect animation
     gsap.fromTo(
       "#aboutTitle2",
       { opacity: 0, rotationX: 90 },
@@ -94,7 +98,7 @@ w-screen"
         opacity: 1,
         scale: 1,
         duration: 1,
-        delay: 0.9,
+        delay: isMobile ? 0.6 : 0.9, // Adjust timing for mobile
         scrollTrigger: {
           trigger: "#about_me_1",
           start: "top 80%",
@@ -102,5 +106,10 @@ w-screen"
         },
       }
     );
+
+    // Add resize handler to adjust animations if window size changes
+    window.addEventListener("resize", () => {
+      ScrollTrigger.refresh();
+    });
   });
 </script>

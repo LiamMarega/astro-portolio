@@ -1,65 +1,81 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import InformativeBox from '../components/ui/InfoBox.astro';
-import About from '../components/About/About.astro';
-import Works from '../components/Work/Works.astro';
-import Contact from '../components/Contact/Contact.astro';
-import CursorFollow from '../components/ui/CursorFollow.astro';
+import Layout from "../layouts/Layout.astro";
+import InformativeBox from "../components/ui/InfoBox.astro";
+import About from "../components/About/About.astro";
+import Works from "../components/Work/Works.astro";
+import Contact from "../components/Contact/Contact.astro";
+import CursorFollow from "../components/ui/CursorFollow.astro";
+import Container from "../components/ui/Container.astro";
 ---
 
-<Layout title='Liam Marega'>
-  <main
-    class='flex h-screen flex-col items-start justify-between px-5 md:px-20 relative text-white'
-  >
+<Layout title="Liam Marega">
+  <main class="relative min-h-screen pt-20 sm:pt-24 md:pt-32 pb-16 text-white">
     <CursorFollow />
-    <div>
-      <h1 class='text-5xl md:text-8xl 2xl:text-9xl font-extrabold italic'>FRONTEND <br> DEVELOPER</h1>
-      <div class='container mx-auto p-4 mb-12 md:p-0'>
-        <div class='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          <p
-            class='font-extralight text-lg text-center md:text-start text-balance opacity-70 text-white p-4 rounded'
-          >
-            I code with art and Empowering startups with visually stunning and functionally seamless
-            interfaces.
-          </p>
-          {/* Segunda parte */}
-          <p
-            class='text-center text-base 2xl:text-lg md:text-start md:text-balance font-extralight text-balance opacity-70 text-white p-4'
-          >
-            I’m a passionate developer with only year experience who uses research, data, and
-            thoughtful design to create delightful products that scale.
-          </p>
-          {/* Tercera parte */}
-          <div class='text-white p-4 rounded flex items-center justify-center'>
-            <a href='#contact' class='flex text-lg items-center border-b border-white'>
-              Get in Touch
-              {/* Icono de flecha */}
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                class='animate-draw h-6 w-6 ml-2'
+
+    <Container class="flex flex-col h-full justify-between">
+      <div>
+        <h1
+          class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-extrabold italic leading-tight"
+        >
+          FRONTEND <br class="md:block" /> DEVELOPER
+        </h1>
+
+        <div class="mt-8 md:mt-12">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+            <p
+              class="font-extralight text-base md:text-lg text-center md:text-start text-balance opacity-70 p-2"
+            >
+              I code with art and Empowering startups with visually stunning and
+              functionally seamless interfaces.
+            </p>
+
+            <p
+              class="text-center md:text-start text-base md:text-lg font-extralight text-balance opacity-70 p-2"
+            >
+              I'm a passionate developer with only year experience who uses
+              research, data, and thoughtful design to create delightful
+              products that scale.
+            </p>
+
+            <div class="flex items-center justify-center md:justify-start p-2">
+              <a
+                href="#contact"
+                class="group flex items-center text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors"
               >
-                <path
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                  stroke-width={2}
-                  d='M17 8l4 4m0 0l-4 4m4-4H3'></path>
-              </svg>
-            </a>
+                Get in Touch
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
+
+        <div class="mt-8 md:mt-12">
+          <InformativeBox />
+        </div>
       </div>
-      <InformativeBox />
-    </div>
-    <img
-      src='/images/draws/arrowBucle.svg'
-      alt='bottom-arrow'
-      class='animate-draw size-20 md:size-36 absolute bottom-72 md:bottom-32 right-0 md:right-40 lg:right-0 2xl:right-40'
-    />
+
+      <img
+        src="/images/draws/arrowBucle.svg"
+        alt="bottom-arrow"
+        class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-36 lg:h-36 absolute bottom-16 md:bottom-24 lg:bottom-32 right-4 sm:right-8 md:right-16 lg:right-32 animate-draw"
+      />
+    </Container>
   </main>
-  <hr class='mx-40 opacity-25' />
+
+  <hr class="mx-auto max-w-[80%] opacity-25" />
+
   <About />
   <Works />
   <Contact />

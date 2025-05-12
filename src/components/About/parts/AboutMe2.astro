@@ -1,51 +1,77 @@
-<!-- about me 2 -->
-<div
-  id="about_me_2"
-  id="about_me_1"
-  class="flex
-flex-col
-md:flex-row
-section
-justify-start
-items-start
-md:items-center
-h-3/6
-md:h-screen
-w-screen
-py-20
-md:py-0"
->
-  <div class="relative w-fit gap-6 pl-10 md:pl-0">
-    <h5
-      class="text-4xl md:text-8xl text-nowrap font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-200"
-    >
-      Nice and
-    </h5>
+<!-- About Me Section 2 -->
+<div id="about_me_2" class="relative w-full">
+  <div class="flex flex-col md:flex-row items-start gap-8 md:gap-12 lg:gap-16">
+    <!-- Title section -->
+    <div class="relative w-full md:w-1/3 flex justify-center md:justify-start">
+      <!-- Main title -->
+      <div class="flex flex-col items-center md:items-start">
+        <h3
+          class="text-3xl sm:text-4xl md:text-6xl lg:text-8xl text-nowrap font-bold text-black w-fit
+          p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-green-200 mx-auto md:mx-0"
+        >
+          Nice and
+        </h3>
 
-    <h5
-      class="absolute z-10 shadow-2xl -right-20 md:-right-16 -top-2 md:-top-10 text-xl md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-yellow-300"
-    >
-      Fast
-    </h5>
-    <h5
-      id="scalableCard"
-      class="absolute -right-24 md:-right-44 -bottom-10 md:top-10 rotate-12 text-lg md:text-3xl font-bold text-black w-fit h-fit p-5 rounded-2xl flex justify-center items-center bg-green-500"
-    >
-      Scalable
-    </h5>
-  </div>
-  <div class="relative w-full h-fit pt-10 flex justify-center">
-    <p class="md:pl-80 text-balance text-2xl md:text-6xl w-10/12">
-      Create responsive, attractive, functional and easy to use <b
-        >applications.</b
+        <!-- Mobile badges (shown only on mobile) -->
+        <div class="flex flex-row gap-3 mt-4 md:hidden">
+          <div
+            class="z-10 shadow-md text-lg sm:text-xl font-bold text-black
+            p-3 rounded-2xl flex justify-center items-center bg-yellow-300"
+          >
+            Fast
+          </div>
+
+          <div
+            id="scalableCardMobile"
+            class="text-base sm:text-lg font-bold text-black
+            p-3 rounded-2xl flex justify-center items-center bg-green-500"
+          >
+            Scalable
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop floating badges (hidden on mobile) -->
+      <div
+        class="absolute z-10 shadow-md right-0 md:-right-12 lg:-right-16
+        -top-2 md:-top-6 lg:-top-10
+        text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black
+        p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-yellow-300 hidden md:flex"
       >
-    </p>
-    <img
-      id="highlightSvg"
-      src="/images/draws/Highlight_04.svg"
-      alt="highlight"
-      class="absolute -top-28 right-52 rotate-180 fill-white hidden md:block"
-    />
+        Fast
+      </div>
+
+      <div
+        id="scalableCard"
+        class="absolute hidden md:flex
+        right-0 md:-right-32 lg:-right-44
+        -bottom-4 sm:-bottom-8 md:bottom-auto md:top-6 lg:top-10
+        rotate-6 sm:rotate-8 md:rotate-12
+        text-base sm:text-lg md:text-xl lg:text-3xl font-bold text-black
+        p-3 sm:p-4 md:p-5 rounded-2xl justify-center items-center bg-green-500"
+      >
+        Scalable
+      </div>
+    </div>
+
+    <!-- Description section -->
+    <div class="relative w-full md:w-2/3 pt-6 md:pt-10 px-4 md:px-0">
+      <p
+        class="text-center md:text-start md:pl-4 lg:pl-6 xl:pl-8 text-xl sm:text-2xl md:text-4xl lg:text-6xl"
+      >
+        Create responsive, attractive, functional and easy to use
+        <b class="relative">applications.</b>
+      </p>
+
+      <img
+        id="highlightSvg"
+        src="/images/draws/Highlight_04.svg"
+        alt="highlight"
+        class="absolute -top-16 sm:-top-20 md:-top-24 lg:-top-28
+          right-16 sm:right-32 md:right-40 lg:right-52
+          rotate-180 fill-white hidden md:block"
+      />
+    </div>
   </div>
 </div>
 
@@ -56,60 +82,94 @@ md:py-0"
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Physics effect for Scalable card
+    // Physics effect for Scalable card (desktop)
     const scalableCard = document.getElementById("scalableCard");
+    const scalableCardMobile = document.getElementById("scalableCardMobile");
+    const isMobile = window.innerWidth < 768;
 
     if (scalableCard) {
       // Initial position (hidden above)
       gsap.set(scalableCard, {
         y: -150,
         opacity: 0,
-        rotation: -10,
+        rotation: isMobile ? -5 : -10,
       });
 
       // Custom bounce animation to simulate physics
       ScrollTrigger.create({
         trigger: "#about_me_2",
-        start: "top 40%",
+        start: "top 60%", // Trigger a bit earlier on mobile
         onEnter: () => {
-          setTimeout(() => {
-            // First make it visible
-            gsap.to(scalableCard, {
-              opacity: 1,
-              duration: 0.3,
-              onComplete: () => {
-                // Drop animation with bounce
-                gsap.to(scalableCard, {
-                  y: 0,
-                  rotation: 12,
-                  duration: 1,
-                  ease: "bounce.out", // Built-in bounce effect
-                  onComplete: () => {
-                    // Small wobble effect after landing
-                    gsap.to(scalableCard, {
-                      rotation: 8,
-                      duration: 0.3,
-                      ease: "power1.inOut",
-                      onComplete: () => {
-                        gsap.to(scalableCard, {
-                          rotation: 12,
-                          duration: 0.2,
-                          ease: "power1.inOut",
-                        });
-                      },
-                    });
-                  },
-                });
-              },
-            });
-          }, 400);
+          setTimeout(
+            () => {
+              // First make it visible
+              gsap.to(scalableCard, {
+                opacity: 1,
+                duration: 0.3,
+                onComplete: () => {
+                  // Drop animation with bounce
+                  gsap.to(scalableCard, {
+                    y: 0,
+                    rotation: isMobile ? 6 : 12,
+                    duration: 1,
+                    ease: "bounce.out", // Built-in bounce effect
+                    onComplete: () => {
+                      // Small wobble effect after landing
+                      gsap.to(scalableCard, {
+                        rotation: isMobile ? 4 : 8,
+                        duration: 0.3,
+                        ease: "power1.inOut",
+                        onComplete: () => {
+                          gsap.to(scalableCard, {
+                            rotation: isMobile ? 6 : 12,
+                            duration: 0.2,
+                            ease: "power1.inOut",
+                          });
+                        },
+                      });
+                    },
+                  });
+                },
+              });
+            },
+            isMobile ? 200 : 400
+          ); // Faster on mobile
         },
         onLeaveBack: () => {
           gsap.to(scalableCard, {
             y: -150,
             opacity: 0,
-            rotation: -10,
+            rotation: isMobile ? -5 : -10,
             duration: 0.5,
+          });
+        },
+      });
+    }
+
+    // Animation for mobile scalable card
+    if (scalableCardMobile) {
+      gsap.set(scalableCardMobile, {
+        opacity: 0,
+        scale: 0.5,
+      });
+
+      ScrollTrigger.create({
+        trigger: "#about_me_2",
+        start: "top 70%",
+        onEnter: () => {
+          gsap.to(scalableCardMobile, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.5,
+            delay: 0.3,
+            ease: "back.out(1.7)",
+          });
+        },
+        onLeaveBack: () => {
+          gsap.to(scalableCardMobile, {
+            opacity: 0,
+            scale: 0.5,
+            duration: 0.3,
           });
         },
       });
@@ -129,17 +189,18 @@ md:py-0"
         trigger: "#about_me_2",
         start: "top 45%",
         onEnter: () => {
-          setTimeout(() => {
-            gsap.to(highlightSvg, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.6,
-              delay: 0.8,
-              ease: "back.out(1.7)",
-              className:
-                "animate-draw absolute -top-28 right-52 rotate-180 fill-white hidden md:block",
-            });
-          }, 600);
+          setTimeout(
+            () => {
+              gsap.to(highlightSvg, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.6,
+                delay: isMobile ? 0.4 : 0.8,
+                ease: "back.out(1.7)",
+              });
+            },
+            isMobile ? 300 : 600
+          );
         },
         onLeaveBack: () => {
           gsap.to(highlightSvg, {
@@ -150,5 +211,10 @@ md:py-0"
         },
       });
     }
+
+    // Add resize handler to adjust animations if window size changes
+    window.addEventListener("resize", () => {
+      ScrollTrigger.refresh();
+    });
   });
 </script>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  width?: number | string;
+  height?: number | string;
+  loading?: "eager" | "lazy";
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  class: className = "",
+  width,
+  height,
+  loading = "lazy",
+  sizes = "(max-width: 640px) 100vw, (max-width: 768px) 75vw, (max-width: 1024px) 50vw, 33vw",
+} = Astro.props;
+
+// Determine if the image is already WebP format
+const isWebP = src.toLowerCase().endsWith(".webp");
+---
+
+<img
+  src={src}
+  alt={alt}
+  loading={loading}
+  width={width}
+  height={height}
+  sizes={sizes}
+  class:list={[className]}
+  decoding={loading === "eager" ? "sync" : "async"}
+  style={`
+    max-width: 100%;
+    height: auto;
+  `}
+/>
+
+<style>
+  img {
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Prevent layout shifts */
+  img.has-dimensions {
+    width: auto;
+    height: auto;
+  }
+</style>
