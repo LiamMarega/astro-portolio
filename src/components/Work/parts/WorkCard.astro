@@ -1,5 +1,5 @@
 ---
-import ButtonMore from '../../ui/buttons/ButtonMore.astro';
+import ButtonMore from "../../ui/buttons/ButtonMore.astro";
 
 interface Props {
   id: string;
@@ -39,41 +39,52 @@ const {
 
 <div
   id={id}
-  class={`relative flex ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} p-5 min-h-screen md:h-full w-full ${bgColor}`}
+  class={`relative flex ${reverse ? "md:flex-row-reverse" : "md:flex-row"} p-5 min-h-screen md:h-full w-full ${bgColor}`}
 >
-  {images.map((image) => <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />)}
-  <div class='w-6/6 md:w-3/6 h-5/6 flex flex-col justify-between gap-10 md:gap-20 md:p-10 p-1'>
-    <div class='flex flex-col justify-around gap-10'>
+  {
+    images.map((image) => (
+      <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />
+    ))
+  }
+  <div
+    class="w-6/6 md:w-3/6 h-5/6 flex flex-col justify-center md:justify-between gap-10 md:gap-5 md:p-10 p-1 pt-20 md:pt-28"
+  >
+    <div class="flex flex-col justify-around gap-8 md:gap-2">
       <h5
-        class={`text-3xl mb-7 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl `}
+        class={`text-3xl mb-10 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl `}
       >
         {title}
       </h5>
 
       {
-        description.map((desc) => (
-          <p class='md:text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl'>{desc}</p>
+        description.map((desc, index) => (
+          <p class="md:text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl mb-2">
+            {desc}
+          </p>
         ))
       }
 
       <ButtonMore link={link} />
-	  <div
-      class='flex flex-col border-4 rounded-2xl border-[#E4F4E4] w-fit md:justify-center md:items-start items-center justify-start'
-    >
-      <h5
-        class='text-[#E4F4E4] text-lg font-bold w-fit h-fit p-5 flex justify-center items-center md:text-2xl'
+      <div
+        class="flex flex-col mt-4 border-2 rounded-xl border-[#E4F4E4] w-fit self-center md:self-start hover:shadow-lg transition-shadow duration-300"
       >
-        TECH STACK
-      </h5>
-      <div class='flex flex-row items-center p-2 gap-x-5 '>
-        {
-          techStack.map((tech) => (
-            <img src={tech.src} alt={tech.alt} class='w-8 h-8 md:w-12 md:h-12 hover:scale-105 duration-150 ' />
-          ))
-        }
+        <h5
+          class="text-[#E4F4E4] text-base font-bold w-fit h-fit p-3 flex justify-center items-center md:text-xl"
+        >
+          TECH STACK
+        </h5>
+        <div class="flex flex-row items-center p-2 gap-x-3">
+          {
+            techStack.map((tech) => (
+              <img
+                src={tech.src}
+                alt={tech.alt}
+                class="w-6 h-6 md:w-10 md:h-10 transform transition-all duration-300 hover:scale-110 hover:rotate-3 hover:brightness-110 hover:-translate-y-1"
+              />
+            ))
+          }
+        </div>
       </div>
-    </div>
-   
     </div>
   </div>
 </div>
