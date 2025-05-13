@@ -2,65 +2,52 @@
 import Terminal from "../../ui/Terminal.astro";
 ---
 
-<!-- about me 3 -->
-<div
-  id="about_me_3"
-  class="flex
-  flex-col
-  md:flex-row
-  section
-  overflow-x-hidden
-  justify-center
-  items-center
-  w-screen
-  min-h-[80vh]
-  md:h-screen
-  px-4
-  md:px-10
-  lg:px-36
-  gap-6
-  md:gap-12
-  py-10
-  md:py-0"
->
-  <div class="relative w-full md:w-5/12 lg:w-1/2 z-20 order-2 md:order-1">
-    <h5
-      class="text-lg sm:text-xl md:text-xl lg:text-4xlxl xl:text-4xl leading-relaxed md:leading-relaxed"
-    >
-      <strong class="text-green-300 font-semibold">pixel-perfect</strong>
-      user interfaces and using the latest technologies, such as
-      <span class="block mt-1 md:mt-2 space-x-1 sm:space-x-2">
-        <strong
-          class="bg-gradient-to-r bg-clip-text text-transparent
+<!-- About Me Section 3 -->
+<div id="about_me_3" class="relative w-full max-w-5xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-6 md:gap-12">
+    <div class="w-full md:w-1/2 order-2 md:order-1">
+      <h5
+        class="text-lg sm:text-xl md:text-xl lg:text-4xl leading-relaxed md:leading-relaxed"
+      >
+        <strong class="text-green-300 font-semibold">pixel-perfect</strong>
+        user interfaces and using the latest technologies, such as
+        <span class="block mt-1 md:mt-2 space-x-1 sm:space-x-2">
+          <strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-          >React</strong
-        ><strong
-          class="bg-gradient-to-r bg-clip-text text-transparent
+            >React</strong
+          ><strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-          >Next</strong
-        ><strong
-          class="bg-gradient-to-r bg-clip-text text-transparent
-      from-indigo-500 via-purple-700 to-indigo-500
-      animate-text inline-block"
-          >Astro</strong
-        ><strong
-          class="bg-gradient-to-r bg-clip-text text-transparent
+            >Next</strong
+          ><strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-          >Flutter</strong
-        >
-      </span>
-      <span class="block mt-1 md:mt-2">
-        and <strong
-          class="bg-gradient-to-r bg-clip-text text-transparent
+            >Astro</strong
+          ><strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-          >Firebase</strong
-        >.
-      </span>
-    </h5>
+            >Flutter</strong
+          >
+        </span>
+        <span class="block mt-1 md:mt-2">
+          and <strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
+              from-indigo-500 via-purple-700 to-indigo-500
+              animate-text inline-block"
+            >Firebase</strong
+          >.
+        </span>
+      </h5>
+    </div>
+
+    <div class="w-full md:w-1/2 order-1 md:order-2 mb-6 md:mb-0">
+      <Terminal />
+    </div>
   </div>
 
   <img
@@ -68,22 +55,35 @@ import Terminal from "../../ui/Terminal.astro";
     alt="highlight-draw"
     class="absolute bottom-0 right-0 w-12 md:w-16 lg:w-auto fill-white hidden md:block"
   />
-
-  <div class="w-full md:w-7/12 lg:w-1/2 z-10 order-1 md:order-2 mb-6 md:mb-0">
-    <Terminal />
-  </div>
-
-  <style>
-    strong {
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      strong.inline-block {
-        margin-right: 4px;
-        margin-bottom: 2px;
-        font-size: 0.95em;
-      }
-    }
-  </style>
 </div>
+
+<style>
+  strong {
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    strong.inline-block {
+      margin-right: 4px;
+      margin-bottom: 2px;
+      font-size: 0.95em;
+    }
+  }
+
+  .animate-text {
+    background-size: 200% 200%;
+    animation: textShine 2s linear infinite;
+  }
+
+  @keyframes textShine {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+</style>

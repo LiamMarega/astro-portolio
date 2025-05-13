@@ -1,5 +1,5 @@
 <!-- About Me Section 2 -->
-<div id="about_me_2" class="relative w-full">
+<div id="about_me_2" class="relative w-full max-w-5xl mx-auto">
   <div class="flex flex-col md:flex-row items-start gap-8 md:gap-12 lg:gap-16">
     <!-- Title section -->
     <div class="relative w-full md:w-1/3 flex justify-center md:justify-start">
@@ -82,26 +82,28 @@
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Physics effect for Scalable card (desktop)
-    const scalableCard = document.getElementById("scalableCard");
-    const scalableCardMobile = document.getElementById("scalableCardMobile");
-    const isMobile = window.innerWidth < 768;
+    // Solo inicializar animaciones si no estamos en escritorio
+    if (window.innerWidth < 768) {
+      const isMobile = true;
+      const scalableCard = document.getElementById("scalableCard");
+      const scalableCardMobile = document.getElementById("scalableCardMobile");
+      const highlightSvg = document.getElementById("highlightSvg");
 
-    if (scalableCard) {
-      // Initial position (hidden above)
-      gsap.set(scalableCard, {
-        y: -150,
-        opacity: 0,
-        rotation: isMobile ? -5 : -10,
-      });
+      // Physics effect for Scalable card (desktop)
+      if (scalableCard) {
+        // Initial position (hidden above)
+        gsap.set(scalableCard, {
+          y: -150,
+          opacity: 0,
+          rotation: -5,
+        });
 
-      // Custom bounce animation to simulate physics
-      ScrollTrigger.create({
-        trigger: "#about_me_2",
-        start: "top 60%", // Trigger a bit earlier on mobile
-        onEnter: () => {
-          setTimeout(
-            () => {
+        // Custom bounce animation to simulate physics
+        ScrollTrigger.create({
+          trigger: "#about_me_2",
+          start: "top 60%",
+          onEnter: () => {
+            setTimeout(() => {
               // First make it visible
               gsap.to(scalableCard, {
                 opacity: 1,
@@ -110,18 +112,18 @@
                   // Drop animation with bounce
                   gsap.to(scalableCard, {
                     y: 0,
-                    rotation: isMobile ? 6 : 12,
+                    rotation: 6,
                     duration: 1,
-                    ease: "bounce.out", // Built-in bounce effect
+                    ease: "bounce.out",
                     onComplete: () => {
                       // Small wobble effect after landing
                       gsap.to(scalableCard, {
-                        rotation: isMobile ? 4 : 8,
+                        rotation: 4,
                         duration: 0.3,
                         ease: "power1.inOut",
                         onComplete: () => {
                           gsap.to(scalableCard, {
-                            rotation: isMobile ? 6 : 12,
+                            rotation: 6,
                             duration: 0.2,
                             ease: "power1.inOut",
                           });
@@ -131,90 +133,91 @@
                   });
                 },
               });
-            },
-            isMobile ? 200 : 400
-          ); // Faster on mobile
-        },
-        onLeaveBack: () => {
-          gsap.to(scalableCard, {
-            y: -150,
-            opacity: 0,
-            rotation: isMobile ? -5 : -10,
-            duration: 0.5,
-          });
-        },
-      });
-    }
+            }, 200); // Faster on mobile
+          },
+          onLeaveBack: () => {
+            gsap.to(scalableCard, {
+              y: -150,
+              opacity: 0,
+              rotation: -5,
+              duration: 0.5,
+            });
+          },
+        });
+      }
 
-    // Animation for mobile scalable card
-    if (scalableCardMobile) {
-      gsap.set(scalableCardMobile, {
-        opacity: 0,
-        scale: 0.5,
-      });
+      // Animation for mobile scalable card
+      if (scalableCardMobile) {
+        gsap.set(scalableCardMobile, {
+          opacity: 0,
+          scale: 0.5,
+        });
 
-      ScrollTrigger.create({
-        trigger: "#about_me_2",
-        start: "top 70%",
-        onEnter: () => {
-          gsap.to(scalableCardMobile, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.5,
-            delay: 0.3,
-            ease: "back.out(1.7)",
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(scalableCardMobile, {
-            opacity: 0,
-            scale: 0.5,
-            duration: 0.3,
-          });
-        },
-      });
-    }
+        ScrollTrigger.create({
+          trigger: "#about_me_2",
+          start: "top 70%",
+          onEnter: () => {
+            gsap.to(scalableCardMobile, {
+              opacity: 1,
+              scale: 1,
+              duration: 0.5,
+              delay: 0.3,
+              ease: "back.out(1.7)",
+            });
+          },
+          onLeaveBack: () => {
+            gsap.to(scalableCardMobile, {
+              opacity: 0,
+              scale: 0.5,
+              duration: 0.3,
+            });
+          },
+        });
+      }
 
-    // Pop-in effect for SVG highlight
-    const highlightSvg = document.getElementById("highlightSvg");
+      // Pop-in effect for SVG highlight
+      if (highlightSvg) {
+        gsap.set(highlightSvg, {
+          scale: 0,
+          opacity: 0,
+          transformOrigin: "center center",
+        });
 
-    if (highlightSvg) {
-      gsap.set(highlightSvg, {
-        scale: 0,
-        opacity: 0,
-        transformOrigin: "center center",
-      });
-
-      ScrollTrigger.create({
-        trigger: "#about_me_2",
-        start: "top 45%",
-        onEnter: () => {
-          setTimeout(
-            () => {
+        ScrollTrigger.create({
+          trigger: "#about_me_2",
+          start: "top 45%",
+          onEnter: () => {
+            setTimeout(() => {
               gsap.to(highlightSvg, {
                 scale: 1,
                 opacity: 1,
                 duration: 0.6,
-                delay: isMobile ? 0.4 : 0.8,
+                delay: 0.4,
                 ease: "back.out(1.7)",
               });
-            },
-            isMobile ? 300 : 600
-          );
-        },
-        onLeaveBack: () => {
-          gsap.to(highlightSvg, {
-            scale: 0,
-            opacity: 0,
-            duration: 0.4,
-          });
-        },
-      });
-    }
+            }, 300);
+          },
+          onLeaveBack: () => {
+            gsap.to(highlightSvg, {
+              scale: 0,
+              opacity: 0,
+              duration: 0.4,
+            });
+          },
+        });
+      }
+    } else {
+      // En escritorio, configurar todo para la animación horizontal
+      const scalableCard = document.getElementById("scalableCard");
+      const highlightSvg = document.getElementById("highlightSvg");
 
-    // Add resize handler to adjust animations if window size changes
-    window.addEventListener("resize", () => {
-      ScrollTrigger.refresh();
-    });
+      if (scalableCard) {
+        gsap.set(scalableCard, { opacity: 1, y: 0, rotation: 12 });
+      }
+
+      if (highlightSvg) {
+        gsap.set(highlightSvg, { opacity: 1, scale: 1 });
+      }
+    }
   });
 </script>

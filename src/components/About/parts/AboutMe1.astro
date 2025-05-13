@@ -1,5 +1,5 @@
 <!-- About Me Section 1 -->
-<div id="about_me_1" class="relative w-full">
+<div id="about_me_1" class="relative w-full max-w-5xl mx-auto">
   <div class="flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16">
     <!-- Text content -->
     <div
@@ -16,7 +16,7 @@
       <h4
         id="aboutTitle2"
         class="text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold text-black w-fit
-        p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-yellow-300 opacity-0 mx-auto md:mx-0"
+        p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-yellow-300 mx-auto md:mx-0"
       >
         Liam?
       </h4>
@@ -24,7 +24,7 @@
       <p
         id="aboutDesc"
         class="text-center md:text-start text-xl sm:text-2xl md:text-3xl lg:text-4xl
-        max-w-full md:max-w-[90%] opacity-0"
+        max-w-full md:max-w-[90%]"
       >
         Developer based in Argentina. <br />
         Technology lover, willing to grow and challenge myself in every project
@@ -34,7 +34,7 @@
     <!-- Map image -->
     <div
       id="aboutMap"
-      class="flex justify-center items-center md:items-start w-full md:w-1/2 opacity-0"
+      class="flex justify-center items-center md:items-start w-full md:w-1/2"
     >
       <img
         src="/images/draws/arg.webp"
@@ -53,63 +53,66 @@
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Create responsive breakpoint context for animations
-    const isMobile = window.innerWidth < 768;
+    // Solo inicializar animaciones si no estamos en escritorio
+    // (las animaciones de escritorio se manejan en gsap.js para el scroll horizontal)
+    if (window.innerWidth < 768) {
+      const isMobile = true;
 
-    // 3D Sign/Billboard effect animation
-    gsap.fromTo(
-      "#aboutTitle2",
-      { opacity: 0, rotationX: 90 },
-      {
-        opacity: 1,
-        rotationX: 0,
-        duration: 1,
-        transformOrigin: "center top",
-        ease: "back.out(1.7)",
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: "#about_me_1",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
+      // 3D Sign/Billboard effect animation
+      gsap.fromTo(
+        "#aboutTitle2",
+        { opacity: 0, rotationX: 90 },
+        {
+          opacity: 1,
+          rotationX: 0,
+          duration: 1,
+          transformOrigin: "center top",
+          ease: "back.out(1.7)",
+          delay: 0.3,
+          scrollTrigger: {
+            trigger: "#about_me_1",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
 
-    gsap.fromTo(
-      "#aboutDesc",
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 0.6,
-        scrollTrigger: {
-          trigger: "#about_me_1",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
+      gsap.fromTo(
+        "#aboutDesc",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: 0.6,
+          scrollTrigger: {
+            trigger: "#about_me_1",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
 
-    gsap.fromTo(
-      "#aboutMap",
-      { opacity: 0, scale: 0.8 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        delay: isMobile ? 0.6 : 0.9, // Adjust timing for mobile
-        scrollTrigger: {
-          trigger: "#about_me_1",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
-
-    // Add resize handler to adjust animations if window size changes
-    window.addEventListener("resize", () => {
-      ScrollTrigger.refresh();
-    });
+      gsap.fromTo(
+        "#aboutMap",
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          delay: 0.6,
+          scrollTrigger: {
+            trigger: "#about_me_1",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    } else {
+      // En escritorio, simplemente mostrar todo sin animación de scroll
+      gsap.set("#aboutTitle2", { opacity: 1, rotationX: 0 });
+      gsap.set("#aboutDesc", { opacity: 1, y: 0 });
+      gsap.set("#aboutMap", { opacity: 1, scale: 1 });
+    }
   });
 </script>
