@@ -16,7 +16,7 @@ import Gallery from "../components/gallery/index.astro";
     <Container class="flex flex-col h-full justify-between">
       <div>
         <h1
-          class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-extrabold italic leading-tight"
+          class="main-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-extrabold italic leading-tight"
         >
           FRONTEND <br class="md:block" /> DEVELOPER
         </h1>
@@ -91,5 +91,11 @@ import Gallery from "../components/gallery/index.astro";
     width: 100%;
     height: 100vh;
     overflow: hidden;
+  }
+
+  /* Asegurarse de que el título principal sea estático */
+  .main-title {
+    position: static !important;
+    transform: none !important;
   }
 </style>

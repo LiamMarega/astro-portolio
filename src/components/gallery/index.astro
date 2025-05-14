@@ -7,7 +7,7 @@ import GalleryScripts from "./parts/GalleryScripts.astro";
 ---
 
 <div id="gallery-section" class="gallery-wrapper">
-  <GalleryHeading title="so sick" />
+  <GalleryHeading title="PROCESS" />
 
   <section class="gallery-grid">
     <GalleryLines />
@@ -78,8 +78,8 @@ import GalleryScripts from "./parts/GalleryScripts.astro";
     border-right: 1px solid black;
   }
 
-  /* Estilo para el título */
-  h1 {
+  /* Estilo para el título - ¡Aplicar solo a la galería! */
+  #gallery-section h1 {
     font-size: 14rem;
     font-family: "Bebas Neue", sans-serif;
     position: fixed;
@@ -93,7 +93,7 @@ import GalleryScripts from "./parts/GalleryScripts.astro";
 
   /* Estilos responsivos */
   @media (max-width: 768px) {
-    h1 {
+    #gallery-section h1 {
       font-size: 8rem;
     }
 
@@ -103,7 +103,7 @@ import GalleryScripts from "./parts/GalleryScripts.astro";
   }
 
   @media (max-width: 480px) {
-    h1 {
+    #gallery-section h1 {
       font-size: 5rem;
     }
 
