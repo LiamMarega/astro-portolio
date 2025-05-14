@@ -1,0 +1,118 @@
+---
+import GalleryHeading from "./parts/GalleryHeading.astro";
+import GalleryLines from "./parts/GalleryLines.astro";
+import GalleryImages from "./parts/GalleryImages.astro";
+import GalleryScripts from "./parts/GalleryScripts.astro";
+// Importing styles
+---
+
+<div id="gallery-section" class="gallery-wrapper">
+  <GalleryHeading title="so sick" />
+
+  <section class="gallery-grid">
+    <GalleryLines />
+  </section>
+
+  <section class="gallery">
+    <GalleryImages />
+  </section>
+
+  <section></section>
+
+  <GalleryScripts />
+</div>
+
+<style is:global>
+  /* Estilos base de la galería exactamente como en el original */
+  html,
+  body {
+    width: 100%;
+    overscroll-behavior: none;
+    min-height: 100%;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  #gallery-section {
+    width: 100%;
+    overscroll-behavior: none;
+    min-height: 100%;
+  }
+
+  .gallery-wrapper section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 100vh;
+    margin: 0 auto;
+  }
+
+  .gallery-wrapper .gallery {
+    height: 200vh;
+  }
+
+  /* Estilo para las imágenes */
+  .img {
+    width: 100%;
+    height: 700px;
+    position: relative;
+    background-size: cover;
+    z-index: -1;
+    background-image: url("https://assets.codepen.io/2621168/img1.jpg");
+  }
+
+  .img:before {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    border-right: 1px solid black;
+  }
+
+  /* Estilo para las líneas */
+  .line {
+    border-right: 1px solid black;
+  }
+
+  /* Estilo para el título */
+  h1 {
+    font-size: 14rem;
+    font-family: "Bebas Neue", sans-serif;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    margin: 0;
+    color: white;
+  }
+
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 8rem;
+    }
+
+    .img {
+      height: 500px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 5rem;
+    }
+
+    .gallery-wrapper section {
+      grid-template-columns: 1fr;
+    }
+
+    .img {
+      height: 400px;
+    }
+  }
+</style>

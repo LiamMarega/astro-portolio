@@ -1,0 +1,29 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<h1 class="gallery-title">{title}</h1>
+
+<style>
+  .gallery-title {
+    font-size: 14rem;
+    font-family: "Bebas Neue", sans-serif;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    margin: 0;
+    color: white;
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Inicialmente oculto */
+    will-change: transform, opacity, filter; /* Optimiza las animaciones */
+    transform-origin: center center; /* Asegura que la escala sea desde el centro */
+    backface-visibility: hidden; /* Ayuda con los problemas de renderizado */
+    -webkit-font-smoothing: antialiased; /* Mejor renderizado de fuente */
+  }
+</style>

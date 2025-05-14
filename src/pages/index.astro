@@ -6,6 +6,7 @@ import Works from "../components/Work/Works.astro";
 import Contact from "../components/Contact/Contact.astro";
 import CursorFollow from "../components/ui/CursorFollow.astro";
 import Container from "../components/ui/Container.astro";
+import Gallery from "../components/gallery/index.astro";
 ---
 
 <Layout title="Liam Marega">
@@ -78,5 +79,17 @@ import Container from "../components/ui/Container.astro";
 
   <About />
   <Works />
+  <div class="gallery-section-container">
+    <Gallery />
+  </div>
   <Contact />
 </Layout>
+
+<style>
+  .gallery-section-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+</style>

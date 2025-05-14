@@ -1,0 +1,125 @@
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import Lenis from "lenis";
+
+  // Nos aseguramos de que el DOM esté listo
+  document.addEventListener("DOMContentLoaded", () => {
+    // Registramos el plugin ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Esperamos un poco para asegurarnos de que todo esté cargado
+    setTimeout(() => {
+      // Configuramos Lenis exactamente como en el ejemplo original
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
+      requestAnimationFrame(raf);
+
+      // Animación para el título "so sick"
+      const title = document.querySelector(".gallery-title");
+      if (title) {
+        // Configuramos el estado inicial del título
+        gsap.set(title, {
+          visibility: "hidden",
+          opacity: 0,
+          scale: 0.5,
+          filter: "blur(20px)",
+          textShadow: "0 0 0 rgba(255,255,255,0)",
+        });
+
+        // Timeline para la animación del título
+        let titleTimeline = gsap.timeline({ paused: true });
+
+        // Secuencia de animación para un efecto más dramático
+        titleTimeline
+          .set(title, { visibility: "visible" })
+          // Primero aparece con desenfoque
+          .to(title, {
+            opacity: 1,
+            scale: 1.2, // Sobreescalar inicialmente
+            filter: "blur(5px)",
+            duration: 0.4,
+            ease: "power2.out",
+          })
+          // Luego se enfoca y rebota a su tamaño final
+          .to(title, {
+            scale: 1,
+            filter: "blur(0px)",
+            textShadow: "0 0 20px rgba(255,255,255,0.5)",
+            duration: 0.8,
+            ease: "elastic.out(1, 0.3)",
+          });
+
+        // Reverse timeline para ocultar el título
+        let titleHideTimeline = gsap.timeline({ paused: true });
+
+        titleHideTimeline.to(title, {
+          opacity: 0,
+          scale: 0.5,
+          filter: "blur(20px)",
+          textShadow: "0 0 0 rgba(255,255,255,0)",
+          duration: 0.5,
+          ease: "power2.in",
+          onComplete: () => {
+            gsap.set(title, { visibility: "hidden" });
+          },
+        });
+
+        // Configuramos la animación del título
+        ScrollTrigger.create({
+          trigger: "#gallery-section",
+          start: "top 70%", // Activar un poco antes para mejor experiencia
+          end: "bottom 10%", // Mantener visible casi hasta el final de la sección
+          onEnter: () => {
+            titleHideTimeline.pause();
+            titleTimeline.restart();
+          },
+          onLeave: () => {
+            titleTimeline.pause();
+            titleHideTimeline.restart();
+          },
+          onEnterBack: () => {
+            titleHideTimeline.pause();
+            titleTimeline.restart();
+          },
+          onLeaveBack: () => {
+            titleTimeline.pause();
+            titleHideTimeline.restart();
+          },
+        });
+      }
+
+      // Configuramos la animación de la galería exactamente como en el ejemplo original
+      const tl = gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: "#gallery-section",
+            start: "top bottom", // Comienza cuando la parte superior de la galería llega al fondo de la ventana
+            end: "bottom top", // Termina cuando la parte inferior de la galería llega a la parte superior de la ventana
+            scrub: true,
+            // Marcadores para depuración (quitar en producción)
+            // markers: true,
+            onEnter: () => {
+              console.log("Galería entrando en vista");
+            },
+          },
+        })
+        .to(".img", {
+          stagger: 0.2,
+          y: -700,
+          ease: "none",
+        });
+
+      // Refrescamos ScrollTrigger para asegurarnos de que todo funcione correctamente
+      ScrollTrigger.refresh();
+    }, 500); // Esperar 500ms para asegurarnos de que todo esté cargado
+  });
+</script>

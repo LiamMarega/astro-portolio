@@ -1,0 +1,59 @@
+---
+// We can replace these with actual project images later
+// These are examples - you should replace them with your actual project images
+const images = [
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+  "https://assets.codepen.io/2621168/img1.jpg",
+];
+---
+
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+<div class="img"></div>
+
+<style>
+  .img {
+    width: 100%;
+    height: 700px;
+    position: relative;
+    background-size: cover;
+    z-index: -1;
+    background-image: url("https://assets.codepen.io/2621168/img1.jpg");
+  }
+
+  .img:before {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    border-right: 1px solid black;
+  }
+
+  @media (max-width: 768px) {
+    .img {
+      height: 500px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .img {
+      height: 400px;
+    }
+  }
+</style>

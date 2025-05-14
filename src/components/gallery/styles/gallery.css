@@ -1,0 +1,92 @@
+/* Base gallery styles */
+html, body {
+  width: 100%;
+  overscroll-behavior: none;
+  min-height: 100%;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Gallery container */
+#gallery {
+  width: 100%;
+  overscroll-behavior: none;
+  min-height: 100%;
+}
+
+/* Section layouts */
+section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.gallery {
+  height: 200vh;
+}
+
+/* Image gallery styles */
+.img {
+  width: 100%;
+  height: 700px;
+  position: relative;
+  background-size: cover;
+  z-index: -1;
+}
+
+.img:before {
+  content: '';
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  border-right: 1px solid black;
+}
+
+/* Line styles */
+.line {
+  border-right: 1px solid black;
+}
+
+/* Heading styles */
+h1 { 
+  font-size: 14rem; 
+  font-family: 'Bebas Neue', sans-serif;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  margin: 0;
+  color: white;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 8rem;
+  }
+  
+  .img {
+    height: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 5rem;
+  }
+  
+  section {
+    grid-template-columns: 1fr;
+  }
+  
+  .img {
+    height: 400px;
+  }
+} 
