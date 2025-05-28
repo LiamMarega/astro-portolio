@@ -1,118 +1,356 @@
 ---
-import GalleryHeading from "./parts/GalleryHeading.astro";
-import GalleryLines from "./parts/GalleryLines.astro";
-import GalleryImages from "./parts/GalleryImages.astro";
-import GalleryScripts from "./parts/GalleryScripts.astro";
-// Importing styles
+// Optimized scroll reveal gallery
 ---
 
-<div id="gallery-section" class="gallery-wrapper">
-  <GalleryHeading title="PROCESS" />
+<section class="gallery-section" id="gallery">
+  <div class="gallery-container">
+    <div class="gallery-header">
+      <h2 class="gallery-title">Featured Projects</h2>
+      <p class="gallery-subtitle">Discover our latest creative works</p>
+    </div>
 
-  <section class="gallery-grid">
-    <GalleryLines />
-  </section>
+    <div class="gallery-grid">
+      <div class="project-card" data-reveal="fade-up" data-delay="0">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
+            alt="Analytics Dashboard"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>Analytics Dashboard</h3>
+              <p>Modern data visualization platform with real-time insights</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <section class="gallery">
-    <GalleryImages />
-  </section>
+      <div class="project-card" data-reveal="fade-up" data-delay="100">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"
+            alt="Mobile Banking App"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>Mobile Banking App</h3>
+              <p>Intuitive financial management with seamless UX design</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <section></section>
+      <div class="project-card" data-reveal="fade-up" data-delay="200">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop"
+            alt="E-commerce Platform"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>E-commerce Platform</h3>
+              <p>Next-generation shopping experience with AI recommendations</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <GalleryScripts />
-</div>
+      <div class="project-card" data-reveal="fade-up" data-delay="300">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
+            alt="Data Visualization"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>Data Visualization</h3>
+              <p>Interactive charts and graphs for complex data analysis</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-reveal="fade-up" data-delay="400">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&h=600&fit=crop"
+            alt="3D Web Experience"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>3D Web Experience</h3>
+              <p>Immersive 3D environment with WebGL and Three.js</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-reveal="fade-up" data-delay="500">
+        <div class="card-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop"
+            alt="Brand Identity"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-content">
+              <h3>Brand Identity</h3>
+              <p>Complete visual identity system for modern startups</p>
+              <a href="#" class="card-link">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Optimized scroll reveal with performance improvements
+  let isObserverActive = true;
+
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: "0px 0px -100px 0px",
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!isObserverActive) return;
+
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const element = entry.target as HTMLElement;
+        const delay = parseInt(element.dataset.delay || "0");
+
+        // Use requestAnimationFrame for smooth animations
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            element.classList.add("revealed");
+          }, delay);
+        });
+
+        // Stop observing once revealed to prevent re-triggering
+        observer.unobserve(element);
+      }
+    });
+  }, observerOptions);
+
+  // Initialize when DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".project-card[data-reveal]");
+
+    // Only observe if cards exist
+    if (cards.length > 0) {
+      cards.forEach((card) => observer.observe(card));
+    }
+
+    // Cleanup observer when all cards are revealed
+    setTimeout(() => {
+      isObserverActive = false;
+    }, 3000); // Stop after 3 seconds max
+  });
+
+  // Cleanup on page unload
+  window.addEventListener("beforeunload", () => {
+    observer.disconnect();
+    isObserverActive = false;
+  });
+</script>
 
 <style is:global>
-  /* Estilos base de la galería exactamente como en el original */
-  html,
-  body {
-    width: 100%;
-    overscroll-behavior: none;
-    min-height: 100%;
-  }
-
-  body::-webkit-scrollbar {
-    display: none;
-  }
-
-  #gallery-section {
-    width: 100%;
-    overscroll-behavior: none;
-    min-height: 100%;
-  }
-
-  .gallery-wrapper section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    height: 100vh;
-    margin: 0 auto;
-  }
-
-  .gallery-wrapper .gallery {
-    height: 200vh;
-  }
-
-  /* Estilo para las imágenes */
-  .img {
-    width: 100%;
-    height: 700px;
+  .gallery-section {
     position: relative;
-    background-size: cover;
-    z-index: -1;
-    background-image: url("https://assets.codepen.io/2621168/img1.jpg");
+    padding: 6rem 0;
+    min-height: auto; /* Changed from 100vh to auto */
   }
 
-  .img:before {
-    content: "";
-    position: absolute;
-    height: 100vh;
-    width: 100%;
-    z-index: 4;
-    top: 0;
-    left: 0;
-    border-right: 1px solid black;
+  .gallery-container {
+    max-width: 1200px; /* Reduced from 1400px */
+    margin: 0 auto;
+    padding: 0 1.5rem; /* Reduced padding */
+    position: relative;
   }
 
-  /* Estilo para las líneas */
-  .line {
-    border-right: 1px solid black;
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 3rem; /* Reduced from 4rem */
   }
 
-  /* Estilo para el título - ¡Aplicar solo a la galería! */
-  #gallery-section h1 {
-    font-size: 14rem;
-    font-family: "Bebas Neue", sans-serif;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+  .gallery-title {
+    font-size: clamp(2rem, 4vw, 3.5rem); /* Reduced size */
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gallery-subtitle {
+    font-size: 1.1rem; /* Slightly reduced */
+    color: #888;
+    font-weight: 300;
     margin: 0;
-    color: white;
   }
 
-  /* Estilos responsivos */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(350px, 1fr)
+    ); /* Reduced min width */
+    gap: 1.5rem; /* Reduced gap */
+    margin-top: 2rem; /* Reduced margin */
+  }
+
+  .project-card {
+    position: relative;
+    border-radius: 16px; /* Slightly reduced */
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Reduced shadow */
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* Faster transition */
+    opacity: 0;
+    transform: translateY(40px) scale(0.96); /* Reduced movement */
+    will-change: transform, opacity; /* Optimize for animations */
+  }
+
+  .project-card.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px) scale(1.01); /* Reduced hover effect */
+    box-shadow: 0 15px 40px rgba(0, 198, 255, 0.15); /* Reduced glow */
+  }
+
+  .card-image-wrapper {
+    position: relative;
+    height: 250px; /* Reduced from 300px */
+    overflow: hidden;
+  }
+
+  .card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* Faster transition */
+  }
+
+  .project-card:hover .card-image-wrapper img {
+    transform: scale(1.05); /* Reduced scale */
+  }
+
+  .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.6) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    padding: 1.5rem; /* Reduced padding */
+    transform: translateY(15px); /* Reduced movement */
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); /* Faster transition */
+  }
+
+  .project-card:hover .card-overlay {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .card-content h3 {
+    color: #ffffff;
+    font-size: 1.3rem; /* Slightly reduced */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-content p {
+    color: #cccccc;
+    font-size: 0.9rem; /* Slightly reduced */
+    line-height: 1.5; /* Reduced line height */
+    margin-bottom: 1rem;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    color: #eaff00;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem; /* Slightly reduced */
+    padding: 0.4rem 0.8rem; /* Reduced padding */
+    border: 1px solid #eaff00;
+    border-radius: 20px; /* Reduced radius */
+    transition: all 0.25s ease; /* Faster transition */
+    background: rgba(0, 198, 255, 0.1);
+    backdrop-filter: blur(8px); /* Reduced blur */
+  }
+
+  .card-link:hover {
+    background: #eaff00;
+    color: #000;
+    transform: translateY(-1px); /* Reduced movement */
+    box-shadow: 0 4px 12px rgba(255, 255, 0, 0.3); /* Reduced shadow */
+  }
+
+  /* Responsive optimizations */
   @media (max-width: 768px) {
-    #gallery-section h1 {
-      font-size: 8rem;
+    .gallery-section {
+      padding: 3rem 0; /* Reduced mobile padding */
     }
 
-    .img {
-      height: 500px;
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem; /* Reduced mobile gap */
+    }
+
+    .gallery-container {
+      padding: 0 1rem;
+    }
+
+    .card-image-wrapper {
+      height: 200px; /* Reduced mobile height */
+    }
+
+    .gallery-header {
+      margin-bottom: 2rem; /* Reduced mobile margin */
     }
   }
 
-  @media (max-width: 480px) {
-    #gallery-section h1 {
-      font-size: 5rem;
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      transition: none;
     }
 
-    .gallery-wrapper section {
-      grid-template-columns: 1fr;
+    .project-card:hover {
+      transform: none;
     }
 
-    .img {
-      height: 400px;
+    .card-image-wrapper img {
+      transition: none;
+    }
+
+    .project-card:hover .card-image-wrapper img {
+      transform: none;
     }
   }
 </style>

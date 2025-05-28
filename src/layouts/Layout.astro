@@ -1,6 +1,5 @@
 ---
 import Navbar from "../components/ui/Navbar.astro";
-import { ViewTransitions } from "astro:transitions";
 import "lenis/dist/lenis.css";
 import NoiseBackground from "../components/ui/NoiseBackground.astro";
 import SquareBackground from "../components/ui/SquareBackground.astro";
@@ -39,7 +38,6 @@ const {
   </head>
 
   <body class="overflow-x-hidden bg-black text-white min-h-screen">
-    <ViewTransitions />
     <Navbar />
     <slot />
     <NoiseBackground />
