@@ -2,81 +2,98 @@
 // Optimized scroll reveal gallery
 ---
 
-<section class="gallery-section" id="gallery">
+<section 
+  class="gallery-section" 
+  id="gallery"
+  role="region"
+  aria-label="Featured projects gallery"
+>
   <div class="gallery-container">
-    <div class="gallery-header">
+    <header class="gallery-header">
       <h2 class="gallery-title">Featured Projects</h2>
       <p class="gallery-subtitle">Discover our latest creative works</p>
-    </div>
+    </header>
 
     <div class="gallery-grid">
-      <div class="project-card" data-reveal="fade-up" data-delay="0">
+      <article class="project-card" data-reveal="fade-up" data-delay="0" role="article" aria-label="Analytics Dashboard project">
         <div class="card-image-wrapper">
           <img
             src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
-            alt="Analytics Dashboard"
+            alt="Analytics Dashboard project screenshot"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
               <h3>Analytics Dashboard</h3>
               <p>Modern data visualization platform with real-time insights</p>
-              <a href="#" class="card-link">View Project</a>
+              <a href="#" class="card-link" aria-label="View Analytics Dashboard project">View Project</a>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="project-card" data-reveal="fade-up" data-delay="100">
+      <article class="project-card" data-reveal="fade-up" data-delay="100" role="article" aria-label="Mobile Banking App project">
         <div class="card-image-wrapper">
           <img
             src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"
-            alt="Mobile Banking App"
+            alt="Mobile Banking App project screenshot"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
               <h3>Mobile Banking App</h3>
               <p>Intuitive financial management with seamless UX design</p>
-              <a href="#" class="card-link">View Project</a>
+              <a href="#" class="card-link" aria-label="View Mobile Banking App project">View Project</a>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="project-card" data-reveal="fade-up" data-delay="200">
+      <article class="project-card" data-reveal="fade-up" data-delay="200" role="article" aria-label="E-commerce Platform project">
         <div class="card-image-wrapper">
           <img
             src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop"
-            alt="E-commerce Platform"
+            alt="E-commerce Platform project screenshot"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
               <h3>E-commerce Platform</h3>
               <p>Next-generation shopping experience with AI recommendations</p>
-              <a href="#" class="card-link">View Project</a>
+              <a href="#" class="card-link" aria-label="View E-commerce Platform project">View Project</a>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="project-card" data-reveal="fade-up" data-delay="300">
+      <article class="project-card" data-reveal="fade-up" data-delay="300" role="article" aria-label="Data Visualization project">
         <div class="card-image-wrapper">
           <img
             src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
-            alt="Data Visualization"
+            alt="Data Visualization project screenshot"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
               <h3>Data Visualization</h3>
               <p>Interactive charts and graphs for complex data analysis</p>
-              <a href="#" class="card-link">View Project</a>
+              <a href="#" class="card-link" aria-label="View Data Visualization project">View Project</a>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
       <div class="project-card" data-reveal="fade-up" data-delay="400">
         <div class="card-image-wrapper">
@@ -170,35 +187,36 @@
 <style is:global>
   .gallery-section {
     position: relative;
-    padding: 6rem 0;
-    min-height: auto; /* Changed from 100vh to auto */
+    padding: 3rem 0;
+    min-height: auto;
   }
 
   .gallery-container {
-    max-width: 1200px; /* Reduced from 1400px */
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem; /* Reduced padding */
+    padding: 0 1rem;
     position: relative;
   }
 
   .gallery-header {
     text-align: center;
-    margin-bottom: 3rem; /* Reduced from 4rem */
+    margin-bottom: 2rem;
   }
 
   .gallery-title {
-    font-size: clamp(2rem, 4vw, 3.5rem); /* Reduced size */
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    line-height: 1.2;
   }
 
   .gallery-subtitle {
-    font-size: 1.1rem; /* Slightly reduced */
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     color: #888;
     font-weight: 300;
     margin: 0;
@@ -206,24 +224,21 @@
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(350px, 1fr)
-    ); /* Reduced min width */
-    gap: 1.5rem; /* Reduced gap */
-    margin-top: 2rem; /* Reduced margin */
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
   }
 
   .project-card {
     position: relative;
-    border-radius: 16px; /* Slightly reduced */
+    border-radius: 12px;
     overflow: hidden;
     background: #1a1a1a;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Reduced shadow */
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* Faster transition */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0;
-    transform: translateY(40px) scale(0.96); /* Reduced movement */
-    will-change: transform, opacity; /* Optimize for animations */
+    transform: translateY(30px) scale(0.98);
+    will-change: transform, opacity;
   }
 
   .project-card.revealed {
@@ -232,13 +247,13 @@
   }
 
   .project-card:hover {
-    transform: translateY(-8px) scale(1.01); /* Reduced hover effect */
-    box-shadow: 0 15px 40px rgba(0, 198, 255, 0.15); /* Reduced glow */
+    transform: translateY(-4px) scale(1.005);
+    box-shadow: 0 8px 25px rgba(0, 198, 255, 0.1);
   }
 
   .card-image-wrapper {
     position: relative;
-    height: 250px; /* Reduced from 300px */
+    height: 200px;
     overflow: hidden;
   }
 
@@ -311,31 +326,68 @@
     box-shadow: 0 4px 12px rgba(255, 255, 0, 0.3); /* Reduced shadow */
   }
 
-  /* Responsive optimizations */
-  @media (max-width: 768px) {
+  /* Mobile First Responsive Design */
+  @media (min-width: 480px) {
     .gallery-section {
-      padding: 3rem 0; /* Reduced mobile padding */
+      padding: 4rem 0;
     }
-
-    .gallery-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem; /* Reduced mobile gap */
-    }
-
+    
     .gallery-container {
-      padding: 0 1rem;
+      padding: 0 1.5rem;
     }
-
+    
     .card-image-wrapper {
-      height: 200px; /* Reduced mobile height */
+      height: 220px;
     }
-
+  }
+  
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+    
     .gallery-header {
-      margin-bottom: 2rem; /* Reduced mobile margin */
+      margin-bottom: 2.5rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .gallery-section {
+      padding: 5rem 0;
+    }
+    
+    .card-image-wrapper {
+      height: 240px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .gallery-header {
+      margin-bottom: 3rem;
+    }
+    
+    .card-image-wrapper {
+      height: 260px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .gallery-section {
+      padding: 6rem 0;
+    }
+    
+    .gallery-grid {
+      gap: 2rem;
     }
   }
 
-  /* Reduce motion for users who prefer it */
+  /* Accessibility and Motion Preferences */
   @media (prefers-reduced-motion: reduce) {
     .project-card {
       transition: none;
@@ -349,6 +401,28 @@
       transition: none;
     }
 
+    .project-card:hover .card-image-wrapper img {
+      transform: none;
+    }
+  }
+  
+  @media (prefers-contrast: high) {
+    .project-card {
+      border: 1px solid #ffffff;
+    }
+    
+    .card-overlay {
+      background: rgba(0, 0, 0, 0.9);
+    }
+  }
+  
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .project-card:hover {
+      transform: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
     .project-card:hover .card-image-wrapper img {
       transform: none;
     }

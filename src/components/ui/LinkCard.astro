@@ -14,34 +14,36 @@ const { title, description, url, icon, gradient = "from-purple-500 to-pink-500" 
   href={url} 
   target="_blank" 
   rel="noopener noreferrer"
-  class="group block w-full max-w-md mx-auto mb-4 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+  class="group block w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-3 sm:mb-4 transform transition-all duration-300 hover:scale-105 focus:scale-105 hover:shadow-2xl focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-black rounded-xl sm:rounded-2xl motion-reduce:transform-none motion-reduce:transition-none"
+  aria-label={`Visit ${title}${description ? ': ' + description : ''} (opens in new tab)`}
 >
-  <div class={`relative overflow-hidden rounded-2xl bg-gradient-to-r ${gradient} p-[2px] shadow-lg`}>
-    <div class="relative bg-black/90 backdrop-blur-sm rounded-2xl p-6 h-full transition-all duration-300 group-hover:bg-black/80">
-      <div class="flex items-center space-x-4">
+  <div class={`relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-r ${gradient} p-[1px] sm:p-[2px] shadow-lg`}>
+    <div class="relative bg-black/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 h-full transition-all duration-300 group-hover:bg-black/80 motion-reduce:transition-none">
+      <div class="flex items-center gap-3 sm:gap-4">
         {icon && (
           <div class="flex-shrink-0">
-            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center text-lg sm:text-2xl" aria-hidden="true">
               {icon}
             </div>
           </div>
         )}
         <div class="flex-1 min-w-0">
-          <h3 class="text-lg font-semibold text-white truncate group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300">
+          <h3 class="text-base sm:text-lg font-semibold text-white truncate group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 motion-reduce:group-hover:text-white">
             {title}
           </h3>
           {description && (
-            <p class="text-sm text-gray-300 mt-1 line-clamp-2">
+            <p class="text-xs sm:text-sm text-gray-300 mt-1 line-clamp-2 leading-relaxed">
               {description}
             </p>
           )}
         </div>
         <div class="flex-shrink-0">
           <svg 
-            class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" 
+            class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-white focus:text-white transition-colors duration-300 motion-reduce:transition-none" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
@@ -57,5 +59,71 @@ const { title, description, url, icon, gradient = "from-purple-500 to-pink-500" 
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Ensure proper touch targets on mobile */
+  @media (max-width: 640px) {
+    a {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+      transform: none;
+    }
+    
+    a:hover,
+    a:focus {
+      transform: none;
+    }
+    
+    .group:hover h3,
+    .group:focus h3 {
+      background: none;
+      -webkit-background-clip: unset;
+      background-clip: unset;
+      color: white;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    a {
+      border: 2px solid currentColor;
+    }
+    
+    .group:hover .bg-black\/90,
+    .group:focus .bg-black\/90 {
+      background-color: rgb(0 0 0 / 0.95);
+    }
+    
+    h3, p {
+      color: white !important;
+    }
+  }
+  
+  /* Enhanced focus indicators */
+  a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Skip link support */
+  a:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Performance optimization */
+  a {
+    will-change: transform;
+  }
+
+  a:not(:hover):not(:focus) {
+    will-change: auto;
   }
 </style>

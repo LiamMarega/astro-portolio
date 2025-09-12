@@ -3,19 +3,26 @@ interface Props {
   title: string;
   description: string;
   image: string;
+  priority?: boolean;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, priority = false } = Astro.props;
 ---
 
-<div class='card h-72 w-60'>
-  <div class='circle'></div>
-  <div class='circle'></div>
+<div class='card w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-64 sm:h-72 md:h-80 lg:h-72 mx-auto' role="article" tabindex="0">
+  <div class='circle' aria-hidden="true"></div>
+  <div class='circle' aria-hidden="true"></div>
   <div class='card-inner'>
-    <div class='p-6 flex flex-col gap-5 justify-center items-center'>
-      <h4 class='font-extrabold'>{title}</h4>
-      <span> {description}</span>
-      <img src={image} alt={title} class='h-16' />
+    <div class='p-4 sm:p-5 md:p-6 flex flex-col gap-3 sm:gap-4 md:gap-5 justify-center items-center h-full text-center'>
+      <h4 class='font-extrabold text-sm sm:text-base md:text-lg lg:text-xl leading-tight'>{title}</h4>
+      <p class='text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed max-w-full'>{description}</p>
+      <img 
+        src={image} 
+        alt={`${title} icon`} 
+        class='h-12 sm:h-14 md:h-16 lg:h-18 w-auto object-contain flex-shrink-0'
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+      />
     </div>
   </div>
 </div>

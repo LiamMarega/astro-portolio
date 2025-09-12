@@ -9,39 +9,44 @@ import Container from "../components/ui/Container.astro";
 import Gallery from "../components/gallery/index.astro";
 ---
 
-<Layout title="Liam Marega">
-  <main class="relative min-h-80 md:min-h-screen pb-16 text-white">
+<Layout 
+  title="Liam Marega - Frontend Developer | Responsive Web Applications"
+  description="Experienced Frontend Developer specializing in creating responsive, attractive, and functional web applications. Expert in React, TypeScript, and modern web technologies."
+>
+  <main class="relative min-h-screen pb-12 sm:pb-16 text-white" role="main">
     <CursorFollow />
 
     <Container class="flex flex-col h-full justify-between">
-      <div>
+      <header class="hero-section">
         <h1
-          class="main-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl 2xl:text-9xl font-extrabold italic leading-tight"
+          class="main-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold italic leading-tight"
+          role="banner"
         >
-          FRONTEND <br class="md:block" /> DEVELOPER
+          FRONTEND <br class="sm:block" /> DEVELOPER
         </h1>
 
-        <div class="mt-8 md:mt-12">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+        <div class="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8">
             <p
-              class="font-extralight text-base md:text-lg text-center md:text-start text-balance opacity-70 p-2"
+              class="font-extralight text-sm sm:text-base md:text-lg text-center sm:text-start text-balance opacity-70 p-2"
             >
               I code with art and Empowering startups with visually stunning and
               functionally seamless interfaces.
             </p>
 
             <p
-              class="text-center md:text-start text-base md:text-lg font-extralight text-balance opacity-70 p-2"
+              class="text-center sm:text-start text-sm sm:text-base md:text-lg font-extralight text-balance opacity-70 p-2"
             >
-              I'm a passionate developer with only year experience who uses
+              I'm a passionate developer with experience who uses
               research, data, and thoughtful design to create delightful
               products that scale.
             </p>
 
-            <div class="flex items-center justify-center md:justify-start p-2">
+            <div class="flex items-center justify-center sm:justify-start p-2">
               <a
                 href="#contact"
-                class="group flex items-center text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors"
+                class="group flex items-center text-sm sm:text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black"
+                aria-label="Navigate to contact section"
               >
                 Get in Touch
                 <svg
@@ -49,7 +54,8 @@ import Gallery from "../components/gallery/index.astro";
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  class="h-4 w-4 sm:h-5 sm:w-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
@@ -62,16 +68,20 @@ import Gallery from "../components/gallery/index.astro";
           </div>
         </div>
 
-        <div class="mt-8 md:mt-12">
+        <div class="mt-6 sm:mt-8 md:mt-12">
           <InformativeBox />
         </div>
-      </div>
+      </header>
 
-      <img
-        src="/images/draws/arrowBucle.svg"
-        alt="bottom-arrow"
-        class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-36 lg:h-36 absolute bottom-16 md:bottom-24 lg:bottom-32 right-4 sm:right-8 md:right-16 lg:right-32 animate-draw"
-      />
+      <div class="hero-decoration">
+        <img
+          src="/images/draws/arrowBucle.svg"
+          alt="Decorative arrow pointing down"
+          class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-36 xl:h-36 absolute bottom-12 sm:bottom-16 md:bottom-24 lg:bottom-32 right-3 sm:right-4 md:right-8 lg:right-16 xl:right-32 animate-draw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     </Container>
 
     <hr class="mx-auto max-w-[80%] opacity-25" />

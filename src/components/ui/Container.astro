@@ -3,7 +3,7 @@
  * Responsive Container Component
  *
  * A reusable container with consistent padding and max-width across the site.
- * Use this to maintain layout consistency between sections.
+ * Optimized with Mobile First approach for all screen sizes.
  *
  * Usage example:
  * <Container>
@@ -23,6 +23,11 @@ interface Props {
   fullWidthMobile?: boolean;
 
   /**
+   * Container size variant
+   */
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+  /**
    * Optional max width override (defaults to responsive scaling)
    */
   maxWidth?: string;
@@ -31,25 +36,51 @@ interface Props {
    * Optional padding override (defaults to responsive padding)
    */
   padding?: string;
+
+  /**
+   * Center content vertically
+   */
+  centerY?: boolean;
+
+  /**
+   * Semantic HTML element to use
+   */
+  as?: 'div' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer';
 }
 
 const {
   class: className = "",
   fullWidthMobile = false,
-  maxWidth = "max-w-[90rem]",
-  padding = "px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16",
+  size = 'lg',
+  maxWidth,
+  padding,
+  centerY = false,
+  as: Element = 'div',
 } = Astro.props;
+
+// Size-based max-width classes (Mobile First)
+const sizeClasses = {
+  sm: 'max-w-2xl',
+  md: 'max-w-4xl', 
+  lg: 'max-w-6xl',
+  xl: 'max-w-7xl',
+  full: 'max-w-full'
+};
+
+const finalMaxWidth = maxWidth || sizeClasses[size];
+const finalPadding = padding || "px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16";
 ---
 
-<div
+<Element
   class:list={[
     "mx-auto w-full",
     fullWidthMobile ? "" : "max-w-[100vw]",
-    maxWidth,
-    padding,
+    finalMaxWidth,
+    finalPadding,
+    centerY && "flex items-center justify-center min-h-screen",
     className,
   ]}
 >
   <slot />
-</div>
+</Element>
 

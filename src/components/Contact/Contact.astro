@@ -4,7 +4,11 @@ import SocialButtons from '../../components/ui/buttons/SocialButtons.astro';
 
 <section
   id='contact'
-  class='h-full p-24 md:p-0 md:h-screen w-screen flex justify-center items-center'
+  class='min-h-screen w-full flex justify-center items-center p-6 sm:p-8 md:p-12 lg:p-16 xl:p-24 2xl:p-0'
+  role='region'
+  aria-label='Contact section'
 >
-  <SocialButtons />
+  <div class='w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl'>
+    <SocialButtons />
+  </div>
 </section>

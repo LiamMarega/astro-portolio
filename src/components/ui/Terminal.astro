@@ -1,21 +1,24 @@
 <div
-  class="container opacity-90 w-full max-w-[85vw] md:max-w-[550px] h-[220px] sm:h-[300px] md:h-[450px] md:opacity-100 shadow-lg"
+  class="container w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[550px] xl:max-w-[600px] h-[200px] sm:h-[220px] md:h-[280px] lg:h-[380px] xl:h-[450px] opacity-90 md:opacity-100 shadow-lg mx-auto"
+  role="img"
+  aria-label="Terminal window showing command prompt with blinking cursor"
+  tabindex="0"
 >
   <div class="terminal_toolbar">
     <div class="butt">
-      <button class="btn btn-color"></button>
-      <button class="btn"></button>
-      <button class="btn"></button>
+      <button class="btn btn-color" aria-label="Close terminal" tabindex="-1" role="button"></button>
+      <button class="btn" aria-label="Minimize terminal" tabindex="-1" role="button"></button>
+      <button class="btn" aria-label="Maximize terminal" tabindex="-1" role="button"></button>
     </div>
-    <p class="user">liammarega@admin: ~</p>
-    <div class="add_tab">+</div>
+    <p class="user" aria-hidden="true">liammarega@admin: ~</p>
+    <button class="add_tab" aria-label="Add new tab" tabindex="-1" role="button">+</button>
   </div>
   <div class="terminal_body">
     <div class="terminal_promt">
-      <span class="terminal_user">liammarega@admin:</span>
-      <span class="terminal_location">~</span>
-      <span class="terminal_bling">$</span>
-      <span class="terminal_cursor"></span>
+      <span class="terminal_user" aria-hidden="true">liammarega@admin:</span>
+      <span class="terminal_location" aria-hidden="true">~</span>
+      <span class="terminal_bling" aria-hidden="true">$</span>
+      <span class="terminal_cursor" aria-hidden="true"></span>
     </div>
   </div>
 </div>
@@ -84,11 +87,17 @@
 
   .user {
     color: #d5d0ce;
-    margin-left: 6px;
-    font-size: 12px;
-    line-height: 15px;
+    margin-left: 4px;
+    font-size: 10px;
+    line-height: 12px;
     white-space: nowrap;
     overflow: hidden;
+
+    @media (min-width: 475px) {
+      margin-left: 6px;
+      font-size: 12px;
+      line-height: 15px;
+    }
 
     @media (min-width: 640px) {
       font-size: 14px;
@@ -107,8 +116,13 @@
 
   .terminal_promt {
     display: flex;
-    padding: 6px;
-    font-size: 10px;
+    padding: 4px;
+    font-size: 8px;
+
+    @media (min-width: 475px) {
+      padding: 6px;
+      font-size: 10px;
+    }
 
     @media (min-width: 640px) {
       font-size: 12px;
@@ -134,10 +148,22 @@
 
   .terminal_cursor {
     display: block;
-    height: 14px;
-    width: 5px;
-    margin-left: 10px;
+    height: 10px;
+    width: 3px;
+    margin-left: 6px;
     animation: curbl 1200ms linear infinite;
+
+    @media (min-width: 475px) {
+      height: 12px;
+      width: 4px;
+      margin-left: 8px;
+    }
+
+    @media (min-width: 640px) {
+      height: 14px;
+      width: 5px;
+      margin-left: 10px;
+    }
   }
 
   @keyframes curbl {
@@ -160,5 +186,60 @@
     100% {
       background: #ffffff;
     }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .terminal_cursor {
+      animation: none;
+      background: #ffffff;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .container {
+      border: 2px solid currentColor;
+    }
+    
+    .terminal_toolbar {
+      background: #000000;
+      border-bottom: 1px solid currentColor;
+    }
+    
+    .terminal_body {
+      background: #000000;
+    }
+    
+    .terminal_user,
+    .terminal_location,
+    .terminal_bling {
+      color: currentColor;
+    }
+    
+    .user {
+      color: currentColor;
+    }
+    
+    .btn {
+      border: 1px solid currentColor;
+    }
+    
+    .add_tab {
+      border-color: currentColor;
+      color: currentColor;
+    }
+  }
+
+  /* Focus indicators */
+  .container:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+  
+  .btn:focus-visible,
+  .add_tab:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 1px;
   }
 </style>

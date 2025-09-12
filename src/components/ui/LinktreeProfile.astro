@@ -16,32 +16,36 @@ const {
 } = Astro.props;
 ---
 
-<div class="text-center mb-8 px-4">
+<header class="text-center mb-6 sm:mb-8 px-3 sm:px-4" role="banner">
   <!-- Avatar -->
-  <div class="relative inline-block mb-6">
+  <div class="relative inline-block mb-4 sm:mb-6">
     <img 
       src={avatar} 
-      alt={name}
-      class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 border-white/10"
+      alt={`${name} - Professional Developer Profile Picture`}
+      class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover border-2 border-white/10 shadow-lg hover:scale-105 focus:scale-105 transition-transform duration-300 motion-reduce:transform-none motion-reduce:transition-none"
       loading="eager"
+      decoding="async"
+      tabindex="0"
     />
   </div>
 
   <!-- Nombre con efecto de gradiente -->
-  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+  <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent leading-tight">
     {name}
   </h1>
 
   <!-- Descripción -->
-  <p class="text-gray-300 text-sm sm:text-base md:text-lg max-w-md mx-auto leading-relaxed mb-6">
+  <p class="text-gray-300 text-xs sm:text-sm md:text-base lg:text-lg max-w-xs sm:max-w-sm md:max-w-md mx-auto leading-relaxed mb-4 sm:mb-6">
     {description}
   </p>
 
   <!-- Iconos sociales -->
   {showSocials && (
-    <SocialIcons size="md" />
+    <div class="mt-4 sm:mt-6">
+      <SocialIcons size="md" />
+    </div>
   )}
-</div>
+</header>
 
 <style>
   @keyframes pulse {
@@ -55,5 +59,59 @@ const {
   
   .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Focus management for avatar */
+  img:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    img {
+      transition: none;
+      transform: none;
+    }
+    
+    img:hover,
+    img:focus {
+      transform: none;
+    }
+    
+    .animate-pulse {
+      animation: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    h1 {
+      background: none;
+      -webkit-background-clip: unset;
+      background-clip: unset;
+      color: white;
+    }
+    
+    img {
+      border-color: currentColor;
+    }
+  }
+
+  /* Ensure proper touch targets on mobile */
+  @media (max-width: 640px) {
+    img {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
+  /* Performance optimization */
+  img {
+    will-change: transform;
+  }
+
+  img:not(:hover):not(:focus) {
+    will-change: auto;
   }
 </style>

@@ -2,24 +2,34 @@
 
 ---
 
-<header class="top-0 w-full z-50 backdrop-blur-sm">
+<header class="sticky top-0 w-full z-50 backdrop-blur-sm bg-black/20 border-b border-white/5">
   <nav
-    class="text-xl font-light px-4 sm:px-8 md:px-12 py-4 md:py-8 flex items-center justify-between"
+    class="text-base sm:text-lg md:text-xl font-light px-3 sm:px-4 md:px-8 lg:px-12 py-3 sm:py-4 md:py-6 lg:py-8 flex items-center justify-between max-w-7xl mx-auto"
+    role="navigation"
+    aria-label="Main navigation"
   >
-    <div class="flex gap-x-3 md:gap-x-5 items-center">
-      <div class="bg-white w-8 h-8 md:w-12 md:h-12 rounded-r-full"></div>
-      <a href="/" class="text-base md:text-xl">
-        <h3>Liam Marega</h3>
+    <div class="flex gap-x-2 sm:gap-x-3 md:gap-x-5 items-center">
+      <div class="bg-white w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-r-full flex-shrink-0" aria-hidden="true"></div>
+      <a href="/" class="text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm" aria-label="Go to homepage">
+        <h1 class="sr-only">Liam Marega - Frontend Developer</h1>
+        <span aria-hidden="true">Liam Marega</span>
       </a>
     </div>
 
-    <button id="mobile-menu-button" class="md:hidden">
+    <button 
+      id="mobile-menu-button" 
+      class="md:hidden p-2 rounded-md hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black transition-colors"
+      aria-label="Toggle mobile menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        class="w-6 h-6"
+        class="w-5 h-5 sm:w-6 sm:h-6"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -29,19 +39,27 @@
       </svg>
     </button>
 
-    <ul id="desktop-menu" class="hidden md:flex gap-5 lg:gap-10">
-      <li>
-        <a href="#about" class="hover:text-yellow-300 transition-colors"
-          >About</a
-        >
+    <ul id="desktop-menu" class="hidden md:flex gap-4 lg:gap-6 xl:gap-10" role="menubar">
+      <li role="none">
+        <a 
+          href="#about" 
+          class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
+          role="menuitem"
+        >About</a>
       </li>
-      <li>
-        <a href="#work" class="hover:text-yellow-300 transition-colors">Work</a>
+      <li role="none">
+        <a 
+          href="#work" 
+          class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
+          role="menuitem"
+        >Work</a>
       </li>
-      <li>
-        <a href="#contact" class="hover:text-yellow-300 transition-colors"
-          >Contact</a
-        >
+      <li role="none">
+        <a 
+          href="#contact" 
+          class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
+          role="menuitem"
+        >Contact</a>
       </li>
     </ul>
   </nav>
@@ -49,43 +67,61 @@
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 bg-black/95 flex items-center justify-center hidden z-50"
+    class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center hidden z-50 md:hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mobile-menu-title"
   >
-    <button id="close-menu-button" class="absolute top-6 right-6">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        class="w-6 h-6"
+    <div class="absolute inset-0" aria-hidden="true"></div>
+    <div class="relative w-full max-w-sm mx-auto px-6">
+      <button 
+        id="close-menu-button" 
+        class="absolute -top-4 right-0 p-3 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black transition-colors"
+        aria-label="Close mobile menu"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-    <ul class="flex flex-col gap-8 text-center text-2xl">
-      <li>
-        <a
-          href="#about"
-          class="hover:text-yellow-300 transition-colors mobile-link">About</a
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="w-6 h-6"
+          aria-hidden="true"
         >
-      </li>
-      <li>
-        <a
-          href="#work"
-          class="hover:text-yellow-300 transition-colors mobile-link">Work</a
-        >
-      </li>
-      <li>
-        <a
-          href="#contact"
-          class="hover:text-yellow-300 transition-colors mobile-link">Contact</a
-        >
-      </li>
-    </ul>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <h2 id="mobile-menu-title" class="sr-only">Navigation Menu</h2>
+      <nav role="navigation" aria-label="Mobile navigation">
+        <ul class="flex flex-col gap-6 sm:gap-8 text-center" role="menubar">
+          <li role="none">
+            <a
+              href="#about"
+              class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
+              role="menuitem"
+            >About</a>
+          </li>
+          <li role="none">
+            <a
+              href="#work"
+              class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
+              role="menuitem"
+            >Work</a>
+          </li>
+          <li role="none">
+            <a
+              href="#contact"
+              class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
+              role="menuitem"
+            >Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -110,30 +146,98 @@
   const closeMenuButton = document.getElementById("close-menu-button");
   const mobileLinks = document.querySelectorAll(".mobile-link");
 
-  function toggleMenu() {
-    if (mobileMenu && mobileMenu.classList.contains("hidden")) {
+  let isMenuOpen = false;
+
+  function openMenu() {
+    if (mobileMenu && mobileMenuButton) {
       mobileMenu.classList.remove("hidden");
       document.body.style.overflow = "hidden";
-    } else if (mobileMenu) {
-      mobileMenu.classList.add("hidden");
-      document.body.style.overflow = "";
+      mobileMenuButton.setAttribute("aria-expanded", "true");
+      isMenuOpen = true;
+      
+      // Focus the first menu item
+      const firstMenuItem = mobileMenu.querySelector('a[role="menuitem"]') as HTMLElement;
+      if (firstMenuItem) {
+        firstMenuItem.focus();
+      }
     }
   }
 
+  function closeMenu() {
+    if (mobileMenu && mobileMenuButton) {
+      mobileMenu.classList.add("hidden");
+      document.body.style.overflow = "";
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+      isMenuOpen = false;
+      
+      // Return focus to menu button
+      (mobileMenuButton as HTMLElement).focus();
+    }
+  }
+
+  function toggleMenu() {
+    if (isMenuOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  // Event listeners
   if (mobileMenuButton) {
     mobileMenuButton.addEventListener("click", toggleMenu);
   }
 
   if (closeMenuButton) {
-    closeMenuButton.addEventListener("click", toggleMenu);
+    closeMenuButton.addEventListener("click", closeMenu);
   }
 
+  // Close menu when clicking on links
   mobileLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      if (mobileMenu) {
-        mobileMenu.classList.add("hidden");
-        document.body.style.overflow = "";
+    link.addEventListener("click", closeMenu);
+  });
+
+  // Close menu on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isMenuOpen) {
+      closeMenu();
+    }
+  });
+
+  // Close menu when clicking outside
+  if (mobileMenu) {
+    mobileMenu.addEventListener("click", (e) => {
+      if (e.target === mobileMenu) {
+        closeMenu();
       }
     });
+  }
+
+  // Handle focus trapping in mobile menu
+  document.addEventListener("keydown", (e) => {
+    if (!isMenuOpen || e.key !== "Tab") return;
+
+    const focusableElements = mobileMenu?.querySelectorAll(
+      'a[role="menuitem"], button'
+    );
+    
+    if (!focusableElements || focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+    if (e.shiftKey) {
+      // Shift + Tab
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      // Tab
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
   });
 </script>

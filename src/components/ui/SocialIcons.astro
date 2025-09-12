@@ -15,22 +15,17 @@ const {
   links = [
     {
       name: 'Instagram',
-      url: 'https://instagram.com/liam.marega',
+      url: 'https://instagram.com/liammdev',
       icon: 'instagram',
       color: 'hover:text-pink-500'
     },
     {
       name: 'YouTube',
-      url: 'https://youtube.com/@liammarega',
+      url: 'https://youtube.com/@liammdev',
       icon: 'youtube',
       color: 'hover:text-red-500'
     },
-    {
-      name: 'TikTok',
-      url: 'https://tiktok.com/@liam.marega',
-      icon: 'tiktok',
-      color: 'hover:text-black'
-    },
+    
     {
       name: 'Portfolio',
       url: '/',
@@ -42,9 +37,9 @@ const {
 } = Astro.props;
 
 const sizeClasses = {
-  sm: 'w-6 h-6',
-  md: 'w-8 h-8',
-  lg: 'w-10 h-10'
+  sm: 'w-5 h-5 sm:w-6 sm:h-6',
+    md: 'w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8',
+    lg: 'w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12'
 };
 
 const getIcon = (iconName: string) => {
@@ -58,16 +53,71 @@ const getIcon = (iconName: string) => {
 };
 ---
 
-<div class="flex justify-center space-x-6 mt-6">
+<nav class="flex justify-center items-center gap-3 sm:gap-4 md:gap-6 mt-4 sm:mt-6" role="navigation" aria-label="Social media links">
   {links.map((link) => (
     <a
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
-      class={`${sizeClasses[size]} text-gray-400 transition-all duration-300 transform hover:scale-110 ${link.color}`}
-      aria-label={link.name}
+      class={`${sizeClasses[size]} text-gray-400 transition-all duration-300 transform hover:scale-110 focus:scale-110 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-black rounded-sm ${link.color} motion-reduce:transform-none motion-reduce:transition-none`}
+      aria-label={`Visit ${link.name} profile (opens in new tab)`}
     >
       <Fragment set:html={getIcon(link.icon)} />
     </a>
   ))}
-</div>
+</nav>
+
+<style>
+  /* Ensure proper touch targets on mobile */
+  @media (max-width: 640px) {
+    nav a {
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    nav a {
+      transition: none;
+      transform: none;
+    }
+    
+    nav a:hover,
+    nav a:focus {
+      transform: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    nav a {
+      color: currentColor;
+      border: 1px solid currentColor;
+    }
+    
+    nav a:hover,
+    nav a:focus {
+      background-color: currentColor;
+      color: black;
+    }
+  }
+
+  /* Keyboard navigation improvements */
+  nav a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    nav a {
+      border: 1px solid currentColor;
+    }
+  }
+</style>

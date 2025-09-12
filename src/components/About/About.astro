@@ -5,20 +5,31 @@ import AboutMe3 from "../About/parts/AboutMe3.astro";
 import Container from "../ui/Container.astro";
 ---
 
-<section id="about" class="w-full relative overflow-hidden mt-40">
-  <div class="h-screen flex flex-col md:flex-row md:w-[300%] pt-14">
+<section 
+  id="about" 
+  class="w-full relative overflow-hidden mt-20 sm:mt-24 md:mt-32 lg:mt-40"
+  role="region"
+  aria-label="About me section"
+>
+  <div class="min-h-screen flex flex-col md:flex-row md:w-[300%] pt-8 sm:pt-10 md:pt-12 lg:pt-14">
     <div
-      class="section w-full md:w-1/3 flex items-center justify-center p-4 md:p-8 lg:p-12"
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 1"
     >
       <AboutMe1 />
     </div>
     <div
-      class="section w-full md:w-1/3 flex items-center justify-center p-4 md:p-8 lg:p-12"
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 2"
     >
       <AboutMe2 />
     </div>
     <div
-      class="section w-full md:w-1/3 flex items-center justify-center p-4 md:p-8 lg:p-12"
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 3"
     >
       <AboutMe3 />
     </div>

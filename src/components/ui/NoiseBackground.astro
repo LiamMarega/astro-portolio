@@ -1,12 +1,46 @@
-<div class="fixed inset-x-0 top-0 -z-30 h-screen bg-black/10">
-	<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"></svg>
+<div 
+  class="fixed inset-0 -z-30 h-screen w-screen bg-black/5 pointer-events-none"
+  aria-hidden="true"
+  role="presentation"
+>
 </div>
 
 <style>
-	div::before {
-		@apply absolute left-0 top-0 h-full w-full transform-gpu bg-repeat opacity-15;
-		content: "";
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
-		background-size: 150px;
-	}
+  div::before {
+    @apply absolute left-0 top-0 h-full w-full transform-gpu bg-repeat;
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='noise-filter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise-filter)'/%3E%3C/svg%3E");
+    background-size: 120px;
+    opacity: 0.08;
+    will-change: transform;
+  }
+
+  /* Responsive background size for better performance */
+  @media (max-width: 640px) {
+    div::before {
+      background-size: 80px;
+      opacity: 0.06;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    div::before {
+      background-size: 100px;
+      opacity: 0.07;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    div::before {
+      background-size: 140px;
+      opacity: 0.09;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    div::before {
+      will-change: auto;
+    }
+  }
 </style>

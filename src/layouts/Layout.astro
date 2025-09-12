@@ -22,18 +22,60 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#000000" />
-
-    <!-- Favicon -->
-    <link rel="icon" href="/images/avatar.webp" type="image/x-icon" />
-
+    <meta name="author" content="Liam Marega" />
+    <meta name="keywords" content="frontend developer, web development, responsive design, portfolio, Liam Marega" />
+    
+    <!-- Performance optimizations -->
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={Astro.url.href} />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/fonts/HelveticaNeueBold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/images/avatar.webp" as="image" />
+    
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//images.unsplash.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    
+    <!-- Favicon with multiple sizes -->
+    <link rel="icon" href="/images/avatar.webp" type="image/webp" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32" />
+    
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="/images/avatar.webp" />
-
+    <link rel="apple-touch-icon" href="/images/avatar.webp" sizes="180x180" />
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={new URL('/images/avatar.webp', Astro.url).href} />
+    <meta property="og:site_name" content="Liam Marega Portfolio" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/images/avatar.webp', Astro.url).href} />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Liam Marega",
+      "jobTitle": "Frontend Developer",
+      "description": "Frontend Developer specializing in responsive, attractive and functional applications",
+      "url": "https://liammarega.dev",
+      "image": "https://liammarega.dev/images/avatar.webp",
+      "sameAs": [
+        "https://github.com/liammarega",
+        "https://linkedin.com/in/liammarega"
+      ]
+    })}></script>
+    
     <title>{title}</title>
   </head>
 

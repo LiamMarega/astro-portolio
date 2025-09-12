@@ -2,34 +2,78 @@
 
 ---
 
-<div class='circle'></div>
+<div class='circle' aria-hidden="true" role="presentation" tabindex="-1"></div>
 
 <style>
   .circle {
-    --circle-size: 40px;
+    --circle-size: 32px;
     position: fixed;
-
     height: var(--circle-size);
     width: var(--circle-size);
-    border: 1px solid white;
-    border-radius: 100%;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
     top: calc(var(--circle-size) / 2 * -1);
     left: calc(var(--circle-size) / 2 * -1);
     pointer-events: none;
     z-index: 999;
+    will-change: transform;
+    backdrop-filter: blur(1px);
   }
 
-  @media (max-width: 768px) {
+  /* Hide on touch devices and small screens */
+  @media (max-width: 768px), (hover: none) {
     .circle {
       display: none;
     }
   }
+
+  /* Larger cursor for bigger screens */
+  @media (min-width: 1200px) {
+    .circle {
+      --circle-size: 40px;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .circle {
+      display: none;
+      will-change: auto;
+      transition: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .circle {
+      border-color: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+  }
+
+  /* Focus indicator for keyboard navigation */
+  .circle:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
 </style>
 
 <script>
+  // Check for reduced motion preference
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
   // Select the circle element
   const circleElement = document.querySelector('.circle');
+  
+  // Exit early if reduced motion is preferred or element doesn't exist
+  if (prefersReducedMotion || !circleElement) {
+    if (circleElement) {
+      (circleElement as HTMLElement).style.display = 'none';
+    }
+    // Exit script execution
+    throw new Error('CursorFollow disabled due to accessibility preferences');
+  }
 
   // Create objects to track mouse position and custom cursor position
   const mouse = { x: 0, y: 0 }; // Track current mouse position
@@ -45,6 +89,19 @@
     mouse.x = e.x;
     mouse.y = e.y;
   });
+  
+  // Handle keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    // Hide cursor on Tab navigation for better accessibility
+    if (e.key === 'Tab') {
+      (circleElement as HTMLElement).style.opacity = '0.3';
+    }
+  });
+  
+  // Show cursor again on mouse movement
+  window.addEventListener('mousemove', () => {
+    (circleElement as HTMLElement).style.opacity = '1';
+  }, { once: false });
 
   // Smoothing factor for cursor movement speed (0 = smoother, 1 = instant)
   const speed = 0.17;

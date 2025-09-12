@@ -7,8 +7,23 @@ import GalleryComponent from "../components/gallery/index.astro";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gallery Animation Demo</title>
-    <!-- Load Bebas Neue font -->
+    <meta name="description" content="Explore Liam Marega's featured projects and creative works. Interactive gallery showcasing modern web development and design." />
+    <meta name="keywords" content="portfolio, gallery, web development, frontend, projects, Liam Marega" />
+    <meta name="author" content="Liam Marega" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Project Gallery - Liam Marega" />
+    <meta property="og:description" content="Explore featured projects and creative works by Liam Marega" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Project Gallery - Liam Marega" />
+    <meta property="twitter:description" content="Explore featured projects and creative works by Liam Marega" />
+    
+    <title>Project Gallery - Liam Marega | Frontend Developer Portfolio</title>
+    
+    <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,15 +32,58 @@ import GalleryComponent from "../components/gallery/index.astro";
     />
 
     <style>
+      /* Reset and base styles */
+      * {
+        box-sizing: border-box;
+      }
+      
+      html {
+        scroll-behavior: smooth;
+      }
+      
       body {
         margin: 0;
         padding: 0;
         background-color: #121212;
         color: white;
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      
+      /* Skip to main content for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        text-decoration: none;
+        border-radius: 4px;
+        z-index: 1000;
+      }
+      
+      .skip-link:focus {
+        top: 6px;
+      }
+      
+      /* Mobile-first responsive adjustments */
+      @media (max-width: 480px) {
+        body {
+          font-size: 14px;
+        }
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
       }
     </style>
   </head>
   <body>
+    <a href="#gallery" class="skip-link">Skip to main content</a>
     <GalleryComponent />
   </body>
 </html>

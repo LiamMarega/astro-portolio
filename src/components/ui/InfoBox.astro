@@ -2,71 +2,82 @@
 // InfoBox.astro - Animated info box displaying skills and technologies
 ---
 
-<div
+<section
   id="info-box"
-  class="absolute max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] left-0 w-full h-full mt-8 sm:mt-12 md:mt-16"
+  class="absolute max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] left-0 w-full h-full mt-6 sm:mt-8 md:mt-12 lg:mt-16"
+  role="region"
+  aria-label="Developer skills and technologies"
 >
   <div
-    class="relative flex items-center px-4 md:px-8 py-6 md:py-8 bg-white rounded-r-full animate-slide-in"
+    class="relative flex items-center px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 bg-white rounded-r-full animate-slide-in"
   >
     <!-- Avatar image -->
     <img
-      class="w-full h-24 sm:w-32 sm:h-32 md:h-48 md:w-48 lg:h-60 lg:w-60 ml-auto mr-4 sm:mr-8 md:mr-16 lg:mr-20 object-contain hover:scale-105 transition-transform duration-300 animate-slide-in-with-container"
-      alt="LiamMarega-avatar"
+      class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48 xl:h-60 xl:w-60 ml-auto mr-3 sm:mr-4 md:mr-8 lg:mr-16 xl:mr-20 object-contain hover:scale-105 focus:scale-105 transition-transform duration-300 animate-slide-in-with-container motion-reduce:transform-none motion-reduce:transition-none"
+      alt="Liam Marega - Professional Developer Avatar"
       src="/images/avatar-withoutbg.png"
+      loading="eager"
+      decoding="async"
+      tabindex="0"
     />
 
     <!-- Mobile developer bubble -->
     <div
-      class="bubble-card absolute -top-16 sm:-top-20 md:-top-24 left-4 sm:left-10 md:left-20
+      class="bubble-card absolute -top-12 sm:-top-16 md:-top-20 lg:-top-24 left-2 sm:left-4 md:left-10 lg:left-20
       bg-green-200 delay-1 flex-center"
+      role="img"
+      aria-label="Mobile Developer specialization"
     >
       <h3
-        class="text-black text-xs sm:text-sm md:text-xs lg:text-base font-bold"
+        class="text-black text-[10px] sm:text-xs md:text-sm lg:text-base font-bold leading-tight"
       >
         MOBILE DEVELOPER
       </h3>
-      <span class="hidden sm:block text-black text-[10px] md:text-xs">
+      <span class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight">
         Professional iOS and Android developer
       </span>
     </div>
 
     <!-- Web developer bubble -->
     <div
-      class="bubble-card absolute -bottom-16 sm:-bottom-20 right-16 sm:right-24 md:right-48 lg:right-60
+      class="bubble-card absolute -bottom-12 sm:-bottom-16 md:-bottom-20 right-12 sm:right-16 md:right-24 lg:right-48 xl:right-60
       bg-lime-200 delay-2 flex-center"
+      role="img"
+      aria-label="Web Developer specialization"
     >
       <h3
-        class="text-black text-xs sm:text-sm md:text-xs lg:text-base font-bold"
+        class="text-black text-[10px] sm:text-xs md:text-sm lg:text-base font-bold leading-tight"
       >
         WEB DEVELOPER
       </h3>
-      <span class="hidden sm:block text-black text-[10px] md:text-xs">
+      <span class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight">
         Developing websites with best practices
       </span>
     </div>
 
     <!-- Technologies card 1 -->
     <div
-      class="tech-card absolute top-0 md:top-1/3 lg:top-40 xl:top-48 right-4 md:right-auto md:left-24 lg:left-32 xl:left-40
-      rotate-6 sm:rotate-12 bg-yellow-300 delay-3"
+      class="tech-card absolute top-2 sm:top-0 md:top-1/3 lg:top-40 xl:top-48 right-2 sm:right-4 md:right-auto md:left-24 lg:left-32 xl:left-40
+      rotate-3 sm:rotate-6 md:rotate-12 bg-yellow-300 delay-3"
+      role="img"
+      aria-label="Primary technologies: React, Flutter, Next.js"
     >
-      <div class="corner-dot left-2 top-2"></div>
-      <div class="corner-dot right-2 top-2"></div>
-      <div class="corner-dot left-2 bottom-2"></div>
-      <div class="corner-dot right-2 bottom-2"></div>
+      <div class="corner-dot left-1 sm:left-2 top-1 sm:top-2" aria-hidden="true"></div>
+      <div class="corner-dot right-1 sm:right-2 top-1 sm:top-2" aria-hidden="true"></div>
+      <div class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
+      <div class="corner-dot right-1 sm:right-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
       <h3
-        class="text-black font-bold text-xs sm:text-sm md:text-xs lg:text-base"
+        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
         REACT
       </h3>
       <h3
-        class="text-black font-bold text-xs sm:text-sm md:text-xs lg:text-base"
+        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
         FLUTTER
       </h3>
       <h3
-        class="text-black font-bold text-xs sm:text-sm md:text-xs lg:text-base"
+        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
         NEXT.JS
       </h3>
@@ -74,44 +85,47 @@
 
     <!-- Technologies card 2 -->
     <div
-      class="tech-card absolute hidden sm:flex top-20 sm:top-12 md:top-14 right-72 sm:-right-8 md:-right-14
-      -rotate-6 sm:-rotate-12 bg-green-200 delay-4"
+      class="tech-card absolute hidden sm:flex top-16 sm:top-20 md:top-12 lg:top-14 right-20 sm:right-72 md:-right-8 lg:-right-14
+      -rotate-3 sm:-rotate-6 md:-rotate-12 bg-green-200 delay-4"
+      role="img"
+      aria-label="UX/UI Design expertise since 2025"
     >
-      <div class="corner-dot left-2 top-2"></div>
-      <div class="corner-dot left-2 bottom-2"></div>
+      <div class="corner-dot left-1 sm:left-2 top-1 sm:top-2" aria-hidden="true"></div>
+      <div class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
       <h3
-        class="text-black font-bold text-xs sm:text-sm md:text-xs lg:text-base"
+        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
         UX/UI
       </h3>
       <h3
-        class="text-black font-bold text-xs sm:text-sm md:text-xs lg:text-base"
+        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
         @'25
       </h3>
     </div>
   </div>
-</div>
+</section>
 
 <style>
   /* Reusable bubble styles */
   .bubble-card {
-    @apply size-20 sm:size-24 md:size-28 lg:size-32 xl:size-36 p-2 sm:p-3 md:p-4
+    @apply w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 2xl:w-36 2xl:h-36 
+      p-1 sm:p-2 md:p-3 lg:p-4
       rounded-full flex flex-col items-center justify-center text-center
-      animate-pop-in;
+      animate-pop-in shadow-lg;
   }
 
   /* Reusable tech card styles */
   .tech-card {
-    @apply w-20 h-24 sm:w-32 sm:h-28 md:w-40 md:h-32
-      px-2 sm:px-4 md:px-6 py-3 sm:py-4
+    @apply w-16 h-20 sm:w-20 sm:h-24 md:w-32 md:h-28 lg:w-40 lg:h-32
+      px-1 sm:px-2 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4
       rounded-2xl flex flex-col items-center justify-center
-      animate-pop-in;
+      animate-pop-in shadow-lg;
   }
 
   /* Corner dots for cards */
   .corner-dot {
-    @apply absolute size-2 rounded-full bg-gray-600;
+    @apply absolute w-1 h-1 sm:w-2 sm:h-2 rounded-full bg-gray-600;
   }
 
   /* Reusable flex center utility */
@@ -173,5 +187,56 @@
 
   .delay-4 {
     animation-delay: 2.1s;
+  }
+
+  /* Accessibility and performance improvements */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-in,
+    .animate-pop-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    
+    .delay-1,
+    .delay-2,
+    .delay-3,
+    .delay-4 {
+      animation-delay: 0s;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .bubble-card,
+    .tech-card {
+      border: 2px solid currentColor;
+    }
+    
+    .corner-dot {
+      background-color: currentColor;
+    }
+  }
+
+  /* Focus management */
+  img:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* Ensure proper stacking context */
+  #info-box {
+    z-index: 10;
+  }
+
+  /* Performance optimization */
+  .animate-slide-in,
+  .animate-pop-in {
+    will-change: transform, opacity;
+  }
+
+  .animate-slide-in.animation-complete,
+  .animate-pop-in.animation-complete {
+    will-change: auto;
   }
 </style>
