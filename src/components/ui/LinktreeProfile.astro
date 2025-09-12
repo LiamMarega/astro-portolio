@@ -1,0 +1,59 @@
+---
+import SocialIcons from './SocialIcons.astro';
+
+interface Props {
+  name?: string;
+  description?: string;
+  avatar?: string;
+  showSocials?: boolean;
+}
+
+const { 
+  name = "Liam Marega",
+  description = "Frontend Developer especializado en aplicaciones responsivas, atractivas y funcionales. Creando experiencias digitales únicas.",
+  avatar = "/images/avatar.webp",
+  showSocials = true
+} = Astro.props;
+---
+
+<div class="text-center mb-8 px-4">
+  <!-- Avatar -->
+  <div class="relative inline-block mb-6">
+    <img 
+      src={avatar} 
+      alt={name}
+      class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 border-white/10"
+      loading="eager"
+    />
+  </div>
+
+  <!-- Nombre con efecto de gradiente -->
+  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+    {name}
+  </h1>
+
+  <!-- Descripción -->
+  <p class="text-gray-300 text-sm sm:text-base md:text-lg max-w-md mx-auto leading-relaxed mb-6">
+    {description}
+  </p>
+
+  <!-- Iconos sociales -->
+  {showSocials && (
+    <SocialIcons size="md" />
+  )}
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>
