@@ -1,24 +1,23 @@
 ---
+import AvatarWithBorder from "./avatarWithBorder.astro";
+
 // InfoBox.astro - Animated info box displaying skills and technologies
 ---
 
 <section
   id="info-box"
-  class="absolute max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] left-0 w-full h-full mt-6 sm:mt-8 md:mt-12 lg:mt-16"
+  class="absolute max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] left-0 w-full mt-6 sm:mt-8 md:mt-12 lg:mt-12"
   role="region"
   aria-label="Developer skills and technologies"
 >
   <div
-    class="relative flex items-center px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 bg-white rounded-r-full animate-slide-in"
+    class="relative flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 bg-white rounded-r-full animate-slide-in h-20 sm:h-24 md:h-32 lg:h-48 xl:h-60"
   >
-    <!-- Avatar image -->
     <img
-      class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48 xl:h-60 xl:w-60 ml-auto mr-3 sm:mr-4 md:mr-8 lg:mr-16 xl:mr-20 object-contain hover:scale-105 focus:scale-105 transition-transform duration-300 animate-slide-in-with-container motion-reduce:transform-none motion-reduce:transition-none"
+      class="absolute left-1/2 -translate-x-1/2 -bottom-2 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48 xl:h-96 xl:w-96 object-contain hover:scale-105 transition-transform duration-300 animate-slide-in-with-container motion-reduce:transform-none motion-reduce:transition-none
+  [filter:drop-shadow(0_2px_0_white)_drop-shadow(0_-2px_0_white)_drop-shadow(2px_0_0_white)_drop-shadow(-2px_0_0_white)_drop-shadow(2px_2px_0_white)_drop-shadow(-2px_-2px_0_white)_drop-shadow(2px_-2px_0_white)_drop-shadow(-2px_2px_0_white)]"
       alt="Liam Marega - Professional Developer Avatar"
       src="/images/avatar-withoutbg.png"
-      loading="eager"
-      decoding="async"
-      tabindex="0"
     />
 
     <!-- Mobile developer bubble -->
@@ -33,7 +32,9 @@
       >
         MOBILE DEVELOPER
       </h3>
-      <span class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight">
+      <span
+        class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight"
+      >
         Professional iOS and Android developer
       </span>
     </div>
@@ -50,7 +51,9 @@
       >
         WEB DEVELOPER
       </h3>
-      <span class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight">
+      <span
+        class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight"
+      >
         Developing websites with best practices
       </span>
     </div>
@@ -62,10 +65,26 @@
       role="img"
       aria-label="Primary technologies: React, Flutter, Next.js"
     >
-      <div class="corner-dot left-1 sm:left-2 top-1 sm:top-2" aria-hidden="true"></div>
-      <div class="corner-dot right-1 sm:right-2 top-1 sm:top-2" aria-hidden="true"></div>
-      <div class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
-      <div class="corner-dot right-1 sm:right-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
+      <div
+        class="corner-dot left-1 sm:left-2 top-1 sm:top-2"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="corner-dot right-1 sm:right-2 top-1 sm:top-2"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="corner-dot right-1 sm:right-2 bottom-1 sm:bottom-2"
+        aria-hidden="true"
+      >
+      </div>
       <h3
         class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
@@ -90,8 +109,16 @@
       role="img"
       aria-label="UX/UI Design expertise since 2025"
     >
-      <div class="corner-dot left-1 sm:left-2 top-1 sm:top-2" aria-hidden="true"></div>
-      <div class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2" aria-hidden="true"></div>
+      <div
+        class="corner-dot left-1 sm:left-2 top-1 sm:top-2"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="corner-dot left-1 sm:left-2 bottom-1 sm:bottom-2"
+        aria-hidden="true"
+      >
+      </div>
       <h3
         class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
@@ -197,7 +224,7 @@
       opacity: 1;
       transform: none;
     }
-    
+
     .delay-1,
     .delay-2,
     .delay-3,
@@ -212,7 +239,7 @@
     .tech-card {
       border: 2px solid currentColor;
     }
-    
+
     .corner-dot {
       background-color: currentColor;
     }

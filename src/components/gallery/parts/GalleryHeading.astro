@@ -6,11 +6,19 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<h1 class="gallery-title gallery-heading">{title}</h1>
+<h1
+  class="gallery-title gallery-heading"
+  aria-label={`Gallery section: ${title}`}
+  role="heading"
+  aria-level="1"
+>
+  {title}
+</h1>
 
 <style>
   .gallery-heading.gallery-title {
-    font-size: 14rem;
+    /* Responsive fluid typography using clamp() */
+    font-size: clamp(3rem, 12vw, 14rem);
     font-family: "Bebas Neue", sans-serif;
     position: fixed;
     left: 50%;
@@ -19,11 +27,68 @@ const { title } = Astro.props;
     z-index: 1;
     margin: 0;
     color: white;
-    opacity: 0; /* Inicialmente invisible */
-    visibility: hidden; /* Inicialmente oculto */
-    will-change: transform, opacity, filter; /* Optimiza las animaciones */
-    transform-origin: center center; /* Asegura que la escala sea desde el centro */
-    backface-visibility: hidden; /* Ayuda con los problemas de renderizado */
-    -webkit-font-smoothing: antialiased; /* Mejor renderizado de fuente */
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity, filter;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+
+    /* Ensure text is readable on all backgrounds */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+    /* Prevent text selection for better UX */
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 480px) {
+    .gallery-heading.gallery-title {
+      font-size: clamp(2.5rem, 10vw, 5rem);
+      /* Reduce will-change on mobile for better performance */
+      will-change: opacity;
+    }
+  }
+
+  /* Tablet optimizations */
+  @media (min-width: 481px) and (max-width: 1023px) {
+    .gallery-heading.gallery-title {
+      font-size: clamp(5rem, 10vw, 10rem);
+    }
+  }
+
+  /* Desktop optimizations */
+  @media (min-width: 1024px) {
+    .gallery-heading.gallery-title {
+      font-size: clamp(8rem, 12vw, 14rem);
+    }
+  }
+
+  /* Large desktop */
+  @media (min-width: 1920px) {
+    .gallery-heading.gallery-title {
+      font-size: clamp(10rem, 12vw, 16rem);
+    }
+  }
+
+  /* Accessibility: Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-heading.gallery-title {
+      will-change: auto;
+      transition: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .gallery-heading.gallery-title {
+      text-shadow: 0 0 0 transparent;
+      outline: 2px solid currentColor;
+      outline-offset: 4px;
+    }
   }
 </style>

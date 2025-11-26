@@ -3,80 +3,142 @@
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import Lenis from "lenis";
 
-  // Nos aseguramos de que el DOM esté listo
+  // Device and performance detection
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+  const isDesktop = window.innerWidth >= 1024;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const isTouchDevice = window.matchMedia(
+    "(hover: none) and (pointer: coarse)",
+  ).matches;
+
+  // Performance monitoring
+  let performanceIssues = false;
+  let frameCount = 0;
+  let lastTime = performance.now();
+
+  function checkPerformance() {
+    frameCount++;
+    const currentTime = performance.now();
+    const elapsed = currentTime - lastTime;
+
+    if (elapsed >= 1000) {
+      const fps = Math.round((frameCount * 1000) / elapsed);
+      if (fps < 30) {
+        performanceIssues = true;
+        console.warn("Performance issues detected, simplifying animations");
+      }
+      frameCount = 0;
+      lastTime = currentTime;
+    }
+  }
+
+  // Wait for DOM to be ready
   document.addEventListener("DOMContentLoaded", () => {
-    // Registramos el plugin ScrollTrigger
+    // Skip animations if user prefers reduced motion
+    if (prefersReducedMotion) {
+      console.log("Reduced motion preferred, skipping animations");
+      return;
+    }
+
+    // Register ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
 
-    // Esperamos un poco para asegurarnos de que todo esté cargado
+    // Small delay to ensure everything is loaded
     setTimeout(() => {
-      // Configuramos Lenis exactamente como en el ejemplo original
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
+      // Initialize Lenis smooth scroll (only on desktop and if supported)
+      let lenis: any = null;
 
-      function raf(time: number) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
+      if (isDesktop && !isTouchDevice) {
+        try {
+          lenis = new Lenis({
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: "vertical",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+          });
+
+          function raf(time: number) {
+            lenis.raf(time);
+            checkPerformance();
+            requestAnimationFrame(raf);
+          }
+
+          requestAnimationFrame(raf);
+        } catch (error) {
+          console.warn("Lenis initialization failed:", error);
+        }
       }
 
-      requestAnimationFrame(raf);
-
+      // Title animation
       const title = document.querySelector(".gallery-heading.gallery-title");
       if (title) {
-        // Configuramos el estado inicial del título
+        // Set initial state
         gsap.set(title, {
           visibility: "visible",
           opacity: 0,
-          scale: 0,
-          filter: "blur(20px)",
+          scale: isMobile ? 0.8 : 0,
+          filter: isMobile ? "blur(5px)" : "blur(20px)",
           textShadow: "0 0 0 rgba(255,255,255,0)",
         });
 
-        // Timeline para la animación del título
+        // Show timeline - simplified for mobile
         let titleTimeline = gsap.timeline({ paused: true });
 
-        // Secuencia de animación para un efecto más dramático
-        titleTimeline
-          .set(title, { visibility: "visible" })
-          // Primero aparece con desenfoque
-          .to(title, {
+        if (isMobile) {
+          // Simplified animation for mobile
+          titleTimeline.set(title, { visibility: "visible" }).to(title, {
             opacity: 1,
-            scale: 1.2, // Sobreescalar inicialmente
-            filter: "blur(5px)",
-            duration: 0.4,
-            ease: "power2.out",
-          })
-          // Luego se enfoca y rebota a su tamaño final
-          .to(title, {
             scale: 1,
             filter: "blur(0px)",
-            textShadow: "0 0 20px rgba(255,255,255,0.5)",
-            duration: 0.8,
-            ease: "elastic.out(1, 0.3)",
+            duration: 0.6,
+            ease: "power2.out",
           });
+        } else {
+          // Full animation for tablet/desktop
+          titleTimeline
+            .set(title, { visibility: "visible" })
+            .to(title, {
+              opacity: 1,
+              scale: 1.2,
+              filter: "blur(5px)",
+              duration: 0.4,
+              ease: "power2.out",
+            })
+            .to(title, {
+              scale: 1,
+              filter: "blur(0px)",
+              textShadow: "0 0 20px rgba(255,255,255,0.5)",
+              duration: 0.8,
+              ease: "elastic.out(1, 0.3)",
+            });
+        }
 
-        // Reverse timeline para ocultar el título
+        // Hide timeline
         let titleHideTimeline = gsap.timeline({ paused: true });
 
         titleHideTimeline.to(title, {
           opacity: 0,
-          scale: 0.5,
-          filter: "blur(20px)",
+          scale: isMobile ? 0.8 : 0.5,
+          filter: isMobile ? "blur(5px)" : "blur(20px)",
           textShadow: "0 0 0 rgba(255,255,255,0)",
-          duration: 0.5,
+          duration: isMobile ? 0.3 : 0.5,
           ease: "power2.in",
           onComplete: () => {
             gsap.set(title, { visibility: "hidden" });
           },
         });
 
-        // Configuramos la animación del título
+        // ScrollTrigger for title
         ScrollTrigger.create({
           trigger: "#gallery-section",
-          start: "top 70%", // Activar un poco antes para mejor experiencia
-          end: "bottom 10%", // Mantener visible casi hasta el final de la sección
+          start: isMobile ? "top 80%" : "top 70%",
+          end: isMobile ? "bottom 20%" : "bottom 10%",
           onEnter: () => {
             titleHideTimeline.pause();
             titleTimeline.restart();
@@ -93,32 +155,84 @@
             titleTimeline.pause();
             titleHideTimeline.restart();
           },
+          // markers: true, // Uncomment for debugging
         });
       }
 
-      // Configuramos la animación de la galería exactamente como en el ejemplo original
-      const tl = gsap
-        .timeline({
+      // Gallery images animation
+      const galleryImages = document.querySelectorAll(".img");
+
+      if (galleryImages.length > 0) {
+        // Responsive animation values
+        const animationDistance = isMobile ? -300 : isTablet ? -500 : -700;
+        const staggerAmount = isMobile ? 0.1 : isTablet ? 0.15 : 0.2;
+
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: "#gallery-section",
-            start: "top bottom", // Comienza cuando la parte superior de la galería llega al fondo de la ventana
-            end: "bottom top", // Termina cuando la parte inferior de la galería llega a la parte superior de la ventana
-            scrub: true,
-            // Marcadores para depuración (quitar en producción)
-            // markers: true,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: isMobile ? 0.5 : true, // Less scrub on mobile for better performance
+            // markers: true, // Uncomment for debugging
             onEnter: () => {
-              console.log("Galería entrando en vista");
+              console.log("Gallery entering view");
             },
+            // Disable on performance issues
+            invalidateOnRefresh: true,
           },
-        })
-        .to(".img", {
-          stagger: 0.2,
-          y: -700,
-          ease: "none",
         });
 
-      // Refrescamos ScrollTrigger para asegurarnos de que todo funcione correctamente
+        // Simplified animation for mobile/performance issues
+        if (isMobile || performanceIssues) {
+          tl.to(".img", {
+            stagger: staggerAmount,
+            y: animationDistance,
+            ease: "none",
+          });
+        } else {
+          // Full animation for desktop
+          tl.to(".img", {
+            stagger: staggerAmount,
+            y: animationDistance,
+            ease: "none",
+          });
+        }
+      }
+
+      // Refresh ScrollTrigger
       ScrollTrigger.refresh();
-    }, 500); // Esperar 500ms para asegurarnos de que todo esté cargado
+
+      // Handle resize with debounce
+      let resizeTimeout: number;
+      const handleResize = () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 250);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      // Cleanup on page unload
+      window.addEventListener("beforeunload", () => {
+        if (lenis) {
+          lenis.destroy();
+        }
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        window.removeEventListener("resize", handleResize);
+      });
+
+      // Handle visibility change (tab switching)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // Pause animations when tab is hidden
+          gsap.globalTimeline.pause();
+        } else {
+          // Resume animations when tab is visible
+          gsap.globalTimeline.resume();
+          ScrollTrigger.refresh();
+        }
+      });
+    }, 500);
   });
 </script>

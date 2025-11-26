@@ -1,40 +1,119 @@
 ---
-// We can replace these with actual project images later
-// These are examples - you should replace them with your actual project images
-const images = [
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
-  "https://assets.codepen.io/2621168/img1.jpg",
+// Gallery project images with proper metadata
+const projects = [
+  {
+    id: 1,
+    title: "Analytics Dashboard",
+    description: "Modern data visualization platform",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 2,
+    title: "Mobile Banking App",
+    description: "Intuitive financial management",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 3,
+    title: "E-commerce Platform",
+    description: "Next-generation shopping experience",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 4,
+    title: "Data Visualization",
+    description: "Interactive charts and graphs",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 5,
+    title: "3D Web Experience",
+    description: "Immersive 3D environment",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 6,
+    title: "Brand Identity",
+    description: "Complete visual identity system",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 7,
+    title: "Portfolio Website",
+    description: "Creative portfolio showcase",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 8,
+    title: "Social Media App",
+    description: "Modern social networking platform",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
+  {
+    id: 9,
+    title: "Fitness Tracker",
+    description: "Health and wellness application",
+    image: "https://assets.codepen.io/2621168/img1.jpg",
+  },
 ];
 ---
 
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
-<div class="img"></div>
+{
+  projects.map((project) => (
+    <article
+      class="img"
+      data-project-id={project.id}
+      aria-label={`${project.title}: ${project.description}`}
+    >
+      <div class="img-content">
+        <img
+          src={project.image}
+          alt={`${project.title} - ${project.description} project screenshot`}
+          loading="lazy"
+          decoding="async"
+          width="1200"
+          height="700"
+        />
+      </div>
+    </article>
+  ))
+}
 
 <style>
   .img {
     width: 100%;
-    height: 700px;
+    /* Responsive height using clamp() */
+    height: clamp(300px, 50vh, 700px);
     position: relative;
     background-size: cover;
+    background-position: center;
     z-index: -1;
-    background-image: url("https://assets.codepen.io/2621168/img1.jpg");
+    overflow: hidden;
+
+    /* Improve rendering performance */
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
-  .img:before {
+  .img-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .img-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+
+    /* Aspect ratio preservation */
+    aspect-ratio: 12 / 7;
+  }
+
+  .img::before {
     content: "";
     position: absolute;
     height: 100vh;
@@ -42,18 +121,62 @@ const images = [
     z-index: 4;
     top: 0;
     left: 0;
-    border-right: 1px solid black;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    pointer-events: none;
   }
 
-  @media (max-width: 768px) {
+  /* Mobile optimizations */
+  @media (max-width: 480px) {
     .img {
-      height: 500px;
+      height: clamp(250px, 40vh, 400px);
+    }
+
+    .img::before {
+      border-right-width: 0.5px;
     }
   }
 
-  @media (max-width: 480px) {
+  /* Tablet optimizations */
+  @media (min-width: 481px) and (max-width: 1023px) {
     .img {
-      height: 400px;
+      height: clamp(350px, 45vh, 500px);
+    }
+  }
+
+  /* Desktop optimizations */
+  @media (min-width: 1024px) {
+    .img {
+      height: clamp(500px, 50vh, 700px);
+    }
+  }
+
+  /* Large desktop */
+  @media (min-width: 1920px) {
+    .img {
+      height: clamp(600px, 55vh, 800px);
+    }
+  }
+
+  /* Accessibility: Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .img {
+      will-change: auto;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .img::before {
+      border-right-color: rgba(255, 255, 255, 0.5);
+      border-right-width: 2px;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .img {
+      /* Disable will-change on touch devices for better performance */
+      will-change: auto;
     }
   }
 </style>

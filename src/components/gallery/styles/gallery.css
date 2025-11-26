@@ -1,12 +1,48 @@
-/* Base gallery styles */
-html, body {
+/* ============================================
+   Gallery Component Styles - Mobile First
+   ============================================ */
+
+/* CSS Custom Properties for theming */
+:root {
+  --gallery-line-color: rgba(0, 0, 0, 0.15);
+  --gallery-bg-color: #000000;
+  --gallery-text-color: #ffffff;
+  --gallery-spacing-sm: 1rem;
+  --gallery-spacing-md: 2rem;
+  --gallery-spacing-lg: 3rem;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gallery-line-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  :root {
+    --gallery-line-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Base styles */
+html,
+body {
   width: 100%;
   overscroll-behavior: none;
   min-height: 100%;
+  scroll-behavior: smooth;
 }
 
+/* Hide scrollbar for cleaner look */
 body::-webkit-scrollbar {
   display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Gallery container */
@@ -14,30 +50,64 @@ body::-webkit-scrollbar {
   width: 100%;
   overscroll-behavior: none;
   min-height: 100%;
+  position: relative;
 }
 
-/* Section layouts */
+/* Section layouts - Mobile First */
 section {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  height: 100vh;
+  /* Mobile: Single column */
+  grid-template-columns: 1fr;
+  min-height: 100vh;
   margin: 0 auto;
+  width: 100%;
+  position: relative;
 }
 
+/* Gallery section specific */
 .gallery {
-  height: 200vh;
+  min-height: 200vh;
+  position: relative;
 }
 
-/* Image gallery styles */
+#gallery-section {
+  position: relative;
+  width: 100%;
+}
+
+/* Image gallery styles - Mobile First */
 .img {
   width: 100%;
-  height: 700px;
+  /* Responsive height using clamp() */
+  height: clamp(250px, 40vh, 400px);
   position: relative;
   background-size: cover;
+  background-position: center;
   z-index: -1;
+  overflow: hidden;
+
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-.img:before {
+.img-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.img-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  aspect-ratio: 12 / 7;
+}
+
+.img::before {
   content: '';
   position: absolute;
   height: 100vh;
@@ -45,17 +115,22 @@ section {
   z-index: 4;
   top: 0;
   left: 0;
-  border-right: 1px solid black;
+  border-right: 0.5px solid var(--gallery-line-color);
+  pointer-events: none;
 }
 
 /* Line styles */
 .line {
-  border-right: 1px solid black;
+  border-right: 0.5px solid var(--gallery-line-color);
+  height: 100%;
+  position: relative;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
-/* Heading styles */
-h1 { 
-  font-size: 14rem; 
+/* Heading styles - Mobile First */
+h1 {
+  font-size: clamp(2.5rem, 10vw, 5rem);
   font-family: 'Bebas Neue', sans-serif;
   position: fixed;
   left: 50%;
@@ -63,30 +138,192 @@ h1 {
   transform: translate(-50%, -50%);
   z-index: 1;
   margin: 0;
-  color: white;
+  color: var(--gallery-text-color);
+  text-align: center;
+  padding: 0 var(--gallery-spacing-sm);
+  max-width: 90vw;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 8rem;
-  }
-  
+/* ============================================
+   Responsive Breakpoints
+   ============================================ */
+
+/* Small Mobile (320px - 480px) - Base styles above */
+
+/* Medium Mobile (481px - 640px) */
+@media (min-width: 481px) {
   .img {
-    height: 500px;
+    height: clamp(300px, 45vh, 450px);
+  }
+
+  .img::before {
+    border-right-width: 0.75px;
+  }
+
+  .line {
+    border-right-width: 0.75px;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 10vw, 6rem);
   }
 }
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 5rem;
-  }
-  
+/* Tablet Portrait (641px - 767px) */
+@media (min-width: 641px) {
   section {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .img {
-    height: 400px;
+    height: clamp(350px, 45vh, 500px);
   }
-} 
+
+  .img::before {
+    border-right-width: 1px;
+  }
+
+  .line {
+    border-right-width: 1px;
+    opacity: 0.7;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 10vw, 7rem);
+    padding: 0 var(--gallery-spacing-md);
+  }
+}
+
+/* Tablet Landscape (768px - 1023px) */
+@media (min-width: 768px) {
+  section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .img {
+    height: clamp(400px, 50vh, 550px);
+  }
+
+  .line {
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: clamp(5rem, 10vw, 10rem);
+  }
+}
+
+/* Desktop (1024px - 1279px) */
+@media (min-width: 1024px) {
+  .img {
+    height: clamp(500px, 50vh, 700px);
+  }
+
+  .line {
+    opacity: 1;
+  }
+
+  h1 {
+    font-size: clamp(8rem, 12vw, 14rem);
+    padding: 0 var(--gallery-spacing-lg);
+  }
+}
+
+/* Large Desktop (1280px - 1919px) */
+@media (min-width: 1280px) {
+  .img {
+    height: clamp(550px, 52vh, 750px);
+  }
+
+  h1 {
+    font-size: clamp(10rem, 12vw, 14rem);
+  }
+}
+
+/* Extra Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+  .img {
+    height: clamp(600px, 55vh, 800px);
+  }
+
+  h1 {
+    font-size: clamp(12rem, 12vw, 16rem);
+  }
+}
+
+/* ============================================
+   Accessibility & User Preferences
+   ============================================ */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .img {
+    will-change: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .img::before {
+    border-right-color: rgba(255, 255, 255, 0.5);
+    border-right-width: 2px;
+  }
+
+  .line {
+    border-right-color: rgba(255, 255, 255, 0.5);
+    border-right-width: 2px;
+    opacity: 1;
+  }
+
+  h1 {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+/* ============================================
+   Touch Device Optimizations
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+
+  /* Disable will-change on touch devices for better performance */
+  .img {
+    will-change: auto;
+  }
+
+  /* Larger touch targets */
+  a,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+
+  .img::before,
+  .line {
+    display: none;
+  }
+
+  h1 {
+    position: static;
+    transform: none;
+  }
+}
