@@ -1,0 +1,212 @@
+---
+import ButtonMore from "../../ui/buttons/ButtonMore.astro";
+
+interface Props {
+    id: string;
+    title: string;
+    description: string[];
+    techStack: TechStack[];
+    bgColor: string;
+    textColor: string;
+    images: Image[];
+    reverse?: boolean;
+    link?: string;
+}
+
+type TechStack = {
+    src: string;
+    alt: string;
+};
+
+type Image = {
+    src: string;
+    alt: string;
+};
+
+const {
+    id,
+    title,
+    description,
+    images,
+    techStack,
+    bgColor,
+    textColor,
+    reverse = false,
+    link,
+} = Astro.props;
+---
+
+<article
+    id={`${id}-tablet`}
+    class={`work-card-tablet relative w-full min-h-screen flex ${reverse ? "flex-row-reverse" : "flex-row"} items-center p-8 ${bgColor}`}
+    data-work-card
+>
+    <!-- Content Section -->
+    <div class="w-1/2 flex flex-col gap-6 p-6 z-10">
+        <!-- Title -->
+        <header>
+            <h2
+                class={`text-4xl font-bold w-fit p-5 rounded-2xl ${textColor} bg-[#E4F4E4] shadow-lg`}
+            >
+                {title}
+            </h2>
+        </header>
+
+        <!-- Description -->
+        <div class="flex flex-col gap-3">
+            {
+                description.map((desc) => (
+                    <p class="text-[#E4F4E4] font-semibold text-lg leading-relaxed">
+                        {desc}
+                    </p>
+                ))
+            }
+        </div>
+
+        <!-- CTA Button -->
+        <div class="mt-4">
+            <ButtonMore link={link} />
+        </div>
+
+        <!-- Tech Stack -->
+        <div
+            class="flex flex-col border-2 rounded-xl border-[#E4F4E4] w-fit shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+            <h3
+                class="text-[#E4F4E4] text-lg font-bold p-3 border-b-2 border-[#E4F4E4]"
+            >
+                TECH STACK
+            </h3>
+            <div class="flex flex-row items-center p-3 gap-4">
+                {
+                    techStack.map((tech) => (
+                        <img
+                            src={tech.src}
+                            alt={tech.alt}
+                            loading="lazy"
+                            decoding="async"
+                            class="w-10 h-10 transform transition-all duration-300 hover:scale-110 hover:rotate-3 hover:brightness-110 hover:-translate-y-1"
+                            width="40"
+                            height="40"
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Images Section -->
+    <div
+        class={`w-1/2 relative flex items-center justify-center p-6 ${reverse ? "pr-12" : "pl-12"}`}
+    >
+        <div
+            class="images-grid relative w-full h-full flex items-center justify-center"
+        >
+            {
+                images.map((image, index) => (
+                    <figure
+                        class={`image-wrapper absolute rounded-2xl overflow-hidden shadow-2xl ${
+                            index === 0 ? "z-20" : "z-10"
+                        }`}
+                        style={
+                            images.length > 1 && index === 1
+                                ? reverse
+                                    ? "right: 0; top: 20%; max-width: 45%;"
+                                    : "left: 0; top: 20%; max-width: 45%;"
+                                : "max-width: 55%; left: 50%; transform: translateX(-50%);"
+                        }
+                    >
+                        <img
+                            src={image.src}
+                            alt={image.alt}
+                            loading={index === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                            fetchpriority={index === 0 ? "high" : "auto"}
+                            class="w-full h-auto object-cover"
+                            width="600"
+                            height="1200"
+                        />
+                    </figure>
+                ))
+            }
+        </div>
+    </div>
+</article>
+
+<style>
+    .work-card-tablet {
+        scroll-snap-align: start;
+    }
+
+    .image-wrapper {
+        background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.05)
+        );
+    }
+
+    .image-wrapper img {
+        filter: drop-shadow(-20px 20px 30px rgba(0, 0, 0, 0.4));
+        transition: transform 0.4s ease-out;
+    }
+
+    .image-wrapper:hover img {
+        transform: scale(1.03);
+    }
+
+    /* Fade-in animation on scroll */
+    .work-card-tablet {
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Stagger animation for images */
+    .image-wrapper:nth-child(1) {
+        animation: slideInImage 0.8s ease-out 0.2s forwards;
+        opacity: 0;
+    }
+
+    .image-wrapper:nth-child(2) {
+        animation: slideInImage 0.8s ease-out 0.4s forwards;
+        opacity: 0;
+    }
+
+    @keyframes slideInImage {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Respect reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        .work-card-tablet,
+        .image-wrapper {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .image-wrapper img {
+            transition: none !important;
+        }
+    }
+
+    /* Optimize for touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        .image-wrapper:active img {
+            transform: scale(0.98);
+        }
+    }
+</style>

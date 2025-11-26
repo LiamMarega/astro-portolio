@@ -37,49 +37,73 @@ const {
 } = Astro.props;
 ---
 
-<div
+<article
   id={id}
-  class={`relative flex ${reverse ? "md:flex-row-reverse" : "md:flex-row"} p-5 min-h-screen md:h-full w-full ${bgColor}`}
+  class={`relative flex ${reverse ? "flex-row-reverse" : "flex-row"} p-5 min-h-screen h-full w-full ${bgColor}`}
+  data-work-card
 >
+  <!-- Project Images - Optimized for Desktop -->
   {
-    images.map((image) => (
-      <img src={image.src} alt={image.alt} class={`absolute ${image.class}`} />
+    images.map((image, index) => (
+      <img
+        src={image.src}
+        alt={image.alt}
+        loading={index === 0 ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={index === 0 ? "high" : "auto"}
+        class={`work-image ${image.class}`}
+        width="800"
+        height="1600"
+      />
     ))
   }
-  <div
-    class="w-6/6 md:w-3/6 h-5/6 flex flex-col justify-center md:justify-between gap-10 md:gap-5 md:p-10 p-1 pt-20 md:pt-28"
-  >
-    <div class="flex flex-col justify-around gap-8 md:gap-2">
-      <h5
-        class={`text-3xl mb-10 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] md:text-4xl `}
-      >
-        {title}
-      </h5>
 
-      {
-        description.map((desc, index) => (
-          <p class="md:text-balance text-[#E4F4E4] font-semibold text-lg md:text-xl mb-2">
-            {desc}
-          </p>
-        ))
-      }
+  <!-- Content Container -->
+  <div class="w-3/6 h-5/6 flex flex-col justify-center gap-5 p-10 pt-28 z-10">
+    <div class="flex flex-col justify-around gap-2">
+      <!-- Project Title -->
+      <header>
+        <h2
+          class={`text-4xl mb-10 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] shadow-lg`}
+        >
+          {title}
+        </h2>
+      </header>
 
+      <!-- Project Description -->
+      <div class="flex flex-col gap-2">
+        {
+          description.map((desc) => (
+            <p class="text-balance text-[#E4F4E4] font-semibold text-xl mb-2 leading-relaxed">
+              {desc}
+            </p>
+          ))
+        }
+      </div>
+
+      <!-- CTA Button -->
       <ButtonMore link={link} />
+
+      <!-- Tech Stack -->
       <div
-        class="flex flex-col mt-4 border-2 rounded-xl border-[#E4F4E4] w-fit self-center md:self-start hover:shadow-lg transition-shadow duration-300"
+        class="flex flex-col mt-4 border-2 rounded-xl border-[#E4F4E4] w-fit self-start hover:shadow-xl transition-shadow duration-300"
       >
-        <h5
-          class="text-[#E4F4E4] text-base font-bold w-fit h-fit p-3 flex justify-center items-center md:text-xl"
+        <h3
+          class="text-[#E4F4E4] text-xl font-bold w-fit h-fit p-3 flex justify-center items-center border-b-2 border-[#E4F4E4]"
         >
           TECH STACK
-        </h5>
+        </h3>
         <div class="flex flex-row items-center p-2 gap-x-3">
           {
             techStack.map((tech) => (
               <img
                 src={tech.src}
                 alt={tech.alt}
-                class="w-6 h-6 md:w-10 md:h-10 transform transition-all duration-300 hover:scale-110 hover:rotate-3 hover:brightness-110 hover:-translate-y-1"
+                loading="lazy"
+                decoding="async"
+                class="w-10 h-10 transform transition-all duration-300 hover:scale-110 hover:rotate-3 hover:brightness-110 hover:-translate-y-1"
+                width="40"
+                height="40"
               />
             ))
           }
@@ -87,11 +111,29 @@ const {
       </div>
     </div>
   </div>
-</div>
+</article>
 
 <style>
-  img.absolute {
+  .work-image {
     -webkit-filter: drop-shadow(-35px 35px 35px #000000);
     filter: drop-shadow(-35px 35px 35px #000000);
+    will-change: transform;
+  }
+
+  /* Optimize for GSAP animations */
+  article[data-work-card] {
+    will-change: transform;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .work-image,
+    article[data-work-card] {
+      will-change: auto;
+    }
+
+    img {
+      transition: none !important;
+    }
   }
 </style>

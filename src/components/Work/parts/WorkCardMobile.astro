@@ -1,0 +1,166 @@
+---
+import ButtonMore from "../../ui/buttons/ButtonMore.astro";
+
+interface Props {
+    id: string;
+    title: string;
+    description: string[];
+    techStack: TechStack[];
+    bgColor: string;
+    textColor: string;
+    images: Image[];
+    link?: string;
+}
+
+type TechStack = {
+    src: string;
+    alt: string;
+};
+
+type Image = {
+    src: string;
+    alt: string;
+};
+
+const { id, title, description, images, techStack, bgColor, textColor, link } =
+    Astro.props;
+---
+
+<article
+    id={`${id}-mobile`}
+    class={`work-card-mobile relative w-full min-h-screen flex flex-col justify-center items-center p-6 py-16 ${bgColor}`}
+    data-work-card
+>
+    <!-- Content Container -->
+    <div class="w-full max-w-md flex flex-col gap-8 z-10">
+        <!-- Title -->
+        <header>
+            <h2
+                class={`text-3xl font-bold w-fit p-4 rounded-xl ${textColor} bg-[#E4F4E4] shadow-lg`}
+            >
+                {title}
+            </h2>
+        </header>
+
+        <!-- Project Images -->
+        {
+            images && images.length > 0 && (
+                <div class="work-images-container flex flex-col gap-4 my-4">
+                    {images.map((image, index) => (
+                        <figure class="work-image-wrapper rounded-2xl overflow-hidden shadow-2xl">
+                            <img
+                                src={image.src}
+                                alt={image.alt}
+                                loading={index === 0 ? "eager" : "lazy"}
+                                decoding="async"
+                                fetchpriority={index === 0 ? "high" : "auto"}
+                                class="w-full h-auto object-cover transform transition-transform duration-500 hover:scale-105"
+                                width="400"
+                                height="800"
+                            />
+                        </figure>
+                    ))}
+                </div>
+            )
+        }
+
+        <!-- Description -->
+        <div class="flex flex-col gap-4">
+            {
+                description.map((desc) => (
+                    <p class="text-[#E4F4E4] font-semibold text-base leading-relaxed">
+                        {desc}
+                    </p>
+                ))
+            }
+        </div>
+
+        <!-- CTA Button -->
+        <div class="flex justify-center mt-4">
+            <ButtonMore link={link} />
+        </div>
+
+        <!-- Tech Stack -->
+        <div
+            class="flex flex-col border-2 rounded-xl border-[#E4F4E4] w-full shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+            <h3
+                class="text-[#E4F4E4] text-base font-bold p-3 text-center border-b-2 border-[#E4F4E4]"
+            >
+                TECH STACK
+            </h3>
+            <div
+                class="flex flex-row justify-center items-center p-4 gap-4 flex-wrap"
+            >
+                {
+                    techStack.map((tech) => (
+                        <img
+                            src={tech.src}
+                            alt={tech.alt}
+                            loading="lazy"
+                            decoding="async"
+                            class="w-8 h-8 transform transition-all duration-300 hover:scale-125 hover:rotate-6 hover:brightness-110"
+                            width="32"
+                            height="32"
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</article>
+
+<style>
+    .work-card-mobile {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+
+    .work-image-wrapper {
+        position: relative;
+        background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.05)
+        );
+    }
+
+    .work-image-wrapper img {
+        filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    }
+
+    /* Fade-in animation on scroll */
+    .work-card-mobile {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Respect reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        .work-card-mobile {
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+
+        .work-image-wrapper img,
+        img {
+            transition: none !important;
+        }
+    }
+
+    /* Optimize for touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        .work-image-wrapper img:active {
+            transform: scale(0.98);
+        }
+    }
+</style>
