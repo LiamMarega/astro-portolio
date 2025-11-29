@@ -9,11 +9,14 @@ import Container from "../components/ui/Container.astro";
 import Gallery from "../components/gallery/index.astro";
 ---
 
-<Layout 
+<Layout
   title="Liam Marega - Frontend Developer | Responsive Web Applications"
   description="Experienced Frontend Developer specializing in creating responsive, attractive, and functional web applications. Expert in React, TypeScript, and modern web technologies."
 >
-  <main class="relative min-h-screen pb-12 sm:pb-16 text-white" role="main">
+  <main
+    class="relative sm:pb-10 xl:pb-0 xl:min-h-screen pb-12 text-white"
+    role="main"
+  >
     <CursorFollow />
 
     <Container class="flex flex-col h-full justify-between">
@@ -26,7 +29,9 @@ import Gallery from "../components/gallery/index.astro";
         </h1>
 
         <div class="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8"
+          >
             <p
               class="font-extralight text-sm sm:text-base md:text-lg text-center sm:text-start text-balance opacity-70 p-2"
             >
@@ -37,9 +42,9 @@ import Gallery from "../components/gallery/index.astro";
             <p
               class="text-center sm:text-start text-sm sm:text-base md:text-lg font-extralight text-balance opacity-70 p-2"
             >
-              I'm a passionate developer with experience who uses
-              research, data, and thoughtful design to create delightful
-              products that scale.
+              I'm a passionate developer with experience who uses research,
+              data, and thoughtful design to create delightful products that
+              scale.
             </p>
 
             <div class="flex items-center justify-center sm:justify-start p-2">
