@@ -6,7 +6,6 @@ gsap.registerPlugin(ScrollTrigger);
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', () => {
   // Only execute animations on desktop (1024px and above)
-  // Mobile and tablet get CSS-based animations instead
   if (window.innerWidth >= 1024) {
     initDesktopAnimations();
   }
@@ -20,15 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const hasScrollTriggers = ScrollTrigger.getAll().length > 0;
 
       if (isDesktop && !hasScrollTriggers) {
-        // Switched to desktop, initialize animations
         initDesktopAnimations();
       } else if (!isDesktop && hasScrollTriggers) {
-        // Switched to mobile/tablet, kill all ScrollTriggers
         ScrollTrigger.getAll().forEach(trigger => trigger.kill(true));
-        // Reset any transforms applied by GSAP
         gsap.set('.section, [data-work-card]', { clearProps: 'all' });
       } else if (isDesktop && hasScrollTriggers) {
-        // Still on desktop, just refresh
         ScrollTrigger.refresh();
       }
     }, 250);
@@ -45,47 +40,72 @@ function initDesktopAnimations() {
     start: 'top top',
     pin: true,
     scrub: 0.5,
-    anticipatePin: 1, // Optimize performance
+    anticipatePin: 1,
     end: () => '+=' + document.querySelector('#about').offsetWidth,
     invalidateOnRefresh: true,
   });
 
-  // Horizontal animation for About sections
   aboutTimeline.to('.section', {
     xPercent: -100 * (document.querySelectorAll('.section').length - 1),
     ease: 'none',
     duration: 2
   });
 
-  // Configuration for Work section (vertical scroll with pin and stacking)
-  const workTimeline = gsap.timeline();
-
-  ScrollTrigger.create({
-    animation: workTimeline,
-    trigger: '#work',
-    start: 'top top',
-    pin: true,
-    scrub: 0.5,
-    anticipatePin: 1, // Optimize performance
-    end: '+=3000',
-    invalidateOnRefresh: true,
-  });
-
-  // Stacking animations for work cards
-  const workCards = gsap.utils.toArray('[data-work-card]');
-
-  workCards.forEach((card, index) => {
-    if (index > 0) {
-      workTimeline.to(card, {
-        yPercent: -100 * index,
-        duration: 2,
-        ease: 'none',
-      }, 0); // Start all at the same time for proper stacking
-    }
-  });
+  // Stacking Cards Animation for Work Section
+  initStackingCardsAnimation();
 
   // Refresh ScrollTrigger after initialization
   ScrollTrigger.refresh();
+}
+
+function initStackingCardsAnimation() {
+  const workCards = gsap.utils.toArray('[data-work-card]');
+
+  if (workCards.length === 0) return;
+
+  // Create a ScrollTrigger for each card that scales down the card
+  // as it gets covered by the next one
+  workCards.forEach((card, index) => {
+    const isLastCard = index === workCards.length - 1;
+
+    // Create scale-down animation for all cards except the last one
+    if (!isLastCard) {
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => {
+          // Scale down and add slight "push back" effect as next card covers this one
+          const progress = self.progress;
+          const scale = 1 - (progress * 0.05); // Scale from 1 to 0.95
+          const brightness = 1 - (progress * 0.2); // Darken slightly
+
+          gsap.set(card, {
+            scale: scale,
+            filter: `brightness(${brightness})`,
+            transformOrigin: 'center top'
+          });
+        },
+        onLeave: () => {
+          // Ensure final state
+          gsap.set(card, {
+            scale: 0.95,
+            filter: 'brightness(0.8)',
+            transformOrigin: 'center top'
+          });
+        },
+        onEnterBack: () => {
+          // Reset when scrolling back up
+          gsap.set(card, {
+            scale: 1,
+            filter: 'brightness(1)',
+            transformOrigin: 'center top'
+          });
+        }
+      });
+    }
+  });
 }
 
 // Respect prefers-reduced-motion

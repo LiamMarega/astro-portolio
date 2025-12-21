@@ -113,10 +113,16 @@ const projects = [
 <!-- Desktop Version: >= 1024px -->
 <section
   id="work"
-  class="hidden lg:block relative rounded-t-3xl h-full lg:h-screen w-full"
+  class="hidden lg:block relative w-full"
   aria-label="Projects showcase"
 >
-  {projects.map((project) => <WorkCard {...project} />)}
+  <div class="work-stack-container">
+    {
+      projects.map((project, index) => (
+        <WorkCard {...project} cardIndex={index} totalCards={projects.length} />
+      ))
+    }
+  </div>
 </section>
 
 <style>
@@ -134,5 +140,11 @@ const projects = [
     #work {
       scroll-behavior: smooth;
     }
+  }
+
+  /* Stacking cards container for desktop */
+  .work-stack-container {
+    position: relative;
+    width: 100%;
   }
 </style>

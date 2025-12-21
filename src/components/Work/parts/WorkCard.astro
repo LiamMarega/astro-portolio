@@ -11,6 +11,8 @@ interface Props {
   images: Image[];
   reverse?: boolean;
   link?: string;
+  cardIndex?: number;
+  totalCards?: number;
 }
 
 type TechStack = {
@@ -34,13 +36,17 @@ const {
   textColor,
   reverse = false,
   link,
+  cardIndex = 0,
+  totalCards = 1,
 } = Astro.props;
 ---
 
 <article
   id={id}
-  class={`relative flex ${reverse ? "flex-row-reverse" : "flex-row"} p-5 min-h-screen h-full w-full ${bgColor}`}
+  class={`work-card relative flex ${reverse ? "flex-row-reverse" : "flex-row"} p-5 min-h-screen h-screen w-full ${bgColor}`}
   data-work-card
+  data-card-index={cardIndex}
+  style={`z-index: ${cardIndex + 1};`}
 >
   <!-- Project Images - Optimized for Desktop -->
   {
@@ -120,15 +126,20 @@ const {
     will-change: transform;
   }
 
-  /* Optimize for GSAP animations */
-  article[data-work-card] {
+  /* Stacking card styles */
+  .work-card {
+    position: sticky;
+    top: 0;
     will-change: transform;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+    overflow: hidden;
   }
 
   /* Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     .work-image,
-    article[data-work-card] {
+    .work-card {
       will-change: auto;
     }
 
