@@ -6,15 +6,15 @@ import StickerPeel from "./StickerPeel.astro";
 
 <section
   id="info-box"
-  class="absolute max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] left-0 bottom-52 w-full"
+  class="relative max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] xl:max-w-[75%] mx-auto w-full mt-24 mb-32"
   role="region"
   aria-label="Developer skills and technologies"
 >
   <div
-    class="relative flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 bg-white rounded-r-full animate-slide-in h-20 sm:h-24 md:h-32 lg:h-48 xl:h-60"
+    class="relative flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 bg-white rounded-[2rem] sm:rounded-r-full animate-slide-in h-40 sm:h-24 md:h-32 lg:h-48 xl:h-60"
   >
     <div
-      class="absolute left-1/2 -translate-x-1/2 -bottom-16 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48 xl:h-[32rem] xl:w-96 hover:scale-105 transition-transform duration-300 animate-slide-in-with-container"
+      class="absolute left-1/2 -translate-x-1/2 bottom-4 sm:-bottom-16 w-32 h-32 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48 xl:h-[32rem] xl:w-96 hover:scale-105 transition-transform duration-300 animate-slide-in-with-container"
     >
       <img
         class="w-full h-full object-contain [filter:drop-shadow(0_2px_0_white)_drop-shadow(0_-2px_0_white)_drop-shadow(2px_0_0_white)_drop-shadow(-2px_0_0_white)_drop-shadow(2px_2px_0_white)_drop-shadow(-2px_-2px_0_white)_drop-shadow(2px_-2px_0_white)_drop-shadow(-2px_2px_0_white)]"
@@ -23,10 +23,10 @@ import StickerPeel from "./StickerPeel.astro";
       />
     </div>
 
-    <!-- Mobile developer bubble -->
+    <!-- Mobile developer bubble (TOP-LEFT) -->
     <div
-      class="bubble-card absolute -top-12 sm:-top-16 md:-top-20 lg:-top-24 left-2 sm:left-4 md:left-10 lg:left-20
-      bg-green-200 delay-1 flex-center"
+      class="bubble-card absolute -top-10 left-2 sm:left-4 md:left-10 lg:left-20
+      bg-green-200 delay-1 flex-center z-10"
       role="img"
       aria-label="Mobile Developer specialization"
     >
@@ -42,10 +42,10 @@ import StickerPeel from "./StickerPeel.astro";
       </span>
     </div>
 
-    <!-- Web developer bubble -->
+    <!-- Web developer bubble (BOTTOM-RIGHT) -->
     <div
-      class="bubble-card absolute -bottom-12 sm:-bottom-16 md:-bottom-20 right-12 sm:right-16 md:right-24 lg:right-48 xl:right-60
-      bg-lime-200 delay-2 flex-center"
+      class="bubble-card absolute -bottom-10 right-2 sm:right-16 md:right-24 lg:right-48 xl:right-60
+      bg-lime-200 delay-2 flex-center z-10"
       role="img"
       aria-label="Web Developer specialization"
     >
@@ -61,10 +61,10 @@ import StickerPeel from "./StickerPeel.astro";
       </span>
     </div>
 
-    <!-- Technologies card 1 -->
+    <!-- Technologies card 1 (TOP-RIGHT) -->
     <div
-      class="tech-card absolute top-2 sm:top-0 md:top-1/3 lg:top-40 xl:top-48 right-2 sm:right-4 md:right-auto md:left-24 lg:left-32 xl:left-40
-      rotate-3 sm:rotate-6 md:rotate-12 bg-yellow-300 delay-3"
+      class="tech-card absolute -top-10 right-2 sm:right-4 md:right-auto md:left-24 lg:left-32 xl:left-40
+      rotate-3 sm:rotate-6 md:rotate-12 bg-yellow-300 delay-3 z-10"
       role="img"
       aria-label="Primary technologies: React, Flutter, Next.js"
     >
@@ -105,10 +105,10 @@ import StickerPeel from "./StickerPeel.astro";
       </h3>
     </div>
 
-    <!-- Technologies card 2 -->
+    <!-- Technologies card 2 (BOTTOM-LEFT) -->
     <div
-      class="tech-card absolute hidden sm:flex top-16 sm:top-20 md:top-12 lg:top-14 right-20 sm:right-72 md:-right-8 lg:-right-14
-      -rotate-3 sm:-rotate-6 md:-rotate-12 bg-green-200 delay-4"
+      class="tech-card absolute -bottom-10 left-2 sm:left-72 md:-right-8 lg:-right-14
+      -rotate-3 sm:-rotate-6 md:-rotate-12 bg-green-200 delay-4 z-10"
       role="img"
       aria-label="UX/UI Design expertise since 2025"
     >

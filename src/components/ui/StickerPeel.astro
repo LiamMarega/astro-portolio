@@ -47,7 +47,9 @@ const cssVars = {
     "--sticker-peelback-active": `${peelBackActivePct}%`,
     "--sticker-peel-easing": peelEasing,
     "--sticker-peel-hover-easing": peelHoverEasing,
-    "--sticker-width": typeof width === "number" ? `${width}px` : width,
+    "--sticker-width-desktop": typeof width === "number" ? `${width}px` : width,
+    "--sticker-width-mobile":
+        typeof width === "number" ? `${width * 0.4}px` : `calc(${width} * 0.4)`,
     "--sticker-shadow-opacity": shadowIntensity.toString(),
     "--sticker-lighting-constant": lightingIntensity.toString(),
     "--peel-direction": `${peelDirection}deg`,
@@ -142,7 +144,7 @@ const styleString = Object.entries(cssVars)
                     src={imageSrc}
                     alt=""
                     class="block"
-                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: ${width}px;`}
+                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: var(--sticker-width);`}
                     draggable="false"
                 />
             </div>
@@ -161,7 +163,7 @@ const styleString = Object.entries(cssVars)
                     src={imageSrc}
                     alt=""
                     class="block"
-                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: ${width}px; filter: url(#${expandAndFillId});`}
+                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: var(--sticker-width); filter: url(#${expandAndFillId});`}
                     draggable="false"
                 />
             </div>
@@ -177,7 +179,7 @@ const styleString = Object.entries(cssVars)
                     src={imageSrc}
                     alt=""
                     class="block"
-                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: ${width}px; filter: url(#${expandAndFillId});`}
+                    style={`transform: rotate(calc(${rotate}deg - ${peelDirection}deg)); width: var(--sticker-width); filter: url(#${expandAndFillId});`}
                     draggable="false"
                 />
             </div>
@@ -188,6 +190,13 @@ const styleString = Object.entries(cssVars)
 <style>
     .sticker-drag-target {
         will-change: transform;
+        --sticker-width: var(--sticker-width-mobile);
+    }
+
+    @media (min-width: 640px) {
+        .sticker-drag-target {
+            --sticker-width: var(--sticker-width-desktop);
+        }
     }
 
     .sticker-main,
