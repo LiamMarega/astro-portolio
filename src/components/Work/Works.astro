@@ -2,94 +2,16 @@
 import WorkCard from "../Work/parts/WorkCard.astro";
 import WorkCardMobile from "../Work/parts/WorkCardMobile.astro";
 import WorkCardTablet from "../Work/parts/WorkCardTablet.astro";
+import CircularGallery from "../ui/CircularGallery.astro";
+import {
+  getProjects,
+  shouldReverse,
+  techIcons,
+  minorProjects,
+} from "../../data/projects";
 
-// Project data shared across all components
-const projects = [
-  {
-    id: "ferox",
-    title: "Ferox app",
-    bgColor: "bg-[#15432b]",
-    textColor: "text-[#15432b]",
-    link: "https://feroxapp.com/",
-    description: [
-      "Ferox is a hunting social network whose objective is to unify the sector and create links between hunters.",
-      "Since there is strength in numbers, it is the perfect place to come together and show that we are a united sector capable of great things.",
-    ],
-    images: [
-      {
-        src: "/images/works/feroxMock.webp",
-        alt: "Ferox app mobile mockup showing hunting social network interface",
-        class: "absolute right-10 bottom-10 h-60 md:h-[65%] 2xl:h-[75%]",
-      },
-    ],
-    techStack: [
-      { src: "/images/icons/flutter.svg", alt: "Flutter framework" },
-      { src: "/images/icons/dart.svg", alt: "Dart programming language" },
-      { src: "/images/icons/android-icon.svg", alt: "Android platform" },
-      { src: "/images/icons/firebase.svg", alt: "Firebase backend" },
-      { src: "/images/icons/stripe.svg", alt: "Stripe payment integration" },
-    ],
-  },
-  {
-    id: "advantisAI",
-    title: "ADVANTIS.AI",
-    bgColor: "bg-[#22A7F2]",
-    textColor: "text-[#22A7F2]",
-    link: "https://www.figma.com/proto/8ShCMxzmpgONb3goAOGLBj/TARP-rebrand?node-id=139-907&t=P2Qw3j0XwZZ202Gd-1",
-    reverse: true,
-    description: [
-      "Advantis AI is at the forefront of revolutionizing the decentralized finance (DeFi) industry through the power of artificial intelligence (AI).",
-      "Your mission is to bridge the gap between technology and users, providing comprehensive tools, educational resources, and a thriving community.",
-    ],
-    images: [
-      {
-        src: "/images/works/advantis-scan.webp",
-        alt: "Advantis AI scan feature interface",
-        class:
-          "absolute md:left-3 xl:left-4 top-20 h-60 md:h-[55%] 2xl:h-[65%]",
-      },
-      {
-        src: "/images/works/advantis-home.webp",
-        alt: "Advantis AI home dashboard",
-        class:
-          "absolute md:left-3 xl:left-56 top-80 h-60 md:h-[50%] 2xl:h-[60%]",
-      },
-    ],
-    techStack: [
-      { src: "/images/icons/react.svg", alt: "React library" },
-      { src: "/images/icons/typescript.svg", alt: "TypeScript language" },
-      { src: "/images/icons/html5.svg", alt: "HTML5 markup" },
-      { src: "/images/icons/css.svg", alt: "CSS styling" },
-      { src: "/images/icons/firebase.svg", alt: "Firebase backend" },
-    ],
-  },
-  {
-    id: "fmoney",
-    title: "FMoney raffle",
-    bgColor: "bg-[#629A48]",
-    textColor: "text-[#629A48]",
-    link: "https://www.figma.com/proto/Ic2WlwbqBiSLBOBtOX4Je4/App-megapool?node-id=262-99250&t=52OuOuXFk5eiOAq2-1",
-    description: [
-      "FMoney is a blockchain technology currently applied to raffles.",
-      "The platform guarantees greater transparency, instant traceability, security, greater speed, and efficiency to all processes (purchase, selection of the winner, and prize claim).",
-    ],
-    images: [
-      {
-        src: "/images/works/fmoney.webp",
-        alt: "FMoney raffle platform blockchain interface",
-        class:
-          "absolute right-10 bottom-36 xl:bottom-32 h-60 md:h-[55%] xl:h-[65%]",
-      },
-    ],
-    techStack: [
-      { src: "/images/icons/react.svg", alt: "React library" },
-      { src: "/images/icons/typescript.svg", alt: "TypeScript language" },
-      { src: "/images/icons/dart.svg", alt: "Dart programming language" },
-      { src: "/images/icons/firebase.svg", alt: "Firebase backend" },
-      { src: "/images/icons/metamask.svg", alt: "MetaMask wallet integration" },
-    ],
-  },
-];
+// Get all projects from centralized data source
+const projects = getProjects(true); // Sort by featured first
 ---
 
 <!-- Mobile Version: < 768px -->
@@ -98,7 +20,11 @@ const projects = [
   class="block md:hidden w-full scroll-smooth"
   aria-label="Projects showcase"
 >
-  {projects.map((project) => <WorkCardMobile {...project} />)}
+  {
+    projects.map((project, index) => (
+      <WorkCardMobile {...project} isReversed={shouldReverse(project, index)} />
+    ))
+  }
 </section>
 
 <!-- Tablet Version: 768px - 1023px -->
@@ -107,7 +33,11 @@ const projects = [
   class="hidden md:block lg:hidden w-full scroll-smooth"
   aria-label="Projects showcase"
 >
-  {projects.map((project) => <WorkCardTablet {...project} />)}
+  {
+    projects.map((project, index) => (
+      <WorkCardTablet {...project} isReversed={shouldReverse(project, index)} />
+    ))
+  }
 </section>
 
 <!-- Desktop Version: >= 1024px -->
@@ -116,12 +46,44 @@ const projects = [
   class="hidden lg:block relative w-full"
   aria-label="Projects showcase"
 >
-  <div class="work-stack-container">
+  <div class="work-stack-container p-5">
     {
       projects.map((project, index) => (
-        <WorkCard {...project} cardIndex={index} totalCards={projects.length} />
+        <WorkCard
+          {...project}
+          cardIndex={index}
+          totalCards={projects.length + 1}
+          isReversed={shouldReverse(project, index)}
+        />
       ))
     }
+    <WorkCard
+      id="more-works"
+      title="Otros Proyectos"
+      description={["Una galería con más trabajos realizados."]}
+      techStack={[techIcons.react, techIcons.typescript]}
+      bgColor="bg-[#fde047]"
+      textColor="text-[#000000]"
+      cardIndex={projects.length}
+      totalCards={projects.length + 1}
+      isReversed={true}
+      useCustomContent
+      fullWidthCustomContent
+    >
+      <CircularGallery
+        items={minorProjects}
+        bend={10}
+        textColor="#000000"
+        borderRadius={0.05}
+        font="bold 24px sans-serif"
+        scrollSpeed={1.5}
+        scrollEase={0.05}
+        cardHeight={400}
+        cardWidth={300}
+        cardGap={0.5}
+        offsetX={10}
+      />
+    </WorkCard>
   </div>
 </section>
 

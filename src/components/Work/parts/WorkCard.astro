@@ -1,105 +1,111 @@
 ---
 import ButtonMore from "../../ui/buttons/ButtonMore.astro";
+import type {
+  Project,
+  TechStackItem,
+  ProjectImage,
+} from "../../../data/projects";
 
-interface Props {
-  id: string;
-  title: string;
-  description: string[];
-  techStack: TechStack[];
-  bgColor: string;
-  textColor: string;
-  images: Image[];
-  reverse?: boolean;
-  link?: string;
+interface Props extends Omit<Project, "featured" | "images" | "reverse"> {
+  /** Optional images - not required when using custom content */
+  images?: ProjectImage[];
   cardIndex?: number;
   totalCards?: number;
+  isReversed?: boolean;
+  /** When true, uses slot content instead of default image section */
+  useCustomContent?: boolean;
+  /** When true, the custom content (slot) will take up 100% of the card width/height using absolute positioning */
+  fullWidthCustomContent?: boolean;
 }
-
-type TechStack = {
-  src: string;
-  alt: string;
-};
-
-type Image = {
-  src: string;
-  alt: string;
-  class: string;
-};
 
 const {
   id,
   title,
   description,
-  images,
+  images = [],
   techStack,
   bgColor,
   textColor,
-  reverse = false,
   link,
   cardIndex = 0,
   totalCards = 1,
+  isReversed = false,
+  useCustomContent = false,
+  fullWidthCustomContent = false,
 } = Astro.props;
+
+// Determine if we have multiple images for staggered layout
+const hasMultipleImages = images.length > 1;
+
+// Check if slot content was provided
+const hasSlotContent = Astro.slots.has("default") || Astro.slots.has("custom-content");
+const shouldUseCustom = useCustomContent || hasSlotContent;
 ---
 
 <article
   id={id}
-  class={`work-card relative flex ${reverse ? "flex-row-reverse" : "flex-row"} p-5 min-h-screen h-screen w-full ${bgColor}`}
+  class:list={["work-card", bgColor, { "work-card--reversed": isReversed }]}
   data-work-card
   data-card-index={cardIndex}
   style={`z-index: ${cardIndex + 1};`}
 >
-  <!-- Project Images - Optimized for Desktop -->
-  {
-    images.map((image, index) => (
-      <img
-        src={image.src}
-        alt={image.alt}
-        loading={index === 0 ? "eager" : "lazy"}
-        decoding="async"
-        fetchpriority={index === 0 ? "high" : "auto"}
-        class={`work-image ${image.class}`}
-        width="800"
-        height="1600"
-      />
-    ))
-  }
+  <!-- Image/Custom Content Section -->
+  <div class:list={["work-card__image-section", { "work-card__image-section--full-width": fullWidthCustomContent }]}>
+    {shouldUseCustom ? (
+      <!-- Custom Content via Slot -->
+      <div class="work-card__custom-content">
+        <slot name="custom-content">
+          <slot />
+        </slot>
+      </div>
+    ) : (
+      <!-- Default Image Layout -->
+      <div
+        class:list={[
+          "work-card__images-container",
+          { "work-card__images-container--multiple": hasMultipleImages },
+        ]}
+      >
+        {images.map((image, index) => (
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading={cardIndex === 0 && index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchpriority={cardIndex === 0 && index === 0 ? "high" : "auto"}
+            class:list={[
+              "work-card__image",
+              { "work-card__image--primary": index === 0 },
+              { "work-card__image--secondary": index === 1 },
+            ]}
+          />
+        ))}
+      </div>
+    )}
+  </div>
 
-  <!-- Content Container -->
-  <div class="w-3/6 h-5/6 flex flex-col justify-center gap-5 p-10 pt-28 z-10">
-    <div class="flex flex-col justify-around gap-2">
+  <!-- Content Section (50%) -->
+  <div class="work-card__content-section">
+    <div class="work-card__content-inner">
       <!-- Project Title -->
-      <header>
-        <h2
-          class={`text-4xl mb-10 font-bold w-fit h-fit p-5 rounded-2xl flex justify-center items-center ${textColor} bg-[#E4F4E4] shadow-lg`}
-        >
+      <header class="work-card__header">
+        <h2 class={`work-card__title ${textColor}`}>
           {title}
         </h2>
       </header>
 
       <!-- Project Description -->
-      <div class="flex flex-col gap-2">
-        {
-          description.map((desc) => (
-            <p class="text-balance text-[#E4F4E4] font-semibold text-xl mb-2 leading-relaxed">
-              {desc}
-            </p>
-          ))
-        }
+      <div class="work-card__description">
+        {description.map((desc) => <p class="work-card__paragraph">{desc}</p>)}
       </div>
 
       <!-- CTA Button -->
-      <ButtonMore link={link} />
+      {link && <ButtonMore link={link} />}
 
       <!-- Tech Stack -->
-      <div
-        class="flex flex-col mt-4 border-2 rounded-xl border-[#E4F4E4] w-fit self-start hover:shadow-xl transition-shadow duration-300"
-      >
-        <h3
-          class="text-[#E4F4E4] text-xl font-bold w-fit h-fit p-3 flex justify-center items-center border-b-2 border-[#E4F4E4]"
-        >
-          TECH STACK
-        </h3>
-        <div class="flex flex-row items-center p-2 gap-x-3">
+      <div class="work-card__tech-stack">
+        <h3 class="work-card__tech-title">TECH STACK</h3>
+        <div class="work-card__tech-icons">
           {
             techStack.map((tech) => (
               <img
@@ -107,7 +113,7 @@ const {
                 alt={tech.alt}
                 loading="lazy"
                 decoding="async"
-                class="w-10 h-10 transform transition-all duration-300 hover:scale-110 hover:rotate-3 hover:brightness-110 hover:-translate-y-1"
+                class="work-card__tech-icon"
                 width="40"
                 height="40"
               />
@@ -120,31 +126,255 @@ const {
 </article>
 
 <style>
-  .work-image {
-    -webkit-filter: drop-shadow(-35px 35px 35px #000000);
-    filter: drop-shadow(-35px 35px 35px #000000);
+  /* ==========================================================================
+     Work Card - Base Styles
+     ========================================================================== */
+
+  .work-card {
+    position: sticky;
+    top: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Perfect 50/50 split */
+    gap: 0;
+    margin: 0 1rem;
+    width: calc(100% - 2rem);
+    height: calc(100vh - 3rem);
+    min-height: calc(100vh - 3rem);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
     will-change: transform;
   }
 
-  /* Stacking card styles */
-  .work-card {
-    position: sticky;
-    top: 0;
-    will-change: transform;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
-    border-radius: 24px;
+  /* Reversed layout - swap columns */
+  .work-card--reversed {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .work-card--reversed .work-card__image-section {
+    order: 1;
+  }
+
+  .work-card--reversed .work-card__content-section {
+    order: 0;
+  }
+
+  /* ==========================================================================
+     Image Section
+     ========================================================================== */
+
+  .work-card__image-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
     overflow: hidden;
   }
 
-  /* Respect reduced motion preference */
+  /* Full width custom content modifier */
+  .work-card__image-section--full-width {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    z-index: 1; /* Behind content by default, can be adjusted */
+  }
+
+  .work-card__images-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    max-height: 85%;
+  }
+
+  /* Single image - centered */
+  .work-card__image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Preserve aspect ratio */
+    border-radius: 12px;
+    filter: drop-shadow(-20px 20px 30px rgba(0, 0, 0, 0.4));
+  }
+
+  /* Multiple images - staggered layout */
+  .work-card__images-container--multiple {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .work-card__images-container--multiple .work-card__image--primary {
+    position: relative;
+    z-index: 2;
+    max-height: 75%;
+    transform: translateX(15%);
+  }
+
+  .work-card__images-container--multiple .work-card__image--secondary {
+    position: relative;
+    z-index: 1;
+    max-height: 65%;
+    transform: translateX(-15%) translateY(15%);
+    opacity: 0.95;
+  }
+
+  /* Custom content container - for slots like carousels */
+  .work-card__custom-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  .work-card__image-section--full-width .work-card__custom-content {
+      padding: 0;
+  }
+
+  .work-card__custom-content :global(*) {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* ==========================================================================
+     Content Section
+     ========================================================================== */
+
+  .work-card__content-section {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem;
+    overflow-y: auto;
+    pointer-events: none; /* Allow clicks to pass through to gallery if not on interactive elements */
+  }
+
+  .work-card__content-section > * {
+    pointer-events: auto; /* Re-enable clicks for text/buttons */
+  }
+
+  .work-card__content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+
+  /* Title */
+  .work-card__header {
+    margin-bottom: 0.5rem;
+  }
+
+  .work-card__title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    padding: 1rem 1.5rem;
+    background-color: #e4f4e4;
+    border-radius: 1rem;
+    width: fit-content;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Description */
+  .work-card__description {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .work-card__paragraph {
+    color: #e4f4e4;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.6;
+    text-wrap: balance;
+  }
+
+  /* Tech Stack */
+  .work-card__tech-stack {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #e4f4e4;
+    border-radius: 0.75rem;
+    width: fit-content;
+    margin-top: 1rem;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .work-card__tech-stack:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .work-card__tech-title {
+    color: #e4f4e4;
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid #e4f4e4;
+  }
+
+  .work-card__tech-icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .work-card__tech-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .work-card__tech-icon:hover {
+    transform: scale(1.15) rotate(3deg) translateY(-3px);
+    filter: brightness(1.1);
+  }
+
+  /* ==========================================================================
+     Responsive Adjustments
+     ========================================================================== */
+
+  @media (max-width: 1280px) {
+    .work-card__content-section {
+      padding: 2rem;
+    }
+
+    .work-card__images-container--multiple .work-card__image--primary {
+      max-height: 70%;
+    }
+
+    .work-card__images-container--multiple .work-card__image--secondary {
+      max-height: 60%;
+    }
+  }
+
+  /* ==========================================================================
+     Reduced Motion
+     ========================================================================== */
+
   @media (prefers-reduced-motion: reduce) {
-    .work-image,
-    .work-card {
+    .work-card,
+    .work-card__image {
       will-change: auto;
     }
 
-    img {
-      transition: none !important;
+    .work-card__tech-icon {
+      transition: none;
     }
   }
 </style>

@@ -1,26 +1,14 @@
 ---
 import ButtonMore from "../../ui/buttons/ButtonMore.astro";
+import type {
+    Project,
+    TechStackItem,
+    ProjectImage,
+} from "../../../data/projects";
 
-interface Props {
-    id: string;
-    title: string;
-    description: string[];
-    techStack: TechStack[];
-    bgColor: string;
-    textColor: string;
-    images: Image[];
-    link?: string;
+interface Props extends Omit<Project, "featured" | "reverse"> {
+    isReversed?: boolean;
 }
-
-type TechStack = {
-    src: string;
-    alt: string;
-};
-
-type Image = {
-    src: string;
-    alt: string;
-};
 
 const { id, title, description, images, techStack, bgColor, textColor, link } =
     Astro.props;

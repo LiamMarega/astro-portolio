@@ -1,0 +1,874 @@
+---
+/**
+ * CircularGallery Component
+ *
+ * A WebGL-based circular gallery with smooth scroll animations.
+ * Uses OGL library for 3D rendering.
+ *
+ * @prop {Array} items - Array of { image: string, text: string } objects
+ * @prop {number} bend - Curvature of the gallery (positive = curve down, negative = curve up)
+ * @prop {string} textColor - Color of the text labels
+ * @prop {number} borderRadius - Border radius of images (0-0.5)
+ * @prop {string} font - CSS font string for labels
+ * @prop {number} scrollSpeed - Speed multiplier for scrolling
+ * @prop {number} scrollEase - Easing factor (0-1)
+ * @prop {number} cardWidth - Width of each card (default: 300)
+ * @prop {number} cardHeight - Height of each card (default: 400)
+ * @prop {number} cardGap - Gap between cards (default: 1)
+ */
+
+interface GalleryItem {
+    image: string;
+    text: string;
+}
+
+interface Props {
+    items?: GalleryItem[];
+    bend?: number;
+    textColor?: string;
+    borderRadius?: number;
+    font?: string;
+    scrollSpeed?: number;
+    scrollEase?: number;
+    cardWidth?: number;
+    cardHeight?: number;
+    cardGap?: number;
+    offsetX?: number;
+    class?: string;
+}
+
+const {
+    items = [],
+    bend = 3,
+    textColor = "#ffffff",
+    borderRadius = 0.05,
+    font = "bold 30px sans-serif",
+    scrollSpeed = 2,
+    scrollEase = 0.05,
+    cardWidth = 300,
+    cardHeight = 400,
+    cardGap = 1,
+    offsetX = 0,
+    class: className = "",
+} = Astro.props;
+
+// Generate unique ID for this instance
+const galleryId = `circular-gallery-${Math.random().toString(36).substr(2, 9)}`;
+
+// Default demo items if none provided
+const defaultItems: GalleryItem[] = [
+    {
+        image: "https://picsum.photos/seed/1/800/600?grayscale",
+        text: "Project One",
+    },
+    {
+        image: "https://picsum.photos/seed/2/800/600?grayscale",
+        text: "Project Two",
+    },
+    {
+        image: "https://picsum.photos/seed/3/800/600?grayscale",
+        text: "Project Three",
+    },
+    {
+        image: "https://picsum.photos/seed/4/800/600?grayscale",
+        text: "Project Four",
+    },
+    {
+        image: "https://picsum.photos/seed/5/800/600?grayscale",
+        text: "Project Five",
+    },
+    {
+        image: "https://picsum.photos/seed/6/800/600?grayscale",
+        text: "Project Six",
+    },
+    {
+        image: "https://picsum.photos/seed/7/800/600?grayscale",
+        text: "Project Seven",
+    },
+    {
+        image: "https://picsum.photos/seed/8/800/600?grayscale",
+        text: "Project Eight",
+    },
+];
+
+const galleryItems = items.length > 0 ? items : defaultItems;
+---
+
+<div
+    id={galleryId}
+    class:list={["circular-gallery", className]}
+    data-gallery-config={JSON.stringify({
+        items: galleryItems,
+        bend,
+        textColor,
+        borderRadius,
+        font,
+        scrollSpeed,
+        scrollEase,
+        cardWidth,
+        cardHeight,
+        cardGap,
+        offsetX,
+    })}
+>
+    <div class="circular-gallery__canvas-container"></div>
+    <div class="circular-gallery__loading">
+        <span class="circular-gallery__loading-spinner"></span>
+    </div>
+</div>
+
+<style>
+    .circular-gallery {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        overflow: hidden;
+        cursor: grab;
+        user-select: none;
+    }
+
+    .circular-gallery:active {
+        cursor: grabbing;
+    }
+
+    .circular-gallery__canvas-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .circular-gallery__canvas-container canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .circular-gallery__loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        transition: opacity 0.3s ease;
+    }
+
+    .circular-gallery__loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .circular-gallery__loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .circular-gallery__loading-spinner {
+            animation: none;
+        }
+    }
+</style>
+
+<script>
+    import {
+        Camera,
+        Mesh,
+        Plane,
+        Program,
+        Renderer,
+        Texture,
+        Transform,
+    } from "ogl";
+
+    type GL = Renderer["gl"];
+
+    // Utility functions
+    function debounce<T extends (...args: any[]) => void>(
+        func: T,
+        wait: number,
+    ) {
+        let timeout: number;
+        return function (this: any, ...args: Parameters<T>) {
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+    function lerp(p1: number, p2: number, t: number): number {
+        return p1 + (p2 - p1) * t;
+    }
+
+    function getFontSize(font: string): number {
+        const match = font.match(/(\d+)px/);
+        return match ? parseInt(match[1], 10) : 30;
+    }
+
+    function createTextTexture(
+        gl: GL,
+        text: string,
+        font: string = "bold 30px monospace",
+        color: string = "black",
+    ): { texture: Texture; width: number; height: number } {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Could not get 2d context");
+
+        context.font = font;
+        const metrics = context.measureText(text);
+        const textWidth = Math.ceil(metrics.width);
+        const fontSize = getFontSize(font);
+        const textHeight = Math.ceil(fontSize * 1.2);
+
+        canvas.width = textWidth + 20;
+        canvas.height = textHeight + 20;
+
+        context.font = font;
+        context.fillStyle = color;
+        context.textBaseline = "middle";
+        context.textAlign = "center";
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        const texture = new Texture(gl, { generateMipmaps: false });
+        texture.image = canvas;
+        return { texture, width: canvas.width, height: canvas.height };
+    }
+
+    // Title class
+    interface TitleProps {
+        gl: GL;
+        plane: Mesh;
+        renderer: Renderer;
+        text: string;
+        textColor?: string;
+        font?: string;
+    }
+
+    class Title {
+        gl: GL;
+        plane: Mesh;
+        renderer: Renderer;
+        text: string;
+        textColor: string;
+        font: string;
+        mesh!: Mesh;
+
+        constructor({
+            gl,
+            plane,
+            renderer,
+            text,
+            textColor = "#545050",
+            font = "30px sans-serif",
+        }: TitleProps) {
+            this.gl = gl;
+            this.plane = plane;
+            this.renderer = renderer;
+            this.text = text;
+            this.textColor = textColor;
+            this.font = font;
+            this.createMesh();
+        }
+
+        createMesh() {
+            const { texture, width, height } = createTextTexture(
+                this.gl,
+                this.text,
+                this.font,
+                this.textColor,
+            );
+            const geometry = new Plane(this.gl);
+            const program = new Program(this.gl, {
+                vertex: `
+          attribute vec3 position;
+          attribute vec2 uv;
+          uniform mat4 modelViewMatrix;
+          uniform mat4 projectionMatrix;
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+                fragment: `
+          precision highp float;
+          uniform sampler2D tMap;
+          varying vec2 vUv;
+          void main() {
+            vec4 color = texture2D(tMap, vUv);
+            if (color.a < 0.1) discard;
+            gl_FragColor = color;
+          }
+        `,
+                uniforms: { tMap: { value: texture } },
+                transparent: true,
+            });
+            this.mesh = new Mesh(this.gl, { geometry, program });
+            const aspect = width / height;
+            const textHeightScaled = this.plane.scale.y * 0.15;
+            const textWidthScaled = textHeightScaled * aspect;
+            this.mesh.scale.set(textWidthScaled, textHeightScaled, 1);
+            this.mesh.position.y =
+                -this.plane.scale.y * 0.5 - textHeightScaled * 0.5 - 0.05;
+            this.mesh.setParent(this.plane);
+        }
+    }
+
+    // Media class
+    interface ScreenSize {
+        width: number;
+        height: number;
+    }
+
+    interface Viewport {
+        width: number;
+        height: number;
+    }
+
+    interface MediaProps {
+        geometry: Plane;
+        gl: GL;
+        image: string;
+        index: number;
+        length: number;
+        renderer: Renderer;
+        scene: Transform;
+        screen: ScreenSize;
+        text: string;
+        viewport: Viewport;
+        bend: number;
+        textColor: string;
+        borderRadius?: number;
+        font?: string;
+        cardWidth: number;
+        cardHeight: number;
+        cardGap: number;
+    }
+
+    class Media {
+        extra: number = 0;
+        geometry: Plane;
+        gl: GL;
+        image: string;
+        index: number;
+        length: number;
+        renderer: Renderer;
+        scene: Transform;
+        screen: ScreenSize;
+        text: string;
+        viewport: Viewport;
+        bend: number;
+        textColor: string;
+        borderRadius: number;
+        font?: string;
+        cardWidth: number;
+        cardHeight: number;
+        cardGap: number;
+        program!: Program;
+        plane!: Mesh;
+        title!: Title;
+        scale!: number;
+        padding!: number;
+        width!: number;
+        widthTotal!: number;
+        x!: number;
+        speed: number = 0;
+        isBefore: boolean = false;
+        isAfter: boolean = false;
+
+        constructor(props: MediaProps) {
+            this.geometry = props.geometry;
+            this.gl = props.gl;
+            this.image = props.image;
+            this.index = props.index;
+            this.length = props.length;
+            this.renderer = props.renderer;
+            this.scene = props.scene;
+            this.screen = props.screen;
+            this.text = props.text;
+            this.viewport = props.viewport;
+            this.bend = props.bend;
+            this.textColor = props.textColor;
+            this.borderRadius = props.borderRadius || 0;
+            this.font = props.font;
+            this.cardWidth = props.cardWidth;
+            this.cardHeight = props.cardHeight;
+            this.cardGap = props.cardGap;
+            this.createShader();
+            this.createMesh();
+            this.createTitle();
+            this.onResize();
+        }
+
+        createShader() {
+            const texture = new Texture(this.gl, { generateMipmaps: true });
+            this.program = new Program(this.gl, {
+                depthTest: false,
+                depthWrite: false,
+                vertex: `
+          precision highp float;
+          attribute vec3 position;
+          attribute vec2 uv;
+          uniform mat4 modelViewMatrix;
+          uniform mat4 projectionMatrix;
+          uniform float uTime;
+          uniform float uSpeed;
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            vec3 p = position;
+            p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+          }
+        `,
+                fragment: `
+          precision highp float;
+          uniform vec2 uImageSizes;
+          uniform vec2 uPlaneSizes;
+          uniform sampler2D tMap;
+          uniform float uBorderRadius;
+          varying vec2 vUv;
+          
+          float roundedBoxSDF(vec2 p, vec2 b, float r) {
+            vec2 d = abs(p) - b;
+            return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
+          }
+          
+          void main() {
+            vec2 ratio = vec2(
+              min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+              min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+            );
+            vec2 uv = vec2(
+              vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+              vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+            );
+            vec4 color = texture2D(tMap, uv);
+            
+            float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+            float edgeSmooth = 0.002;
+            float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+            
+            gl_FragColor = vec4(color.rgb, alpha);
+          }
+        `,
+                uniforms: {
+                    tMap: { value: texture },
+                    uPlaneSizes: { value: [0, 0] },
+                    uImageSizes: { value: [0, 0] },
+                    uSpeed: { value: 0 },
+                    uTime: { value: 100 * Math.random() },
+                    uBorderRadius: { value: this.borderRadius },
+                },
+                transparent: true,
+            });
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = this.image;
+            img.onload = () => {
+                texture.image = img;
+                this.program.uniforms.uImageSizes.value = [
+                    img.naturalWidth,
+                    img.naturalHeight,
+                ];
+            };
+        }
+
+        createMesh() {
+            this.plane = new Mesh(this.gl, {
+                geometry: this.geometry,
+                program: this.program,
+            });
+            this.plane.setParent(this.scene);
+        }
+
+        createTitle() {
+            this.title = new Title({
+                gl: this.gl,
+                plane: this.plane,
+                renderer: this.renderer,
+                text: this.text,
+                textColor: this.textColor,
+                font: this.font,
+            });
+        }
+
+        update(
+            scroll: { current: number; last: number },
+            direction: "right" | "left",
+        ) {
+            this.plane.position.x = this.x - scroll.current - this.extra;
+
+            const x = this.plane.position.x;
+            const H = this.viewport.width / 2;
+
+            if (this.bend === 0) {
+                this.plane.position.y = 0;
+                this.plane.rotation.z = 0;
+            } else {
+                const B_abs = Math.abs(this.bend);
+                const R = (H * H + B_abs * B_abs) / (2 * B_abs);
+                const effectiveX = Math.min(Math.abs(x), H);
+
+                const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
+                if (this.bend > 0) {
+                    this.plane.position.y = -arc;
+                    this.plane.rotation.z =
+                        -Math.sign(x) * Math.asin(effectiveX / R);
+                } else {
+                    this.plane.position.y = arc;
+                    this.plane.rotation.z =
+                        Math.sign(x) * Math.asin(effectiveX / R);
+                }
+            }
+
+            this.speed = scroll.current - scroll.last;
+            this.program.uniforms.uTime.value += 0.04;
+            this.program.uniforms.uSpeed.value = this.speed;
+
+            const planeOffset = this.plane.scale.x / 2;
+            const viewportOffset = this.viewport.width / 2;
+            this.isBefore =
+                this.plane.position.x + planeOffset < -viewportOffset;
+            this.isAfter = this.plane.position.x - planeOffset > viewportOffset;
+
+            if (direction === "right" && this.isBefore) {
+                this.extra -= this.widthTotal;
+                this.isBefore = this.isAfter = false;
+            }
+            if (direction === "left" && this.isAfter) {
+                this.extra += this.widthTotal;
+                this.isBefore = this.isAfter = false;
+            }
+        }
+
+        onResize({
+            screen,
+            viewport,
+        }: { screen?: ScreenSize; viewport?: Viewport } = {}) {
+            if (screen) this.screen = screen;
+            if (viewport) this.viewport = viewport;
+
+            // Use configurable card sizes
+            this.scale = this.screen.height / 1500;
+            this.plane.scale.y =
+                (this.viewport.height * (this.cardHeight * this.scale)) /
+                this.screen.height;
+            this.plane.scale.x =
+                (this.viewport.width * (this.cardWidth * this.scale)) /
+                this.screen.width;
+            this.plane.program.uniforms.uPlaneSizes.value = [
+                this.plane.scale.x,
+                this.plane.scale.y,
+            ];
+            this.padding = this.cardGap;
+            this.width = this.plane.scale.x + this.padding;
+            this.widthTotal = this.width * this.length;
+            this.x = this.width * this.index;
+        }
+    }
+
+    // Main Gallery App
+    interface GalleryConfig {
+        items: { image: string; text: string }[];
+        bend: number;
+        textColor: string;
+        borderRadius: number;
+        font: string;
+        scrollSpeed: number;
+        scrollEase: number;
+        cardWidth: number;
+        cardHeight: number;
+        cardGap: number;
+        offsetX: number;
+    }
+
+    class CircularGalleryApp {
+        container: HTMLElement;
+        canvasContainer: HTMLElement;
+        loadingElement: HTMLElement;
+        config: GalleryConfig;
+
+        renderer!: Renderer;
+        gl!: GL;
+        camera!: Camera;
+        scene!: Transform;
+        planeGeometry!: Plane;
+        medias: Media[] = [];
+        mediasImages: { image: string; text: string }[] = [];
+        screen!: ScreenSize;
+        viewport!: Viewport;
+        raf: number = 0;
+
+        scroll: {
+            ease: number;
+            current: number;
+            target: number;
+            last: number;
+            position?: number;
+        };
+
+        isDown: boolean = false;
+        start: number = 0;
+        onCheckDebounce: (...args: any[]) => void;
+
+        constructor(container: HTMLElement, config: GalleryConfig) {
+            this.container = container;
+            this.canvasContainer = container.querySelector(
+                ".circular-gallery__canvas-container",
+            )!;
+            this.loadingElement = container.querySelector(
+                ".circular-gallery__loading",
+            )!;
+            this.config = config;
+
+            this.scroll = {
+                ease: config.scrollEase,
+                current: 0,
+                target: 0,
+                last: 0,
+            };
+
+            this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
+
+            this.init();
+        }
+
+        init() {
+            this.createRenderer();
+            this.createCamera();
+            this.createScene();
+            this.onResize();
+            this.createGeometry();
+            this.createMedias();
+            this.update();
+            this.addEventListeners();
+
+            // Hide loading after a short delay
+            setTimeout(() => {
+                this.loadingElement.classList.add("hidden");
+            }, 500);
+        }
+
+        createRenderer() {
+            this.renderer = new Renderer({
+                alpha: true,
+                antialias: true,
+                dpr: Math.min(window.devicePixelRatio || 1, 2),
+            });
+            this.gl = this.renderer.gl;
+            this.gl.clearColor(0, 0, 0, 0);
+            this.canvasContainer.appendChild(
+                this.renderer.gl.canvas as HTMLCanvasElement,
+            );
+        }
+
+        createCamera() {
+            this.camera = new Camera(this.gl);
+            this.camera.fov = 45;
+            this.camera.position.z = 20;
+        }
+
+        createScene() {
+            this.scene = new Transform();
+            this.scene.position.x = this.config.offsetX;
+        }
+
+        createGeometry() {
+            this.planeGeometry = new Plane(this.gl, {
+                heightSegments: 50,
+                widthSegments: 100,
+            });
+        }
+
+        createMedias() {
+            const items = this.config.items;
+            // Duplicate items for infinite scroll
+            this.mediasImages = items.concat(items);
+
+            this.medias = this.mediasImages.map((data, index) => {
+                return new Media({
+                    geometry: this.planeGeometry,
+                    gl: this.gl,
+                    image: data.image,
+                    index,
+                    length: this.mediasImages.length,
+                    renderer: this.renderer,
+                    scene: this.scene,
+                    screen: this.screen,
+                    text: data.text,
+                    viewport: this.viewport,
+                    bend: this.config.bend,
+                    textColor: this.config.textColor,
+                    borderRadius: this.config.borderRadius,
+                    font: this.config.font,
+                    cardWidth: this.config.cardWidth,
+                    cardHeight: this.config.cardHeight,
+                    cardGap: this.config.cardGap,
+                });
+            });
+        }
+
+        onTouchDown = (e: MouseEvent | TouchEvent) => {
+            this.isDown = true;
+            this.scroll.position = this.scroll.current;
+            this.start = "touches" in e ? e.touches[0].clientX : e.clientX;
+        };
+
+        onTouchMove = (e: MouseEvent | TouchEvent) => {
+            if (!this.isDown) return;
+            const x = "touches" in e ? e.touches[0].clientX : e.clientX;
+            const distance =
+                (this.start - x) * (this.config.scrollSpeed * 0.025);
+            this.scroll.target = (this.scroll.position ?? 0) + distance;
+        };
+
+        onTouchUp = () => {
+            this.isDown = false;
+            this.onCheck();
+        };
+
+        onWheel = (e: WheelEvent) => {
+            const delta =
+                e.deltaY || (e as any).wheelDelta || (e as any).detail;
+            this.scroll.target +=
+                (delta > 0
+                    ? this.config.scrollSpeed
+                    : -this.config.scrollSpeed) * 0.2;
+            this.onCheckDebounce();
+        };
+
+        onCheck() {
+            if (!this.medias || !this.medias[0]) return;
+            const width = this.medias[0].width;
+            const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
+            const item = width * itemIndex;
+            this.scroll.target = this.scroll.target < 0 ? -item : item;
+        }
+
+        onResize = () => {
+            this.screen = {
+                width: this.canvasContainer.clientWidth,
+                height: this.canvasContainer.clientHeight,
+            };
+            this.renderer.setSize(this.screen.width, this.screen.height);
+            this.camera.perspective({
+                aspect: this.screen.width / this.screen.height,
+            });
+            const fov = (this.camera.fov * Math.PI) / 180;
+            const height = 2 * Math.tan(fov / 2) * this.camera.position.z;
+            const width = height * this.camera.aspect;
+            this.viewport = { width, height };
+
+            if (this.medias) {
+                this.medias.forEach((media) =>
+                    media.onResize({
+                        screen: this.screen,
+                        viewport: this.viewport,
+                    }),
+                );
+            }
+        };
+
+        update = () => {
+            this.scroll.current = lerp(
+                this.scroll.current,
+                this.scroll.target,
+                this.scroll.ease,
+            );
+            const direction =
+                this.scroll.current > this.scroll.last ? "right" : "left";
+
+            if (this.medias) {
+                this.medias.forEach((media) =>
+                    media.update(this.scroll, direction),
+                );
+            }
+
+            this.renderer.render({ scene: this.scene, camera: this.camera });
+            this.scroll.last = this.scroll.current;
+            this.raf = window.requestAnimationFrame(this.update);
+        };
+
+        addEventListeners() {
+            window.addEventListener("resize", this.onResize);
+            this.container.addEventListener("wheel", this.onWheel);
+            this.container.addEventListener("mousedown", this.onTouchDown);
+            window.addEventListener("mousemove", this.onTouchMove);
+            window.addEventListener("mouseup", this.onTouchUp);
+            this.container.addEventListener("touchstart", this.onTouchDown, {
+                passive: true,
+            });
+            window.addEventListener("touchmove", this.onTouchMove, {
+                passive: true,
+            });
+            window.addEventListener("touchend", this.onTouchUp);
+        }
+
+        destroy() {
+            window.cancelAnimationFrame(this.raf);
+            window.removeEventListener("resize", this.onResize);
+            this.container.removeEventListener("wheel", this.onWheel);
+            this.container.removeEventListener("mousedown", this.onTouchDown);
+            window.removeEventListener("mousemove", this.onTouchMove);
+            window.removeEventListener("mouseup", this.onTouchUp);
+            this.container.removeEventListener("touchstart", this.onTouchDown);
+            window.removeEventListener("touchmove", this.onTouchMove);
+            window.removeEventListener("touchend", this.onTouchUp);
+
+            if (this.renderer?.gl?.canvas?.parentNode) {
+                this.renderer.gl.canvas.parentNode.removeChild(
+                    this.renderer.gl.canvas as HTMLCanvasElement,
+                );
+            }
+        }
+    }
+
+    // Initialize all galleries on the page
+    function initGalleries() {
+        const galleries =
+            document.querySelectorAll<HTMLElement>(".circular-gallery");
+
+        galleries.forEach((gallery) => {
+            if (gallery.dataset.initialized === "true") return;
+
+            const configData = gallery.dataset.galleryConfig;
+            if (!configData) return;
+
+            try {
+                const config = JSON.parse(configData) as GalleryConfig;
+                const app = new CircularGalleryApp(gallery, config);
+                gallery.dataset.initialized = "true";
+
+                // Store reference for cleanup
+                (gallery as any)._galleryApp = app;
+            } catch (error) {
+                console.error("Failed to initialize circular gallery:", error);
+            }
+        });
+    }
+
+    // Initialize on DOM ready
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initGalleries);
+    } else {
+        initGalleries();
+    }
+
+    // Re-initialize on Astro page transitions
+    document.addEventListener("astro:page-load", initGalleries);
+</script>
