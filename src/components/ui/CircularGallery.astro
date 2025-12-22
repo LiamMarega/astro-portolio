@@ -34,6 +34,7 @@ interface Props {
     cardHeight?: number;
     cardGap?: number;
     offsetX?: number;
+    offsetY?: number;
     class?: string;
 }
 
@@ -49,6 +50,7 @@ const {
     cardHeight = 400,
     cardGap = 1,
     offsetX = 0,
+    offsetY = 0,
     class: className = "",
 } = Astro.props;
 
@@ -109,6 +111,7 @@ const galleryItems = items.length > 0 ? items : defaultItems;
         cardHeight,
         cardGap,
         offsetX,
+        offsetY,
     })}
 >
     <div class="circular-gallery__canvas-container"></div>
@@ -595,6 +598,7 @@ const galleryItems = items.length > 0 ? items : defaultItems;
         cardHeight: number;
         cardGap: number;
         offsetX: number;
+        offsetY: number;
     }
 
     class CircularGalleryApp {
@@ -686,6 +690,7 @@ const galleryItems = items.length > 0 ? items : defaultItems;
         createScene() {
             this.scene = new Transform();
             this.scene.position.x = this.config.offsetX;
+            this.scene.position.y = this.config.offsetY;
         }
 
         createGeometry() {
