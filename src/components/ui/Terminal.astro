@@ -6,22 +6,149 @@
 >
   <div class="terminal_toolbar">
     <div class="butt">
-      <button class="btn btn-color" aria-label="Close terminal" tabindex="-1" role="button"></button>
-      <button class="btn" aria-label="Minimize terminal" tabindex="-1" role="button"></button>
-      <button class="btn" aria-label="Maximize terminal" tabindex="-1" role="button"></button>
+      <button
+        class="btn btn-color"
+        aria-label="Close terminal"
+        tabindex="-1"
+        role="button"></button>
+      <button
+        class="btn"
+        aria-label="Minimize terminal"
+        tabindex="-1"
+        role="button"></button>
+      <button
+        class="btn"
+        aria-label="Maximize terminal"
+        tabindex="-1"
+        role="button"></button>
     </div>
     <p class="user" aria-hidden="true">liammarega@admin: ~</p>
-    <button class="add_tab" aria-label="Add new tab" tabindex="-1" role="button">+</button>
+    <button class="add_tab" aria-label="Add new tab" tabindex="-1" role="button"
+      >+</button
+    >
   </div>
-  <div class="terminal_body">
-    <div class="terminal_promt">
+  <div class="terminal_body" id="terminal-body">
+    <div id="terminal-history"></div>
+    <div class="terminal_promt" id="terminal-current">
       <span class="terminal_user" aria-hidden="true">liammarega@admin:</span>
       <span class="terminal_location" aria-hidden="true">~</span>
       <span class="terminal_bling" aria-hidden="true">$</span>
+      <span id="current-command" class="terminal_text"></span>
       <span class="terminal_cursor" aria-hidden="true"></span>
     </div>
   </div>
 </div>
+
+<script>
+  const commands = [
+    {
+      command: "git pull",
+      outputs: [
+        'Updating <span class="text-yellow-400">4a2b3c4..5d6e7f8</span>',
+        "Fast-forward",
+        ' src/components/ui/Terminal.astro | <span class="text-green-400">246 +++</span>',
+        " 1 file changed, 246 insertions(+)",
+      ],
+    },
+    {
+      command: "git add .",
+      outputs: [],
+    },
+    {
+      command: 'git commit -m "feat: enhance terminal animation"',
+      outputs: [
+        '[<span class="text-cyan-400">main 7g8h9i0</span>] feat: enhance terminal animation',
+        ' <span class="text-gray-400">1 file changed, 10 insertions(+)</span>',
+      ],
+    },
+    {
+      command: "git push",
+      outputs: [
+        'Enumerating objects: <span class="text-green-400">5</span>, done.',
+        "Counting objects: 100% (5/5), done.",
+        'Delta compression using up to <span class="text-cyan-400">12 threads</span>',
+        "Compressing objects: 100% (3/3), done.",
+        "Writing objects: 100% (3/3), 450 bytes | 450.00 KiB/s, done.",
+        "Total 3 (delta 2), reused 0 (delta 0), pack-reused 0",
+        'To <span class="text-blue-400">github.com:liammarega/astro-portfolio.git</span>',
+        '   <span class="text-yellow-400">5d6e7f8..7g8h9i0</span>  <span class="text-cyan-400">main</span> -> <span class="text-cyan-400">main</span>',
+      ],
+    },
+  ];
+
+  const historyContainer = document.getElementById("terminal-history");
+  const currentCommandSpan = document.getElementById("current-command");
+  const terminalBody = document.getElementById("terminal-body");
+  const terminalWindow = document.querySelector(".container");
+
+  async function typeWriter(text: string, element: HTMLElement, speed = 60) {
+    for (let i = 0; i < text.length; i++) {
+      element.textContent += text.charAt(i);
+      const delay = speed + Math.random() * 80;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  function addHistoryLine(htmlContent: string, isCommand = false) {
+    if (!historyContainer || !terminalBody) return;
+
+    const line = document.createElement("div");
+    if (isCommand) {
+      line.className = "terminal_promt";
+      line.innerHTML = `
+        <span class="terminal_user">liammarega@admin:</span>
+        <span class="terminal_location">~</span>
+        <span class="terminal_bling">$</span>
+        <span class="terminal_text">${htmlContent}</span>
+      `;
+    } else {
+      line.className = "terminal_output";
+      line.innerHTML = htmlContent;
+    }
+    historyContainer.appendChild(line);
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+
+  async function runSimulation() {
+    if (!currentCommandSpan) return;
+
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const item of commands) {
+      await typeWriter(item.command, currentCommandSpan);
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      addHistoryLine(item.command, true);
+      currentCommandSpan.textContent = "";
+
+      for (const output of item.outputs) {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        addHistoryLine(output);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  if (
+    terminalWindow &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            runSimulation();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    observer.observe(terminalWindow);
+  }
+</script>
 
 <style>
   .terminal_toolbar {
@@ -107,11 +234,48 @@
   .terminal_body {
     background: rgba(28, 28, 28, 0.8);
     height: calc(100% - 30px);
-    padding-top: 2px;
+    padding: 10px;
     margin-top: -1px;
     font-size: 12px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+  }
+
+  .terminal_body::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .terminal_body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .terminal_body::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 10px;
+  }
+
+  .terminal_output {
+    color: #b0b0b0;
+    margin-left: 12px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  .terminal_text {
+    color: #ffffff;
+    margin-left: 4px;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
   }
 
   .terminal_promt {
@@ -132,6 +296,22 @@
 
   .terminal_promt span {
     margin-left: 4px;
+  }
+
+  .text-green-400 {
+    color: #4ade80;
+  }
+  .text-yellow-400 {
+    color: #facc15;
+  }
+  .text-cyan-400 {
+    color: #22d3ee;
+  }
+  .text-blue-400 {
+    color: #60a5fa;
+  }
+  .text-gray-400 {
+    color: #9ca3af;
   }
 
   .terminal_user {
@@ -201,30 +381,30 @@
     .container {
       border: 2px solid currentColor;
     }
-    
+
     .terminal_toolbar {
       background: #000000;
       border-bottom: 1px solid currentColor;
     }
-    
+
     .terminal_body {
       background: #000000;
     }
-    
+
     .terminal_user,
     .terminal_location,
     .terminal_bling {
       color: currentColor;
     }
-    
+
     .user {
       color: currentColor;
     }
-    
+
     .btn {
       border: 1px solid currentColor;
     }
-    
+
     .add_tab {
       border-color: currentColor;
       color: currentColor;
@@ -236,7 +416,7 @@
     outline: 2px solid #ffffff;
     outline-offset: 2px;
   }
-  
+
   .btn:focus-visible,
   .add_tab:focus-visible {
     outline: 2px solid #ffffff;

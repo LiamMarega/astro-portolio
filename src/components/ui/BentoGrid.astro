@@ -1,0 +1,275 @@
+---
+import { minorProjects } from "../../data/projects";
+
+interface Props {
+    className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<div class={`bento-grid-container ${className}`}>
+    <div class="bento-grid">
+        {
+            minorProjects.map((project, index) => (
+                <div class={`bento-item bento-item-${index}`} data-bento-item>
+                    <div class="bento-card opacity-95">
+                        <div class="bento-image-wrapper">
+                            <img
+                                src={project.image}
+                                alt={project.text}
+                                class="bento-image"
+                                loading="lazy"
+                            />
+                            <div class="bento-overlay">
+                                <div class="bento-header">
+                                    <span class="bento-tag">Featured</span>
+                                    <div class="bento-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M7 17L17 7M17 7H7M17 7V17"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="bento-footer">
+                                    <h3 class="bento-title">{project.text}</h3>
+                                    <p class="bento-subtitle">
+                                        Development & Design
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    .bento-grid-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 2rem 2rem 45%;
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 1rem;
+        width: 100%;
+        height: 100%;
+        max-width: 1100px;
+        max-height: 700px;
+    }
+
+    .bento-item {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        perspective: 1000px;
+    }
+
+    .bento-card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        transform-style: preserve-3d;
+    }
+
+    .bento-item:hover .bento-card {
+        transform: translateY(-5px) rotateX(2deg) rotateY(-1deg);
+        opacity: 1;
+    }
+
+    .bento-image-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        background: hsla(0, 0%, 10%, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        &:hover {
+            background: hsla(0, 0%, 10%, 1);
+        }
+    }
+
+    .bento-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 0.8);
+        opacity: 0.8;
+    }
+
+    .bento-item:hover .bento-image {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+
+    .bento-overlay {
+        position: absolute;
+        inset: 0;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.3) 0%,
+            rgba(0, 0, 0, 0) 40%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
+        opacity: 0.4;
+        transition: all 0.4s ease;
+    }
+
+    .bento-item:hover .bento-overlay {
+        opacity: 1;
+    }
+
+    .bento-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .bento-item:hover .bento-header {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .bento-tag {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.9);
+        padding: 0.3rem 0.6rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .bento-icon {
+        width: 28px;
+        height: 28px;
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .bento-footer {
+        transform: translateY(10px);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .bento-item:hover .bento-footer {
+        transform: translateY(0);
+    }
+
+    .bento-title {
+        color: white;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .bento-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.8rem;
+        margin: 0.2rem 0 0 0;
+    }
+
+    /* Bento Layout - 4 Items */
+    .bento-item-0 {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .bento-item-1 {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+
+    .bento-item-2 {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .bento-item-3 {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    @media (max-width: 1400px) {
+        .bento-grid-container {
+            padding-left: 50%;
+        }
+    }
+
+    /* Tablet/Desktop 1024-1280 */
+    @media (min-width: 1024px) and (max-width: 1280px) {
+        .bento-grid {
+            gap: 0.75rem;
+            max-width: 90%;
+        }
+        .bento-title {
+            font-size: 1rem;
+        }
+    }
+
+    /* Mobile/Tablet Handled elsewhere but safe defaults here */
+    @media (max-width: 1023px) {
+        .bento-grid-container {
+            padding: 1rem;
+        }
+        .bento-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            gap: 1rem;
+            max-height: none;
+        }
+        .bento-item-0,
+        .bento-item-1,
+        .bento-item-2,
+        .bento-item-3 {
+            grid-column: span 1;
+            grid-row: span 1;
+            height: 200px;
+        }
+        .bento-overlay {
+            opacity: 1;
+        }
+        .bento-header {
+            opacity: 1;
+            transform: none;
+        }
+    }
+</style>

@@ -9,6 +9,8 @@ import {
   techIcons,
   minorProjects,
 } from "../../data/projects";
+import BentoGrid from "../ui/BentoGrid.astro";
+import Iridescense from "../ui/iridescense.astro";
 
 // Get all projects from centralized data source
 const projects = getProjects(true); // Sort by featured first
@@ -59,8 +61,10 @@ const projects = getProjects(true); // Sort by featured first
     }
     <WorkCard
       id="more-works"
-      title="Otros Proyectos"
-      description={["Una galería con más trabajos realizados."]}
+      title="The Creative Vault"
+      description={[
+        "A curated ensemble of professional freelance work, academic breakthroughs, and technical explorations that showcase the depth and versatility of my engineering journey.",
+      ]}
       techStack={[techIcons.react, techIcons.typescript]}
       bgColor="bg-[#fde047]"
       textColor="text-[#000000]"
@@ -70,44 +74,33 @@ const projects = getProjects(true); // Sort by featured first
       useCustomContent
       fullWidthCustomContent
     >
-      <CircularGallery
-        items={minorProjects}
-        bend={15}
-        textColor="#000000"
-        borderRadius={0.05}
-        font="bold 24px sans-serif"
-        scrollSpeed={1}
-        scrollEase={0.05}
-        cardHeight={400}
-        cardWidth={300}
-        cardGap={0.25}
-        offsetX={15}
-        offsetY={3}
-      />
+      <Iridescense>
+        <BentoGrid />
+      </Iridescense>
     </WorkCard>
   </div>
-</section>
 
-<style>
-  /* Scroll snap for smooth scrolling on mobile/tablet */
-  #work-mobile,
-  #work-tablet {
-    scroll-snap-type: y mandatory;
-    overflow-y: auto;
-  }
-
-  /* Ensure smooth scrolling */
-  @media (prefers-reduced-motion: no-preference) {
+  <style>
+    /* Scroll snap for smooth scrolling on mobile/tablet */
     #work-mobile,
-    #work-tablet,
-    #work {
-      scroll-behavior: smooth;
+    #work-tablet {
+      scroll-snap-type: y mandatory;
+      overflow-y: auto;
     }
-  }
 
-  /* Stacking cards container for desktop */
-  .work-stack-container {
-    position: relative;
-    width: 100%;
-  }
-</style>
+    /* Ensure smooth scrolling */
+    @media (prefers-reduced-motion: no-preference) {
+      #work-mobile,
+      #work-tablet,
+      #work {
+        scroll-behavior: smooth;
+      }
+    }
+
+    /* Stacking cards container for desktop */
+    .work-stack-container {
+      position: relative;
+      width: 100%;
+    }
+  </style>
+</section>
