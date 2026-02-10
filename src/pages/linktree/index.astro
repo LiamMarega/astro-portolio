@@ -5,7 +5,15 @@ import LinkCard from "../../components/ui/LinkCard.astro";
 
 // Datos predefinidos para los 3 pines fijos
 const links = [
-    {
+  {
+    title: "Valentine Day Letter",
+    description: "Una carta especial para San Valentín 💌",
+    url: "https://www.valentinedayletter.com/",
+    icon: "💌",
+    gradient: "from-rose-500 via-red-500 to-pink-600 animate-pulse",
+    featured: true
+  },
+  {
     title: "Contacto Profesional",
     description: "¿Tienes un proyecto en mente? ¡Hablemos!",
     url: "mailto:liammaregadevelop@gmail.com",
@@ -31,10 +39,10 @@ const links = [
 ---
  
 <Layout title="Liam Marega - Links" description="Todos mis enlaces importantes en un solo lugar">
-  <main class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+  <main class="min-h-screen bg-[#0a0a0a] relative overflow-hidden font-sans">
     <!-- Efectos de fondo -->
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-pink-900/20 via-transparent to-transparent"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3b82f6,transparent)] opacity-20 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_800px_at_100%_20%,#8b5cf6,transparent)] opacity-10 blur-3xl"></div>
     
     <!-- Contenido principal -->
     <div class="relative z-10 container mx-auto px-4 py-8 sm:py-12 md:py-16">

@@ -14,11 +14,11 @@ const { title, description, url, icon, gradient = "from-purple-500 to-pink-500" 
   href={url} 
   target="_blank" 
   rel="noopener noreferrer"
-  class="group block w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-3 sm:mb-4 transform transition-all duration-300 hover:scale-105 focus:scale-105 hover:shadow-2xl focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-black rounded-xl sm:rounded-2xl motion-reduce:transform-none motion-reduce:transition-none"
+  class="group block w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-4 transform transition-all duration-300 hover:scale-[1.02] focus:scale-[1.02] hover:-translate-y-1 focus:-translate-y-1 focus:outline-none rounded-xl sm:rounded-2xl"
   aria-label={`Visit ${title}${description ? ': ' + description : ''} (opens in new tab)`}
 >
-  <div class={`relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-r ${gradient} p-[1px] sm:p-[2px] shadow-lg`}>
-    <div class="relative bg-black/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 h-full transition-all duration-300 group-hover:bg-black/80 motion-reduce:transition-none">
+  <div class={`relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-tr ${gradient} p-[1.5px] shadow-lg group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow duration-300`}>
+    <div class="relative bg-gray-900/95 backdrop-blur-md rounded-[11px] sm:rounded-[15px] p-4 sm:p-5 h-full transition-all duration-300 group-hover:bg-gray-900/80">
       <div class="flex items-center gap-3 sm:gap-4">
         {icon && (
           <div class="flex-shrink-0">
@@ -39,7 +39,7 @@ const { title, description, url, icon, gradient = "from-purple-500 to-pink-500" 
         </div>
         <div class="flex-shrink-0">
           <svg 
-            class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-white focus:text-white transition-colors duration-300 motion-reduce:transition-none" 
+            class="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
