@@ -82,3 +82,18 @@
   background-size: 100% 8px;
   padding-bottom: 2px;
 }
+
+/* Performance: paint containment for heavy visual sections */
+section {
+  contain: layout style;
+}
+
+/* Reduce repaints for elements with backdrop-filter */
+[class*="backdrop-blur"] {
+  will-change: backdrop-filter;
+}
+
+/* Optimize images for GPU compositing */
+img[loading="lazy"] {
+  content-visibility: auto;
+}

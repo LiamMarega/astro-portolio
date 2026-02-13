@@ -4,20 +4,23 @@
 
 <nav
   class="fixed w-full z-50 top-0 left-0 bg-background-dark/95 backdrop-blur-md border-b border-border-dark"
+  aria-label="Navegación principal"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-20">
       <div
         class="flex-shrink-0 flex items-center relative group cursor-pointer"
       >
-        <span
+        <a
+          href="/landing-builder"
           class="text-lg font-black tracking-tight text-white font-display border border-white px-3 py-1 bg-black z-10 transition-transform group-hover:-rotate-1"
+          aria-label="Landing PRO - Inicio"
         >
           LANDING<span class="text-primary">PRO</span>
-        </span>
+        </a>
         <span
           class="absolute -right-6 -bottom-4 text-primary font-mono text-xs hidden sm:block"
-          >v2.0</span
+          aria-hidden="true">v2.0</span
         >
       </div>
       <div class="hidden md:flex space-x-12">

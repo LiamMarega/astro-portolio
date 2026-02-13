@@ -33,8 +33,14 @@
           class="space-y-4 pt-4 relative bg-black/20 p-6 rounded-sm border border-border-dark/50"
         >
           <div class="flex items-start">
-            <span class="material-symbols-outlined text-red-500 mr-3 mt-1"
-              >cancel</span
+            <svg
+              class="w-6 h-6 text-red-500 mr-3 mt-1 flex-shrink-0"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              ><path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+              ></path></svg
             >
             <div>
               <strong class="text-white block"
@@ -47,13 +53,25 @@
             </div>
           </div>
           <div class="flex items-center justify-center py-2">
-            <span class="material-symbols-outlined text-border-dark"
-              >arrow_downward</span
+            <svg
+              class="w-6 h-6 text-border-dark"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              ><path
+                d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+              ></path></svg
             >
           </div>
           <div class="flex items-start">
-            <span class="material-symbols-outlined text-primary mr-3 mt-1"
-              >check_circle</span
+            <svg
+              class="w-6 h-6 text-primary mr-3 mt-1 flex-shrink-0"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              ><path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              ></path></svg
             >
             <div>
               <strong class="text-white block"
@@ -72,6 +90,8 @@
       <div
         class="relative w-full aspect-[4/3] bg-background-dark border border-border-dark shadow-2xl group rounded-sm overflow-hidden select-none"
         id="comparison-container"
+        role="group"
+        aria-label="Comparación antes y después del rediseño web"
       >
         <!-- After Image (Base Layer) -->
         <div class="absolute inset-0 w-full h-full">
@@ -84,6 +104,10 @@
             alt="Sleek dark mode modern dashboard interface"
             class="w-full h-full object-cover"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMag2DqeCy4Oooe5vMCwDLKLut2Lz67yqzcvgENkC7fVjdZZ-IG_6Q-wRVoxn_RM8_4TmVRp9VXXUmnPMclSn2apVGSfNk2DssRitgR0xK52tTIXzWl-Ok5Su6qffi9-NpdVoGieBwDQFGuu1MEYj8841OY0ny8Cs7acZ2ghxdbFOa6r4P1nBwDGiAV6LrhdHDKkIGyKJMqlfDkGsaSkf64LBWNsPeND-FF6mnrIlYRR9X3xokDSgTdl8PDptZp1psz-giTqUPwbU"
+            width="512"
+            height="383"
+            loading="lazy"
+            decoding="async"
             draggable="false"
           />
         </div>
@@ -99,15 +123,15 @@
           >
             Antes
           </div>
-          <!-- We need to set width/height: 100% of parent CONTAINER, not this wrapper -->
-          <!-- But since overflow is hidden, we keep img full size relative to container logic or use object-cover on full container size? -->
-          <!-- Better approach: The image inside needs to be the width of the main container to maintain aspect ratio/position matching 'After' image. -->
-          <!-- So we set this image to be the width of the parent container, but absolutely positioned left 0. -->
           <img
             alt="Screens of cluttered outdated web design layout"
             class="absolute top-0 left-0 w-full h-full max-w-none object-cover opacity-40 grayscale filter blur-[2px]"
             style="width: 100%; height: 100%;"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzQ7vIuI4QVoqY7JyWcsnekjm6nzVB8JuJ4ilW812uVc6RbC_tsYgDnzXPM7hLB32Hb1JDsywyRWL70q0jD2RuFMQ5CALpVo6q39tMLRiTZEy7oXXrfGIcqLADSijPDVtIlvU_P7U0sfWwBXX3m7szUTsWCdPjcwv-QP8rEg3Fi5SToAcrmu1v_d_ZCN6nc9WVd0KzftTyFVuJmGlTtJTPGrZBc41XwVvyZXZrx4E1Vo6WrH8n__4SY5uxGRuROf27Wos3sIoeS-w"
+            width="512"
+            height="381"
+            loading="lazy"
+            decoding="async"
             draggable="false"
             id="before-image"
           />
@@ -118,6 +142,12 @@
           class="absolute top-0 bottom-0 w-px bg-transparent z-20 cursor-ew-resize touch-none"
           style="left: 50%; transform: translateX(-50%);"
           id="slider-handle"
+          role="slider"
+          aria-label="Deslizador de comparación antes y después"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="50"
+          tabindex="0"
         >
           <!-- Visual Line -->
           <div
@@ -129,8 +159,14 @@
           <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-black border border-primary rounded-full flex items-center justify-center shadow-lg transform active:scale-110 transition-transform"
           >
-            <span class="material-icons text-primary text-xs select-none"
-              >code_off</span
+            <svg
+              class="w-4 h-4 text-primary"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              ><path
+                d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"
+              ></path></svg
             >
           </div>
         </div>
@@ -150,24 +186,21 @@
     if (!container || !beforeWrapper || !handle || !beforeImage) return;
 
     let isDragging = false;
+    let containerWidth = container.offsetWidth;
 
-    const updateSlider = (percent) => {
-      // Clamp percentage between 0 and 100
+    const updateSlider = (percent: number) => {
       percent = Math.max(0, Math.min(100, percent));
-
       beforeWrapper.style.width = `${percent}%`;
       handle.style.left = `${percent}%`;
-
-      // Ensure the before image stays full width of container so it doesn't squish
-      // We set that in CSS/HTML structure (w-full max-w-none relative to container)
-      // but let's just ensure its width matches container width
-      beforeImage.style.width = `${container.offsetWidth}px`;
+      handle.setAttribute("aria-valuenow", String(Math.round(percent)));
+      beforeImage.style.width = `${containerWidth}px`;
     };
 
-    const handleStart = (e) => {
+    const handleStart = (e: Event) => {
       isDragging = true;
+      containerWidth = container.offsetWidth;
       document.body.style.cursor = "ew-resize";
-      e.preventDefault(); // Prevent text selection
+      e.preventDefault();
     };
 
     const handleEnd = () => {
@@ -175,48 +208,56 @@
       document.body.style.cursor = "";
     };
 
-    const handleMove = (e) => {
+    const handleMove = (e: MouseEvent | TouchEvent) => {
       if (!isDragging) return;
 
-      let clientX;
-      if (e.type === "touchmove") {
-        clientX = e.touches[0].clientX;
-      } else {
-        clientX = e.clientX;
-      }
-
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const rect = container.getBoundingClientRect();
-      // Calculate position relative to container
       const x = clientX - rect.left;
-      // Convert to percentage
       const percent = (x / rect.width) * 100;
-
       updateSlider(percent);
     };
 
-    // Initialize with correct width for inner image on load/resize
-    const handleResize = () => {
-      if (beforeImage && container) {
-        beforeImage.style.width = `${container.offsetWidth}px`;
+    // Keyboard support for accessibility
+    const handleKeydown = (e: KeyboardEvent) => {
+      const currentValue = parseFloat(
+        handle.getAttribute("aria-valuenow") || "50",
+      );
+      let newValue = currentValue;
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+        newValue = Math.max(0, currentValue - 2);
+        e.preventDefault();
+      } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+        newValue = Math.min(100, currentValue + 2);
+        e.preventDefault();
+      }
+      if (newValue !== currentValue) {
+        containerWidth = container.offsetWidth;
+        updateSlider(newValue);
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Initial call
+    const handleResize = () => {
+      containerWidth = container.offsetWidth;
+      if (beforeImage) {
+        beforeImage.style.width = `${containerWidth}px`;
+      }
+    };
 
-    // Event Listeners
+    window.addEventListener("resize", handleResize, { passive: true });
+    handleResize();
+
     handle.addEventListener("mousedown", handleStart);
-    handle.addEventListener("touchstart", handleStart);
+    handle.addEventListener("touchstart", handleStart, { passive: false });
+    handle.addEventListener("keydown", handleKeydown);
 
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("touchmove", handleMove);
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    window.addEventListener("touchmove", handleMove, { passive: true });
 
-    window.addEventListener("mouseup", handleEnd);
-    window.addEventListener("touchend", handleEnd);
+    window.addEventListener("mouseup", handleEnd, { passive: true });
+    window.addEventListener("touchend", handleEnd, { passive: true });
   }
 
-  // Run on load
   document.addEventListener("astro:page-load", initComparisonSlider);
-  // Also run initially in case view transitions aren't used or initial load
   initComparisonSlider();
 </script>

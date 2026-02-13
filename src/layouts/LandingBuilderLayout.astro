@@ -1,10 +1,9 @@
 ---
 import "../styles/landing-builder.css";
-import "@fontsource/inter";
-import "@fontsource/space-grotesk";
-import "@fontsource/permanent-marker";
-import "@fontsource/caveat";
-import "material-icons/iconfont/material-icons.css";
+import "@fontsource/inter/latin.css";
+import "@fontsource/space-grotesk/latin.css";
+import "@fontsource/permanent-marker/latin.css";
+import "@fontsource/caveat/latin.css";
 import { SEO } from "astro-seo";
 
 interface Props {
@@ -15,17 +14,32 @@ interface Props {
 
 const {
   title,
-  description = "Desarrollo de landing pages estratégicas de alto rendimiento.",
+  description = "Desarrollo de landing pages estratégicas de alto rendimiento. Diseño web persuasivo, SEO técnico y velocidad de carga optimizada para convertir tráfico en clientes.",
   image = "/images/og-landing-builder.jpg",
 } = Astro.props;
+
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://www.liammarega.com",
+);
 ---
 
 <!doctype html>
-<html class="dark" lang="es">
+<html class="dark" lang="es" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- Preconnect to external domains for faster resource loading -->
+    <link
+      rel="preconnect"
+      href="https://lh3.googleusercontent.com"
+      crossorigin
+    />
+    <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
 
     <SEO
       title={title}
@@ -36,9 +50,14 @@ const {
           type: "website",
           image: image,
         },
+        optional: {
+          locale: "es_AR",
+          siteName: "Landing Performance PRO",
+        },
       }}
       twitter={{
         creator: "@liammdev",
+        card: "summary_large_image",
       }}
       extend={{
         link: [{ rel: "icon", href: "/favicon.svg" }],
@@ -55,17 +74,52 @@ const {
             name: "twitter:description",
             content: description,
           },
+          {
+            name: "theme-color",
+            content: "#0A0A0A",
+          },
         ],
       }}
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-      rel="stylesheet"
+
+    <!-- JSON-LD Structured Data -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        name: "Landing Performance PRO",
+        description: description,
+        url: canonicalURL.href,
+        priceRange: "$$",
+        serviceType: "Desarrollo Web y Landing Pages",
+        areaServed: "Worldwide",
+        knowsLanguage: ["es", "en"],
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "USD",
+          price: "1000",
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            priceCurrency: "USD",
+            price: "1000",
+            unitText: "desde",
+          },
+        },
+      })}
     />
   </head>
   <body
     class="font-sans bg-background-dark text-text-light overflow-x-hidden selection:bg-primary selection:text-black"
   >
-    <slot />
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-black focus:px-4 focus:py-2 focus:font-bold"
+    >
+      Saltar al contenido principal
+    </a>
+    <main id="main-content" role="main">
+      <slot />
+    </main>
   </body>
 </html>
