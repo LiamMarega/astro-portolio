@@ -9,6 +9,36 @@ export default {
       ...defaultTheme.screens,
     },
     extend: {
+      colors: {
+        primary: '#E2FF00',
+        secondary: '#00E5FF',
+        accent: '#FF3D00',
+        background: {
+          dark: '#0A0A0A',
+        },
+        surface: {
+          dark: '#161616',
+        },
+        border: {
+          dark: '#262626',
+        },
+        text: {
+          light: '#F5F5F5',
+          dim: '#888888',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        marker: ['Permanent Marker', 'cursive'],
+        hand: ['Caveat', 'cursive'],
+      },
+      boxShadow: {
+        brutal: '4px 4px 0px 0px #E2FF00',
+        'brutal-white': '4px 4px 0px 0px #FFFFFF',
+        'brutal-lg': '6px 6px 0px 0px #E2FF00',
+      },
       animation: {
         text: 'text 5s ease infinite',
         draw: 'reveal 2s linear forwards',
