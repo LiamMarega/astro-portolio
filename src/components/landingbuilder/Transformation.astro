@@ -1,70 +1,137 @@
 ---
+
 ---
 
-<section class="py-24 bg-surface-dark border-y border-border-dark overflow-hidden relative">
+<section
+  class="py-24 bg-surface-dark border-y border-border-dark overflow-hidden relative"
+>
   <div class="torn-paper-top"></div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <!-- Left Column -->
       <div class="space-y-8 relative">
-        <div class="inline-block bg-primary/10 border border-primary/20 px-3 py-1 rounded-sm">
-          <span class="text-primary text-xs font-bold uppercase tracking-wider">Transformación Real</span>
+        <div
+          class="inline-block bg-primary/10 border border-primary/20 px-3 py-1 rounded-sm"
+        >
+          <span class="text-primary text-xs font-bold uppercase tracking-wider"
+            >Transformación Real</span
+          >
         </div>
-        <h2 class="text-3xl lg:text-4xl font-bold text-white font-display leading-tight">
+        <h2
+          class="text-3xl lg:text-4xl font-bold text-white font-display leading-tight"
+        >
           De una web pasiva a un <br />
-          <span class="text-primary relative inline-block text-hand-highlight">Activo Digital</span> de alto rendimiento.
+          <span class="text-primary relative inline-block text-hand-highlight"
+            >Activo Digital</span
+          > de alto rendimiento.
         </h2>
         <p class="text-text-dim text-lg">
-          La diferencia entre "tener una web" y tener una máquina de ventas. Eliminamos la fricción técnica para que tu mensaje brille.
+          La diferencia entre "tener una web" y tener una máquina de ventas.
+          Eliminamos la fricción técnica para que tu mensaje brille.
         </p>
-        <div class="space-y-4 pt-4 relative bg-black/20 p-6 rounded-sm border border-border-dark/50">
+        <div
+          class="space-y-4 pt-4 relative bg-black/20 p-6 rounded-sm border border-border-dark/50"
+        >
           <div class="flex items-start">
-            <span class="material-symbols-outlined text-red-500 mr-3 mt-1">cancel</span>
+            <span class="material-symbols-outlined text-red-500 mr-3 mt-1"
+              >cancel</span
+            >
             <div>
-              <strong class="text-white block">Antes (Lenta / Sin Claridad)</strong>
-              <p class="text-text-dim text-sm">Cargas de +5s, diseño saturado, textos aburridos y baja conversión.</p>
+              <strong class="text-white block"
+                >Antes (Lenta / Sin Claridad)</strong
+              >
+              <p class="text-text-dim text-sm">
+                Cargas de +5s, diseño saturado, textos aburridos y baja
+                conversión.
+              </p>
             </div>
           </div>
           <div class="flex items-center justify-center py-2">
-            <span class="material-symbols-outlined text-border-dark">arrow_downward</span>
+            <span class="material-symbols-outlined text-border-dark"
+              >arrow_downward</span
+            >
           </div>
           <div class="flex items-start">
-            <span class="material-symbols-outlined text-primary mr-3 mt-1">check_circle</span>
+            <span class="material-symbols-outlined text-primary mr-3 mt-1"
+              >check_circle</span
+            >
             <div>
-              <strong class="text-white block">Después (Activo Digital Pro)</strong>
-              <p class="text-text-dim text-sm">Carga en &lt;1s, autoridad visual instantánea y flujo de ventas claro.</p>
+              <strong class="text-white block"
+                >Después (Activo Digital Pro)</strong
+              >
+              <p class="text-text-dim text-sm">
+                Carga en &lt;1s, autoridad visual instantánea y flujo de ventas
+                claro.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Column (Before/After Image) -->
-      <div class="relative w-full aspect-[4/3] bg-background-dark border border-border-dark shadow-2xl group rounded-sm overflow-hidden">
-        <div class="absolute inset-0 flex">
-          <div class="w-1/2 h-full relative overflow-hidden border-r border-primary bg-gray-900 group-hover:w-[45%] transition-all duration-500 ease-in-out">
-            <div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-1 z-10 rounded-sm">
-              Antes
-            </div>
-            <img
-              alt="Screens of cluttered outdated web design layout"
-              class="opacity-40 grayscale w-full h-full object-cover filter blur-[2px]"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzQ7vIuI4QVoqY7JyWcsnekjm6nzVB8JuJ4ilW812uVc6RbC_tsYgDnzXPM7hLB32Hb1JDsywyRWL70q0jD2RuFMQ5CALpVo6q39tMLRiTZEy7oXXrfGIcqLADSijPDVtIlvU_P7U0sfWwBXX3m7szUTsWCdPjcwv-QP8rEg3Fi5SToAcrmu1v_d_ZCN6nc9WVd0KzftTyFVuJmGlTtJTPGrZBc41XwVvyZXZrx4E1Vo6WrH8n__4SY5uxGRuROf27Wos3sIoeS-w"
-            />
+      <!-- Right Column (Before/After Slider) -->
+      <div
+        class="relative w-full aspect-[4/3] bg-background-dark border border-border-dark shadow-2xl group rounded-sm overflow-hidden select-none"
+        id="comparison-container"
+      >
+        <!-- After Image (Base Layer) -->
+        <div class="absolute inset-0 w-full h-full">
+          <div
+            class="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold uppercase px-2 py-1 z-10 rounded-sm shadow-lg pointer-events-none"
+          >
+            Después
           </div>
-          <div class="w-1/2 h-full relative overflow-hidden bg-background-dark group-hover:w-[55%] transition-all duration-500 ease-in-out">
-            <div class="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold uppercase px-2 py-1 z-10 rounded-sm shadow-lg">
-              Después
-            </div>
-            <img
-              alt="Sleek dark mode modern dashboard interface"
-              class="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMag2DqeCy4Oooe5vMCwDLKLut2Lz67yqzcvgENkC7fVjdZZ-IG_6Q-wRVoxn_RM8_4TmVRp9VXXUmnPMclSn2apVGSfNk2DssRitgR0xK52tTIXzWl-Ok5Su6qffi9-NpdVoGieBwDQFGuu1MEYj8841OY0ny8Cs7acZ2ghxdbFOa6r4P1nBwDGiAV6LrhdHDKkIGyKJMqlfDkGsaSkf64LBWNsPeND-FF6mnrIlYRR9X3xokDSgTdl8PDptZp1psz-giTqUPwbU"
-            />
-          </div>
+          <img
+            alt="Sleek dark mode modern dashboard interface"
+            class="w-full h-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMag2DqeCy4Oooe5vMCwDLKLut2Lz67yqzcvgENkC7fVjdZZ-IG_6Q-wRVoxn_RM8_4TmVRp9VXXUmnPMclSn2apVGSfNk2DssRitgR0xK52tTIXzWl-Ok5Su6qffi9-NpdVoGieBwDQFGuu1MEYj8841OY0ny8Cs7acZ2ghxdbFOa6r4P1nBwDGiAV6LrhdHDKkIGyKJMqlfDkGsaSkf64LBWNsPeND-FF6mnrIlYRR9X3xokDSgTdl8PDptZp1psz-giTqUPwbU"
+            draggable="false"
+          />
         </div>
-        <div class="absolute top-0 bottom-0 left-1/2 w-px bg-primary flex items-center justify-center z-20 shadow-[0_0_10px_rgba(226,255,0,0.5)]">
-          <div class="w-8 h-8 bg-black border border-primary rounded-full flex items-center justify-center shadow-lg">
-            <span class="material-icons text-primary text-xs">code</span>
+
+        <!-- Before Image (Overlay Layer) -->
+        <div
+          class="absolute inset-0 h-full overflow-hidden border-r border-primary bg-gray-900"
+          style="width: 50%;"
+          id="before-image-wrapper"
+        >
+          <div
+            class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-1 z-10 rounded-sm pointer-events-none"
+          >
+            Antes
+          </div>
+          <!-- We need to set width/height: 100% of parent CONTAINER, not this wrapper -->
+          <!-- But since overflow is hidden, we keep img full size relative to container logic or use object-cover on full container size? -->
+          <!-- Better approach: The image inside needs to be the width of the main container to maintain aspect ratio/position matching 'After' image. -->
+          <!-- So we set this image to be the width of the parent container, but absolutely positioned left 0. -->
+          <img
+            alt="Screens of cluttered outdated web design layout"
+            class="absolute top-0 left-0 w-full h-full max-w-none object-cover opacity-40 grayscale filter blur-[2px]"
+            style="width: 100%; height: 100%;"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzQ7vIuI4QVoqY7JyWcsnekjm6nzVB8JuJ4ilW812uVc6RbC_tsYgDnzXPM7hLB32Hb1JDsywyRWL70q0jD2RuFMQ5CALpVo6q39tMLRiTZEy7oXXrfGIcqLADSijPDVtIlvU_P7U0sfWwBXX3m7szUTsWCdPjcwv-QP8rEg3Fi5SToAcrmu1v_d_ZCN6nc9WVd0KzftTyFVuJmGlTtJTPGrZBc41XwVvyZXZrx4E1Vo6WrH8n__4SY5uxGRuROf27Wos3sIoeS-w"
+            draggable="false"
+            id="before-image"
+          />
+        </div>
+
+        <!-- Slider Handle -->
+        <div
+          class="absolute top-0 bottom-0 w-px bg-transparent z-20 cursor-ew-resize touch-none"
+          style="left: 50%; transform: translateX(-50%);"
+          id="slider-handle"
+        >
+          <!-- Visual Line -->
+          <div
+            class="absolute inset-y-0 left-1/2 w-0.5 -ml-[1px] bg-primary shadow-[0_0_10px_rgba(226,255,0,0.5)]"
+          >
+          </div>
+
+          <!-- Circle Handle -->
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-black border border-primary rounded-full flex items-center justify-center shadow-lg transform active:scale-110 transition-transform"
+          >
+            <span class="material-icons text-primary text-xs select-none"
+              >code_off</span
+            >
           </div>
         </div>
       </div>
@@ -72,3 +139,84 @@
   </div>
   <div class="torn-paper-bottom"></div>
 </section>
+
+<script>
+  function initComparisonSlider() {
+    const container = document.getElementById("comparison-container");
+    const beforeWrapper = document.getElementById("before-image-wrapper");
+    const beforeImage = document.getElementById("before-image");
+    const handle = document.getElementById("slider-handle");
+
+    if (!container || !beforeWrapper || !handle || !beforeImage) return;
+
+    let isDragging = false;
+
+    const updateSlider = (percent) => {
+      // Clamp percentage between 0 and 100
+      percent = Math.max(0, Math.min(100, percent));
+
+      beforeWrapper.style.width = `${percent}%`;
+      handle.style.left = `${percent}%`;
+
+      // Ensure the before image stays full width of container so it doesn't squish
+      // We set that in CSS/HTML structure (w-full max-w-none relative to container)
+      // but let's just ensure its width matches container width
+      beforeImage.style.width = `${container.offsetWidth}px`;
+    };
+
+    const handleStart = (e) => {
+      isDragging = true;
+      document.body.style.cursor = "ew-resize";
+      e.preventDefault(); // Prevent text selection
+    };
+
+    const handleEnd = () => {
+      isDragging = false;
+      document.body.style.cursor = "";
+    };
+
+    const handleMove = (e) => {
+      if (!isDragging) return;
+
+      let clientX;
+      if (e.type === "touchmove") {
+        clientX = e.touches[0].clientX;
+      } else {
+        clientX = e.clientX;
+      }
+
+      const rect = container.getBoundingClientRect();
+      // Calculate position relative to container
+      const x = clientX - rect.left;
+      // Convert to percentage
+      const percent = (x / rect.width) * 100;
+
+      updateSlider(percent);
+    };
+
+    // Initialize with correct width for inner image on load/resize
+    const handleResize = () => {
+      if (beforeImage && container) {
+        beforeImage.style.width = `${container.offsetWidth}px`;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial call
+
+    // Event Listeners
+    handle.addEventListener("mousedown", handleStart);
+    handle.addEventListener("touchstart", handleStart);
+
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("touchmove", handleMove);
+
+    window.addEventListener("mouseup", handleEnd);
+    window.addEventListener("touchend", handleEnd);
+  }
+
+  // Run on load
+  document.addEventListener("astro:page-load", initComparisonSlider);
+  // Also run initially in case view transitions aren't used or initial load
+  initComparisonSlider();
+</script>
