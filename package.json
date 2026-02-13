@@ -12,9 +12,15 @@
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/tailwind": "^6.0.2",
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/permanent-marker": "^5.2.7",
+    "@fontsource/space-grotesk": "^5.2.10",
     "astro": "^5.16.6",
+    "astro-seo": "^1.1.0",
     "gsap": "^3.13.0",
     "lenis": "^1.1.13",
+    "material-icons": "^1.13.14",
     "ogl": "^1.0.11",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
