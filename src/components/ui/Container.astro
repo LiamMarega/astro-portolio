@@ -11,7 +11,7 @@
  * </Container>
  */
 
-interface Props {
+export interface Props {
   /**
    * Optional class names to add to the container
    */
@@ -59,7 +59,7 @@ const {
 } = Astro.props;
 
 // Size-based max-width classes (Mobile First)
-const sizeClasses = {
+const sizeClasses: Record<string, string> = {
   sm: 'max-w-2xl',
   md: 'max-w-4xl', 
   lg: 'max-w-6xl',
@@ -67,7 +67,7 @@ const sizeClasses = {
   full: 'max-w-full'
 };
 
-const finalMaxWidth = maxWidth || sizeClasses[size];
+const finalMaxWidth = maxWidth || sizeClasses[size as string];
 const finalPadding = padding || "px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16";
 ---
 
