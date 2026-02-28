@@ -162,9 +162,9 @@
             </span>
           </div>
           <div class="p-8 space-y-8 bg-[#0F0F0F] relative">
-            <div class="flex items-center justify-between relative z-10">
+            <div class="flex items-center justify-between relative z-10 group/header">
               <div class="flex flex-col">
-                <span class="text-5xl font-bold text-white font-display"
+                <span class="text-5xl font-bold text-white font-display group-hover/header:text-primary transition-colors duration-500"
                   >99%</span
                 >
                 <span
@@ -173,10 +173,10 @@
                 >
               </div>
               <div
-                class="h-14 w-14 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center"
+                class="h-14 w-14 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center relative shadow-[0_0_15px_theme(colors.primary/20%)] animate-[pulse_3s_ease-in-out_infinite]"
               >
                 <svg
-                  class="w-8 h-8 text-primary"
+                  class="w-8 h-8 text-primary animate-[spin_12s_linear_infinite]"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
@@ -189,13 +189,14 @@
 
             <div class="space-y-4">
               <div
-                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4"
+                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4 group hover:border-green-500/30 hover:bg-surface-dark transition-all duration-300 cursor-default"
               >
                 <div
-                  class="bg-green-500/10 p-1.5 rounded-sm text-green-500 mt-1"
+                  class="bg-green-500/10 p-1.5 rounded-sm text-green-500 mt-1 relative overflow-hidden group-hover:bg-green-500/20 transition-colors"
                 >
+                  <div class="absolute inset-0 bg-green-500/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                   <svg
-                    class="w-5 h-5"
+                    class="w-5 h-5 relative z-10 transform group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-300"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     aria-hidden="true"
@@ -205,20 +206,21 @@
                   >
                 </div>
                 <div>
-                  <div class="text-white font-bold text-sm">
+                  <div class="text-white font-bold text-sm group-hover:text-green-400 transition-colors duration-300">
                     Carga Instantánea = Menos Rebote y Más Ventas
                   </div>
                   <div class="text-text-dim text-xs mt-1">
-                    Cada 100ms de retraso reduce conversiones un 7%.
+                    Cada <span class="text-white">100ms</span> de retraso reduce conversiones un 7%.
                   </div>
                 </div>
               </div>
               <div
-                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4"
+                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4 group hover:border-blue-500/30 hover:bg-surface-dark transition-all duration-300 cursor-default"
               >
-                <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 mt-1">
+                <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 mt-1 relative overflow-hidden group-hover:bg-blue-500/20 transition-colors">
+                  <div class="absolute inset-0 bg-blue-500/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                   <svg
-                    class="w-5 h-5"
+                    class="w-5 h-5 relative z-10 transform group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform duration-300"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     aria-hidden="true"
@@ -228,7 +230,7 @@
                   >
                 </div>
                 <div>
-                  <div class="text-white font-bold text-sm">
+                  <div class="text-white font-bold text-sm group-hover:text-blue-400 transition-colors duration-300">
                     100% Responsive & Mobile First
                   </div>
                   <div class="text-text-dim text-xs mt-1">
@@ -237,13 +239,14 @@
                 </div>
               </div>
               <div
-                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4"
+                class="bg-background-dark p-4 rounded-sm border border-border-dark flex items-start gap-4 group hover:border-purple-500/30 hover:bg-surface-dark transition-all duration-300 cursor-default"
               >
                 <div
-                  class="bg-purple-500/10 p-1.5 rounded-sm text-purple-500 mt-1"
+                  class="bg-purple-500/10 p-1.5 rounded-sm text-purple-500 mt-1 relative overflow-hidden group-hover:bg-purple-500/20 transition-colors"
                 >
+                  <div class="absolute inset-0 bg-purple-500/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                   <svg
-                    class="w-5 h-5"
+                    class="w-5 h-5 relative z-10 transform group-hover:scale-110 group-hover:rotate-180 transition-transform duration-700 ease-in-out"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     aria-hidden="true"
@@ -253,7 +256,7 @@
                   >
                 </div>
                 <div>
-                  <div class="text-white font-bold text-sm">
+                  <div class="text-white font-bold text-sm group-hover:text-purple-400 transition-colors duration-300">
                     Diseño Persuasivo
                   </div>
                   <div class="text-text-dim text-xs mt-1">

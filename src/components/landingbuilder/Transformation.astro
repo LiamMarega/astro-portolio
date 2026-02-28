@@ -21,9 +21,12 @@
           class="text-3xl lg:text-4xl font-bold text-white font-display leading-tight"
         >
           De una web pasiva a un <br />
-          <span class="text-primary relative inline-block text-hand-highlight"
-            >Activo Digital</span
-          > de alto rendimiento.
+          <span class="text-primary relative inline-block">
+            Activo Digital
+            <svg class="absolute -inset-1 md:-inset-2 w-[110%] h-[120%] text-primary/30 -z-10 animate-draw-transform overflow-visible" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M15 30C30 5 170 5 185 30C195 50 10 50 15 30Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray: 500; stroke-dashoffset: 500;"/>
+            </svg>
+          </span> de alto rendimiento.
         </h2>
         <p class="text-text-dim text-lg">
           La diferencia entre "tener una web" y tener una máquina de ventas.
@@ -52,16 +55,11 @@
               </p>
             </div>
           </div>
-          <div class="flex items-center justify-center py-2">
-            <svg
-              class="w-6 h-6 text-border-dark"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-              ><path
-                d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-              ></path></svg
-            >
+          <div class="flex items-center justify-center py-4 relative">
+            <svg width="24" height="40" viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-text-dim/50">
+              <path d="M12 2C12 15 4 25 12 38" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-draw-transform" style="stroke-dasharray: 100; stroke-dashoffset: 100;"/>
+              <path d="M7 33L12 38L17 33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-draw-transform" style="stroke-dasharray: 50; stroke-dashoffset: 50;"/>
+            </svg>
           </div>
           <div class="flex items-start">
             <svg
@@ -259,5 +257,37 @@
   }
 
   document.addEventListener("astro:page-load", initComparisonSlider);
-  initComparisonSlider();
+  if (document.readyState === 'complete') {
+    initComparisonSlider();
+  } else {
+    window.addEventListener('load', initComparisonSlider);
+  }
+
+  function initTransformationReveal() {
+    const svgPaths = document.querySelectorAll('.animate-draw-transform');
+    const svgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.animation = 'dash-transform 1.5s ease-out forwards';
+          svgObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    svgPaths.forEach(path => svgObserver.observe(path));
+  }
+  document.addEventListener("astro:page-load", initTransformationReveal);
+  if (document.readyState === 'complete') {
+    initTransformationReveal();
+  } else {
+    window.addEventListener('load', initTransformationReveal);
+  }
 </script>
+
+<style>
+  @keyframes dash-transform {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

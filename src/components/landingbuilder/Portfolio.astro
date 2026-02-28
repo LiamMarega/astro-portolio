@@ -2,7 +2,7 @@
 
 ---
 
-<section class="py-24 bg-background-dark" id="portfolio">
+<section class="py-24 bg-background-dark overflow-hidden" id="portfolio">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row justify-between items-end mb-16">
       <div class="relative">
@@ -10,8 +10,15 @@
           class="text-primary font-mono text-xs tracking-widest uppercase mb-2 block"
           >Portafolio</span
         >
-        <h2 class="text-3xl lg:text-5xl font-bold text-white font-display">
-          Proyectos <br />Destacados
+        <h2 class="text-3xl lg:text-5xl font-bold text-white font-display relative inline-block">
+          Proyectos <br />
+          <span class="relative inline-block">
+            Destacados
+            <svg class="absolute -bottom-2 md:-bottom-3 left-0 w-full h-3 md:h-4 text-primary overflow-visible" viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 9.5C40.5 4.5 95.5 -1.5 197.5 9.5" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="animate-draw" style="stroke-dasharray: 300; stroke-dashoffset: 0;"/>
+              <path d="M12.5 11.5C35.5 8.5 125.5 1.5 187.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-draw opacity-50" style="stroke-dasharray: 300; stroke-dashoffset: 0;"/>
+            </svg>
+          </span>
         </h2>
       </div>
       <div class="mt-6 md:mt-0">
@@ -37,50 +44,46 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
       <!-- Project 1 -->
-      <div class="group cursor-pointer">
+      <div class="group cursor-pointer reveal-card opacity-0 translate-y-12 transition-all duration-1000 ease-out data-[visible=true]:opacity-100 data-[visible=true]:translate-y-0">
         <div
-          class="relative rounded-sm overflow-hidden border border-border-dark group-hover:border-primary/50 transition-colors duration-300"
+          class="relative rounded-sm overflow-hidden border border-border-dark group-hover:border-primary/50 transition-colors duration-500 shadow-xl"
         >
-          <div class="h-64 sm:h-80 overflow-hidden relative">
+          <div class="h-64 sm:h-80 overflow-hidden relative bg-black">
             <img
               alt="Cyberpunk neon city vibes website project"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFVVAGsKbaPCb7M1PsEixMwOZG-rQdZp2Q9SWEq92hZtQY_ekWOmk5BnAjotRLahkjpKiGEldLk2Od0FdL7z-Ti_11Qj2x90MT5XlCj9vlynZ5MlV1tWSrNWYtsN44iRuYMAMjbociEJip2blVb3RxkFGok9ld4CDkZ7PNH8--qPkVY93afPsodHCoOK6HB_LMXvoyuLUKShCDYpQWv_COO4f0HKrBBXtxuV_xrRl2wZb1y0o-KCSjAczW1vp2-MzSFVbDrUZ04u4"
               width="512"
               height="347"
               loading="lazy"
               decoding="async"
             />
-            <div
-              class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"
-            >
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
           </div>
-          <div class="p-6 bg-surface-dark relative">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold text-white font-display">
+          <div class="p-8 bg-surface-dark relative">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-2xl font-bold text-white font-display group-hover:text-primary transition-colors duration-300">
                 Ferox Systems
               </h3>
               <span
-                class="bg-background-dark px-2 py-1 text-[10px] text-text-dim border border-border-dark rounded-sm uppercase tracking-wider"
+                class="bg-background-dark px-3 py-1 text-[10px] text-text-dim border border-border-dark rounded-sm uppercase tracking-wider font-semibold"
                 >SaaS B2B</span
               >
             </div>
-            <p class="text-text-dim text-sm mb-4 line-clamp-2">
+            <p class="text-text-dim text-sm mb-6 line-clamp-2 leading-relaxed">
               Rediseño completo para empresa de ciberseguridad. Enfocado en
-              generar demos cualificadas.
+              generar demos cualificadas y optimizar el funnel.
             </p>
             <div
-              class="flex items-center gap-4 text-xs font-mono text-gray-500 pt-2 border-t border-border-dark/50"
+              class="flex flex-wrap items-center gap-4 text-xs font-mono text-gray-400 pt-4 border-t border-border-dark bg-surface-dark w-full"
             >
-              <span class="flex items-center gap-1"
-                ><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> +140%
-                Conversión</span
+              <span class="flex items-center gap-1.5 bg-background-dark border border-border-dark px-2 py-1 rounded-sm"
+                ><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span> <span class="text-white font-bold">+140%</span> Conversión</span
               >
-              <span class="flex items-center gap-1"
-                ><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> 0.5s Carga</span
+              <span class="flex items-center gap-1.5 bg-background-dark border border-border-dark px-2 py-1 rounded-sm"
+                ><span class="w-2 h-2 rounded-full bg-blue-500"></span> <span class="text-white font-bold">0.5s</span> Carga</span
               >
             </div>
           </div>
@@ -88,49 +91,44 @@
       </div>
 
       <!-- Project 2 -->
-      <div class="group cursor-pointer md:mt-12">
+      <div class="group cursor-pointer md:mt-16 reveal-card opacity-0 translate-y-12 transition-all duration-1000 ease-out data-[visible=true]:opacity-100 data-[visible=true]:translate-y-0" style="transition-delay: 150ms;">
         <div
-          class="relative rounded-sm overflow-hidden border border-border-dark group-hover:border-primary/50 transition-colors duration-300"
+          class="relative rounded-sm overflow-hidden border border-border-dark group-hover:border-primary/50 transition-colors duration-500 shadow-xl"
         >
-          <div class="h-64 sm:h-80 overflow-hidden relative">
+          <div class="h-64 sm:h-80 overflow-hidden relative bg-black">
             <img
               alt="Financial minimalist dashboard dark mode"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7Bd9IHU9Q0zBqDX2-YI_v5ai1xkWpwEB4iyzprgv_NMVGyO1wwxpGWpJvUW6OvyaXY9nU8pQiU77SiX5CYEyt0dzRgTdLeGVy768u5Rz8bIYKGGKNAkGwBx4F5_Nl-onLN3EicnobeKX3ERkqEtYNc-K0-8HUQVPqiK-kWsjyFFOf4_gP9qRGX650OyRtYRKHZ6yGprkpJ8P5yibDt0BQh7JrrZ85zQX-RmC0VKHMe3xGAovhlmVjUAwhGqJMoWefnmoQ4__goYY"
               width="512"
               height="347"
               loading="lazy"
               decoding="async"
             />
-            <div
-              class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"
-            >
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
           </div>
-          <div class="p-6 bg-surface-dark relative">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold text-white font-display">
+          <div class="p-8 bg-surface-dark relative">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-2xl font-bold text-white font-display group-hover:text-primary transition-colors duration-300">
                 Advantis Finance
               </h3>
               <span
-                class="bg-background-dark px-2 py-1 text-[10px] text-text-dim border border-border-dark rounded-sm uppercase tracking-wider"
+                class="bg-background-dark px-3 py-1 text-[10px] text-text-dim border border-border-dark rounded-sm uppercase tracking-wider font-semibold"
                 >Fintech</span
               >
             </div>
-            <p class="text-text-dim text-sm mb-4 line-clamp-2">
+            <p class="text-text-dim text-sm mb-6 line-clamp-2 leading-relaxed">
               Dashboard interactivo y landing page para captación de inversores.
-              Animaciones fluidas a 60fps.
+              Animaciones fluidas a 60fps con data en tiempo real.
             </p>
             <div
-              class="flex items-center gap-4 text-xs font-mono text-gray-500 pt-2 border-t border-border-dark/50"
+              class="flex flex-wrap items-center gap-4 text-xs font-mono text-gray-400 pt-4 border-t border-border-dark w-full"
             >
-              <span class="flex items-center gap-1"
-                ><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Core
-                Web Vitals OK</span
+              <span class="flex items-center gap-1.5 bg-background-dark border border-border-dark px-2 py-1 rounded-sm"
+                ><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span> <span class="text-white font-bold">100/100</span> Web Vitals</span
               >
-              <span class="flex items-center gap-1"
-                ><span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span> SEO
-                Técnico</span
+              <span class="flex items-center gap-1.5 bg-background-dark border border-border-dark px-2 py-1 rounded-sm"
+                ><span class="w-2 h-2 rounded-full bg-purple-500"></span> <span class="text-white font-bold">+120%</span> CTR</span
               >
             </div>
           </div>
@@ -139,3 +137,57 @@
     </div>
   </div>
 </section>
+
+<script>
+  function initPortfolioReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.setAttribute('data-visible', 'true');
+          // Optional: stop observing once revealed
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { 
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    });
+
+    document.querySelectorAll('.reveal-card').forEach((el) => {
+      observer.observe(el);
+    });
+
+    // Animate SVG draw on scroll
+    const svgPaths = document.querySelectorAll('.animate-draw');
+    const svgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.animation = 'dash 1.5s ease-out forwards';
+          svgObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    svgPaths.forEach(path => svgObserver.observe(path));
+  }
+
+  document.addEventListener("astro:page-load", initPortfolioReveal);
+  // Run on first load
+  if (document.readyState === 'complete') {
+    initPortfolioReveal();
+  } else {
+    window.addEventListener('load', initPortfolioReveal);
+  }
+</script>
+
+<style>
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .animate-draw {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+  }
+</style>
