@@ -3,11 +3,16 @@
 ---
 
 <section
-  class="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-background-dark overflow-hidden"
+  class="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-background-dark overflow-hidden flex flex-col justify-center min-h-[90vh]"
 >
-  <div class="absolute inset-0 tech-grid opacity-20 pointer-events-none"></div>
-  <div class="absolute inset-0 soft-gradient pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <!-- Ambient Space Grid Background -->
+  <div class="absolute inset-0 z-0">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] rounded-full bg-primary/20 blur-[120px] mix-blend-screen animate-pulse-slow pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[600px] h-[600px] rounded-full bg-blue-900/20 blur-[130px] mix-blend-screen animate-pulse-slow pointer-events-none" style="animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
       <!-- Left Column -->
       <div class="lg:col-span-7 space-y-10 text-left relative">
@@ -27,23 +32,28 @@
         </div>
 
         <h1
-          class="text-5xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight font-display relative"
+          class="text-5xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight font-display relative z-10"
         >
-          Desarrollo landings <br class="hidden lg:block" />
-          estratégicas que <br />
+          Desarrollo de <br class="hidden lg:block" />
+          <span class="text-nowrap">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white ">activos digitales</span> que </span>  <br />
           <span class="relative inline-block px-2 mx-1 z-10 mt-2">
-            <span class="relative z-10 text-black">convierten tráfico</span>
+            <span class="relative z-10 text-black">multiplican tu ROI</span>
             <span
-              class="absolute inset-0 bg-primary -rotate-1 transform -z-10 skew-x-3"
+              class="absolute inset-0 bg-primary -rotate-2 transform -z-10 skew-x-3 rounded-sm"
             ></span>
+            <!-- Handdrawn annotation -->
+            <svg class="absolute -bottom-6 -right-8 w-24 h-auto text-white transform rotate-12" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10,50 Q40,20 90,30" />
+              <path d="M70,10 L90,30 L70,50" />
+            </svg>
           </span>
-          en clientes.
         </h1>
 
-        <p class="text-lg text-text-dim max-w-xl leading-relaxed font-normal">
+        <p class="text-lg text-text-dim max-w-xl leading-relaxed font-normal relative z-10">
           Para coaches, marcas personales y negocios digitales que buscan
-          escalar. Tu web no debe ser solo bonita, debe ser un <span
-            class="text-white font-medium">activo financiero</span
+          escalar. Tu web no debe ser solo un folleto, debe ser una <span
+            class="text-white font-medium border-b-2 border-primary/50 pb-0.5">máquina de conversión</span
           >.
         </p>
 
@@ -109,8 +119,32 @@
         </div>
       </div>
 
-      <!-- Right Column (Card) -->
-      <div class="lg:col-span-5 relative mt-12 lg:mt-0">
+      <!-- Right Column (Orbit Animation & Card) -->
+      <div class="lg:col-span-5 relative mt-16 lg:mt-0 lg:ml-8 flex justify-center items-center">
+        <!-- Custom CSS Orbit Animation -->
+        <div class="absolute inset-0 flex items-center justify-center scale-75 sm:scale-100 z-0 opacity-60">
+          <div class="relative w-[500px] h-[500px]">
+            <!-- Orbit Ring 1 -->
+            <div class="absolute inset-0 border border-white/5 rounded-full animate-[spin_60s_linear_infinite]">
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full overflow-hidden border-2 border-surface-dark bg-background-dark animate-[spin_60s_linear_infinite_reverse]">
+                <img src="/images/works/advantis-home.webp" alt="Work 1" class="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </div>
+              <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-16 h-16 rounded-full overflow-hidden border-2 border-surface-dark bg-background-dark animate-[spin_60s_linear_infinite_reverse]">
+                <img src="/images/works/feroxMock.webp" alt="Work 2" class="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </div>
+            </div>
+            
+            <!-- Orbit Ring 2 -->
+            <div class="absolute inset-[60px] border border-white/5 rounded-full animate-[spin_45s_linear_infinite_reverse]">
+              <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full overflow-hidden border-2 border-surface-dark bg-background-dark animate-[spin_45s_linear_infinite]">
+                <img src="/images/works/fmoney.webp" alt="Work 3" class="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </div>
+              <div class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full overflow-hidden border-2 border-surface-dark bg-background-dark animate-[spin_45s_linear_infinite]">
+                <img src="/images/works/lamshoes.webp" alt="Work 4" class="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           class="relative bg-surface-dark border border-border-dark p-0 shadow-2xl z-10 rounded-sm overflow-hidden transform hover:scale-[1.01] transition-transform duration-500 group"
         >

@@ -24,45 +24,101 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div class="relative pl-6 border-l border-border-dark hover:border-primary transition-colors duration-300 group">
-        <span class="text-4xl font-bold text-surface-dark absolute -top-3 -left-3 select-none z-0 group-hover:text-primary/10 transition-colors font-display">01</span>
-        <div class="relative z-10">
-          <h3 class="text-lg font-bold text-white mb-3 font-display">Auditoría & Estrategia</h3>
-          <p class="text-text-dim text-sm leading-relaxed">
-            Analizamos tu negocio, tu oferta y tu cliente. No escribimos una línea de código sin saber a quién le vendemos.
+    <div class="relative mt-24">
+      <!-- Grid container with relative positioning for absolute SVGs -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 relative z-10">
+        
+        <!-- Step 1 -->
+        <div class="relative group mt-0 lg:mt-12">
+          <div class="mb-6 relative inline-block">
+            <span class="text-6xl font-black text-transparent text-stroke-dark opacity-40 group-hover:opacity-100 group-hover:text-stroke-primary transition-all duration-300 font-display">1</span>
+            <!-- Hand-drawn circle highlighting the number -->
+            <svg class="absolute -inset-4 w-[140%] h-[140%] text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M50,10 C70,10 90,30 90,50 C90,70 70,90 50,90 C30,90 10,70 10,50 C10,30 30,12 55,15" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3 font-display">Auditoría & Estrategia</h3>
+          <p class="text-text-dim text-sm leading-relaxed pr-4">
+            Analizamos tu negocio, tu oferta y tu cliente. No escribimos una sola línea de código sin saber exactamente a quién le vamos a vender.
           </p>
         </div>
-      </div>
 
-      <div class="relative pl-6 border-l border-border-dark hover:border-primary transition-colors duration-300 group">
-        <span class="text-4xl font-bold text-surface-dark absolute -top-3 -left-3 select-none z-0 group-hover:text-primary/10 transition-colors font-display">02</span>
-        <div class="relative z-10">
-          <h3 class="text-lg font-bold text-white mb-3 font-display">Copywriting Persuasivo</h3>
-          <p class="text-text-dim text-sm leading-relaxed">
-            Redactamos los textos utilizando fórmulas probadas (PAS, AIDA) para conectar emocionalmente y guiar a la acción.
-          </p>
+        <!-- Arrow 1 -> 2 (visible lg and up) -->
+        <div class="hidden lg:block absolute top-[40px] left-[20%] w-[10%] text-border-dark">
+          <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-full h-auto overflow-visible group-hover:text-primary transition-colors">
+            <path d="M0,25 Q50,-10 100,25" stroke-dasharray="4 4" />
+            <path d="M90,15 L100,25 L85,30" stroke-linejoin="round" />
+          </svg>
         </div>
-      </div>
 
-      <div class="relative pl-6 border-l border-border-dark hover:border-primary transition-colors duration-300 group">
-        <span class="text-4xl font-bold text-surface-dark absolute -top-3 -left-3 select-none z-0 group-hover:text-primary/10 transition-colors font-display">03</span>
-        <div class="relative z-10">
-          <h3 class="text-lg font-bold text-white mb-3 font-display">Desarrollo High-End</h3>
-          <p class="text-text-dim text-sm leading-relaxed">
-            Stack moderno (Next.js/Tailwind). Sin constructores visuales lentos. Código limpio, rápido y seguro.
+        <!-- Step 2 -->
+        <div class="relative group mt-0 lg:-mt-4">
+          <div class="mb-6 relative inline-block">
+            <span class="text-6xl font-black text-transparent text-stroke-dark opacity-40 group-hover:opacity-100 group-hover:text-stroke-primary transition-all duration-300 font-display">2</span>
+            <svg class="absolute -inset-4 w-[140%] h-[140%] text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M45,15 C65,10 85,25 90,45 C95,65 75,85 55,90 C35,95 15,75 10,55 C5,35 20,15 40,15" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3 font-display">Copy Persuasivo</h3>
+          <p class="text-text-dim text-sm leading-relaxed pr-4">
+            Redactamos textos utilizando fórmulas probadas (PAS, AIDA) para derribar objeciones, conectar emocionalmente y guiar a la acción inevitable.
           </p>
         </div>
-      </div>
 
-      <div class="relative pl-6 border-l border-border-dark hover:border-primary transition-colors duration-300 group">
-        <span class="text-4xl font-bold text-surface-dark absolute -top-3 -left-3 select-none z-0 group-hover:text-primary/10 transition-colors font-display">04</span>
-        <div class="relative z-10">
-          <h3 class="text-lg font-bold text-white mb-3 font-display">Medición & Optimización</h3>
-          <p class="text-text-dim text-sm leading-relaxed">
-            Configuramos analíticas avanzadas para saber qué funciona. Tu web es un ente vivo que mejora con datos.
+        <!-- Arrow 2 -> 3 (visible lg and up) -->
+        <div class="hidden lg:block absolute top-[60px] left-[45%] w-[10%] text-border-dark">
+          <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-full h-auto overflow-visible">
+            <path d="M0,0 Q50,40 100,0" stroke-dasharray="4 4" />
+            <path d="M90,10 L100,0 L85,-5" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative group mt-0 lg:mt-16">
+          <div class="mb-6 relative inline-block">
+            <span class="text-6xl font-black text-transparent text-stroke-dark opacity-40 group-hover:opacity-100 group-hover:text-stroke-primary transition-all duration-300 font-display">3</span>
+            <svg class="absolute -inset-4 w-[140%] h-[140%] text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M50,10 C70,10 90,30 90,50 C90,70 70,90 50,90 C30,90 10,70 10,50 C10,30 30,12 55,15" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3 font-display">Desarrollo High-End</h3>
+          <p class="text-text-dim text-sm leading-relaxed pr-4">
+            Sin constructores visuales lentos. Código limpio, rápido y seguro configurado para cargar en &lt; 1s para no perder a ningún impaciente.
           </p>
         </div>
+
+        <!-- Arrow 3 -> 4 (visible lg and up) -->
+        <div class="hidden lg:block absolute top-[20px] left-[70%] w-[10%] text-border-dark">
+          <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-full h-auto overflow-visible">
+            <path d="M0,50 Q50,10 100,50" stroke-dasharray="4 4" />
+            <path d="M90,40 L100,50 L85,55" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative group mt-0 lg:-mt-8">
+          <div class="mb-6 relative inline-block">
+            <span class="text-6xl font-black text-transparent text-stroke-dark opacity-40 group-hover:opacity-100 group-hover:text-stroke-primary transition-all duration-300 font-display">4</span>
+            <!-- Hand-drawn highlight -->
+            <svg class="absolute -inset-6 w-[160%] h-[160%] text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M20,80 L80,20 M20,20 L80,80 M10,50 C10,10 90,10 90,50 C90,90 10,90 10,50" stroke-dasharray="200" stroke-dashoffset="0" class="group-hover:animate-draw" />
+            </svg>
+            <style>
+              @keyframes draw {
+                from { stroke-dashoffset: 200; }
+                to { stroke-dashoffset: 0; }
+              }
+              .animate-draw {
+                animation: draw 1s ease-out forwards;
+              }
+            </style>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3 font-display">Medición & Escalabilidad</h3>
+          <p class="text-text-dim text-sm leading-relaxed pr-4">
+            Configuramos analíticas avanzadas para saber exactamente qué funciona. Tu web se convierte en un ente vivo que mejora con datos reales.
+          </p>
+        </div>
+
       </div>
     </div>
   </div>
