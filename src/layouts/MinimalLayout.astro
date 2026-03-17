@@ -25,8 +25,8 @@ const defaultSchema = {
   "@type": "Person",
   name: "Liam Marega",
   jobTitle: "Frontend Developer",
-  url: "https://liammarega.dev",
-  image: "https://liammarega.dev/images/avatar.webp",
+  url: "https://liammarega.com",
+  image: "https://liammarega.com/images/avatar.webp",
   sameAs: ["https://github.com/liammarega"],
 };
 ---
@@ -42,9 +42,20 @@ const defaultSchema = {
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL} />
 
-    <link rel="preload" href="/fonts/HelveticaNeueBold.ttf" as="font" type="font/ttf" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/HelveticaNeueBold.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
     <link rel="icon" href="/images/avatar.webp" type="image/webp" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32" />
+    <link
+      rel="icon"
+      href="/favicon.ico"
+      type="image/x-icon"
+      sizes="16x16 32x32"
+    />
     <link rel="apple-touch-icon" href="/images/avatar.webp" sizes="180x180" />
     <link rel="manifest" href="/manifest.json" />
 
@@ -88,15 +99,24 @@ const defaultSchema = {
       font-display: swap;
       font-weight: 800;
     }
-    ::selection { background: rgba(226, 255, 0, 0.3); }
-    html { scroll-behavior: smooth; }
-    body { font-family: "HelveticaNeue", system-ui, sans-serif; }
+    ::selection {
+      background: rgba(226, 255, 0, 0.3);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "HelveticaNeue", system-ui, sans-serif;
+    }
   </style>
 
   <script>
     import Lenis from "lenis";
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
-    function raf(time: number) { lenis.raf(time); requestAnimationFrame(raf); }
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
     requestAnimationFrame(raf);
   </script>
 </html>

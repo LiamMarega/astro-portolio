@@ -5,30 +5,61 @@ const blogSchema = {
   "@context": "https://schema.org",
   "@type": "Blog",
   name: "LIAM TIMES",
-  description: "El periódico digital de Liam Marega — Frontend, tecnología y desarrollo digital.",
-  url: "https://liammarega.dev/newspaper",
+  description:
+    "El periódico digital de Liam Marega — Frontend, tecnología y desarrollo digital.",
+  url: "https://liammarega.com/newspaper",
   author: {
     "@type": "Person",
     name: "Liam Marega",
-    url: "https://liammarega.dev",
-    image: "https://liammarega.dev/images/avatar.webp",
-    sameAs: ["https://github.com/liammarega", "https://instagram.com/liammarega"],
+    url: "https://liammarega.com",
+    image: "https://liammarega.com/images/avatar.webp",
+    sameAs: [
+      "https://github.com/liammarega",
+      "https://instagram.com/liammarega",
+    ],
   },
   publisher: {
     "@type": "Person",
     name: "Liam Marega",
-    logo: { "@type": "ImageObject", url: "https://liammarega.dev/images/avatar.webp" },
+    logo: {
+      "@type": "ImageObject",
+      url: "https://liammarega.com/images/avatar.webp",
+    },
   },
   inLanguage: "es",
 };
 
 const placeholderArticles = [
-  { category: "FRONTEND", title: "Por qué tu landing page está perdiendo ventas sin que lo sepas", date: "Próximamente" },
-  { category: "DISEÑO", title: "El arte de la primera impresión: cómo diseñar above the fold", date: "Próximamente" },
-  { category: "TECNOLOGÍA", title: "GSAP vs Framer Motion: qué usar y cuándo en 2025", date: "Próximamente" },
-  { category: "MARKETING", title: "VSL: La herramienta más subestimada del marketing digital", date: "Próximamente" },
-  { category: "ESTRATEGIA", title: "De freelancer a agencia: la transición que nadie te cuenta", date: "Próximamente" },
-  { category: "CÓDIGO", title: "Astro 5: El framework que está redefiniendo el web moderno", date: "Próximamente" },
+  {
+    category: "FRONTEND",
+    title: "Por qué tu landing page está perdiendo ventas sin que lo sepas",
+    date: "Próximamente",
+  },
+  {
+    category: "DISEÑO",
+    title: "El arte de la primera impresión: cómo diseñar above the fold",
+    date: "Próximamente",
+  },
+  {
+    category: "TECNOLOGÍA",
+    title: "GSAP vs Framer Motion: qué usar y cuándo en 2025",
+    date: "Próximamente",
+  },
+  {
+    category: "MARKETING",
+    title: "VSL: La herramienta más subestimada del marketing digital",
+    date: "Próximamente",
+  },
+  {
+    category: "ESTRATEGIA",
+    title: "De freelancer a agencia: la transición que nadie te cuenta",
+    date: "Próximamente",
+  },
+  {
+    category: "CÓDIGO",
+    title: "Astro 5: El framework que está redefiniendo el web moderno",
+    date: "Próximamente",
+  },
 ];
 ---
 
@@ -38,8 +69,13 @@ const placeholderArticles = [
   schema={blogSchema}
 >
   <!-- Ticker strip -->
-  <div class="overflow-hidden border-b border-[#E2FF00]/30 bg-[#E2FF00]/5 py-2" aria-hidden="true">
-    <div class="ticker-track whitespace-nowrap text-xs font-bold tracking-widest text-[#E2FF00]/70 uppercase">
+  <div
+    class="overflow-hidden border-b border-[#E2FF00]/30 bg-[#E2FF00]/5 py-2"
+    aria-hidden="true"
+  >
+    <div
+      class="ticker-track whitespace-nowrap text-xs font-bold tracking-widest text-[#E2FF00]/70 uppercase"
+    >
       <span class="inline-block px-8">LIAM TIMES</span>
       <span class="inline-block px-4">—</span>
       <span class="inline-block px-8">FRONTEND</span>
@@ -69,25 +105,48 @@ const placeholderArticles = [
   </div>
 
   <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-
     <!-- Back link -->
-    <a href="/" class="inline-flex items-center gap-2 text-xs text-white/30 hover:text-[#E2FF00] transition-colors mb-10 uppercase tracking-widest font-bold">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-xs text-white/30 hover:text-[#E2FF00] transition-colors mb-10 uppercase tracking-widest font-bold"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M9 2L4 7l5 5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
       </svg>
       Volver
     </a>
 
     <!-- Masthead -->
     <header class="border-b border-white/10 pb-8 mb-10">
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div
+        class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
+      >
         <div>
-          <p class="text-xs tracking-widest uppercase text-white/30 mb-2 font-bold">liammarega.dev/newspaper</p>
-          <h1 class="masthead-title text-6xl sm:text-8xl md:text-[9rem] font-extrabold leading-none tracking-tighter text-white">
+          <p
+            class="text-xs tracking-widest uppercase text-white/30 mb-2 font-bold"
+          >
+            liammarega.com/newspaper
+          </p>
+          <h1
+            class="masthead-title text-6xl sm:text-8xl md:text-[9rem] font-extrabold leading-none tracking-tighter text-white"
+          >
             LIAM<span class="text-[#E2FF00]">_</span>TIMES
           </h1>
         </div>
-        <div class="text-right text-xs text-white/30 space-y-1 font-mono shrink-0">
+        <div
+          class="text-right text-xs text-white/30 space-y-1 font-mono shrink-0"
+        >
           <p class="uppercase tracking-wider">Issue 001</p>
           <p>Est. 2025</p>
           <p>By Liam Marega</p>
@@ -95,59 +154,92 @@ const placeholderArticles = [
       </div>
 
       <!-- Deck -->
-      <p class="mt-6 text-base sm:text-lg text-white/50 max-w-xl leading-relaxed">
-        El periódico digital donde comparto lo que pienso, aprendo y construyo sobre frontend, diseño y estrategia digital.
+      <p
+        class="mt-6 text-base sm:text-lg text-white/50 max-w-xl leading-relaxed"
+      >
+        El periódico digital donde comparto lo que pienso, aprendo y construyo
+        sobre frontend, diseño y estrategia digital.
         <em class="text-[#E2FF00]/70 not-italic"> Próximamente.</em>
       </p>
     </header>
 
     <!-- Coming soon highlight -->
-    <div class="relative border border-[#E2FF00]/20 rounded-2xl bg-[#E2FF00]/5 p-8 sm:p-12 mb-12 overflow-hidden">
-      <div class="absolute top-0 right-0 w-64 h-64 bg-[#E2FF00]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>
-      <span class="inline-block text-xs font-bold uppercase tracking-widest text-[#E2FF00] bg-[#E2FF00]/10 px-3 py-1 rounded-full mb-4">En construcción</span>
-      <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight mb-3">
+    <div
+      class="relative border border-[#E2FF00]/20 rounded-2xl bg-[#E2FF00]/5 p-8 sm:p-12 mb-12 overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-[#E2FF00]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"
+      >
+      </div>
+      <span
+        class="inline-block text-xs font-bold uppercase tracking-widest text-[#E2FF00] bg-[#E2FF00]/10 px-3 py-1 rounded-full mb-4"
+        >En construcción</span
+      >
+      <h2
+        class="text-2xl sm:text-4xl font-extrabold text-white leading-tight mb-3"
+      >
         Contenido editorial<br />que pronto llegará.
       </h2>
       <p class="text-white/50 text-sm sm:text-base max-w-md">
-        Estoy preparando artículos sobre lo que realmente importa en el mundo del frontend, el diseño y los negocios digitales. Sin fluff, con profundidad.
+        Estoy preparando artículos sobre lo que realmente importa en el mundo
+        del frontend, el diseño y los negocios digitales. Sin fluff, con
+        profundidad.
       </p>
     </div>
 
     <!-- Article placeholder grid -->
     <section aria-labelledby="articles-heading">
       <div class="flex items-center justify-between mb-6">
-        <h2 id="articles-heading" class="text-xs font-bold uppercase tracking-widest text-white/40">
+        <h2
+          id="articles-heading"
+          class="text-xs font-bold uppercase tracking-widest text-white/40"
+        >
           Artículos · Próximamente
         </h2>
         <div class="h-px flex-1 ml-4 bg-white/10"></div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 border border-white/8 rounded-xl overflow-hidden">
-        {placeholderArticles.map((article) => (
-          <article class="bg-black p-5 hover:bg-white/3 transition-colors group cursor-default">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-[#E2FF00]/60 mb-3 block">
-              {article.category}
-            </span>
-            <h3 class="text-sm sm:text-base font-bold text-white/60 group-hover:text-white/80 leading-snug transition-colors line-clamp-3">
-              {article.title}
-            </h3>
-            <div class="mt-4 flex items-center gap-2">
-              <span class="text-[10px] font-bold bg-white/5 text-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                {article.date}
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 border border-white/8 rounded-xl overflow-hidden"
+      >
+        {
+          placeholderArticles.map((article) => (
+            <article class="bg-black p-5 hover:bg-white/3 transition-colors group cursor-default">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-[#E2FF00]/60 mb-3 block">
+                {article.category}
               </span>
-            </div>
-          </article>
-        ))}
+              <h3 class="text-sm sm:text-base font-bold text-white/60 group-hover:text-white/80 leading-snug transition-colors line-clamp-3">
+                {article.title}
+              </h3>
+              <div class="mt-4 flex items-center gap-2">
+                <span class="text-[10px] font-bold bg-white/5 text-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  {article.date}
+                </span>
+              </div>
+            </article>
+          ))
+        }
       </div>
     </section>
 
     <!-- Subscribe strip -->
-    <section class="mt-16 border-t border-white/10 pt-10 text-center" aria-labelledby="subscribe-heading">
-      <h2 id="subscribe-heading" class="text-xl sm:text-2xl font-extrabold text-white mb-2">
+    <section
+      class="mt-16 border-t border-white/10 pt-10 text-center"
+      aria-labelledby="subscribe-heading"
+    >
+      <h2
+        id="subscribe-heading"
+        class="text-xl sm:text-2xl font-extrabold text-white mb-2"
+      >
         Avisame cuando salga.
       </h2>
-      <p class="text-white/40 text-sm mb-6">Sin spam. Solo cuando haya algo que valga la pena leer.</p>
-      <form class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm mx-auto" onsubmit="return false;">
+      <p class="text-white/40 text-sm mb-6">
+        Sin spam. Solo cuando haya algo que valga la pena leer.
+      </p>
+      <form
+        class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm mx-auto"
+        onsubmit="return false;"
+      >
         <input
           type="email"
           placeholder="tu@email.com"
@@ -166,27 +258,41 @@ const placeholderArticles = [
     </section>
 
     <!-- Footer nav -->
-    <nav class="mt-14 flex flex-wrap justify-center gap-6 text-xs text-white/20 uppercase tracking-widest font-bold border-t border-white/8 pt-8" aria-label="Navegación del periódico">
+    <nav
+      class="mt-14 flex flex-wrap justify-center gap-6 text-xs text-white/20 uppercase tracking-widest font-bold border-t border-white/8 pt-8"
+      aria-label="Navegación del periódico"
+    >
       <a href="/" class="hover:text-[#E2FF00] transition-colors">Hub</a>
-      <a href="/portfolio" class="hover:text-[#E2FF00] transition-colors">Portfolio</a>
-      <a href="/landing-builder" class="hover:text-[#E2FF00] transition-colors">LANDINGPRO</a>
-      <a href="/gallery" class="hover:text-[#E2FF00] transition-colors">Gallery</a>
+      <a href="/portfolio" class="hover:text-[#E2FF00] transition-colors"
+        >Portfolio</a
+      >
+      <a href="/landing-builder" class="hover:text-[#E2FF00] transition-colors"
+        >LANDINGPRO</a
+      >
+      <a href="/gallery" class="hover:text-[#E2FF00] transition-colors"
+        >Gallery</a
+      >
     </nav>
-
   </main>
 </MinimalLayout>
 
 <style>
   @keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
   .ticker-track {
     display: inline-block;
     animation: ticker 30s linear infinite;
   }
   @media (prefers-reduced-motion: reduce) {
-    .ticker-track { animation: none; }
+    .ticker-track {
+      animation: none;
+    }
   }
 
   .masthead-title {

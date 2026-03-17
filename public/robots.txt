@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://liammarega.dev/sitemap.xml
+Sitemap: https://liammarega.com/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
