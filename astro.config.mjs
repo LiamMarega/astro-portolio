@@ -1,9 +1,10 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
+import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
+  integrations: [tailwind(), react()],
   
   // Performance optimizations
   build: {
@@ -44,7 +45,8 @@ export default defineConfig({
           manualChunks: {
             // Separate vendor chunks
             'vendor-gsap': ['gsap'],
-            'vendor-lenis': ['lenis']
+            'vendor-lenis': ['lenis'],
+            'vendor-react': ['react', 'react-dom']
           }
         }
       },

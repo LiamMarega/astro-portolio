@@ -1,153 +1,85 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import InformativeBox from "../components/ui/InfoBox.astro";
-import About from "../components/About/About.astro";
-import Works from "../components/Work/Works.astro";
-import Contact from "../components/Contact/Contact.astro";
-import CursorFollow from "../components/ui/CursorFollow.astro";
-import Container from "../components/ui/Container.astro";
-import Gallery from "../components/gallery/index.astro";
-import StickerPeel from "../components/ui/StickerPeel.astro";
+import LinktreeLayout from "../layouts/LinktreeLayout.astro";
+import LinktreeHero from "../components/linktree/LinktreeHero.astro";
+import LinktreeGrid from "../components/linktree/LinktreeGrid.astro";
+import TargetCursor from "../components/ui/TargetCursor";
+
+const cards = [
+  {
+    title: "Portfolio",
+    url: "/portfolio",
+    icon: "◈",
+    description: "Proyectos y trabajos recientes",
+    featured: false,
+  },
+  {
+    title: "LANDINGPRO",
+    url: "/landing-builder",
+    icon: "⚡",
+    description: "Landings que convierten a $1000+",
+    featured: true,
+    badge: "OPEN",
+  },
+  {
+    title: "Newspaper",
+    url: "/newspaper",
+    icon: "✦",
+    description: "Editorial & contenido",
+    featured: false,
+    badge: "PRÓXIMO",
+  },
+  {
+    title: "Gallery",
+    url: "/gallery",
+    icon: "▣",
+    description: "Visual & diseño",
+    featured: false,
+  },
+  {
+    title: "Instagram",
+    url: "https://instagram.com/liammarega",
+    icon: "IG",
+    featured: false,
+    external: true,
+  },
+  {
+    title: "YouTube",
+    url: "https://youtube.com/@liammarega",
+    icon: "YT",
+    featured: false,
+    external: true,
+  },
+  {
+    title: "GitHub",
+    url: "https://github.com/liammarega",
+    icon: "GH",
+    featured: false,
+    external: true,
+  },
+  {
+    title: "Email",
+    url: "mailto:liammaregadevelop@gmail.com",
+    icon: "@",
+    description: "liammaregadevelop@gmail.com",
+    featured: false,
+  },
+];
 ---
 
-<Layout
-  title="Liam Marega - Frontend Developer | Responsive Web Applications"
-  description="Experienced Frontend Developer specializing in creating responsive, attractive, and functional web applications. Expert in React, TypeScript, and modern web technologies."
+<LinktreeLayout
+  title="Liam Marega — Links | Frontend Developer & Digital Strategist"
+  description="Hub central de Liam Marega. Portfolio, LANDINGPRO, Newspaper, Gallery y todas mis redes en un solo lugar."
 >
-  <!-- <StickerPeel
-    class="z-[60]"
-    imageSrc="/images/draws/sticker.png"
-    width={220}
-    rotate={0}
-    peelBackHoverPct={15}
-    peelBackActivePct={30}
-    shadowIntensity={1}
-    lightingIntensity={0.1}
-    initialPosition={{ x: 600, y: -40 }}
-    delay={2}
-  />
-  <StickerPeel
-    class="z-[60]"
-    imageSrc="/images/draws/jacket_sticker.png"
-    width={350}
-    rotate={5}
-    peelBackHoverPct={20}
-    peelBackActivePct={30}
-    shadowIntensity={0.6}
-    lightingIntensity={0.1}
-    initialPosition={{ x: 150, y: 400 }}
-    delay={2.5}
-  />
-  <StickerPeel
-    class="z-[60]"
-    imageSrc="/images/draws/beard_sticker.png"
-    width={180}
-    rotate={10}
-    peelBackHoverPct={30}
-    peelBackActivePct={40}
-    shadowIntensity={0.8}
-    lightingIntensity={0.3}
-    initialPosition={{ x: 1300, y: 160 }}
-    delay={3}
-  /> -->
-  <main
-    class="relative sm:pb-10 xl:pb-0 xl:min-h-screen pb-12 text-white"
-    role="main"
-  >
-    <CursorFollow />
+  <TargetCursor client:only="react" color="#E2FF00" />
 
-    <Container class="flex flex-col h-full justify-between">
-      <header class="hero-section">
-        <h1
-          class="main-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold italic leading-tight"
-          role="banner"
-        >
-          FRONTEND <br class="sm:block" /> DEVELOPER
-        </h1>
+  <main class="relative z-10 min-h-screen flex flex-col items-center px-4 py-14 sm:py-20">
+    <LinktreeHero />
+    <LinktreeGrid cards={cards} />
 
-        <div class="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8"
-          >
-            <p
-              class="font-extralight text-sm sm:text-base md:text-lg text-center sm:text-start text-balance opacity-70 p-2"
-            >
-              I code with art and Empowering startups with visually stunning and
-              functionally seamless interfaces.
-            </p>
-
-            <p
-              class="text-center sm:text-start text-sm sm:text-base md:text-lg font-extralight text-balance opacity-70 p-2"
-            >
-              I'm a passionate developer with experience who uses research,
-              data, and thoughtful design to create delightful products that
-              scale.
-            </p>
-
-            <div class="flex items-center justify-center sm:justify-start p-2">
-              <a
-                href="#contact"
-                class="group flex items-center text-sm sm:text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black"
-                aria-label="Navigate to contact section"
-              >
-                Get in Touch
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  class="h-4 w-4 sm:h-5 sm:w-5 ml-2 group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6 sm:mt-16 md:mt-24 relative min-h-[550px] sm:min-h-0">
-          <InformativeBox />
-        </div>
-      </header>
-
-      <div class="hero-decoration">
-        <img
-          src="/images/draws/arrowBucle.svg"
-          alt="Decorative arrow pointing down"
-          class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-36 xl:h-36 absolute bottom-12 sm:bottom-16 md:bottom-24 lg:bottom-32 right-3 sm:right-4 md:right-8 lg:right-16 xl:right-32 animate-draw"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-    </Container>
-
-    <hr class="mx-auto max-w-[80%] opacity-25" />
+    <footer class="mt-12 text-center">
+      <p class="text-xs text-white/20 tracking-widest uppercase">
+        liammarega.dev · {new Date().getFullYear()}
+      </p>
+    </footer>
   </main>
-
-  <About />
-  <hr class="mx-auto max-w-[80%] opacity-25" />
-  <Works />
-  <hr class="mx-auto max-w-[80%] opacity-25" />
-  <!-- <Gallery /> -->
-  <Contact />
-</Layout>
-
-<style>
-  .gallery-section-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  /* Asegurarse de que el título principal sea estático */
-  .main-title {
-    position: static !important;
-    transform: none !important;
-  }
-</style>
+</LinktreeLayout>

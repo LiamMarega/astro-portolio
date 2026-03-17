@@ -1,0 +1,109 @@
+---
+interface CardData {
+  title: string;
+  url: string;
+  icon: string;
+  description?: string;
+  featured?: boolean;
+  external?: boolean;
+  badge?: string;
+}
+
+interface Props {
+  cards: CardData[];
+}
+
+const { cards } = Astro.props;
+---
+
+<nav
+  aria-label="Enlaces principales"
+  class="w-full max-w-lg grid grid-cols-2 gap-3 px-0"
+>
+  {cards.map((card) => {
+    const isExternal = card.external || card.url.startsWith("http");
+    return (
+      <a
+        href={card.url}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        data-cursor-scale
+        aria-label={card.title}
+        class:list={[
+          "cursor-target group relative flex flex-col justify-between p-4 rounded-xl border border-white/8 bg-white/3 backdrop-blur-sm",
+          "hover:border-[#E2FF00]/50 hover:bg-white/6 hover:shadow-[0_0_24px_rgba(226,255,0,0.08)]",
+          "transition-all duration-300 ease-out hover:-translate-y-0.5",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60",
+          "min-h-[90px]",
+          card.featured ? "col-span-2 min-h-[100px] bg-[#E2FF00]/6 border-[#E2FF00]/20 hover:border-[#E2FF00]/60 hover:bg-[#E2FF00]/10" : "",
+        ]}
+      >
+        <!-- Top row: icon + badge -->
+        <div class="flex items-start justify-between mb-2">
+          <span
+            class:list={[
+              "text-xl leading-none",
+              card.featured ? "text-[#E2FF00]" : "text-white/70 group-hover:text-white",
+              "transition-colors duration-200"
+            ]}
+            aria-hidden="true"
+          >
+            {card.icon}
+          </span>
+
+          {card.badge && (
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#E2FF00] bg-[#E2FF00]/10 px-2 py-0.5 rounded-full">
+              {card.badge}
+            </span>
+          )}
+
+          {isExternal && !card.badge && (
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              class="text-white/20 group-hover:text-white/40 transition-colors mt-0.5"
+              aria-hidden="true"
+            >
+              <path d="M2.5 1H11V9.5M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          )}
+        </div>
+
+        <!-- Title + description -->
+        <div>
+          <p
+            class:list={[
+              "font-bold text-sm sm:text-base leading-tight",
+              card.featured ? "text-white" : "text-white/85 group-hover:text-white",
+              "transition-colors duration-200"
+            ]}
+          >
+            {card.title}
+          </p>
+
+          {card.description && (
+            <p class="text-xs text-white/40 mt-0.5 group-hover:text-white/60 transition-colors leading-snug line-clamp-1">
+              {card.description}
+            </p>
+          )}
+        </div>
+
+        <!-- Featured arrow -->
+        {card.featured && (
+          <svg
+            class="absolute right-4 bottom-4 text-[#E2FF00]/60 group-hover:text-[#E2FF00] group-hover:translate-x-0.5 transition-all duration-200"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        )}
+      </a>
+    );
+  })}
+</nav>

@@ -3,6 +3,7 @@ import Layout from '../layouts/LandingBuilderLayout.astro';
 import Navbar from '../components/landingbuilder/Navbar.astro';
 import Hero from '../components/landingbuilder/Hero.astro';
 import Problems from '../components/landingbuilder/Problems.astro';
+import VSL from '../components/landingbuilder/VSL.astro';
 import Qualification from '../components/landingbuilder/Qualification.astro';
 import Approach from '../components/landingbuilder/Approach.astro';
 import Transformation from '../components/landingbuilder/Transformation.astro';
@@ -11,10 +12,11 @@ import CTA from '../components/landingbuilder/CTA.astro';
 import Footer from '../components/landingbuilder/Footer.astro';
 ---
 
-<Layout title="LiammDev LANDINGPRO Strategic Professional Home">
+<Layout title="LiammDev LANDINGPRO — Landings que multiplican tu ROI">
   <Navbar />
   <Hero />
   <Problems />
+  <VSL />
   <Qualification />
   <Approach />
   <Transformation />
@@ -22,3 +24,98 @@ import Footer from '../components/landingbuilder/Footer.astro';
   <CTA />
   <Footer />
 </Layout>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Respect user preference
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+
+    // Hero content entrance (on load)
+    gsap.from('.lb-hero-content > *', {
+      y: 40,
+      opacity: 0,
+      stagger: 0.12,
+      duration: 0.9,
+      ease: 'power3.out',
+      delay: 0.2,
+    });
+
+    // VSL entrance
+    gsap.from('.lb-vsl-container', {
+      scale: 0.94,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-vsl',
+        start: 'top 80%',
+      },
+    });
+
+    // Qualification columns slide in from sides
+    gsap.from('.lb-qual-yes', {
+      x: -50,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-qualification',
+        start: 'top 75%',
+      },
+    });
+    gsap.from('.lb-qual-no', {
+      x: 50,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-qualification',
+        start: 'top 75%',
+      },
+    });
+
+    // Approach steps sequential stagger
+    gsap.from('.lb-approach-step', {
+      y: 30,
+      opacity: 0,
+      scale: 0.95,
+      stagger: 0.18,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-approach',
+        start: 'top 70%',
+      },
+    });
+
+    // Portfolio cards stagger from below
+    gsap.from('.lb-portfolio-card', {
+      y: 60,
+      opacity: 0,
+      stagger: 0.2,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-portfolio',
+        start: 'top 72%',
+      },
+    });
+
+    // CTA entrance
+    gsap.from('.lb-cta-content', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.lb-cta',
+        start: 'top 80%',
+      },
+    });
+  }
+</script>

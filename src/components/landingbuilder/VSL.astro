@@ -1,0 +1,115 @@
+---
+const metrics = [
+  { value: "20+", label: "Proyectos Entregados" },
+  { value: "$50k+", label: "en ROI Generado" },
+  { value: "100%", label: "Ownership del Código" },
+];
+---
+
+<section
+  id="vsl"
+  class="lb-vsl py-20 sm:py-28 bg-[#0d0d0d] border-y border-[#262626] overflow-hidden"
+  aria-labelledby="vsl-heading"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+    <!-- Label -->
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#E2FF00] mb-4 font-mono">
+      Prueba Social
+    </p>
+
+    <!-- Heading -->
+    <h2
+      id="vsl-heading"
+      class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-3 max-w-2xl"
+    >
+      Mirá cómo transformamos webs en
+      <span class="text-[#E2FF00]">activos que venden.</span>
+    </h2>
+    <p class="text-white/50 text-base mb-10 max-w-xl">
+      En menos de 4 minutos vas a entender por qué tu web actual no convierte, y qué haría diferente.
+    </p>
+
+    <!-- VSL Container -->
+    <div
+      class="lb-vsl-container relative aspect-video w-full rounded-2xl overflow-hidden border border-[#E2FF00]/10 bg-[#111] shadow-[0_0_60px_rgba(226,255,0,0.06)] group cursor-pointer"
+      role="button"
+      tabindex="0"
+      aria-label="Reproducir video de presentación (próximamente)"
+    >
+      <!-- Grid texture background -->
+      <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(#E2FF00 1px, transparent 1px), linear-gradient(90deg, #E2FF00 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+      <!-- Glow center -->
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(226,255,0,0.04),transparent)]"></div>
+
+      <!-- Play button -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-4">
+        <div class="relative">
+          <!-- Pulse rings -->
+          <div class="absolute inset-0 rounded-full bg-[#E2FF00]/10 animate-ping" style="animation-duration: 2s;"></div>
+          <div class="absolute inset-0 rounded-full bg-[#E2FF00]/5 scale-150 animate-ping" style="animation-duration: 2.5s; animation-delay: 0.5s;"></div>
+
+          <!-- Play circle -->
+          <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#E2FF00] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-[0_0_40px_rgba(226,255,0,0.3)]">
+            <svg
+              class="w-6 h-6 sm:w-8 sm:h-8 text-black ml-1"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+          </div>
+        </div>
+
+        <p class="text-white/40 text-xs sm:text-sm font-mono tracking-wider uppercase">
+          Video disponible próximamente
+        </p>
+      </div>
+
+      <!-- Coming soon badge -->
+      <div class="absolute top-4 right-4">
+        <span class="text-[10px] font-bold uppercase tracking-widest bg-[#E2FF00]/10 text-[#E2FF00]/70 border border-[#E2FF00]/20 px-3 py-1 rounded-full">
+          Próximamente
+        </span>
+      </div>
+
+      <!-- Duration badge -->
+      <div class="absolute bottom-4 left-4">
+        <span class="text-[11px] font-mono bg-black/60 text-white/40 px-2 py-0.5 rounded backdrop-blur-sm">
+          ~4 min
+        </span>
+      </div>
+    </div>
+
+    <!-- Trust metrics -->
+    <div class="mt-10 grid grid-cols-3 gap-4 sm:gap-8 border-t border-[#262626] pt-8">
+      {metrics.map((m) => (
+        <div class="text-center">
+          <p class="text-2xl sm:text-4xl font-extrabold text-[#E2FF00] leading-none mb-1">
+            {m.value}
+          </p>
+          <p class="text-xs sm:text-sm text-white/40 leading-snug">
+            {m.label}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-10 text-center">
+      <a
+        href="#apply"
+        class="inline-flex items-center gap-2 bg-[#E2FF00] text-black font-extrabold text-sm sm:text-base px-7 py-3.5 rounded-xl hover:bg-white transition-colors duration-200 shadow-[0_0_30px_rgba(226,255,0,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+        aria-label="Aplicar ahora para el servicio LANDINGPRO"
+      >
+        Aplicar Ahora
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
