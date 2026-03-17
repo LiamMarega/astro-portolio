@@ -6,6 +6,21 @@
       "sourceType": "github",
       "computedHash": "6962db07127ee540a56e4677f65576d0727668a1d67f7da8bc978f10791c2bfe"
     },
+    "feature-analyzer": {
+      "source": "notedit/happy-skills",
+      "sourceType": "github",
+      "computedHash": "2a586e4734bd78f00e3fe981c278311eb54793dfa545cbe62d1c7e921feafa7a"
+    },
+    "feature-dev": {
+      "source": "notedit/happy-skills",
+      "sourceType": "github",
+      "computedHash": "88689be79a44bac2873145d149cc7bd120f6f3eb896bbab99609cd05a58ecbcb"
+    },
+    "gsap-animation": {
+      "source": "notedit/happy-skills",
+      "sourceType": "github",
+      "computedHash": "59b6f5dadf39f48a5fe9f459430f454ca30383bab71899ba8db44f168a449fbd"
+    },
     "pdf": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -15,6 +30,11 @@
       "source": "anthropics/skills",
       "sourceType": "github",
       "computedHash": "6b8b859d26f93aa059c9870d1ab76b44ab69e3d6757ce4a03cc94cb760888073"
+    },
+    "react-animation": {
+      "source": "notedit/happy-skills",
+      "sourceType": "github",
+      "computedHash": "4f8448e3975fe921d824584f386cb7c94e3cc61348bc49c855064c27007fa99f"
     },
     "xlsx": {
       "source": "anthropics/skills",
