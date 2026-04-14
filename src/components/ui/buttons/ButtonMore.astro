@@ -104,7 +104,7 @@ const { link = 'www.google.com' } = Astro.props;
 </style>
 
 <script define:vars={{ link }} is:inline>
-  function openLink(e) {
+  function openLink() {
     console.log(link);
     window.open(link, '_blank');
   }

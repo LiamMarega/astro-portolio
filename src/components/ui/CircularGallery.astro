@@ -55,7 +55,7 @@ const {
 } = Astro.props;
 
 // Generate unique ID for this instance
-const galleryId = `circular-gallery-${Math.random().toString(36).substr(2, 9)}`;
+const galleryId = `circular-gallery-${Math.random().toString(36).substring(2, 11)}`;
 
 // Default demo items if none provided
 const defaultItems: GalleryItem[] = [
