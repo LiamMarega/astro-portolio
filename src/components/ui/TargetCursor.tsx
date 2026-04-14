@@ -8,6 +8,7 @@ export interface TargetCursorProps {
   hideDefaultCursor?: boolean;
   hoverDuration?: number;
   parallaxOn?: boolean;
+  color?: string;
 }
 
 const TargetCursor: React.FC<TargetCursorProps> = ({
@@ -15,7 +16,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   spinDuration = 2,
   hideDefaultCursor = true,
   hoverDuration = 0.2,
-  parallaxOn = true
+  parallaxOn = true,
+  color = '#E2FF00'
 }) => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const cornersRef = useRef<NodeListOf<HTMLDivElement> | null>(null);
@@ -263,7 +265,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   if (isMobile) return null;
 
   return (
-    <div ref={cursorRef} className="target-cursor-wrapper">
+    <div ref={cursorRef} className="target-cursor-wrapper" style={{ '--cursor-color': color } as React.CSSProperties}>
       <div ref={dotRef} className="target-cursor-dot" />
       <div className="target-cursor-corner corner-tl" />
       <div className="target-cursor-corner corner-tr" />

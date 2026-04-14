@@ -74,7 +74,7 @@ const ogImage = new URL(image, Astro.url).href;
     <meta name="twitter:creator" content="@liammarega" />
 
     <!-- Structured Data -->
-    <script
+    <script is:inline
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
@@ -135,6 +135,19 @@ const ogImage = new URL(image, Astro.url).href;
     }
     body {
       font-family: "HelveticaNeue", system-ui, sans-serif;
+    }
+
+    /* Glow pulse animation for Working on section */
+    @keyframes glow-pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(226, 255, 0, 0.08);
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(226, 255, 0, 0.2);
+      }
+    }
+    .animate-glow-pulse {
+      animation: glow-pulse 3s ease-in-out infinite;
     }
   </style>
 
