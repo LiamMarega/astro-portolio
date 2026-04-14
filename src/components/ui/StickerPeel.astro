@@ -248,6 +248,7 @@ const styleString = Object.entries(cssVars)
 
 <script>
     import { gsap } from "gsap";
+    // @ts-ignore - gsap types have casing mismatch between index.d.ts reference and package exports
     import { Draggable } from "gsap/Draggable";
 
     gsap.registerPlugin(Draggable);
