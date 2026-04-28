@@ -4,23 +4,28 @@ import Navbar from '../components/landingbuilder/Navbar.astro';
 import Hero from '../components/landingbuilder/Hero.astro';
 import Problems from '../components/landingbuilder/Problems.astro';
 import VSL from '../components/landingbuilder/VSL.astro';
-import Qualification from '../components/landingbuilder/Qualification.astro';
 import Approach from '../components/landingbuilder/Approach.astro';
 import Transformation from '../components/landingbuilder/Transformation.astro';
 import Portfolio from '../components/landingbuilder/Portfolio.astro';
+import Qualification from '../components/landingbuilder/Qualification.astro';
+import FAQ from '../components/landingbuilder/FAQ.astro';
 import CTA from '../components/landingbuilder/CTA.astro';
 import Footer from '../components/landingbuilder/Footer.astro';
 ---
 
-<Layout title="LiammDev LANDINGPRO — Landings que multiplican tu ROI">
+<Layout
+  title="LiammDev LANDINGPRO — Landing pages de alto rendimiento"
+  description="Diseño, copy y desarrollo de landing pages de alto rendimiento para negocios digitales con oferta validada que quieren convertir más tráfico en consultas, leads o ventas."
+>
   <Navbar />
   <Hero />
   <Problems />
   <VSL />
-  <Qualification />
   <Approach />
   <Transformation />
   <Portfolio />
+  <Qualification />
+  <FAQ />
   <CTA />
   <Footer />
 </Layout>
@@ -31,91 +36,58 @@ import Footer from '../components/landingbuilder/Footer.astro';
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Respect user preference
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReduced) {
-
-    // Hero content entrance (on load)
     gsap.from('.lb-hero-content > *', {
-      y: 40,
+      y: 34,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 0.15,
+    });
+
+    gsap.from('.lb-vsl-container', {
+      scale: 0.96,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.lb-vsl', start: 'top 80%' },
+    });
+
+    gsap.from('.lb-approach-step', {
+      y: 28,
       opacity: 0,
       stagger: 0.12,
-      duration: 0.9,
+      duration: 0.65,
       ease: 'power3.out',
-      delay: 0.2,
+      scrollTrigger: { trigger: '.lb-approach', start: 'top 70%' },
     });
 
-    // VSL entrance
-    gsap.from('.lb-vsl-container', {
-      scale: 0.94,
+    gsap.from('.lb-portfolio-card', {
+      y: 36,
       opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-vsl',
-        start: 'top 80%',
-      },
-    });
-
-    // Qualification columns slide in from sides
-    gsap.from('.lb-qual-yes', {
-      x: -50,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-qualification',
-        start: 'top 75%',
-      },
-    });
-    gsap.from('.lb-qual-no', {
-      x: 50,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-qualification',
-        start: 'top 75%',
-      },
-    });
-
-    // Approach steps sequential stagger
-    gsap.from('.lb-approach-step', {
-      y: 30,
-      opacity: 0,
-      scale: 0.95,
-      stagger: 0.18,
+      stagger: 0.12,
       duration: 0.7,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-approach',
-        start: 'top 70%',
-      },
+      scrollTrigger: { trigger: '.lb-portfolio', start: 'top 72%' },
     });
 
-    // Portfolio cards stagger from below
-    gsap.from('.lb-portfolio-card', {
-      y: 60,
+    gsap.from('.lb-qual-yes, .lb-qual-no', {
+      y: 34,
       opacity: 0,
-      stagger: 0.2,
-      duration: 0.9,
+      stagger: 0.14,
+      duration: 0.7,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-portfolio',
-        start: 'top 72%',
-      },
+      scrollTrigger: { trigger: '.lb-qualification', start: 'top 75%' },
     });
 
-    // CTA entrance
     gsap.from('.lb-cta-content', {
       y: 30,
       opacity: 0,
       duration: 0.8,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.lb-cta',
-        start: 'top 80%',
-      },
+      scrollTrigger: { trigger: '.lb-cta', start: 'top 80%' },
     });
   }
 </script>
