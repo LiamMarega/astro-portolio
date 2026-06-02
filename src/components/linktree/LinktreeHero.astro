@@ -35,9 +35,9 @@ const socials = [
 ];
 ---
 
-<header class="flex flex-col items-center text-center mb-10 mt-4">
+<header class="flex flex-col items-center text-center mb-12 mt-4">
   <!-- Avatar -->
-  <div class="relative mb-5">
+  <div class="relative mb-5" data-hero>
     <div
       class="absolute inset-0 rounded-full bg-[#E2FF00]/20 blur-2xl scale-150"
     >
@@ -54,19 +54,43 @@ const socials = [
   </div>
 
   <!-- Name -->
-  <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1">
+  <h1
+    class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1"
+    data-hero
+  >
     {name}
   </h1>
 
   <!-- Tagline -->
   <p
-    class="text-sm sm:text-base text-white/50 font-light tracking-wide animate-pulse-soft"
+    class="text-sm sm:text-base text-white/50 font-light tracking-wide"
+    data-hero
   >
     {tagline}
   </p>
 
+  <!-- Availability status -->
+  <div
+    class="mt-3 inline-flex items-center gap-2 rounded-full border border-[#E2FF00]/20 bg-[#E2FF00]/5 px-3 py-1"
+    data-hero
+  >
+    <span class="relative flex h-2 w-2" aria-hidden="true">
+      <span
+        class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E2FF00]/70"
+      ></span>
+      <span class="relative inline-flex h-2 w-2 rounded-full bg-[#E2FF00]"></span>
+    </span>
+    <span class="text-xs font-medium text-white/70"
+      >Disponible para proyectos</span
+    >
+  </div>
+
   <!-- Social strip -->
-  <nav aria-label="Redes sociales" class="flex items-center gap-4 mt-5">
+  <nav
+    aria-label="Redes sociales"
+    class="flex items-center gap-4 mt-5"
+    data-hero
+  >
     {
       socials.map((s) => (
         <a
@@ -83,17 +107,3 @@ const socials = [
   </nav>
 </header>
 
-<style>
-  @keyframes pulse-soft {
-    0%,
-    100% {
-      opacity: 0.5;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
-  .animate-pulse-soft {
-    animation: pulse-soft 4s ease-in-out infinite;
-  }
-</style>

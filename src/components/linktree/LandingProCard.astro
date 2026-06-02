@@ -1,0 +1,90 @@
+---
+const features = ["Estrategia", "Diseño premium", "Performance"];
+---
+
+<a
+  href="/landing-builder"
+  data-reveal
+  data-cursor-scale
+  aria-label="Sistema Landing PRO — landing pages de alto rendimiento"
+  class="cursor-target group relative block w-full max-w-lg overflow-hidden rounded-2xl border border-[#E2FF00]/25 bg-white/[0.02] p-5 sm:p-6 ring-1 ring-inset ring-white/5 shadow-[0_16px_50px_-20px_rgba(226,255,0,0.35)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/50 hover:shadow-[0_24px_70px_-18px_rgba(226,255,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/70"
+>
+  <!-- Ambient glow -->
+  <div
+    class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#E2FF00]/20 blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+    aria-hidden="true"
+  >
+  </div>
+  <!-- Base tint gradient -->
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#E2FF00]/[0.07] via-transparent to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative flex flex-col gap-4">
+    <!-- Top row: icon + badge -->
+    <div class="flex items-start justify-between">
+      <span
+        class="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E2FF00]/30 bg-[#E2FF00]/10 text-[#E2FF00] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
+        aria-hidden="true"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13l0-8z"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linejoin="round"></path>
+        </svg>
+      </span>
+
+      <span
+        class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#E2FF00] bg-[#E2FF00]/10 border border-[#E2FF00]/20 px-2.5 py-1 rounded-full"
+      >
+        Para clientes
+      </span>
+    </div>
+
+    <!-- Title + subtitle -->
+    <div>
+      <h3
+        class="text-xl sm:text-2xl font-bold tracking-tight text-white text-balance leading-tight"
+      >
+        Sistema Landing PRO
+      </h3>
+      <p class="mt-1.5 text-sm text-white/55 leading-relaxed max-w-[42ch]">
+        Landing pages de alto rendimiento que convierten visitas en clientes.
+      </p>
+    </div>
+
+    <!-- Feature chips -->
+    <div class="flex flex-wrap gap-2">
+      {
+        features.map((f) => (
+          <span class="text-xs font-medium text-white/70 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
+            {f}
+          </span>
+        ))
+      }
+    </div>
+
+    <!-- CTA row -->
+    <div class="flex items-center justify-between border-t border-white/8 pt-4">
+      <span class="text-sm font-semibold text-[#E2FF00]">Ver el sistema</span>
+      <span
+        class="flex h-9 w-9 items-center justify-center rounded-full bg-[#E2FF00] text-black transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-8deg]"
+        aria-hidden="true"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </span>
+    </div>
+  </div>
+</a>

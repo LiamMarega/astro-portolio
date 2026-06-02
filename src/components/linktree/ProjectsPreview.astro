@@ -1,0 +1,57 @@
+---
+import { getProjects } from "../../data/projects";
+
+const projects = getProjects().slice(0, 4);
+---
+
+<div
+  class="w-full max-w-lg overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+  data-reveal
+>
+  <div class="flex gap-3 pb-1">
+    {
+      projects.map((p) => (
+        <a
+          href={`/portfolio#${p.id}`}
+          data-cursor-scale
+          aria-label={`${p.title} — ver en portfolio`}
+          class="cursor-target group relative snap-start shrink-0 w-[180px] overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] ring-1 ring-inset ring-white/5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/40 hover:shadow-[0_16px_40px_-12px_rgba(226,255,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60"
+        >
+          <div class="relative h-[120px] overflow-hidden">
+            <img
+              src={p.images[0].src}
+              alt={p.images[0].alt}
+              width="180"
+              height="120"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"
+              aria-hidden="true"
+            />
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 p-3">
+            <p class="text-sm font-bold text-white leading-tight truncate">
+              {p.title}
+            </p>
+            <p class="text-[11px] text-white/50 mt-0.5">
+              {p.techStack.length} tecnologías
+            </p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>

@@ -2,6 +2,9 @@
 import LinktreeLayout from "../layouts/LinktreeLayout.astro";
 import LinktreeHero from "../components/linktree/LinktreeHero.astro";
 import LinktreeGrid from "../components/linktree/LinktreeGrid.astro";
+import SectionHeader from "../components/linktree/SectionHeader.astro";
+import LandingProCard from "../components/linktree/LandingProCard.astro";
+import ProjectsPreview from "../components/linktree/ProjectsPreview.astro";
 import TargetCursor from "../components/ui/TargetCursor";
 
 interface Project {
@@ -16,7 +19,8 @@ interface Project {
   disabled?: boolean;
 }
 
-const workingOn: Project[] = [
+// Builder — apps propias en desarrollo
+const builder: Project[] = [
   {
     title: "SwipeLoop",
     url: "https://swipeloop.app",
@@ -28,42 +32,27 @@ const workingOn: Project[] = [
   },
 ];
 
-const cards: Project[] = [
-  {
-    title: "Portfolio",
-    url: "/portfolio",
-    icon: "◈",
-    description: "Proyectos y trabajos recientes",
-    featured: false,
-  },
-  // {
-  //   title: "LANDINGPRO",
-  //   url: "/landing-builder",
-  //   icon: "⚡",
-  //   description: "Landings que convierten a $1000+",
-  //   featured: true,
-  //   badge: "OPEN",
-  // },
-  
+// Creador — todas mis redes
+const socials: Project[] = [
   {
     title: "Instagram",
     url: "https://instagram.com/liammdev",
     icon: "IG",
-    featured: false,
+    description: "Contenido & detrás de escena",
     external: true,
   },
   {
     title: "YouTube",
     url: "https://youtube.com/@liammdev",
     icon: "YT",
-    featured: false,
+    description: "Tutoriales & builds",
     external: true,
   },
   {
     title: "GitHub",
     url: "https://github.com/liammarega",
     icon: "GH",
-    featured: false,
+    description: "Código & open source",
     external: true,
   },
   {
@@ -71,158 +60,162 @@ const cards: Project[] = [
     url: "mailto:liammaregadevelop@gmail.com,liammarega85@gmail.com",
     icon: "@",
     description: "liammaregadevelop@gmail.com",
-    featured: false,
-  },
-  {
-    title: "Gallery",
-    url: "/gallery",
-    icon: "▣",
-    description: "Visual & diseño",
-    featured: false,
-    disabled: true,
-  },
-  {
-    title: "Newspaper",
-    url: "/newspaper",
-    icon: "✦",
-    description: "Editorial & contenido",
-    featured: false,
-    disabled: true,
   },
 ];
 ---
 
 <LinktreeLayout
   title="Liam Marega — Links | Frontend Developer & Digital Strategist"
-  description="Hub central de Liam Marega. Portfolio, LANDINGPRO, Newspaper, Gallery y todas mis redes en un solo lugar."
+  description="Hub central de Liam Marega. Sistema Landing PRO, proyectos, apps y todas mis redes en un solo lugar."
 >
   <TargetCursor client:only="react" color="#E2FF00" />
 
   <main
-    class="relative z-10 min-h-screen flex flex-col items-center px-4 py-14 sm:py-20"
+    class="relative z-10 min-h-[100dvh] flex flex-col items-center gap-12 px-4 py-14 sm:py-20"
   >
     <LinktreeHero />
 
-    <!-- Working on Section -->
-    <section class="w-full max-w-lg mb-6">
-      <p class="text-xs font-bold uppercase tracking-widest text-white/30 mb-3 ml-1">
-        Working on
-      </p>
-      <nav aria-label="Proyectos en desarrollo" class="grid grid-cols-1 gap-3">
-        {workingOn.map((project) => {
-          const isExternal = project.url.startsWith("http");
-          const isDisabled = project.disabled;
+    <!-- Sistema Landing PRO — oferta para clientes -->
+    <section class="w-full flex flex-col items-center">
+      <SectionHeader
+        title="Sistema Landing PRO"
+        meta="Para clientes que necesitan una landing que convierte"
+      />
+      <LandingProCard />
+    </section>
 
-          if (isDisabled) {
+    <!-- Proyectos — credibilidad para empresas -->
+    <section class="w-full flex flex-col items-center">
+      <SectionHeader
+        title="Proyectos"
+        meta="Trabajos para empresas y startups"
+        href="/portfolio"
+        cta="Ver todos"
+      />
+      <ProjectsPreview />
+    </section>
+
+    <!-- Builder — apps propias -->
+    <section class="w-full flex flex-col items-center">
+      <SectionHeader title="Builder" meta="Apps que estoy construyendo" />
+      <nav
+        aria-label="Apps en desarrollo"
+        class="w-full max-w-lg grid grid-cols-1 gap-3"
+        data-reveal
+      >
+        {
+          builder.map((project) => {
+            const isExternal = project.url.startsWith("http");
             return (
-              <div
-                aria-label={`${project.title} - Coming soon`}
-                class="relative flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm cursor-not-allowed opacity-40"
+              <a
+                href={project.url}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                data-cursor-scale
+                aria-label={project.title}
+                class="cursor-target group relative flex items-center gap-4 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-4 ring-1 ring-inset ring-white/5 shadow-[0_10px_30px_-14px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#E2FF00]/40 hover:shadow-[0_16px_44px_-14px_rgba(226,255,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60"
               >
-                <!-- Icon -->
+                <div
+                  class="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#E2FF00]/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  aria-hidden="true"
+                />
+
                 {project.image ? (
                   <img
                     src={project.icon}
                     alt={`${project.title} icon`}
                     width="48"
                     height="48"
-                    class="w-12 h-12 rounded-lg object-cover border border-white/10"
+                    class="relative h-12 w-12 rounded-lg object-cover border border-white/10"
                   />
                 ) : (
-                  <span class="text-2xl text-white/40" aria-hidden="true">
+                  <span class="relative text-2xl text-[#E2FF00]" aria-hidden="true">
                     {project.icon}
                   </span>
                 )}
 
-                <!-- Content -->
-                <div class="flex-1 min-w-0">
+                <div class="relative flex-1 min-w-0">
                   <div class="flex items-center gap-2 mb-1">
-                    <p class="font-bold text-base text-white/50 truncate">
+                    <p class="font-bold text-base text-white truncate">
                       {project.title}
                     </p>
-                    <span class="text-[9px] font-bold uppercase tracking-widest text-white/40 bg-white/10 px-2 py-0.5 rounded-full">
-                      COMING SOON
-                    </span>
+                    {project.badge && (
+                      <span class="text-[9px] font-bold uppercase tracking-[0.15em] text-[#E2FF00] bg-[#E2FF00]/10 border border-[#E2FF00]/20 px-2 py-0.5 rounded-full">
+                        {project.badge}
+                      </span>
+                    )}
                   </div>
-                  <p class="text-xs text-white/30 truncate">
+                  <p class="text-xs text-white/50 truncate">
                     {project.description}
                   </p>
                 </div>
-              </div>
+
+                <svg
+                  class="relative w-5 h-5 text-[#E2FF00]/60 group-hover:text-[#E2FF00] group-hover:translate-x-0.5 transition-all duration-200"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 10h12M12 6l4 4-4 4"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
             );
-          }
-
-          return (
-            <a
-              href={project.url}
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener noreferrer" : undefined}
-              data-cursor-scale
-              aria-label={project.title}
-              class:list={[
-                "cursor-target group relative flex items-center gap-4 p-4 rounded-xl border border-[#E2FF00]/30 bg-[#E2FF00]/5 backdrop-blur-sm",
-                "hover:border-[#E2FF00]/60 hover:bg-[#E2FF00]/10 hover:shadow-[0_0_32px_rgba(226,255,0,0.15)]",
-                "transition-all duration-300 ease-out hover:-translate-y-0.5",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60",
-                "animate-glow-pulse"
-              ]}
-            >
-              <!-- Glow effect behind -->
-              <div class="absolute inset-0 rounded-xl bg-[#E2FF00]/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <!-- Icon -->
-              {project.image ? (
-                <img
-                  src={project.icon}
-                  alt={`${project.title} icon`}
-                  width="48"
-                  height="48"
-                  class="w-12 h-12 rounded-lg object-cover border border-white/10"
-                />
-              ) : (
-                <span class="text-2xl text-[#E2FF00]" aria-hidden="true">
-                  {project.icon}
-                </span>
-              )}
-
-              <!-- Content -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <p class="font-bold text-base text-white truncate">
-                    {project.title}
-                  </p>
-                  {project.badge && (
-                    <span class="text-[9px] font-bold uppercase tracking-widest text-[#E2FF00] bg-[#E2FF00]/10 px-2 py-0.5 rounded-full animate-pulse">
-                      {project.badge}
-                    </span>
-                  )}
-                </div>
-                <p class="text-xs text-white/50 truncate">
-                  {project.description}
-                </p>
-              </div>
-
-              <!-- Arrow -->
-              <svg
-                class="w-5 h-5 text-[#E2FF00]/60 group-hover:text-[#E2FF00] group-hover:translate-x-0.5 transition-all duration-200"
-                viewBox="0 0 20 20"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          );
-        })}
+          })
+        }
       </nav>
     </section>
 
-    <LinktreeGrid cards={cards} />
+    <!-- Redes — el creador -->
+    <section class="w-full flex flex-col items-center">
+      <SectionHeader title="Redes" meta="Seguime y conectemos" />
+      <LinktreeGrid cards={socials} />
+    </section>
 
-    <footer class="mt-12 text-center">
+    <footer class="mt-4 text-center">
       <p class="text-xs text-white/20 tracking-widest uppercase">
         liammarega.com · {new Date().getFullYear()}
       </p>
     </footer>
   </main>
 </LinktreeLayout>
+
+<script>
+  import gsap from "gsap";
+  import ScrollTrigger from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    // Hero intro on load
+    gsap.from("[data-hero]", {
+      y: 24,
+      autoAlpha: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      stagger: 0.08,
+    });
+
+    // Section reveals on scroll
+    gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+      gsap.from(el, {
+        y: 32,
+        autoAlpha: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom-=60",
+          once: true,
+        },
+      });
+    });
+  });
+</script>
