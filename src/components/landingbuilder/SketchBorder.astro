@@ -1,0 +1,24 @@
+---
+// Hand-drawn pencil rectangle border. The path is generated client-side
+// (sized to the parent) by the page-level sketch-border script; the
+// #lbPencil SVG filter adds the organic wobble.
+interface Props {
+  pad?: number;
+}
+const { pad = 3 } = Astro.props;
+---
+
+<svg
+  class="sketch-border"
+  data-pad={pad}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  style="filter:url(#lbPencil)"
+>
+  <path
+    fill="none"
+    stroke="rgba(70,55,28,0.30)"
+    stroke-width="1.3"
+    stroke-linecap="round"
+    stroke-linejoin="round"></path>
+</svg>

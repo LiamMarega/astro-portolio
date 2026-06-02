@@ -2,29 +2,38 @@
 import Layout from '../layouts/LandingBuilderLayout.astro';
 import Navbar from '../components/landingbuilder/Navbar.astro';
 import Hero from '../components/landingbuilder/Hero.astro';
+import Trust from '../components/landingbuilder/Trust.astro';
 import Problems from '../components/landingbuilder/Problems.astro';
 import VSL from '../components/landingbuilder/VSL.astro';
+import TornDivider from '../components/landingbuilder/TornDivider.astro';
 import Approach from '../components/landingbuilder/Approach.astro';
 import Transformation from '../components/landingbuilder/Transformation.astro';
 import Portfolio from '../components/landingbuilder/Portfolio.astro';
 import Qualification from '../components/landingbuilder/Qualification.astro';
+import Caso from '../components/landingbuilder/Caso.astro';
 import FAQ from '../components/landingbuilder/FAQ.astro';
 import CTA from '../components/landingbuilder/CTA.astro';
 import Footer from '../components/landingbuilder/Footer.astro';
 ---
 
 <Layout
-  title="LiammDev LANDINGPRO — Landing pages de alto rendimiento"
-  description="Diseño, copy y desarrollo de landing pages de alto rendimiento para negocios digitales con oferta validada que quieren convertir más tráfico en consultas, leads o ventas."
+  title="LiamDev — Landings que convierten tráfico en oportunidades reales"
+  description="Diseño y desarrollo de landing pages estratégicas para coaches, consultores, marcas personales y negocios digitales que quieren vender más."
 >
   <Navbar />
   <Hero />
+  <Trust />
   <Problems />
   <VSL />
-  <Approach />
-  <Transformation />
+  <TornDivider />
+  <div class="band">
+    <Approach />
+    <Transformation />
+  </div>
+  <TornDivider up />
   <Portfolio />
   <Qualification />
+  <Caso />
   <FAQ />
   <CTA />
   <Footer />
@@ -34,60 +43,227 @@ import Footer from '../components/landingbuilder/Footer.astro';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
-    gsap.from('.lb-hero-content > *', {
-      y: 34,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 0.15,
-    });
+  // ---------- Reveal on scroll ----------
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      }
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -60px 0px' },
+  );
+  document.querySelectorAll('.reveal, .hl, .scribble').forEach((el) => io.observe(el));
 
-    gsap.from('.lb-vsl-container', {
-      scale: 0.96,
-      opacity: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '.lb-vsl', start: 'top 80%' },
-    });
-
-    gsap.from('.lb-approach-step', {
-      y: 28,
-      opacity: 0,
-      stagger: 0.12,
-      duration: 0.65,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '.lb-approach', start: 'top 70%' },
-    });
-
-    gsap.from('.lb-portfolio-card', {
-      y: 36,
-      opacity: 0,
-      stagger: 0.12,
-      duration: 0.7,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '.lb-portfolio', start: 'top 72%' },
-    });
-
-    gsap.from('.lb-qual-yes, .lb-qual-no', {
-      y: 34,
-      opacity: 0,
-      stagger: 0.14,
-      duration: 0.7,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '.lb-qualification', start: 'top 75%' },
-    });
-
-    gsap.from('.lb-cta-content', {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '.lb-cta', start: 'top 80%' },
-    });
+  // ---------- Hand-drawn pencil borders (size to parent) ----------
+  function sizeSketch(svg: SVGSVGElement) {
+    const parent = svg.parentElement;
+    if (!parent) return;
+    const r = parent.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    if (!w || !h) return;
+    const pad = parseFloat(svg.dataset.pad || '3');
+    const rad = 10;
+    const x0 = pad + 1, y0 = pad + 1, x1 = w - pad - 1, y1 = h - pad - 1;
+    const d =
+      `M ${x0 + rad} ${y0} L ${x1 - rad} ${y0} Q ${x1} ${y0} ${x1} ${y0 + rad} ` +
+      `L ${x1} ${y1 - rad} Q ${x1} ${y1} ${x1 - rad} ${y1} ` +
+      `L ${x0 + rad} ${y1} Q ${x0} ${y1} ${x0} ${y1 - rad} ` +
+      `L ${x0} ${y0 + rad} Q ${x0} ${y0} ${x0 + rad} ${y0} Z`;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.querySelector('path')?.setAttribute('d', d);
   }
+  const sketches = document.querySelectorAll<SVGSVGElement>('svg.sketch-border[data-pad]');
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver((entries) => {
+      for (const en of entries) {
+        const svg = en.target.querySelector<SVGSVGElement>('svg.sketch-border[data-pad]');
+        if (svg) sizeSketch(svg);
+      }
+    });
+    sketches.forEach((svg) => { if (svg.parentElement) ro.observe(svg.parentElement); sizeSketch(svg); });
+  } else {
+    sketches.forEach(sizeSketch);
+    window.addEventListener('resize', () => sketches.forEach(sizeSketch));
+  }
+
+  // ---------- GSAP: magnetic buttons + parallax + drift ----------
+  if (!reduce) {
+    const fine = window.matchMedia('(pointer: fine)').matches;
+    if (fine) {
+      document.querySelectorAll<HTMLElement>('.magnet').forEach((el) => {
+        const qx = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3' });
+        const qy = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3' });
+        const move = (e: MouseEvent) => {
+          const r = el.getBoundingClientRect();
+          qx((e.clientX - (r.left + r.width / 2)) * 0.3);
+          qy((e.clientY - (r.top + r.height / 2)) * 0.3);
+        };
+        const leave = () => { qx(0); qy(0); };
+        el.addEventListener('mousemove', move);
+        el.addEventListener('mouseleave', leave);
+      });
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+    document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
+      const spd = parseFloat(el.getAttribute('data-parallax') || '0.2') || 0.2;
+      gsap.to(el, {
+        yPercent: spd * -100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el.closest('section, .caso-wrap, .vsl-wrap') || el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    });
+    document.querySelectorAll<HTMLElement>('[data-drift]').forEach((el, i) => {
+      gsap.to(el, { y: '+=18', x: '+=12', rotation: '+=4', duration: 6 + i, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    });
+    ScrollTrigger.refresh();
+
+    // ---------- Hero collage parallax on scroll ----------
+    const hero: Record<string, [number, number]> = {
+      photo: [1.2, -0.04], usd: [2.5, 0.05], dev: [-1.6, 0.07], seal: [-14, 0.03],
+    };
+    const heroEls = Object.entries(hero)
+      .map(([k, v]) => [document.querySelector<HTMLElement>(`[data-hero="${k}"]`), v] as const)
+      .filter(([el]) => el);
+    if (heroEls.length) {
+      const onScroll = () => {
+        const y = window.scrollY;
+        for (const [el, [rot, mul]] of heroEls) {
+          (el as HTMLElement).style.transform = `rotate(${rot}deg) translateY(${y * mul}px)`;
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  }
+</script>
+
+<!-- Pencil cursor drawing (vanilla, desktop fine-pointer only) -->
+<script>
+  (function () {
+    if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = document.querySelector('.lb-root') as HTMLElement | null;
+    if (!root) return;
+
+    const LIFESPAN = 15000, ERASE_DUR = 1700, MOVE_MIN = 4, INK = '26, 22, 16';
+    const canvas = document.createElement('canvas');
+    canvas.id = 'lb-pencil-layer';
+    let ctx: CanvasRenderingContext2D;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function size() {
+      canvas.width = Math.floor(innerWidth * dpr);
+      canvas.height = Math.floor(innerHeight * dpr);
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+      ctx = canvas.getContext('2d')!;
+      ctx.scale(dpr, dpr);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    type Pt = { x: number; y: number };
+    type Stroke = { pts: Pt[]; done: boolean; finishedAt: number };
+    const strokes: Stroke[] = [];
+    let current: Stroke | null = null;
+    let drawing = false, moved = 0;
+
+    function isInteractive(el: EventTarget | null) {
+      return !!(el && (el as Element).closest && (el as Element).closest(
+        'a, button, input, textarea, select, label, [role="button"], .btn, .qf-opt, .vsl-frame, [data-no-pencil]'));
+    }
+
+    document.body.appendChild(canvas);
+    size();
+    window.addEventListener('resize', size);
+
+    // Points are stored in DOCUMENT coordinates (clientX + scroll) so the
+    // drawing stays anchored to the page and scrolls away with it.
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch' || e.button !== 0) return;
+      if (isInteractive(e.target)) return;
+      drawing = true; moved = 0;
+      current = { pts: [{ x: e.clientX + window.scrollX, y: e.clientY + window.scrollY }], done: false, finishedAt: 0 };
+    }, true);
+
+    window.addEventListener('pointermove', (e) => {
+      if (!drawing || !current) return;
+      const px = e.clientX + window.scrollX, py = e.clientY + window.scrollY;
+      const last = current.pts[current.pts.length - 1];
+      const d = Math.hypot(px - last.x, py - last.y);
+      if (d < 1.2) return;
+      moved += d;
+      current.pts.push({ x: px, y: py });
+      if (moved > MOVE_MIN && strokes.indexOf(current) === -1) {
+        strokes.push(current);
+        root.classList.add('pencil-drawing');
+      }
+    }, true);
+
+    function end() {
+      if (current && moved > MOVE_MIN) { current.done = true; current.finishedAt = performance.now(); }
+      else if (current) { const i = strokes.indexOf(current); if (i !== -1) strokes.splice(i, 1); }
+      drawing = false; current = null;
+      root!.classList.remove('pencil-drawing');
+    }
+    window.addEventListener('pointerup', end, true);
+    window.addEventListener('pointercancel', end, true);
+    window.addEventListener('blur', end);
+
+    function drawRange(pts: Pt[], from: number, to: number) {
+      if (to - from < 2) {
+        if (to - from === 1) {
+          const p = pts[from];
+          ctx.beginPath(); ctx.arc(p.x, p.y, 0.8, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + INK + ',0.85)'; ctx.fill();
+        }
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(pts[from].x, pts[from].y);
+      for (let i = from + 1; i < to - 1; i++) {
+        const mx = (pts[i].x + pts[i + 1].x) / 2;
+        const my = (pts[i].y + pts[i + 1].y) / 2;
+        ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
+      }
+      ctx.lineTo(pts[to - 1].x, pts[to - 1].y);
+      ctx.strokeStyle = 'rgba(' + INK + ',0.82)'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.strokeStyle = 'rgba(' + INK + ',0.18)'; ctx.lineWidth = 2.6; ctx.stroke();
+    }
+
+    function loop(now: number) {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      ctx.save();
+      // Shift document-space points into the current viewport.
+      ctx.translate(-window.scrollX, -window.scrollY);
+      for (let s = strokes.length - 1; s >= 0; s--) {
+        const st = strokes[s];
+        const n = st.pts.length;
+        let from = 0;
+        if (st.done) {
+          const age = now - st.finishedAt;
+          if (age > LIFESPAN) {
+            const f = (age - LIFESPAN) / ERASE_DUR;
+            from = Math.floor(f * (n - 1));
+            if (from >= n - 1) { strokes.splice(s, 1); continue; }
+          }
+        }
+        drawRange(st.pts, from, n);
+      }
+      ctx.restore();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
 </script>

@@ -1,86 +1,34 @@
 ---
+import BigBlob from "./BigBlob.astro";
 ---
 
-<section id="apply" class="lb-cta relative overflow-hidden bg-primary py-20 text-black lg:py-24">
-  <div class="absolute inset-0 opacity-5 cta-grid-bg"></div>
-  <div class="torn-paper-cta-top"></div>
-
-  <div class="lb-cta-content relative z-10 mx-auto max-w-6xl px-4 pt-8 sm:px-6 lg:px-8">
-    <div class="grid gap-12 lg:grid-cols-12 lg:items-start">
-      <div class="lg:col-span-5">
-        <span class="mb-5 inline-block border border-black bg-white px-4 py-1 font-mono text-xs font-bold uppercase tracking-[0.2em] shadow-[4px_4px_0_#000]">Solicitud calificada</span>
-        <h2 class="font-display text-4xl font-black leading-none tracking-tight lg:text-6xl">Construyamos una landing que trabaje por tu negocio.</h2>
-        <p class="mt-6 text-lg font-medium leading-8 opacity-90">Completá la solicitud y te respondo en menos de 24h si veo una oportunidad real de mejora.</p>
-
-        <div class="mt-8 space-y-4 border-2 border-black bg-black p-5 text-white shadow-[8px_8px_0_rgba(0,0,0,0.25)]">
-          <p class="font-display text-xl font-bold">Qué pasa después</p>
-          <ol class="space-y-3 text-sm leading-6 text-zinc-300">
-            <li><strong class="text-primary">1.</strong> Reviso tu web, oferta y contexto.</li>
-            <li><strong class="text-primary">2.</strong> Te respondo en menos de 24h.</li>
-            <li><strong class="text-primary">3.</strong> Si hay oportunidad real, coordinamos próximos pasos.</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="lg:col-span-7">
-        <form class="border-2 border-black bg-white p-6 shadow-[10px_10px_0_#000] sm:p-8" action="#" method="POST">
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="name" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Nombre</label>
-              <input id="name" name="name" type="text" autocomplete="name" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black" placeholder="Tu nombre" />
-            </div>
-            <div>
-              <label for="email" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black" placeholder="nombre@empresa.com" />
-            </div>
-            <div class="sm:col-span-2">
-              <label for="website" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Web actual</label>
-              <input id="website" name="website" type="url" class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black" placeholder="https://tuweb.com" />
-            </div>
-            <div class="sm:col-span-2">
-              <label for="offer" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Qué vendés</label>
-              <input id="offer" name="offer" type="text" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black" placeholder="Ej: consultoría, curso, ecommerce, servicio B2B..." />
-            </div>
-            <div>
-              <label for="goal" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Objetivo principal</label>
-              <select id="goal" name="goal" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black">
-                <option value="">Seleccionar</option>
-                <option>Más consultas calificadas</option>
-                <option>Más leads</option>
-                <option>Más ventas</option>
-                <option>Mejorar conversión de campañas</option>
-              </select>
-            </div>
-            <div>
-              <label for="traffic" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Inversión en tráfico</label>
-              <select id="traffic" name="traffic" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black">
-                <option value="">Seleccionar</option>
-                <option>Ya estoy invirtiendo</option>
-                <option>Voy a invertir pronto</option>
-                <option>Tengo tráfico orgánico</option>
-                <option>No tengo tráfico definido</option>
-              </select>
-            </div>
-            <div class="sm:col-span-2">
-              <label for="budget" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Presupuesto estimado</label>
-              <select id="budget" name="budget" required class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black">
-                <option value="">Seleccionar</option>
-                <option>USD 1,000 – 2,000</option>
-                <option>USD 2,000 – 5,000</option>
-                <option>Más de USD 5,000</option>
-                <option>Todavía no tengo presupuesto definido</option>
-              </select>
-            </div>
-            <div class="sm:col-span-2">
-              <label for="message" class="mb-1 block text-xs font-black uppercase tracking-wider text-gray-700">Mensaje</label>
-              <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 bg-gray-50 p-3 text-black outline-none transition-colors focus:border-black" placeholder="Contame contexto, problema actual y qué querés mejorar."></textarea>
-            </div>
-          </div>
-
-          <button class="mt-6 w-full border-2 border-black bg-black px-6 py-4 font-display text-lg font-black uppercase tracking-wide text-white transition-all hover:bg-white hover:text-black" type="submit">Enviar solicitud</button>
-          <p class="mt-4 text-center text-sm font-medium text-gray-600">Sin spam. Sin compromiso. Solo te contacto si puedo ayudarte.</p>
-        </form>
-      </div>
-    </div>
+<section id="contacto" class="final">
+  <BigBlob size={420} parallax={0.2} rotate="210deg" flip style="position:absolute;left:-170px;bottom:-40px;opacity:.9;z-index:0" />
+  <h2 class="reveal">
+    Convertí tu tráfico en <span class="hl">oportunidades reales.</span>
+  </h2>
+  <p class="sub reveal d1">
+    Si estás listo para una landing que trabaje por vos 24/7, hablemos.
+  </p>
+  <div class="actions reveal d2">
+    <a href="#calificar" class="btn btn-yellow magnet">
+      Solicitar diagnóstico
+      <span class="arr">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+    </a>
+    <a href="#calificar" class="btn magnet">
+      Ver si califico
+      <span class="arr">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+    </a>
+  </div>
+  <ul class="meta reveal d3">
+    <li><span class="dot"></span> Respuesta en menos de 24h</li>
+    <li><span class="dot"></span> Proyectos desde USD 600</li>
+  </ul>
+  <div class="side reveal d3">
+    Tu próxima conversión<br />empieza con una<br />decisión.
   </div>
 </section>

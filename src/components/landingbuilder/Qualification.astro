@@ -1,48 +1,39 @@
 ---
-const yesItems = [
-  'Ya tenés una oferta validada.',
-  'Tenés tráfico o vas a invertir en tráfico.',
-  'Querés una landing enfocada en conversión, no solo una web linda.',
-  'Buscás calidad, estrategia y performance.',
-  'Tenés presupuesto desde USD 1,000.',
-];
-
-const noItems = [
-  'Buscás lo más barato.',
-  'Necesitás algo para mañana.',
-  'No sabés qué vendés ni a quién.',
-  'Querés solo una plantilla visual.',
-  'No querés participar del proceso.',
-];
+import BigBlob from "./BigBlob.astro";
+import QualForm from "./QualForm.tsx";
 ---
 
-<section id="calificacion" class="lb-qualification relative bg-background-dark py-20 lg:py-24">
-  <div class="absolute inset-0 tech-grid opacity-10"></div>
-  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-12 max-w-3xl">
-      <span class="mb-3 block font-mono text-xs uppercase tracking-[0.24em] text-primary">Calificación</span>
-      <h2 class="font-display text-3xl font-black leading-tight text-white lg:text-5xl">¿Es este servicio para vos?</h2>
-      <p class="mt-5 text-lg leading-8 text-zinc-300">Esto filtra desde el inicio. Porque una buena landing no arregla una oferta indefinida ni reemplaza una estrategia de negocio.</p>
+<section id="calificar" class="block qual-block" style="padding-top:60px">
+  <BigBlob
+    size={460}
+    parallax={0.22}
+    rotate="170deg"
+    flip
+    style="position:absolute;left:-160px;bottom:-80px;opacity:.5;filter:blur(2px);z-index:0"
+  />
+  <div class="qual">
+    <div class="qual-intro">
+      <div class="kicker reveal">¿Calificamos?</div>
+      <h2 class="reveal d1" style="margin-top:16px;font-size:clamp(30px,3.2vw,44px);line-height:1.05">
+        Para dar resultados, el<br />proyecto tiene que ser<br />el indicado.
+      </h2>
+      <p class="reveal d2" style="margin-top:22px;max-width:400px;font-size:15px">
+        Respondo pocas solicitudes porque necesito asegurar que pueda generar un
+        impacto real en tu negocio. Completá este mini diagnóstico — toma 40
+        segundos.
+      </p>
+      <div class="qual-side reveal d3">
+        Sé honesto,<br />es para vos.
+        <div class="qual-arrow">
+          <svg viewBox="0 0 90 110" width="74" height="92" fill="none" aria-hidden="true">
+            <path d="M 50 8 C 78 18, 80 48, 38 60" stroke="#b88e00" stroke-width="3.2" stroke-linecap="round" fill="none"></path>
+            <path d="M 28 50 L 38 60 L 50 54" stroke="#b88e00" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+          </svg>
+        </div>
+      </div>
     </div>
-
-    <div class="grid gap-6 lg:grid-cols-2">
-      <article class="lb-qual-yes border border-green-500/25 bg-surface-dark p-7 lg:p-9">
-        <h3 class="mb-6 font-display text-2xl font-bold text-white">Es para vos si:</h3>
-        <ul class="space-y-4">
-          {yesItems.map((item) => (
-            <li class="flex gap-3 text-sm leading-6 text-zinc-300"><span class="mt-1 text-green-400">✓</span><span>{item}</span></li>
-          ))}
-        </ul>
-      </article>
-
-      <article class="lb-qual-no border border-red-500/25 bg-surface-dark p-7 lg:p-9">
-        <h3 class="mb-6 font-display text-2xl font-bold text-white">No es para vos si:</h3>
-        <ul class="space-y-4">
-          {noItems.map((item) => (
-            <li class="flex gap-3 text-sm leading-6 text-zinc-300"><span class="mt-1 text-red-400">×</span><span>{item}</span></li>
-          ))}
-        </ul>
-      </article>
+    <div class="qf-wrap reveal d2">
+      <QualForm client:visible />
     </div>
   </div>
 </section>

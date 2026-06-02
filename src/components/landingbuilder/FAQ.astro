@@ -1,32 +1,21 @@
 ---
-const faqs = [
-  ['¿Cuánto tarda?', 'Depende del alcance, pero normalmente un sprint de landing toma entre 2 y 4 semanas desde que tengo la información necesaria.'],
-  ['¿Necesito tener el copy listo?', 'No. El copy es parte del servicio. Lo que sí necesito es entender tu oferta, tu cliente, tu objetivo y tus objeciones comerciales.'],
-  ['¿Qué pasa después de aplicar?', 'Completás la solicitud, reviso tu caso y te respondo en menos de 24h. Si veo oportunidad real de mejora, coordinamos próximos pasos.'],
-  ['¿Trabajás con cualquier negocio?', 'No. Trabajo mejor con negocios que ya tienen una oferta validada y necesitan convertir mejor, especialmente si tienen tráfico o van a invertir en tráfico.'],
-  ['¿Incluye anuncios?', 'No. LANDINGPRO se enfoca en estrategia, copy, diseño y desarrollo de la landing. Puede prepararse para campañas, pero no incluye gestión publicitaria.'],
-  ['¿Por qué no usar una plantilla?', 'Porque una plantilla no entiende tu oferta, tus objeciones ni tu cliente. Puede verse bien, pero no necesariamente vende bien.'],
-  ['¿Cuánto cuesta?', 'Los proyectos empiezan desde USD 1,000. El precio final depende del alcance, integraciones, profundidad estratégica y necesidades técnicas.'],
+const items = [
+  { q: "¿En cuánto tiempo está lista mi landing?", a: "Entre 7 y 21 días hábiles según complejidad y flujo de feedback." },
+  { q: "¿Incluye copy o tengo que enviarlo?", a: "Incluye copy estratégico enfocado en conversión." },
+  { q: "¿Puedo editar mi landing después?", a: "Sí, te entrego todo listo para que vos o tu equipo puedan editar." },
+  { q: "¿Qué plataforma usás?", a: "Desarrollo a medida (Webflow / Next.js) según necesidades del proyecto." },
+  { q: "¿Ofrecés garantía?", a: "Sí, 14 días de soporte post-lanzamiento para ajustes y optimizaciones." },
 ];
 ---
 
-<section id="faq" class="relative border-y border-border-dark bg-surface-dark py-20 lg:py-24">
-  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-10 max-w-3xl">
-      <span class="mb-3 block font-mono text-xs uppercase tracking-[0.24em] text-primary">FAQ</span>
-      <h2 class="font-display text-3xl font-black leading-tight text-white lg:text-5xl">Preguntas que conviene responder antes de hablar.</h2>
-    </div>
-
-    <div class="divide-y divide-border-dark border border-border-dark bg-background-dark">
-      {faqs.map(([question, answer]) => (
-        <details class="group p-6 open:bg-surface-dark">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-5 font-display text-lg font-bold text-white">
-            {question}
-            <span class="text-primary transition-transform group-open:rotate-45">+</span>
-          </summary>
-          <p class="mt-4 max-w-3xl text-sm leading-7 text-zinc-400">{answer}</p>
-        </details>
-      ))}
-    </div>
+<section id="faq" class="block" style="padding-top:50px;padding-bottom:40px">
+  <div class="kicker reveal" style="margin-bottom:28px">Preguntas frecuentes</div>
+  <div class="faq-grid">
+    {items.map((it, i) => (
+      <div class={`faq-item reveal d${i + 1}`}>
+        <h4>{it.q}</h4>
+        <p>{it.a}</p>
+      </div>
+    ))}
   </div>
 </section>

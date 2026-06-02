@@ -1,33 +1,44 @@
 ---
+import BigBlob from "./BigBlob.astro";
 ---
 
-<section id="video" class="lb-vsl relative overflow-hidden bg-background-dark py-20 lg:py-24">
-  <div class="absolute inset-0 soft-gradient"></div>
-  <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-3xl text-center">
-      <span class="mb-3 block font-mono text-xs uppercase tracking-[0.24em] text-primary">Video / auditoría</span>
-      <h2 class="font-display text-3xl font-black leading-tight text-white lg:text-5xl">Mirá cómo detecto los errores que hacen que una landing pierda ventas</h2>
-      <p class="mt-5 text-lg leading-8 text-zinc-300">En este video te muestro cómo pienso una landing de conversión, qué miro primero y qué cambiaría en una página que recibe tráfico pero no genera suficientes consultas.</p>
-    </div>
-
-    <div class="lb-vsl-container mt-12 overflow-hidden border border-primary/15 bg-[#0f0f0f] shadow-[0_0_70px_rgba(226,255,0,0.06)]">
-      <!-- Reemplazar este bloque por un iframe real cuando el VSL esté grabado. -->
-      <div class="relative aspect-video w-full">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(226,255,0,0.18),transparent_35%),linear-gradient(135deg,#111,#050505)]"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:36px_36px] opacity-30"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-          <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-primary bg-primary text-black shadow-[0_0_40px_rgba(226,255,0,0.35)]">
-            <svg class="ml-1 h-9 w-9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-          </div>
-          <p class="font-mono text-xs uppercase tracking-[0.25em] text-primary">Auditoría de conversión · 4–7 min</p>
-          <p class="mt-3 max-w-xl font-display text-2xl font-bold text-white">Headline, oferta, prueba, CTA, orden de secciones, mobile y formulario.</p>
-        </div>
+<section id="vsl" class="block vsl-wrap">
+  <BigBlob
+    size={540}
+    parallax={0.16}
+    rotate="60deg"
+    flip
+    style="position:absolute;right:-190px;top:-70px;opacity:.5;filter:blur(1px);z-index:0"
+  />
+  <div class="vsl-grid">
+    <div class="vsl-head">
+      <div class="kicker reveal">En 90 segundos</div>
+      <h2 class="reveal d1" style="margin-top:14px;font-size:clamp(32px,3.6vw,50px);line-height:1.04">
+        Mirá cómo convierto<br /><span class="hl">tráfico en clientes.</span>
+      </h2>
+      <p class="reveal d2" style="margin-top:22px;max-width:380px;font-size:15.5px">
+        Un recorrido corto por mi forma de pensar cada landing: del mensaje a la
+        conversión, sin vueltas.
+      </p>
+      <div class="note vsl-note reveal d3">
+        <span class="tape sm" style="top:-10px;left:18px;transform:rotate(-9deg)"></span>
+        <p>Dale play ▶<br />después seguimos charlando.</p>
       </div>
     </div>
 
-    <div class="mt-8 flex flex-col items-center gap-3 text-center">
-      <a href="#apply" class="inline-flex items-center justify-center border-2 border-primary bg-primary px-7 py-4 font-black text-black shadow-brutal-white transition-all hover:-translate-y-1 hover:shadow-brutal">Solicitar diagnóstico</a>
-      <p class="max-w-xl text-sm leading-6 text-text-dim">Completás una solicitud breve. Reviso tu web y te respondo en menos de 24h si veo una oportunidad real de mejora.</p>
+    <div class="vsl-stage reveal d2">
+      <div class="vsl-frame" data-no-pencil>
+        <div class="vsl-poster">
+          <span class="vsl-grain"></span>
+          <button class="vsl-play magnet" type="button" aria-label="Reproducir video de presentación">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+          </button>
+          <span class="vsl-time">02:14</span>
+        </div>
+        <span class="tape xl" style="top:-15px;left:38%;transform:rotate(-3deg)"></span>
+        <span class="tape lg" style="bottom:-13px;right:40px;transform:rotate(6deg)"></span>
+        <span class="vsl-badge">VSL · Cómo funciona</span>
+      </div>
     </div>
   </div>
 </section>

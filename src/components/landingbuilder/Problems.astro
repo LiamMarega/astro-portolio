@@ -1,40 +1,43 @@
 ---
-const problems = [
-  {
-    title: 'Mensaje confuso',
-    text: 'El visitante no entiende rápido qué vendés, para quién es y por qué debería importarle.',
-  },
-  {
-    title: 'Diseño sin intención',
-    text: 'Se ve bien, pero no dirige la atención ni responde objeciones en el momento correcto.',
-  },
-  {
-    title: 'Poca prueba',
-    text: 'Sin casos, demostraciones, capturas o evidencia concreta, la confianza queda en el aire.',
-  },
-  {
-    title: 'CTA débil o sin contexto',
-    text: 'Pedir una llamada sin construir deseo antes genera dudas, fricción y abandono.',
-  },
+import SketchBorder from "./SketchBorder.astro";
+
+const items = [
+  { n: "01", t: "Mensaje confuso", p: "Tu visitante no entiende rápido qué vendés ni por qué debe interesarle." },
+  { n: "02", t: "Diseño sin intención", p: "Se ve bien, pero no dirige. No hay una estructura alineada al objetivo." },
+  { n: "03", t: "Poca prueba social", p: "Sin casos, testimonios o autoridad, la confianza que necesitas no aparece." },
+  { n: "04", t: "CTA débil o ausente", p: 'Pedir “más info” no convence. Pierdes oportunidades todos los días.' },
 ];
 ---
 
-<section id="problema" class="relative border-y border-border-dark bg-surface-dark py-20 lg:py-24">
-  <div class="absolute inset-0 tech-grid opacity-10"></div>
-  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl">
-      <span class="mb-3 block font-mono text-xs uppercase tracking-[0.24em] text-primary">Problema</span>
-      <h2 class="font-display text-3xl font-black leading-tight text-white lg:text-5xl">Tu tráfico no debería caer en una página que no sabe vender.</h2>
-      <p class="mt-5 text-lg leading-8 text-zinc-300">Muchos negocios invierten en contenido, anuncios y estrategia… pero mandan a sus prospectos a una web que se ve bien y aun así no explica, no convence y no guía hacia una acción clara.</p>
+<section class="block">
+  <div class="section-head">
+    <div>
+      <div class="kicker reveal">El problema</div>
+      <h2 class="reveal d1" style="margin-top:16px">
+        Tu tráfico no es el problema.<br />
+        Tu <span class="scribble">página sí.
+          <svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4 8 Q 60 1 110 6 T 196 5"></path>
+          </svg>
+        </span>
+      </h2>
+      <p class="body reveal d2">
+        Muchos negocios invierten en contenido, anuncios y estrategia, pero
+        mandan a su audiencia a una web que no explica, no convence y no guía
+        hacia una acción clara.
+      </p>
     </div>
-
-    <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {problems.map((problem, index) => (
-        <article class="border border-border-dark bg-background-dark p-6 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_34px_rgba(226,255,0,0.08)]">
-          <span class="font-mono text-xs text-primary">0{index + 1}</span>
-          <h3 class="mt-5 font-display text-xl font-bold text-white">{problem.title}</h3>
-          <p class="mt-3 text-sm leading-6 text-zinc-400">{problem.text}</p>
-        </article>
+    <div class="problem-grid reveal d2">
+      {items.map((it, i) => (
+        <div
+          class="card problem-card reveal"
+          style={`transition-delay:${0.1 + i * 0.08}s;transform:rotate(${i % 2 ? -0.5 : 0.5}deg)`}
+        >
+          <SketchBorder pad={3} />
+          <span class="num-flag">{it.n}</span>
+          <h4>{it.t}</h4>
+          <p>{it.p}</p>
+        </div>
       ))}
     </div>
   </div>

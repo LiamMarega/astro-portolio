@@ -1,32 +1,56 @@
 ---
-const deliverables = [
-  'Estrategia de conversión',
-  'Copy completo de landing',
-  'Diseño UI personalizado',
-  'Desarrollo responsive',
-  'Optimización de velocidad',
-  'Formulario de aplicación',
-  'Integraciones básicas',
-  'Revisión mobile',
-  'Entrega del código',
-  'Soporte inicial post-lanzamiento',
+const steps = [
+  {
+    n: "01",
+    t: "Descubrimiento",
+    p: "Entiendo tu negocio, oferta y cliente ideal.",
+    ic: '<path d="M12 22h8M13.5 26h5M9 14a7 7 0 1 1 14 0c0 2.5-1.6 4.5-3 6.5h-8c-1.4-2-3-4-3-6.5z" /><path d="M16 6V3M5 14H2M30 14h-3M7 7l-2-2M27 7l2-2" />',
+  },
+  {
+    n: "02",
+    t: "Estrategia",
+    p: "Definimos mensaje, estructura y objetivo principal.",
+    ic: '<circle cx="7" cy="9" r="1.6" /><circle cx="25" cy="9" r="1.6" /><circle cx="7" cy="23" r="1.6" /><circle cx="25" cy="23" r="1.6" /><circle cx="16" cy="16" r="1.6" /><path d="M8.4 10l6.5 5M23.6 10l-6.5 5M8.4 22l6.5-5M23.6 22l-6.5-5" />',
+  },
+  {
+    n: "03",
+    t: "Diseño & Copy",
+    p: "Creo el copy y diseño con foco total en conversión.",
+    ic: '<path d="M6 26l3-8 13-13 5 5-13 13z" /><path d="M19 8l5 5M7 25l3 2M5 28h6" />',
+  },
+  {
+    n: "04",
+    t: "Desarrollo",
+    p: "Desarrollo rápido, optimizado y 100% a medida.",
+    ic: '<rect x="4" y="7" width="24" height="18" rx="1.5" /><path d="M4 12h24M10 17l-2 2 2 2M14 21l2-4M22 17l2 2-2 2" />',
+  },
+  {
+    n: "05",
+    t: "Lanzamiento & Optimización",
+    p: "Publicamos, medimos y mejoramos para que convierta cada día más.",
+    ic: '<path d="M22 6c0 7-6 12-6 12s-6-5-6-12c0-3 3-4 6-4s6 1 6 4z" /><circle cx="16" cy="11" r="2" /><path d="M10 18l-3 3 5 1M22 18l3 3-5 1M13 24c0 2 1 4 3 4s3-2 3-4" />',
+  },
 ];
+const offsets = [0, 30, 10, 36, 16];
 ---
 
-<section id="incluye" class="relative bg-background-dark py-20 lg:py-24">
-  <div class="absolute inset-0 tech-grid opacity-10"></div>
-  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl">
-      <span class="mb-3 block font-mono text-xs uppercase tracking-[0.24em] text-primary">Qué incluye</span>
-      <h2 class="font-display text-3xl font-black leading-tight text-white lg:text-5xl">Qué incluye tu Landing Performance Sprint</h2>
-      <p class="mt-5 text-lg leading-8 text-zinc-300">No es una plantilla maquillada. Es una landing construida alrededor de tu oferta, tu cliente y el objetivo comercial que querés mover.</p>
+<section id="proceso" class="block" style="padding-top:50px">
+  <div class="process">
+    <div>
+      <div class="kicker reveal">Mi proceso</div>
+      <h2 class="reveal d1" style="margin-top:16px;font-size:clamp(32px,3.4vw,46px);line-height:1.04">
+        Un proceso claro.<br />Cero improvisación.
+      </h2>
     </div>
-
-    <div class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-      {deliverables.map((item) => (
-        <div class="flex min-h-28 items-start gap-3 border border-border-dark bg-surface-dark p-5 transition-all hover:border-primary/50">
-          <span class="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-black text-black">✓</span>
-          <p class="font-medium leading-6 text-white">{item}</p>
+    <div class="steps reveal d2">
+      {steps.map((s, i) => (
+        <div class="step" style={`transform:translateY(${offsets[i]}px)`}>
+          <div class="ic">
+            <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.ic} />
+          </div>
+          <span class="nn">{s.n}</span>
+          <h6>{s.t}</h6>
+          <p>{s.p}</p>
         </div>
       ))}
     </div>

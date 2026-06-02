@@ -1,85 +1,104 @@
 ---
-const diagnosticItems = [
-  { label: 'Claridad', detail: 'Oferta entendible en segundos', tone: 'text-primary' },
-  { label: 'Conversión', detail: 'Narrativa, objeciones y CTA', tone: 'text-secondary' },
-  { label: 'Velocidad', detail: 'Carga rápida para campañas', tone: 'text-green-400' },
-  { label: 'Mobile-first', detail: 'Pensada para tráfico real', tone: 'text-blue-400' },
-];
+// Precompute the yellow scallop seal path (deterministic).
+const cx = 50,
+  cy = 50,
+  r = 44,
+  teeth = 24;
+let scallop = "";
+for (let i = 0; i < teeth * 2; i++) {
+  const ang = (i / (teeth * 2)) * Math.PI * 2;
+  const rad = i % 2 === 0 ? r : r - 5;
+  const x = cx + Math.cos(ang) * rad;
+  const y = cy + Math.sin(ang) * rad;
+  scallop += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2);
+}
+scallop += "Z";
 ---
 
-<section id="hero" class="relative flex min-h-[92vh] flex-col justify-center overflow-hidden bg-background-dark pt-28 pb-20 lg:pt-36 lg:pb-28">
-  <div class="absolute inset-0 z-0">
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f24_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f24_1px,transparent_1px)] bg-[size:18px_28px] [mask-image:radial-gradient(ellipse_70%_45%_at_50%_0%,#000_65%,transparent_100%)]"></div>
-    <div class="absolute right-0 top-0 h-[520px] w-[520px] rounded-full bg-primary/20 blur-[140px]"></div>
-    <div class="absolute bottom-0 left-0 h-[520px] w-[520px] rounded-full bg-secondary/10 blur-[150px]"></div>
+<section class="hero">
+  <div>
+    <p class="hero-handwrite reveal">
+      Más que diseño, estrategia<br />
+      <span class="u">que genera oportunidades.</span>
+    </p>
+    <h1 class="reveal d1">
+      Diseño y desarrollo<br />
+      de landings que<br />
+      convierten tráfico<br />
+      en <span class="hl">oportunidades</span><br />
+      <span class="hl">reales.</span>
+    </h1>
+    <p class="lead reveal d2">
+      Creo landing pages de alto rendimiento para coaches, consultores, marcas
+      personales y negocios digitales que quieren vender más, captar más y
+      crecer de verdad.
+    </p>
+    <div class="actions reveal d3">
+      <a href="#contacto" class="btn btn-yellow magnet">
+        Solicitar diagnóstico
+        <span class="arr">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+        </span>
+      </a>
+      <a href="#calificar" class="btn magnet">
+        Ver si califico
+        <span class="arr">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+        </span>
+      </a>
+    </div>
+    <ul class="meta reveal d4">
+      <li><span class="dot"></span> Respuesta en menos de 24h</li>
+      <li><span class="dot"></span> Proyectos desde USD 600</li>
+    </ul>
   </div>
 
-  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="grid items-center gap-14 lg:grid-cols-12">
-      <div class="lb-hero-content lg:col-span-7">
-        <div class="mb-6 inline-flex items-center gap-3 border border-primary/20 bg-primary/5 px-4 py-2">
-          <span class="h-2 w-2 rounded-full bg-primary shadow-[0_0_20px_rgba(226,255,0,0.8)]"></span>
-          <span class="font-mono text-xs uppercase tracking-[0.22em] text-primary">Para negocios digitales con tráfico y oferta validada</span>
-        </div>
-
-        <h1 class="max-w-5xl font-display text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
-          No necesitás otra web linda. Necesitás una landing que convierta tráfico en
-          <span class="relative inline-block text-black">
-            <span class="relative z-10 px-2">oportunidades reales.</span>
-            <span class="absolute inset-0 -rotate-1 bg-primary"></span>
-          </span>
-        </h1>
-
-        <p class="mt-7 max-w-2xl text-base leading-8 text-zinc-300 sm:text-lg">
-          Diseño, copy y desarrollo landing pages de alto rendimiento para coaches, consultores, marcas personales, ecommerce y negocios digitales que quieren convertir más visitas en consultas, leads o ventas.
-        </p>
-
-        <div class="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <a
-            href="#apply"
-            class="group inline-flex w-full items-center justify-center border-2 border-primary bg-primary px-7 py-4 text-base font-black text-black shadow-brutal-white transition-all hover:-translate-y-1 hover:shadow-brutal sm:w-auto"
-          >
-            Solicitar diagnóstico
-            <svg class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-          </a>
-          <p class="max-w-xs text-sm leading-6 text-text-dim">
-            Respuesta en menos de 24h. Sin compromiso. Proyectos desde USD 1,000.
-          </p>
-        </div>
+  <div class="collage reveal d2">
+    <div class="photo-card" data-hero="photo">
+      <div class="backing"></div>
+      <div class="frame">
+        <img
+          src="/images/uploads/liam.jpg"
+          width="500"
+          height="560"
+          alt="Liam, desarrollador detrás de LiamDev"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
+      <span class="tape xl" style="top:-14px;left:30%;transform:rotate(-3deg)"></span>
+      <span class="tape lg" style="top:36px;right:-22px;transform:rotate(72deg)"></span>
+      <span class="tape sm" style="top:55%;left:-18px;transform:rotate(85deg)"></span>
+    </div>
 
-      <div class="lg:col-span-5">
-        <div class="relative overflow-hidden border border-border-dark bg-surface-dark/80 p-4 shadow-2xl">
-          <div class="absolute -right-24 -top-24 h-56 w-56 rounded-full bg-primary/20 blur-3xl"></div>
-          <div class="mb-5 flex items-center justify-between border-b border-border-dark pb-4">
-            <div class="flex gap-2" aria-hidden="true">
-              <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
-              <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
-              <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
-            </div>
-            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-text-dim">Landing audit panel</span>
-          </div>
+    <div class="note note-usd" data-hero="usd">
+      <span class="tape sm" style="top:-12px;left:50%;transform:translateX(-50%) rotate(-5deg)"></span>
+      <div class="desde">Desde</div>
+      <div class="amt">USD 600</div>
+      <div class="per">por landing</div>
+    </div>
 
-          <div class="space-y-3">
-            {diagnosticItems.map((item, index) => (
-              <div class="group border border-border-dark bg-background-dark p-4 transition-all hover:border-primary/40">
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class={`font-display text-lg font-bold ${item.tone}`}>{item.label}</p>
-                    <p class="mt-1 text-sm text-zinc-400">{item.detail}</p>
-                  </div>
-                  <span class="font-mono text-xs text-text-dim">0{index + 1}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div class="note alt note-dev" data-hero="dev">
+      <span class="tape lg" style="top:-14px;left:22px;transform:rotate(-12deg)"></span>
+      <span class="tape sm" style="top:-10px;right:30px;transform:rotate(8deg)"></span>
+      <p>
+        Desarrollo 100% a cargo mío.<br />
+        Sin outsourcing.<br />
+        Cupos limitados.
+      </p>
+    </div>
 
-          <div class="mt-5 border border-primary/20 bg-primary/5 p-4">
-            <p class="font-display text-xl font-bold text-white">El objetivo no es decorar.</p>
-            <p class="mt-2 text-sm leading-6 text-zinc-400">Es construir una página que explique, genere confianza y empuje la acción correcta sin fricción.</p>
-          </div>
-        </div>
-      </div>
+    <div class="seal" data-hero="seal">
+      <svg class="seal-svg" viewBox="0 0 100 100" aria-hidden="true">
+        <path d={scallop} fill="#ffe600"></path>
+        <circle cx="50" cy="50" r="36" fill="none" stroke="rgba(0,0,0,0.45)" stroke-width="1" stroke-dasharray="2 3"></circle>
+      </svg>
+      <span class="letter">L.</span>
+    </div>
+
+    <div class="particles" aria-hidden="true">
+      <span class="particle" style="top:70%;left:-4%;--r:-12deg;--dx:12px;--dy:-18px;animation-delay:-2s"></span>
+      <span class="particle" style="top:8%;left:20%;--r:8deg;--dx:-10px;--dy:10px;animation-delay:-6s;opacity:.3"></span>
     </div>
   </div>
 </section>

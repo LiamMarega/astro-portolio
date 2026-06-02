@@ -2,18 +2,12 @@
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-border-dark bg-background-dark py-10" role="contentinfo">
-  <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-    <div>
-      <span class="inline-block border border-white bg-black px-2 py-1 font-display text-xl font-black tracking-tight text-white">LiammDev LANDING<span class="text-primary">PRO</span></span>
-      <p class="mt-3 max-w-md text-sm leading-6 text-text-dim">Landing pages de alto rendimiento para negocios digitales con oferta validada, tráfico y foco en conversión.</p>
-    </div>
-    <div class="text-sm text-text-dim md:text-right">
-      <p>© {currentYear} LiammDev LANDINGPRO.</p>
-      <p class="mt-1">Diseño, copy y desarrollo para landings premium.</p>
-      <p class="mt-2">
-        <a href="/landing/builder/privacy" class="text-text-dim underline underline-offset-2 transition-colors hover:text-primary">Privacidad & Términos</a>
-      </p>
-    </div>
+<footer class="bot" role="contentinfo">
+  <div>© {currentYear} · LiamDev · Hecho con foco en {`{conversión}`}.</div>
+  <div class="links">
+    <a href="https://instagram.com/liammdev" target="_blank" rel="noopener">@LiammDev · Instagram</a>
+    <a href="https://x.com/liammdev" target="_blank" rel="noopener">@LiammDev · X</a>
+    <a href="mailto:hola@liammdev.com">hola@liammdev.com</a>
+    <a href="/landing/builder/privacy">Privacidad & Términos</a>
   </div>
 </footer>

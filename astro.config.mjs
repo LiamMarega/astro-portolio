@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
+  // Static by default; individual routes opt into on-demand rendering
+  // with `export const prerender = false` (e.g. the Resend form endpoint).
+  adapter: vercel(),
   integrations: [tailwind(), react()],
   
   // Performance optimizations

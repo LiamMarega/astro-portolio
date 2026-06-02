@@ -7,191 +7,165 @@ const lastUpdated = '29 de abril de 2026';
 ---
 
 <Layout
-  title="Política de Privacidad y Términos — LiammDev LANDINGPRO"
-  description="Política de privacidad, términos de servicio y limitación de responsabilidad de LiammDev LANDINGPRO."
+  title="Política de Privacidad y Términos — LiamDev"
+  description="Política de privacidad, términos de servicio y limitación de responsabilidad de LiamDev."
 >
-  <nav
-    class="fixed left-0 top-0 z-50 w-full border-b border-border-dark bg-background-dark/90 backdrop-blur-xl"
-    aria-label="Navegación"
-  >
-    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <a
-        href="/landing-builder"
-        class="inline-flex items-center border border-white bg-black px-3 py-1 font-display text-base font-black tracking-tight text-white transition-transform hover:-rotate-1"
-        aria-label="LiammDev LANDINGPRO - Volver al inicio"
-      >
-        LiammDev LANDING<span class="text-primary">PRO</span>
-      </a>
-      <a
-        href="/landing-builder"
-        class="text-sm font-medium text-text-dim transition-colors hover:text-white"
-      >
-        &larr; Volver
-      </a>
-    </div>
-  </nav>
+  <header class="nav" id="top">
+    <a class="logo" href="/landing-builder" aria-label="LiamDev — volver al inicio">LiamDev</a>
+    <span></span>
+    <a href="/landing-builder" class="btn" style="padding:9px 16px;font-size:11px">&larr; Volver</a>
+  </header>
 
-  <section class="mx-auto max-w-3xl px-4 pb-20 pt-32 sm:px-6 lg:px-8">
-    <header class="mb-16">
-      <h1 class="font-display text-3xl font-black tracking-tight text-text-light sm:text-4xl">
-        Privacidad &<br />
-        <span class="text-primary">Términos</span>
-      </h1>
-      <p class="mt-4 text-sm text-text-dim">
-        Última actualización: {lastUpdated}
-      </p>
-    </header>
+  <section class="block privacy">
+    <div class="kicker">Legal</div>
+    <h1>Privacidad &amp; <span class="hl in">Términos</span></h1>
+    <p class="lead">Última actualización: {lastUpdated}</p>
 
-    <div class="space-y-16 text-sm leading-7 text-text-dim">
-
+    <div class="prose">
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          1. Información del Desarrollador
-        </h2>
-        <div class="space-y-2 rounded-lg border border-border-dark bg-surface-dark p-6">
-          <p><span class="font-medium text-text-light">Nombre:</span> Liam Marega</p>
-          <p><span class="font-medium text-text-light">Ubicación:</span> Argentina</p>
-          <p><span class="font-medium text-text-light">Contacto:</span> +54 343 620 3341</p>
-          <p><span class="font-medium text-text-light">Email:</span>
-            <a href="mailto:liammaregadevelop@gmail.com" class="text-primary underline underline-offset-2 transition-opacity hover:opacity-80">
-              liammaregadevelop@gmail.com
-            </a>
-          </p>
+        <h2>1. Información del Desarrollador</h2>
+        <div class="note alt info">
+          <p><strong>Nombre:</strong> Liam Marega</p>
+          <p><strong>Ubicación:</strong> Argentina</p>
+          <p><strong>Contacto:</strong> +54 343 620 3341</p>
+          <p><strong>Email:</strong> <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a></p>
         </div>
       </article>
 
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          2. Política de Privacidad
-        </h2>
-        <div class="space-y-4">
-          <p>
-            <span class="font-medium text-text-light">Datos que recopilo.</span>
-            Únicamente la información que usted proporciona voluntariamente al contactarme: nombre, email, número de teléfono y detalles del proyecto. No utilizo cookies de rastreo, ni píxeles espía, ni servicios de analítica de terceros.
-          </p>
-          <p>
-            <span class="font-medium text-text-light">Finalidad.</span>
-            Sus datos se usan exclusivamente para responder consultas, enviar presupuestos y coordinar el desarrollo del proyecto.
-          </p>
-          <p>
-            <span class="font-medium text-text-light">Almacenamiento.</span>
-            La información se conserva en herramientas profesionales (email, gestión de proyectos) protegidas con autenticación de dos factores. No se comparte con terceros bajo ninguna circunstancia.
-          </p>
-          <p>
-            <span class="font-medium text-text-light">Sus derechos.</span>
-            Puede solicitar la eliminación de sus datos en cualquier momento enviando un email a la dirección de contacto indicada arriba.
-          </p>
-        </div>
+        <h2>2. Política de Privacidad</h2>
+        <p><strong>Datos que recopilo.</strong> Únicamente la información que usted proporciona voluntariamente al contactarme: nombre, email, número de teléfono y detalles del proyecto. No utilizo cookies de rastreo, ni píxeles espía, ni servicios de analítica de terceros.</p>
+        <p><strong>Finalidad.</strong> Sus datos se usan exclusivamente para responder consultas, enviar presupuestos y coordinar el desarrollo del proyecto.</p>
+        <p><strong>Almacenamiento.</strong> La información se conserva en herramientas profesionales (email, gestión de proyectos) protegidas con autenticación de dos factores. No se comparte con terceros bajo ninguna circunstancia.</p>
+        <p><strong>Sus derechos.</strong> Puede solicitar la eliminación de sus datos en cualquier momento enviando un email a la dirección de contacto indicada arriba.</p>
       </article>
 
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          3. Términos de Servicio
-        </h2>
-        <div class="space-y-4">
-          <p>
-            <span class="font-medium text-text-light">Alcance.</span>
-            Mis servicios incluyen el diseño, desarrollo y entrega de landing pages y aplicaciones web según las especificaciones acordadas por escrito con el cliente.
-          </p>
-          <p>
-            <span class="font-medium text-text-light">Proceso.</span>
-            Todo proyecto requiere un acuerdo previo donde se definen alcance, plazos, entregables y precio. El trabajo comienza una vez confirmado dicho acuerdo.
-          </p>
-          <p>
-            <span class="font-medium text-text-light">Entregables.</span>
-            El cliente recibe el código fuente y/o deployment del proyecto según lo estipulado. Las revisiones se limitan a lo acordado en el alcance inicial.
-          </p>
-        </div>
+        <h2>3. Términos de Servicio</h2>
+        <p><strong>Alcance.</strong> Mis servicios incluyen el diseño, desarrollo y entrega de landing pages y aplicaciones web según las especificaciones acordadas por escrito con el cliente.</p>
+        <p><strong>Proceso.</strong> Todo proyecto requiere un acuerdo previo donde se definen alcance, plazos, entregables y precio. El trabajo comienza una vez confirmado dicho acuerdo.</p>
+        <p><strong>Entregables.</strong> El cliente recibe el código fuente y/o deployment del proyecto según lo estipulado. Las revisiones se limitan a lo acordado en el alcance inicial.</p>
       </article>
 
-      <article class="rounded-lg border border-primary/30 bg-primary/5 p-6">
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          4. Garantía de Satisfacción
-        </h2>
-        <p class="space-y-4">
-          Garantizo que cada desarrollo es entregado con el más alto estándar técnico y profesional. El código es limpio, funcional y cumple con las especificaciones acordadas. Si el resultado final no se ajusta a lo pactado en el acuerdo, me comprometo a realizar las correcciones necesarias dentro del alcance definido.
-        </p>
-      </article>
-
-      <article class="rounded-lg border border-border-dark bg-surface-dark p-6">
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          5. Alcance de Responsabilidad
-        </h2>
-        <div class="space-y-4">
-          <p>
-            Mi responsabilidad se limita estrictamente a la <span class="font-medium text-text-light">implementación técnica y entrega del código</span> según lo acordado. Esto incluye:
-          </p>
-          <ul class="ml-4 list-disc space-y-1">
-            <li>Desarrollo del software conforme a las especificaciones del proyecto.</li>
-            <li>Entrega del código fuente y/o deployment funcional.</li>
-            <li>Correcciones dentro del alcance y período de garantía acordados.</li>
-          </ul>
-          <p>
-            <span class="font-medium text-text-light">No incluye:</span> hosting, mantenimiento continuo, gestión de servidores, administración de bases de datos en producción, ni soporte técnico post-entrega más allá de lo pactado.
-          </p>
-        </div>
-      </article>
-
-      <article class="rounded-lg border border-accent/30 bg-accent/5 p-6">
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          6. Limitación de Responsabilidad
-        </h2>
-        <div class="space-y-4">
-          <p>
-            Una vez entregado el proyecto y aceptado por el cliente, <span class="font-medium text-text-light">Liam Marega no se hace responsable por:</span>
-          </p>
-          <ul class="ml-4 list-disc space-y-2">
-            <li>Daños directos, indirectos, incidentales o consecuentes derivados del uso, mal uso o imposibilidad de uso del software entregado.</li>
-            <li>Actividades ilegales, fraudulentas o indebidas realizadas por el cliente o terceros mediante el software desarrollado.</li>
-            <li>Pérdida de datos, ingresos o beneficios derivados de la operación del software post-entrega.</li>
-            <li>Problemas de seguridad, vulnerabilidades o brechas provocados por la modificación del código después de la entrega.</li>
-            <li>Decisiones de negocio del cliente basadas en el funcionamiento o los resultados del software.</li>
-            <li>Fallas en servicios de terceros (hosting, APIs, pasarelas de pago, CDN) integrados en el proyecto.</li>
-          </ul>
-          <p class="font-medium text-text-light">
-            El cliente asume toda la responsabilidad sobre el uso, gestión, hosting y operación del software una vez completada la entrega.
-          </p>
-        </div>
+      <article class="card-block">
+        <h2>4. Garantía de Satisfacción</h2>
+        <p>Garantizo que cada desarrollo es entregado con el más alto estándar técnico y profesional. El código es limpio, funcional y cumple con las especificaciones acordadas. Si el resultado final no se ajusta a lo pactado en el acuerdo, me comprometo a realizar las correcciones necesarias dentro del alcance definido.</p>
       </article>
 
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          7. Propiedad Intelectual
-        </h2>
-        <div class="space-y-4">
-          <p>
-            Una vez completado el pago total acordado, el cliente recibe los derechos de uso sobre el código entregado. Las herramientas, librerías y frameworks de terceros utilizados permanecen bajo sus respectivas licencias originales.
-          </p>
-          <p>
-            Me reservo el derecho de mostrar el proyecto en mi portfolio como ejemplo de trabajo realizado, salvo acuerdo contractual en contrario.
-          </p>
-        </div>
+        <h2>5. Alcance de Responsabilidad</h2>
+        <p>Mi responsabilidad se limita estrictamente a la <strong>implementación técnica y entrega del código</strong> según lo acordado. Esto incluye:</p>
+        <ul>
+          <li>Desarrollo del software conforme a las especificaciones del proyecto.</li>
+          <li>Entrega del código fuente y/o deployment funcional.</li>
+          <li>Correcciones dentro del alcance y período de garantía acordados.</li>
+        </ul>
+        <p><strong>No incluye:</strong> hosting, mantenimiento continuo, gestión de servidores, administración de bases de datos en producción, ni soporte técnico post-entrega más allá de lo pactado.</p>
       </article>
 
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          8. Modificaciones
-        </h2>
-        <p>
-          Estos términos pueden actualizarse periódicamente. Cualquier cambio significativo será comunicado a los clientes activos. El uso continuado de los servicios después de una actualización constituye la aceptación de los nuevos términos.
-        </p>
+        <h2>6. Limitación de Responsabilidad</h2>
+        <p>Una vez entregado el proyecto y aceptado por el cliente, <strong>Liam Marega no se hace responsable por:</strong></p>
+        <ul>
+          <li>Daños directos, indirectos, incidentales o consecuentes derivados del uso, mal uso o imposibilidad de uso del software entregado.</li>
+          <li>Actividades ilegales, fraudulentas o indebidas realizadas por el cliente o terceros mediante el software desarrollado.</li>
+          <li>Pérdida de datos, ingresos o beneficios derivados de la operación del software post-entrega.</li>
+          <li>Problemas de seguridad, vulnerabilidades o brechas provocados por la modificación del código después de la entrega.</li>
+          <li>Decisiones de negocio del cliente basadas en el funcionamiento o los resultados del software.</li>
+          <li>Fallas en servicios de terceros (hosting, APIs, pasarelas de pago, CDN) integrados en el proyecto.</li>
+        </ul>
+        <p><strong>El cliente asume toda la responsabilidad sobre el uso, gestión, hosting y operación del software una vez completada la entrega.</strong></p>
       </article>
 
       <article>
-        <h2 class="mb-4 font-display text-lg font-bold text-text-light">
-          9. Legislación Aplicable
-        </h2>
-        <p>
-          Estos términos se rigen por las leyes de la República Argentina. Cualquier controversia será resuelta prioritariamente mediante diálogo directo. En caso de no alcanzar acuerdo, se someterá a los tribunales competentes de la provincia de Entre Ríos, Argentina.
-        </p>
+        <h2>7. Propiedad Intelectual</h2>
+        <p>Una vez completado el pago total acordado, el cliente recibe los derechos de uso sobre el código entregado. Las herramientas, librerías y frameworks de terceros utilizados permanecen bajo sus respectivas licencias originales.</p>
+        <p>Me reservo el derecho de mostrar el proyecto en mi portfolio como ejemplo de trabajo realizado, salvo acuerdo contractual en contrario.</p>
       </article>
 
+      <article>
+        <h2>8. Modificaciones</h2>
+        <p>Estos términos pueden actualizarse periódicamente. Cualquier cambio significativo será comunicado a los clientes activos. El uso continuado de los servicios después de una actualización constituye la aceptación de los nuevos términos.</p>
+      </article>
+
+      <article>
+        <h2>9. Legislación Aplicable</h2>
+        <p>Estos términos se rigen por las leyes de la República Argentina. Cualquier controversia será resuelta prioritariamente mediante diálogo directo. En caso de no alcanzar acuerdo, se someterá a los tribunales competentes de la provincia de Entre Ríos, Argentina.</p>
+      </article>
     </div>
 
-    <div class="mt-20 border-t border-border-dark pt-8 text-center text-sm text-text-dim">
-      <p>&copy; {currentYear} Liam Marega — LiammDev LANDINGPRO. Todos los derechos reservados.</p>
+    <div class="privacy-foot">
+      <p>&copy; {currentYear} Liam Marega — LiamDev. Todos los derechos reservados.</p>
     </div>
   </section>
 
   <Footer />
 </Layout>
+
+<style is:global>
+  .lb-root .privacy {
+    max-width: 760px;
+  }
+  .lb-root .privacy h1 {
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.05;
+    margin-top: 14px;
+  }
+  .lb-root .privacy .lead {
+    margin-top: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .lb-root .privacy .prose {
+    margin-top: 48px;
+    display: grid;
+    gap: 44px;
+  }
+  .lb-root .privacy article h2 {
+    font-size: 19px;
+    margin-bottom: 14px;
+  }
+  .lb-root .privacy article p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .lb-root .privacy article p strong {
+    color: var(--ink);
+  }
+  .lb-root .privacy article ul {
+    margin: 4px 0 12px;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+  }
+  .lb-root .privacy article li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .lb-root .privacy .info {
+    display: grid;
+    gap: 6px;
+    max-width: 420px;
+  }
+  .lb-root .privacy .info p {
+    margin: 0;
+  }
+  .lb-root .privacy .card-block {
+    background: rgba(255, 224, 0, 0.08);
+    border: 1px solid rgba(169, 135, 0, 0.3);
+    border-radius: 10px;
+    padding: 24px 26px;
+  }
+  .lb-root .privacy .privacy-foot {
+    margin-top: 64px;
+    border-top: 1px dashed rgba(120, 105, 70, 0.3);
+    padding-top: 28px;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+</style>

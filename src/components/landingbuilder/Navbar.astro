@@ -1,31 +1,27 @@
 ---
+const links = [
+  { href: "#servicios", label: "Servicios" },
+  { href: "#proceso", label: "Proceso" },
+  { href: "#resultados", label: "Resultados" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#sobre", label: "Sobre mí" },
+];
 ---
 
-<nav
-  class="fixed left-0 top-0 z-50 w-full border-b border-border-dark bg-background-dark/90 backdrop-blur-xl"
-  aria-label="Navegación principal"
->
-  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-    <a
-      href="/landing-builder"
-      class="inline-flex items-center border border-white bg-black px-3 py-1 font-display text-base font-black tracking-tight text-white transition-transform hover:-rotate-1"
-      aria-label="LiammDev LANDINGPRO - Inicio"
-    >
-      LiammDev LANDING<span class="text-primary">PRO</span>
-    </a>
-
-    <div class="hidden items-center gap-10 md:flex">
-      <a class="text-sm font-medium text-text-dim transition-colors hover:text-white" href="#metodo">Método</a>
-      <a class="text-sm font-medium text-text-dim transition-colors hover:text-white" href="#demo">Casos/Demo</a>
-      <a class="text-sm font-medium text-text-dim transition-colors hover:text-white" href="#proceso">Proceso</a>
-      <a class="text-sm font-medium text-text-dim transition-colors hover:text-white" href="#faq">FAQ</a>
-    </div>
-
-    <a
-      class="inline-flex items-center justify-center border border-primary bg-primary px-4 py-2 text-sm font-bold text-black shadow-brutal-white transition-all hover:-translate-y-0.5 hover:shadow-brutal"
-      href="#apply"
-    >
-      Solicitar diagnóstico
-    </a>
-  </div>
-</nav>
+<header class="nav" id="top">
+  <a class="logo" href="#top" aria-label="LiamDev — inicio">LiamDev</a>
+  <nav aria-label="Navegación principal">
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href}>{l.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <a
+    href="#contacto"
+    class="btn btn-yellow magnet nav-cta"
+    style="padding:10px 18px;font-size:11.5px"
+  >
+    Solicitar diagnóstico
+  </a>
+</header>
