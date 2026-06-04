@@ -88,7 +88,7 @@ import Footer from '../components/landingbuilder/Footer.astro';
     sketches.forEach((svg) => { if (svg.parentElement) ro.observe(svg.parentElement); sizeSketch(svg); });
   } else {
     sketches.forEach(sizeSketch);
-    window.addEventListener('resize', () => sketches.forEach(sizeSketch));
+    globalThis.addEventListener('resize', () => sketches.forEach(sizeSketch));
   }
 
   // ---------- GSAP: magnetic buttons + parallax + drift ----------
