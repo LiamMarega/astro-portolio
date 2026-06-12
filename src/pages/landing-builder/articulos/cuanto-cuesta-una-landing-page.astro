@@ -1,0 +1,122 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Cuánto cuesta una landing page profesional en 2026?",
+    a: "Una landing page profesional hecha por un freelancer especializado cuesta entre USD 400 y USD 1.500 según complejidad. Con agencia, entre USD 1.500 y USD 5.000+. Las plantillas DIY van de USD 0 a USD 100, pero requieren tu tiempo y no incluyen estrategia.",
+  },
+  {
+    q: "¿Por qué hay tanta diferencia de precios?",
+    a: "Porque 'landing page' puede significar desde una plantilla rellenada en una tarde hasta un proyecto con investigación, copywriting estratégico, diseño a medida, desarrollo optimizado y testing. Pagás por el proceso, no por el archivo final.",
+  },
+  {
+    q: "¿Conviene una landing barata para empezar?",
+    a: "Si todavía no validaste tu oferta ni tenés tráfico, sí: empezá simple. Pero si ya invertís en publicidad, una landing barata que convierte al 1% en vez del 5% te cuesta mucho más que la diferencia de precio.",
+  },
+];
+---
+
+<Layout slug="cuanto-cuesta-una-landing-page" faq={faq}>
+  <p>
+    "¿Cuánto cuesta una landing page?" es la pregunta que más recibo, y la
+    respuesta honesta es: <span class="hl">depende de qué estés comprando
+    realmente</span>. Acá van los rangos reales de 2026, qué incluye cada uno y
+    cómo decidir sin pagar dos veces por lo mismo.
+  </p>
+
+  <h2>Los rangos de precio reales en 2026</h2>
+  <table>
+    <thead>
+      <tr><th>Opción</th><th>Rango (USD)</th><th>Qué incluye</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Plantilla DIY (Wix, Canva, etc.)</td>
+        <td>0 – 100</td>
+        <td>Diseño genérico, tu tiempo, sin estrategia ni copy</td>
+      </tr>
+      <tr>
+        <td>Freelancer junior / marketplace</td>
+        <td>100 – 400</td>
+        <td>Plantilla adaptada, calidad variable, poco proceso</td>
+      </tr>
+      <tr>
+        <td>Freelancer especializado en conversión</td>
+        <td>400 – 1.500</td>
+        <td>Estrategia, copy, diseño a medida, desarrollo optimizado</td>
+      </tr>
+      <tr>
+        <td>Agencia</td>
+        <td>1.500 – 5.000+</td>
+        <td>Equipo completo, gestión de proyecto, costos de estructura</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Estos rangos coinciden con lo que publican las guías de precios de España y
+    Latinoamérica: un freelancer competente cobra entre 400 y 1.000 € por una
+    landing bien hecha, y las agencias multiplican ese número por dos o tres
+    por el mismo entregable.
+  </p>
+
+  <h2>Qué estás pagando realmente</h2>
+  <p>
+    El archivo HTML final es la parte menos valiosa del trabajo. Lo que separa
+    una landing de USD 200 de una de USD 1.000 es el proceso:
+  </p>
+  <ul>
+    <li><strong>Investigación:</strong> entender tu cliente, tu oferta y tu competencia antes de diseñar nada.</li>
+    <li><strong>Copywriting estratégico:</strong> el texto vende, el diseño acompaña. Una landing sin copy pensado es un folleto bonito.</li>
+    <li><strong>Estructura de conversión:</strong> el orden de las secciones sigue una lógica de ventas, no de estética. La desarrollo completa en <a href="/landing-builder/articulos/como-crear-una-landing-page-que-convierta">esta guía paso a paso</a>.</li>
+    <li><strong>Desarrollo optimizado:</strong> velocidad de carga, responsive real, SEO técnico. Una página lenta pierde la mitad de su tráfico antes de mostrar nada.</li>
+    <li><strong>Medición:</strong> analytics y eventos configurados para saber qué funciona.</li>
+  </ul>
+
+  <blockquote>
+    No pagás por una página. Pagás por la diferencia entre convertir al 1% y
+    convertir al 5% — con el mismo tráfico.
+  </blockquote>
+
+  <h2>La matemática que nadie hace</h2>
+  <p>
+    Supongamos que invertís USD 500/mes en anuncios y recibís 1.000 visitas:
+  </p>
+  <ul>
+    <li>Landing mediocre (1% de conversión) → 10 leads/mes</li>
+    <li>Landing profesional (4% de conversión) → 40 leads/mes</li>
+  </ul>
+  <p>
+    Si cerrás 1 de cada 10 leads y tu servicio vale USD 500, la diferencia son
+    <strong>USD 1.500 extra por mes</strong>. La landing "cara" de USD 800 se
+    paga sola en la primera quincena. La barata te cuesta dinero todos los
+    meses, en silencio.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;left:18px;transform:rotate(-8deg)"></span>
+    <span class="an-hand">Mi política de precios ✏️</span>
+    Mis proyectos arrancan en USD 600 e incluyen estrategia, copy, diseño a
+    medida, desarrollo y 14 días de soporte post-lanzamiento. Sin plantillas,
+    sin outsourcing.
+  </div>
+
+  <h2>Señales de alerta al comparar presupuestos</h2>
+  <ul>
+    <li><strong>"Te la tengo en 48 horas"</strong> sin haberte hecho ninguna pregunta sobre tu negocio.</li>
+    <li><strong>No incluye copy</strong> — "vos me pasás los textos" significa que la parte que vende queda en tus manos.</li>
+    <li><strong>No habla de velocidad ni mobile</strong> — más de la mitad de tu tráfico será desde el teléfono.</li>
+    <li><strong>Sin entregables claros:</strong> ¿quién es dueño del dominio, del código, de los accesos?</li>
+  </ul>
+  <p>
+    Armé una checklist completa para ese proceso en
+    <a href="/landing-builder/articulos/contratar-desarrollador-web-freelance">cómo contratar un desarrollador web freelance</a>.
+  </p>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

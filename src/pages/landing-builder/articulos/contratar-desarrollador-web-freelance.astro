@@ -1,0 +1,112 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Cuánto cobra un desarrollador web freelance?",
+    a: "En 2026, un freelancer especializado cobra entre USD 400 y USD 1.500 por una landing page profesional y desde USD 1.500 por sitios completos. Tarifas muy por debajo de eso suelen significar plantillas adaptadas sin estrategia.",
+  },
+  {
+    q: "¿Qué debo pedir antes de contratar a un desarrollador web?",
+    a: "Portfolio con proyectos reales y resultados, proceso de trabajo documentado, qué incluye exactamente el presupuesto (copy, diseño, desarrollo, soporte), tiempos de entrega y quién queda como dueño del código, dominio y accesos.",
+  },
+  {
+    q: "¿Freelancer o agencia?",
+    a: "Para landings y sitios de hasta mediana complejidad, un freelancer especializado suele ofrecer mejor relación calidad-precio y comunicación directa. Las agencias tienen sentido en proyectos grandes que requieren equipos multidisciplinarios sostenidos.",
+  },
+];
+---
+
+<Layout slug="contratar-desarrollador-web-freelance" faq={faq}>
+  <p>
+    Contratar un desarrollador web freelance puede ser la mejor inversión de tu
+    negocio o un dolor de cabeza de meses. La diferencia no está en la suerte:
+    está en <span class="hl">las preguntas que hacés antes de pagar</span>.
+    Esta es la checklist que le daría a un amigo.
+  </p>
+
+  <h2>Las 7 preguntas que filtran al 90%</h2>
+  <h3>1. "¿Me mostrás proyectos con resultados, no solo diseños?"</h3>
+  <p>
+    Un portfolio lindo demuestra gusto estético. Un caso con números
+    ("aumentamos conversiones 214%") demuestra que entiende para qué sirve una
+    web. Buscá lo segundo.
+  </p>
+  <h3>2. "¿Cuál es tu proceso?"</h3>
+  <p>
+    La respuesta correcta tiene etapas: descubrimiento → estrategia → diseño →
+    desarrollo → lanzamiento. La respuesta incorrecta es "pasame el contenido y
+    en una semana está". Sin proceso no hay estrategia; sin estrategia, es
+    decoración.
+  </p>
+  <h3>3. "¿El copy está incluido?"</h3>
+  <p>
+    El texto es lo que vende. Si el presupuesto no lo incluye, la parte más
+    importante del proyecto queda en tus manos — y lo vas a escribir a las 11
+    de la noche, cansado, el día antes de la entrega.
+  </p>
+  <h3>4. "¿Qué velocidad de carga garantizás?"</h3>
+  <p>
+    Quien trabaja seriamente tiene respuesta inmediata: métricas de Core Web
+    Vitals, herramientas de medición, stack optimizado. Si te mira raro,
+    siguiente candidato. (Por qué importa tanto:
+    <a href="/landing-builder/articulos/velocidad-web-core-web-vitals">velocidad web y conversión</a>.)
+  </p>
+  <h3>5. "¿Quién queda como dueño de todo?"</h3>
+  <p>
+    Dominio a tu nombre, hosting con tus accesos, código tuyo al finalizar el
+    pago. Cualquier esquema donde "todo queda en mi plataforma" es una correa.
+  </p>
+  <h3>6. "¿Qué pasa después de la entrega?"</h3>
+  <p>
+    Soporte post-lanzamiento (14-30 días es estándar), cómo se manejan ajustes,
+    costo de cambios futuros. Los proyectos no terminan el día del deploy.
+  </p>
+  <h3>7. "¿Por qué este precio?"</h3>
+  <p>
+    Un profesional desglosa: estrategia, copy, diseño, desarrollo, testing,
+    soporte. Si la respuesta es vaga, el alcance también lo va a ser. Los
+    rangos de mercado están en
+    <a href="/landing-builder/articulos/cuanto-cuesta-una-landing-page">cuánto cuesta una landing page</a>.
+  </p>
+
+  <h2>Señales de alerta 🚩</h2>
+  <ul>
+    <li><strong>Presupuesto sin preguntas previas.</strong> Si no necesitó entender tu negocio para cotizar, va a entregar una plantilla.</li>
+    <li><strong>"Yo hago de todo":</strong> apps, webs, logos, SEO, anuncios y community management. La especialización existe por algo.</li>
+    <li><strong>Sin contrato ni alcance escrito.</strong> Las expectativas no documentadas terminan en conflicto.</li>
+    <li><strong>Comunicación lenta durante la venta.</strong> Si tarda 5 días en responder cuando te quiere vender, imaginate después.</li>
+    <li><strong>Precio demasiado bueno.</strong> Alguien que cobra USD 150 por una landing necesita hacer 20 por mes para vivir. ¿Cuánta atención va a recibir la tuya?</li>
+  </ul>
+
+  <blockquote>
+    Contratá al que te hace preguntas incómodas sobre tu negocio, no al que te
+    dice que sí a todo.
+  </blockquote>
+
+  <h2>Qué tiene que incluir el presupuesto (mínimo)</h2>
+  <ul>
+    <li>Alcance detallado: secciones, funcionalidades, integraciones.</li>
+    <li>Copywriting (o aclaración explícita de quién lo hace).</li>
+    <li>Diseño responsive verificado en dispositivos reales.</li>
+    <li>Optimización de velocidad y SEO técnico básico (metas, schema, sitemap).</li>
+    <li>Configuración de analytics y eventos de conversión.</li>
+    <li>Plazos con hitos y cantidad de rondas de revisión.</li>
+    <li>Soporte post-lanzamiento definido en días y alcance.</li>
+  </ul>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;right:24px;transform:rotate(7deg)"></span>
+    <span class="an-hand">Transparencia total ✏️</span>
+    Sí, este artículo lo escribió un desarrollador freelance. Por eso mismo:
+    estas son exactamente las preguntas que me hacen mis mejores clientes — y
+    las que me diferencian de los presupuestos de USD 150.
+  </div>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

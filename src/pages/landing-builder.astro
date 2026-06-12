@@ -14,13 +14,18 @@ import Caso from '../components/landingbuilder/Caso.astro';
 import FAQ from '../components/landingbuilder/FAQ.astro';
 import CTA from '../components/landingbuilder/CTA.astro';
 import Footer from '../components/landingbuilder/Footer.astro';
+import BookIntro from '../components/landingbuilder/BookIntro.astro';
+import BookTabs from '../components/landingbuilder/BookTabs.astro';
+import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
 ---
 
 <Layout
   title="LiamDev — Landings que convierten tráfico en oportunidades reales"
   description="Diseño y desarrollo de landing pages estratégicas para coaches, consultores, marcas personales y negocios digitales que quieren vender más."
 >
+  <BookIntro />
   <Navbar />
+  <BookTabs />
   <Hero />
   <Trust />
   <Problems />
@@ -37,6 +42,7 @@ import Footer from '../components/landingbuilder/Footer.astro';
   <FAQ />
   <CTA />
   <Footer />
+  <StickyCTA />
 </Layout>
 
 <script>
@@ -110,6 +116,76 @@ import Footer from '../components/landingbuilder/Footer.astro';
     }
 
     gsap.registerPlugin(ScrollTrigger);
+
+    // ---------- Stickers / sellos: entran con "slap" ----------
+    document.querySelectorAll<HTMLElement>('.seal, .vsl-badge, .num-flag, .qual-arrow').forEach((el) => {
+      gsap.from(el, {
+        scale: 1.9, opacity: 0, duration: 0.5, ease: 'back.out(2.2)',
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+      });
+    });
+
+    // ---------- Cintas: se "apoyan" sobre el papel ----------
+    document.querySelectorAll<HTMLElement>('.tape').forEach((el, i) => {
+      gsap.from(el, {
+        opacity: 0, scale: 1.4, duration: 0.38, delay: (i % 3) * 0.07, ease: 'power2.out',
+        scrollTrigger: { trigger: el.parentElement || el, start: 'top 90%', once: true },
+      });
+    });
+
+    // ---------- Tilt 3D en tarjetas (hover, desktop) ----------
+    if (fine) {
+      document.querySelectorAll<HTMLElement>('.card, .photo-card, .note, .faq-item, .art-card').forEach((el) => {
+        if (el.closest('.hero .collage')) return;
+        const max = 3.4;
+        const move = (e: MouseEvent) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.transition = 'transform 0.12s ease-out, box-shadow 0.2s ease';
+          el.style.transform =
+            `perspective(700px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateZ(8px)`;
+          el.classList.add('tilting');
+        };
+        const leave = () => {
+          el.style.transition = 'transform 0.45s ease, box-shadow 0.3s ease';
+          el.style.transform = '';
+          el.classList.remove('tilting');
+          setTimeout(() => { if (!el.classList.contains('tilting')) el.style.transition = ''; }, 480);
+        };
+        el.addEventListener('mousemove', move);
+        el.addEventListener('mouseleave', leave);
+      });
+    }
+
+    // ---------- Contadores del caso real ----------
+    document.querySelectorAll<HTMLElement>('#resultados .stats strong').forEach((el) => {
+      const raw = (el.textContent || '').trim();
+      const m = raw.match(/^([+\-]?)(\d+(?:\.\d+)?)(.*)$/);
+      if (!m) return;
+      const sign = m[1], end = parseFloat(m[2]), suffix = m[3];
+      const dec = m[2].includes('.') ? 1 : 0;
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: end, duration: 1.6, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        onUpdate: () => { el.textContent = sign + obj.v.toFixed(dec) + suffix; },
+      });
+    });
+
+    // ---------- Escritura a mano: las notas Caveat se "escriben" ----------
+    document
+      .querySelectorAll<HTMLElement>('.note p, .side, .qual-side, .signature, .hero-handwrite, .lbl-hand')
+      .forEach((el) => {
+        el.classList.add('write');
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+          onEnter: () => el.classList.add('written'),
+        });
+      });
+
     document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
       const spd = parseFloat(el.getAttribute('data-parallax') || '0.2') || 0.2;
       gsap.to(el, {
@@ -145,6 +221,56 @@ import Footer from '../components/landingbuilder/Footer.astro';
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     }
+
+    // ---------- Entrada del hero (después de la intro del libro) ----------
+    const playHero = () => {
+      const items: [string, gsap.TweenVars][] = [
+        ['.hero .photo-card', { y: 60, rotation: -6, opacity: 0, scale: 0.94, duration: 0.7, ease: 'back.out(1.6)' }],
+        ['.hero h1', { y: 36, opacity: 0, duration: 0.65, ease: 'power3.out' }],
+        ['.hero .lead', { y: 24, opacity: 0, duration: 0.55, ease: 'power3.out' }],
+        ['.hero .actions', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out' }],
+        ['.hero .meta', { y: 14, opacity: 0, duration: 0.45, ease: 'power3.out' }],
+        ['.hero .note', { scale: 1.5, opacity: 0, duration: 0.45, ease: 'back.out(2)' }],
+        ['.hero .seal', { scale: 2.2, rotation: 30, opacity: 0, duration: 0.5, ease: 'back.out(2.4)' }],
+      ];
+      const tl = gsap.timeline({ delay: 0.05 });
+      items.forEach(([sel, vars], i) => {
+        const els = document.querySelectorAll(sel);
+        if (els.length) tl.from(els, { ...vars, stagger: 0.08 }, i * 0.09);
+      });
+      const hand = document.querySelector('.hero-handwrite');
+      if (hand) hand.classList.add('written');
+    };
+    if ((window as any).__lbIntroDone) playHero();
+    else window.addEventListener('lb:introDone', playHero, { once: true });
+  }
+
+  // ---------- UI de scroll: progreso, sticky CTA, nota flotante, pestañas ----------
+  {
+    const prog = document.getElementById('navProgress');
+    const sticky = document.getElementById('stickyCta');
+    const floatNote = document.getElementById('floatNote');
+    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.book-tabs .bt'));
+    const qual = document.getElementById('calificar');
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (prog) prog.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + '%';
+      // Ocultamos los CTAs flotantes cuando el formulario ya está a la vista.
+      const qr = qual?.getBoundingClientRect();
+      const onForm = !!qr && qr.top < innerHeight && qr.bottom > 0;
+      if (sticky) sticky.classList.toggle('show', scrollY > 650 && !onForm);
+      if (floatNote) floatNote.classList.toggle('show', scrollY > 900 && !onForm);
+      if (tabs.length) {
+        let cur = -1;
+        tabs.forEach((t, i) => {
+          const el = document.getElementById(t.dataset.tab || '');
+          if (el && el.getBoundingClientRect().top < innerHeight * 0.45) cur = i;
+        });
+        tabs.forEach((t, i) => t.classList.toggle('on', i === cur));
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 </script>
 

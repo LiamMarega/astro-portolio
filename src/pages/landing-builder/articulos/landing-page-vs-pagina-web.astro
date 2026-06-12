@@ -1,0 +1,95 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Qué es mejor: una landing page o una página web?",
+    a: "Ninguna es mejor; resuelven cosas distintas. La página web construye presencia y confianza de marca a largo plazo. La landing page convierte tráfico en acciones concretas. Si tenés que elegir una sola y tu prioridad es vender, empezá por la landing.",
+  },
+  {
+    q: "¿Puedo tener una landing page sin sitio web?",
+    a: "Sí. Muchos negocios de servicios facturan años enteros con una sola landing bien hecha más sus redes sociales. El sitio completo llega cuando la marca lo necesita, no antes.",
+  },
+  {
+    q: "¿Una landing page sirve para SEO?",
+    a: "Una landing sola posiciona pocas keywords. Para tráfico orgánico necesitás contenido (blog, guías). La combinación ideal: landing para convertir + artículos para atraer.",
+  },
+];
+---
+
+<Layout slug="landing-page-vs-pagina-web" faq={faq}>
+  <p>
+    "Necesito una página web" es una de las frases más caras del mundo digital,
+    porque muchas veces lo que el negocio necesita es otra cosa:
+    <span class="hl">una página que venda</span>. Veamos las diferencias reales
+    y cuándo conviene cada una.
+  </p>
+
+  <h2>La diferencia en una tabla</h2>
+  <table>
+    <thead>
+      <tr><th></th><th>Página web</th><th>Landing page</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Objetivo</strong></td><td>Informar, dar presencia</td><td>Convertir en una acción</td></tr>
+      <tr><td><strong>Audiencia</strong></td><td>Todos los públicos</td><td>Un público específico</td></tr>
+      <tr><td><strong>Navegación</strong></td><td>Menú, múltiples páginas</td><td>Un solo recorrido, sin fugas</td></tr>
+      <tr><td><strong>CTA</strong></td><td>Varios (contacto, blog, redes)</td><td>Uno solo, repetido</td></tr>
+      <tr><td><strong>Conversión típica</strong></td><td>0,5% – 2%</td><td>4% – 10%+</td></tr>
+      <tr><td><strong>Tiempo de desarrollo</strong></td><td>Semanas a meses</td><td>1 a 3 semanas</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Cuándo te alcanza con una landing page</h2>
+  <ul>
+    <li><strong>Vendés un servicio principal:</strong> coaching, consultoría, desarrollo, diseño. Una oferta, una página.</li>
+    <li><strong>Estás validando:</strong> antes de invertir en un sitio completo, comprobá que tu oferta convierte.</li>
+    <li><strong>Corrés campañas de pago:</strong> cada campaña merece su landing específica; mandar anuncios a la home desperdicia presupuesto.</li>
+    <li><strong>Lanzás algo:</strong> un curso, un evento, un producto nuevo.</li>
+  </ul>
+
+  <h2>Cuándo necesitás el sitio completo</h2>
+  <ul>
+    <li><strong>Múltiples líneas de negocio</strong> con públicos distintos que necesitan recorridos propios.</li>
+    <li><strong>SEO como canal principal:</strong> necesitás blog, páginas de servicio por keyword y arquitectura de contenido.</li>
+    <li><strong>Marca establecida</strong> donde clientes, prensa y partners esperan encontrar historia, equipo y casos.</li>
+    <li><strong>E-commerce:</strong> catálogo, carrito y fichas de producto son otra categoría de proyecto.</li>
+  </ul>
+
+  <blockquote>
+    Primero la página que vende. Después la página que cuenta. Casi todos los
+    negocios lo hacen al revés.
+  </blockquote>
+
+  <h2>El camino híbrido (el que más recomiendo)</h2>
+  <p>
+    No es una decisión binaria. La secuencia que mejor funciona para negocios
+    de servicios:
+  </p>
+  <ul>
+    <li><strong>Fase 1:</strong> landing page de conversión para tu oferta principal. Es la base del embudo y la inversión con retorno más rápido.</li>
+    <li><strong>Fase 2:</strong> artículos SEO que atraigan tráfico orgánico calificado hacia esa landing (exactamente lo que estás leyendo ahora).</li>
+    <li><strong>Fase 3:</strong> cuando el volumen lo justifica, expandís a sitio completo sin tirar nada: la landing sigue siendo tu página de ventas.</li>
+  </ul>
+  <p>
+    Sobre el costo de cada etapa, tenés los números reales en
+    <a href="/landing-builder/articulos/cuanto-cuesta-una-landing-page">cuánto cuesta una landing page en 2026</a>.
+    Y si todavía tenés dudas de qué es exactamente una landing, arrancá por
+    <a href="/landing-builder/articulos/que-es-una-landing-page">qué es una landing page</a>.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;left:18px;transform:rotate(-8deg)"></span>
+    <span class="an-hand">En resumen ✏️</span>
+    ¿Tu prioridad de los próximos 6 meses es vender más? Landing. ¿Es construir
+    presencia de marca a largo plazo? Web. ¿Las dos? Landing primero — se paga
+    sola y financia el resto.
+  </div>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

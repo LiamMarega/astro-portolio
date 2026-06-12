@@ -1,0 +1,128 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Qué es CRO (Conversion Rate Optimization)?",
+    a: "Es la disciplina de aumentar el porcentaje de visitantes que realizan la acción deseada en tu web (comprar, registrarse, agendar) mediante mejoras de mensaje, diseño, velocidad y experimentación continua.",
+  },
+  {
+    q: "¿Por dónde empiezo a optimizar mi conversión?",
+    a: "Por el orden de impacto: 1) claridad del titular y coherencia con la fuente de tráfico, 2) velocidad de carga, 3) CTA y formulario, 4) prueba social. Recién después, micro-optimizaciones como colores o animaciones.",
+  },
+  {
+    q: "¿Cuánto tráfico necesito para hacer A/B testing?",
+    a: "Como regla práctica, al menos 1.000 visitas y 100 conversiones por variante para resultados confiables. Con menos tráfico, priorizá cambios grandes basados en heurísticas y feedback de usuarios en vez de tests estadísticos.",
+  },
+];
+---
+
+<Layout slug="optimizacion-cro-mejorar-conversion" faq={faq}>
+  <p>
+    El CRO (<em>Conversion Rate Optimization</em>) es el arte de
+    <span class="hl">vender más sin pagar por más tráfico</span>. Estas son las
+    15 optimizaciones que aplico, ordenadas por impacto — no por moda. Las
+    primeras cinco suelen explicar el 80% de la mejora.
+  </p>
+
+  <h2>Mensaje y estructura (el 80% del resultado)</h2>
+  <h3>1. Titular = beneficio + público</h3>
+  <p>
+    Si tu titular podría usarlo tu competencia sin cambiar una palabra, no es
+    un titular: es un eslogan genérico. Específico gana a creativo.
+  </p>
+  <h3>2. Message match con la fuente de tráfico</h3>
+  <p>
+    El anuncio promete X → la página abre con X. Las landings construidas para
+    una campaña específica convierten radicalmente más; el tráfico de email,
+    por ejemplo, convierte hasta 77% más cuando la página le habla a esa
+    campaña.
+  </p>
+  <h3>3. Un solo objetivo por página</h3>
+  <p>
+    Cada CTA adicional que compite con el principal reduce la conversión.
+    Eliminá menús, enlaces salientes y "mirá también mi Instagram".
+  </p>
+  <h3>4. CTAs personalizados</h3>
+  <p>
+    "Quiero mi diagnóstico gratis" vs "Enviar": los CTAs personalizados
+    convierten hasta <strong>202% mejor</strong>. El botón habla en primera
+    persona del beneficio, no de la mecánica.
+  </p>
+  <h3>5. Prueba social con números</h3>
+  <p>
+    Testimonios con resultados concretos ("+214% conversiones") cerca de los
+    puntos de decisión. La prueba social genérica ("excelente profesional") no
+    mueve nada.
+  </p>
+
+  <h2>Experiencia y fricción</h2>
+  <h3>6. Velocidad de carga</h3>
+  <p>
+    La optimización más rentable y más ignorada. LCP bajo 2,5s o estás
+    regalando conversiones — guía completa en
+    <a href="/landing-builder/articulos/velocidad-web-core-web-vitals">Core Web Vitals</a>.
+  </p>
+  <h3>7. Mobile primero, de verdad</h3>
+  <p>
+    Más de la mitad de tu tráfico llega desde el teléfono. Botones de mínimo
+    44px, formularios con teclado correcto (email → teclado de email), CTA
+    visible sin scroll.
+  </p>
+  <h3>8. Formularios sin grasa</h3>
+  <p>
+    Cada campo innecesario es fricción. ¿De verdad necesitás la empresa y el
+    cargo para un diagnóstico gratuito? Pedí lo mínimo; el resto se pregunta en
+    la llamada.
+  </p>
+  <h3>9. Video corto (VSL)</h3>
+  <p>
+    El video relevante aumenta conversiones hasta 86%. 60-120 segundos:
+    problema → solución → siguiente paso.
+  </p>
+  <h3>10. Reducción de riesgo visible</h3>
+  <p>
+    Garantías, soporte post-entrega, "respuesta en 24h", política de
+    privacidad clara. El miedo mata más ventas que el precio.
+  </p>
+
+  <h2>Refinamiento continuo</h2>
+  <h3>11. FAQ que responde objeciones reales</h3>
+  <p>Anotá las preguntas que te hacen en llamadas y respondelas en la página.</p>
+  <h3>12. Microcopy en momentos de duda</h3>
+  <p>
+    Debajo del botón: "sin compromiso · respuesta en 24h". En el formulario:
+    "toma 40 segundos". Pequeñas frases, gran diferencia.
+  </p>
+  <h3>13. Dirección visual</h3>
+  <p>
+    Flechas, miradas, anotaciones a mano: el ojo sigue señales. Usalas para
+    apuntar al CTA, no para decorar.
+  </p>
+  <h3>14. Urgencia honesta</h3>
+  <p>
+    "Cupos limitados" funciona solo si es verdad. La falsa urgencia destruye la
+    confianza que el resto de la página construyó.
+  </p>
+  <h3>15. Medir → hipotetizar → testear</h3>
+  <p>
+    Analytics + grabaciones de sesión + un test por vez. El CRO no es una lista
+    de trucos: es un sistema de aprendizaje sobre tus clientes. Para saber si
+    tus números son buenos, compará con los
+    <a href="/landing-builder/articulos/tasa-de-conversion-landing-page">benchmarks 2026</a>.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;right:24px;transform:rotate(7deg)"></span>
+    <span class="an-hand">Orden sugerido ✓</span>
+    Semana 1: titular + CTA + velocidad. Semana 2: formulario + prueba social.
+    Después: testear todo lo demás. No empieces por el color del botón.
+  </div>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

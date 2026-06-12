@@ -2,13 +2,15 @@ import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import vercel from "@astrojs/vercel";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
   // Static by default; individual routes opt into on-demand rendering
   // with `export const prerender = false` (e.g. the Resend form endpoint).
+  site: "https://www.liammarega.com",
   adapter: vercel(),
-  integrations: [tailwind(), react()],
+  integrations: [tailwind(), react(), sitemap()],
   
   // Performance optimizations
   build: {
@@ -42,6 +44,8 @@ export default defineConfig({
   
   // Development optimizations
   vite: {
+    // Allows overriding the Vite cache location (useful in sandboxed/CI envs).
+    ...(process.env.VITE_CACHE_DIR ? { cacheDir: process.env.VITE_CACHE_DIR } : {}),
     build: {
       // Optimize chunk splitting
       rollupOptions: {

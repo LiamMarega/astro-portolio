@@ -1,0 +1,201 @@
+---
+import "../styles/landing-builder.css";
+import "@fontsource/source-serif-4/400.css";
+import "@fontsource/source-serif-4/500.css";
+import "@fontsource/source-serif-4/600.css";
+import "@fontsource/source-serif-4/700.css";
+import "@fontsource/source-serif-4/400-italic.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/caveat/500.css";
+import "@fontsource/caveat/600.css";
+import "@fontsource/caveat/700.css";
+import { SEO } from "astro-seo";
+import { getArticulo, getRelacionados } from "../data/articulos";
+import Footer from "../components/landingbuilder/Footer.astro";
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+interface Props {
+  slug: string;
+  faq?: FaqItem[];
+}
+
+const { slug, faq = [] } = Astro.props;
+const art = getArticulo(slug);
+const relacionados = getRelacionados(slug);
+const site = "https://www.liammarega.com";
+const url = `${site}/landing-builder/articulos/${slug}`;
+const fecha = new Date(art.date).toLocaleDateString("es-AR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const jsonLd: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: art.title,
+    description: art.description,
+    inLanguage: "es",
+    datePublished: art.date,
+    dateModified: art.updated || art.date,
+    keywords: art.keywords.join(", "),
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: {
+      "@type": "Person",
+      name: "Liam Marega",
+      url: site,
+      jobTitle: "Desarrollador web especializado en conversión",
+      sameAs: ["https://instagram.com/liammdev", "https://x.com/liammdev"],
+    },
+    publisher: { "@type": "Organization", name: "LiamDev", url: site },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "LiamDev", item: `${site}/landing-builder` },
+      { "@type": "ListItem", position: 2, name: "Artículos", item: `${site}/landing-builder/articulos` },
+      { "@type": "ListItem", position: 3, name: art.title, item: url },
+    ],
+  },
+];
+if (faq.length) {
+  jsonLd.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  });
+}
+---
+
+<!doctype html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={url} />
+    <meta name="keywords" content={art.keywords.join(", ")} />
+    <meta name="author" content="Liam Marega" />
+
+    <SEO
+      title={art.metaTitle}
+      description={art.description}
+      openGraph={{
+        basic: { title: art.metaTitle, type: "article", image: "/images/og-landing-builder.jpg" },
+        optional: { locale: "es_AR", siteName: "LiamDev" },
+        article: {
+          publishedTime: art.date,
+          authors: ["Liam Marega"],
+          section: art.category,
+          tags: art.keywords,
+        },
+      }}
+      twitter={{ creator: "@liammdev", card: "summary_large_image" }}
+      extend={{
+        meta: [
+          { name: "twitter:title", content: art.metaTitle },
+          { name: "twitter:description", content: art.description },
+          { name: "theme-color", content: "#fbfaf5" },
+        ],
+      }}
+    />
+
+    {jsonLd.map((s) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+      <defs>
+        <filter id="lbRoughNote" x="-6%" y="-12%" width="112%" height="124%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014 0.02" numOctaves="3" seed="7" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="11" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbTapeEdge" x="-10%" y="-30%" width="120%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05 0.09" numOctaves="2" seed="9" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="3" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="lb-root">
+      <header class="nav" id="top">
+        <a class="logo" href="/landing-builder" aria-label="LiamDev — inicio">LiamDev</a>
+        <nav aria-label="Navegación principal">
+          <ul>
+            <li><a href="/landing-builder/articulos">Artículos</a></li>
+            <li><a href="/landing-builder#servicios">Servicios</a></li>
+            <li><a href="/landing-builder#resultados">Resultados</a></li>
+          </ul>
+        </nav>
+        <a href="/landing-builder#calificar" class="btn btn-yellow nav-cta" style="padding:10px 18px;font-size:11.5px">
+          Diagnóstico gratis
+        </a>
+      </header>
+
+      <main id="main-content" role="main">
+        <article class="article">
+          <nav class="crumbs" aria-label="Migas de pan">
+            <a href="/landing-builder">LiamDev</a>
+            <span>/</span>
+            <a href="/landing-builder/articulos">Artículos</a>
+            <span>/</span>
+            <span>{art.category}</span>
+          </nav>
+          <h1>{art.title}</h1>
+          <div class="art-meta">
+            <span>Por Liam Marega</span>
+            <time datetime={art.date}>{fecha}</time>
+            <span>{art.reading} min de lectura</span>
+            <span>{art.category}</span>
+          </div>
+
+          <div class="art-body">
+            <slot />
+          </div>
+
+          <aside class="art-cta">
+            <span class="tape lg" style="top:-14px;left:42%;transform:rotate(-3deg)"></span>
+            <h2>¿Tu página no convierte como debería?</h2>
+            <p>
+              Hago un diagnóstico gratuito de tu landing o sitio web: qué está
+              frenando tus conversiones y cómo solucionarlo. Sin compromiso.
+            </p>
+            <a href="/landing-builder#calificar" class="btn btn-yellow">
+              Pedir mi diagnóstico gratis
+              <span class="arr">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+              </span>
+            </a>
+          </aside>
+        </article>
+
+        <section class="art-related" aria-label="Artículos relacionados">
+          <h2>Seguí leyendo ↓</h2>
+          <ul>
+            {relacionados.map((r) => (
+              <li>
+                <a href={`/landing-builder/articulos/${r.slug}`}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <Footer />
+      </main>
+    </div>
+  </body>
+</html>
