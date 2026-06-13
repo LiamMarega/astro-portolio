@@ -425,9 +425,9 @@ html {
   padding: 14px 56px 58px;
   max-width: 1480px;
   margin: 0 auto;
-  align-items: center;
+  align-items: start;
   position: relative;
-  min-height: calc(min(90svh, 880px) - 66px);
+  min-height: calc(min(80svh, 800px) - 66px);
 }
 .lb-root .hero h1 {
   font-size: clamp(36px, 4.4vw, 58px);
@@ -512,7 +512,9 @@ html {
 
 /* Hero collage */
 .lb-root .collage {
-  position: relative;
+  position: sticky;
+  top: 90px;
+  align-self: start;
   min-height: clamp(380px, 58vh, 540px);
   padding-top: 0;
 }
@@ -1745,6 +1747,7 @@ html {
     gap: 30px;
   }
   .lb-root .collage {
+    position: static;
     min-height: 0;
     margin-top: 8px;
     max-width: 520px;
