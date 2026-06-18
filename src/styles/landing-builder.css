@@ -290,6 +290,52 @@ html {
   outline-offset: 2px;
 }
 
+/* Primary CTA — perpetual shine sweep + arrow nudge to pull taps */
+.lb-root .btn-yellow {
+  overflow: hidden;
+}
+.lb-root .btn-yellow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%);
+  transform: translateX(-120%);
+  animation: lbShine 3.4s ease-in-out infinite;
+}
+@keyframes lbShine {
+  0%, 55% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+.lb-root .btn-yellow .arr {
+  animation: lbArrowNudge 1.5s ease-in-out infinite;
+}
+.lb-root .btn-yellow:hover .arr {
+  animation: none;
+  transform: translateX(5px);
+}
+@keyframes lbArrowNudge {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb-root .btn-yellow::after {
+    display: none;
+  }
+  .lb-root .btn-yellow .arr {
+    animation: none;
+  }
+}
+
 /* ============== Nav ============== */
 .lb-root .nav {
   position: fixed;
@@ -2750,6 +2796,27 @@ html.lb-introing .lb-intro {
 }
 @media (max-width: 900px) {
   .lb-root .hero-cue { display: none; }
+}
+
+/* ---------- Closing CTA band at hero bottom ---------- */
+.lb-root .hero-bottom-cta {
+  grid-column: 1 / -1;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.lb-root .hero-bottom-cta .hbc-hand {
+  font-family: "Caveat", cursive;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--yellow-deep);
+}
+.lb-root .hero-bottom-cta .btn-yellow {
+  padding: 16px 28px;
+  font-size: 13.5px;
 }
 
 /* ---------- Affordance: lo clickeable se nota ---------- */

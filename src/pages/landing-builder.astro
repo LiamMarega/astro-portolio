@@ -224,19 +224,33 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
 
     // ---------- Entrada del hero (después de la intro del libro) ----------
     const playHero = () => {
-      const items: [string, gsap.TweenVars][] = [
+      // Revela los elementos que SOLO dependen del CSS .reveal (eyebrow, collage,
+      // CTA inferior). Los animados por GSAP abajo se controlan con fromTo.
+      document
+        .querySelectorAll('.hero .reveal')
+        .forEach((el) => el.classList.add('in'));
+      // Cada item: [sel, from, to?].
+      // - Con `to` => fromTo: fin explícito en opacity:1. Necesario para los
+      //   elementos .reveal (h1, lead, actions, meta): su base CSS es opacity:0
+      //   con transición de 0.8s, así que .from leería ~0 como fin y los dejaría
+      //   invisibles. Tienen transform identidad, por eso y:0 es seguro.
+      // - Sin `to` => from clásico: para photo-card/note/seal, que NO son
+      //   .reveal (base opacity:1) y conservan su rotación CSS de reposo.
+      const items: [string, gsap.TweenVars, gsap.TweenVars?][] = [
         ['.hero .photo-card', { y: 60, rotation: -6, opacity: 0, scale: 0.94, duration: 0.7, ease: 'back.out(1.6)' }],
-        ['.hero h1', { y: 36, opacity: 0, duration: 0.65, ease: 'power3.out' }],
-        ['.hero .lead', { y: 24, opacity: 0, duration: 0.55, ease: 'power3.out' }],
-        ['.hero .actions', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out' }],
-        ['.hero .meta', { y: 14, opacity: 0, duration: 0.45, ease: 'power3.out' }],
+        ['.hero h1', { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' }],
+        ['.hero .lead', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: 'power3.out' }],
+        ['.hero .actions', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }],
+        ['.hero .meta', { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }],
         ['.hero .note', { scale: 1.5, opacity: 0, duration: 0.45, ease: 'back.out(2)' }],
         ['.hero .seal', { scale: 2.2, rotation: 30, opacity: 0, duration: 0.5, ease: 'back.out(2.4)' }],
       ];
       const tl = gsap.timeline({ delay: 0.05 });
-      items.forEach(([sel, vars], i) => {
+      items.forEach(([sel, from, to], i) => {
         const els = document.querySelectorAll(sel);
-        if (els.length) tl.from(els, { ...vars, stagger: 0.08 }, i * 0.09);
+        if (!els.length) return;
+        if (to) tl.fromTo(els, from, { ...to, stagger: 0.08 }, i * 0.09);
+        else tl.from(els, { ...from, stagger: 0.08 }, i * 0.09);
       });
       const hand = document.querySelector('.hero-handwrite');
       if (hand) hand.classList.add('written');
