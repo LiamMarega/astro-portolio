@@ -155,6 +155,8 @@ export default function QualForm() {
   const [ans, setAns] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -184,6 +186,8 @@ export default function QualForm() {
     setAns({});
     setName("");
     setEmail("");
+    setWhatsapp("");
+    setConsent(false);
     setStatus("idle");
     setErrorMsg("");
   };
@@ -196,13 +200,23 @@ export default function QualForm() {
       setStatus("error");
       return;
     }
+    if ((whatsapp.match(/\d/g) || []).length < 8) {
+      setErrorMsg("Dejá tu WhatsApp con código de país para que te escriba.");
+      setStatus("error");
+      return;
+    }
+    if (!consent) {
+      setErrorMsg("Necesito que aceptes que te escriba por WhatsApp.");
+      setStatus("error");
+      return;
+    }
     setStatus("sending");
     setErrorMsg("");
     try {
       const res = await fetch("/api/diagnostico", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, verdict, answers: ans, questions: QF_QUESTIONS.map((x) => ({ id: x.id, q: x.q })) }),
+        body: JSON.stringify({ name, email, whatsapp, consent, verdict, answers: ans, questions: QF_QUESTIONS.map((x) => ({ id: x.id, q: x.q })) }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -225,7 +239,7 @@ export default function QualForm() {
           <span className="qf-stamp">Solicitud enviada</span>
           <h4 className="qf-q" style={{ marginTop: 14 }}>Gracias, {name.split(" ")[0]}.</h4>
           <p className="qf-hint" style={{ marginTop: 10 }}>
-            Recibí tu diagnóstico ({r.k.toLowerCase()}). Te respondo a <strong>{email}</strong> en menos de 24h.
+            Recibí tu diagnóstico ({r.k.toLowerCase()}). Te escribo por WhatsApp a <strong>{whatsapp}</strong> en menos de 24h.
           </p>
           <div className="qf-actions">
             <button className="qf-back" onClick={reset}>↺ Empezar de nuevo</button>
@@ -264,9 +278,30 @@ export default function QualForm() {
               autoComplete="email"
               aria-label="Tu email"
               onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              className="qf-input"
+              type="tel"
+              value={whatsapp}
+              placeholder="WhatsApp (+54 9 11 ...)"
+              autoComplete="tel"
+              inputMode="tel"
+              aria-label="Tu WhatsApp"
+              onChange={(e) => setWhatsapp(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
             />
           </div>
+
+          <label className="qf-consent" style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "flex-start", fontSize: 13, lineHeight: 1.4, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={consent}
+              aria-label="Acepto que me escriban por WhatsApp"
+              onChange={(e) => setConsent(e.target.checked)}
+              style={{ marginTop: 2, flexShrink: 0 }}
+            />
+            <span>Acepto que Liam me escriba por WhatsApp para conversar sobre mi proyecto.</span>
+          </label>
 
           {status === "error" && <p className="qf-error" role="alert">{errorMsg}</p>}
 

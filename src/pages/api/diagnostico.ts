@@ -5,9 +5,10 @@ import { Resend } from "resend";
 // Resend API key secret. The rest of the site stays static.
 export const prerender = false;
 
-// --- Config (placeholders — adjust + set RESEND_API_KEY in your env) ---
-const FROM = "LiamDev <onboarding@resend.dev>"; // use a verified domain in production
-const TO = "liammaregadevelop@gmail.com";
+// --- Config (set RESEND_API_KEY in your env) ---
+// swipeloop.app must be a verified domain in Resend for this to send.
+const FROM = "LiamDev <contacto@swipeloop.app>";
+const TO = "liammarega85@gmail.com";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VERDICT_LABEL: Record<string, string> = {
@@ -39,6 +40,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const name = typeof payload?.name === "string" ? payload.name.trim() : "";
   const email = typeof payload?.email === "string" ? payload.email.trim() : "";
+  const whatsapp = typeof payload?.whatsapp === "string" ? payload.whatsapp.trim() : "";
+  const consent = payload?.consent === true;
   const verdict = typeof payload?.verdict === "string" ? payload.verdict : "";
   const answers = (payload?.answers ?? {}) as Record<string, string>;
   const questions = (Array.isArray(payload?.questions) ? payload.questions : []) as {
@@ -49,6 +52,17 @@ export const POST: APIRoute = async ({ request }) => {
   if (!name || !EMAIL_RE.test(email)) {
     return json({ error: "Nombre o email inválido." }, 400);
   }
+  // Need at least 8 digits to be a usable WhatsApp number.
+  if ((whatsapp.match(/\d/g) ?? []).length < 8) {
+    return json({ error: "WhatsApp inválido." }, 400);
+  }
+  if (!consent) {
+    return json({ error: "Falta aceptar el contacto por WhatsApp." }, 400);
+  }
+
+  // WhatsApp click-to-chat link (digits only).
+  const waDigits = whatsapp.replace(/\D/g, "");
+  const waLink = `https://wa.me/${waDigits}`;
 
   const apiKey = import.meta.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -82,6 +96,11 @@ export const POST: APIRoute = async ({ request }) => {
       <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#555">Email</td><td style="padding:8px 12px;border-bottom:1px solid #eee"><a href="mailto:${esc(
         email,
       )}">${esc(email)}</a></td></tr>
+      <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#555">WhatsApp</td><td style="padding:8px 12px;border-bottom:1px solid #eee"><a href="${esc(
+        waLink,
+      )}"><strong>${esc(whatsapp)}</strong></a> — <a href="${esc(
+        waLink,
+      )}">abrir chat</a></td></tr>
       ${rows}
     </table>
   </div>`;
@@ -91,6 +110,7 @@ export const POST: APIRoute = async ({ request }) => {
     `Veredicto: ${VERDICT_LABEL[verdict] || verdict || "—"}`,
     `Nombre: ${name}`,
     `Email: ${email}`,
+    `WhatsApp: ${whatsapp} (${waLink})`,
     ...questions.map((q) => `- ${q.q}\n  ${answers[q.id] || "—"}`),
   ].join("\n");
 
