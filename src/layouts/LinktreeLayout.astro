@@ -1,5 +1,6 @@
 ---
 import "lenis/dist/lenis.css";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
@@ -100,6 +101,7 @@ const ogImage = new URL(image, Astro.url).href;
     />
 
     <title>{title}</title>
+    <Analytics />
   </head>
 
   <body class="overflow-x-hidden bg-black text-white min-h-screen cursor-none">

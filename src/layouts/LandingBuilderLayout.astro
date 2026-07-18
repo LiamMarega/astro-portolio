@@ -14,6 +14,7 @@ import "@fontsource/caveat/500.css";
 import "@fontsource/caveat/600.css";
 import "@fontsource/caveat/700.css";
 import { SEO } from "astro-seo";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
@@ -98,6 +99,7 @@ const canonicalURL = new URL(
         },
       })}
     />
+    <Analytics />
   </head>
   <body>
     <!-- ===== SVG filter bank (paper / torn / marker simulated in code) ===== -->
