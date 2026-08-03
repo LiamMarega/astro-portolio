@@ -1,0 +1,80 @@
+---
+import type { PortfolioCopy } from "../../i18n/portfolio";
+
+interface Props {
+  copy: PortfolioCopy["saas"];
+}
+
+const { copy } = Astro.props;
+---
+
+<section
+  id="saas"
+  class="w-full flex justify-center px-4 sm:px-6 py-16 sm:py-20"
+  role="region"
+  aria-label={copy.title}
+>
+  <a
+    href="https://swipeloop.app"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="group relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-10 ring-1 ring-inset ring-white/5 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.8)] transition-all duration-500 hover:-translate-y-1 hover:border-[#E2FF00]/40"
+  >
+    <div
+      class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#E2FF00]/10 blur-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-700"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
+      <img
+        src="/images/icons/swipeloop/icon.png"
+        alt="SwipeLoop"
+        width="72"
+        height="72"
+        loading="lazy"
+        decoding="async"
+        class="h-16 w-16 sm:h-[72px] sm:w-[72px] rounded-2xl object-cover border border-white/10 shadow-lg shrink-0"
+      />
+
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <span
+            class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#E2FF00] bg-[#E2FF00]/10 border border-[#E2FF00]/20 px-2.5 py-1 rounded-full"
+          >
+            {copy.eyebrow}
+          </span>
+          <span
+            class="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full"
+          >
+            {copy.badge}
+          </span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-bold text-white leading-tight">
+          {copy.title}
+        </h2>
+        <p class="mt-1 text-sm sm:text-base text-[#E2FF00]/80 font-medium">
+          {copy.subtitle}
+        </p>
+        <p class="mt-3 text-sm sm:text-base text-white/55 leading-relaxed max-w-2xl">
+          {copy.description}
+        </p>
+
+        <span
+          class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#E2FF00] group-hover:gap-2.5 transition-all"
+        >
+          {copy.cta}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M3 8h10M9 4l4 4-4 4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </a>
+</section>

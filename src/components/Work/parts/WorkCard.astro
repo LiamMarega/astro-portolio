@@ -15,6 +15,7 @@ interface Props extends Omit<Project, "featured" | "images" | "reverse"> {
   useCustomContent?: boolean;
   /** When true, the custom content (slot) will take up 100% of the card width/height using absolute positioning */
   fullWidthCustomContent?: boolean;
+  techStackLabel?: string;
 }
 
 const {
@@ -30,6 +31,7 @@ const {
   isReversed = false,
   useCustomContent = false,
   fullWidthCustomContent = false,
+  techStackLabel = "TECH STACK",
 } = Astro.props;
 
 // Determine if we have multiple images for staggered layout
@@ -102,7 +104,7 @@ const shouldUseCustom = useCustomContent || hasSlotContent;
 
       <!-- Tech Stack -->
       <div class="work-card__tech-stack">
-        <h3 class="work-card__tech-title">TECH STACK</h3>
+        <h3 class="work-card__tech-title">{techStackLabel}</h3>
         <div class="work-card__tech-icons">
           {
             techStack.map((tech) => (

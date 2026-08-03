@@ -1,5 +1,14 @@
 ---
 import Terminal from "../../ui/Terminal.astro";
+import { getPortfolioCopy } from "../../../i18n/portfolio";
+import type { Locale } from "../../../i18n/linktree";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = getPortfolioCopy(locale).about3;
 ---
 
 <!-- About Me Section 3 -->
@@ -9,8 +18,8 @@ import Terminal from "../../ui/Terminal.astro";
       <h5
         class="text-lg sm:text-xl md:text-xl lg:text-4xl leading-relaxed md:leading-relaxed"
       >
-        <strong class="text-green-300 font-semibold">pixel-perfect</strong>
-        user interfaces and using the latest technologies, such as
+        <strong class="text-green-300 font-semibold">{t.prefix}</strong>
+        {t.middle}
         <span class="block mt-1 md:mt-2 space-x-1 sm:space-x-2">
           <strong
             class="bg-gradient-to-r bg-clip-text text-transparent
@@ -21,25 +30,25 @@ import Terminal from "../../ui/Terminal.astro";
             class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-            >Next,</strong
-          ><strong
-            class="bg-gradient-to-r bg-clip-text text-transparent
-              from-indigo-500 via-purple-700 to-indigo-500
-              animate-text inline-block"
-            >Astro,</strong
+            >Next.js,</strong
           ><strong
             class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
             >Flutter,</strong
-          >
-        </span>
-        <span class="block mt-1 md:mt-2">
-          and <strong
+          ><strong
             class="bg-gradient-to-r bg-clip-text text-transparent
               from-indigo-500 via-purple-700 to-indigo-500
               animate-text inline-block"
-            >Firebase</strong
+            >Railway,</strong
+          >
+        </span>
+        <span class="block mt-1 md:mt-2">
+          {t.connector} <strong
+            class="bg-gradient-to-r bg-clip-text text-transparent
+              from-indigo-500 via-purple-700 to-indigo-500
+              animate-text inline-block"
+            >{t.techLast}</strong
           >.
         </span>
       </h5>

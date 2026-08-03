@@ -6,9 +6,10 @@ import type {
 
 interface Props extends Omit<Project, "featured" | "reverse"> {
     isReversed?: boolean;
+    techStackLabel?: string;
 }
 
-const { id, title, description, images, techStack, bgColor, textColor, link } =
+const { id, title, description, images, techStack, bgColor, textColor, link, techStackLabel = "TECH STACK" } =
     Astro.props;
 ---
 
@@ -73,7 +74,7 @@ const { id, title, description, images, techStack, bgColor, textColor, link } =
             <h3
                 class="text-[#E4F4E4] text-base font-bold p-3 text-center border-b-2 border-[#E4F4E4]"
             >
-                TECH STACK
+                {techStackLabel}
             </h3>
             <div
                 class="flex flex-row justify-center items-center p-4 gap-4 flex-wrap"

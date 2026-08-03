@@ -1,12 +1,28 @@
 ---
-const features = ["Estrategia", "Diseño premium", "Performance"];
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  features?: string[];
+  cta?: string;
+  ariaLabel?: string;
+}
+
+const {
+  eyebrow = "For clients",
+  title = "Landing PRO System",
+  subtitle = "High-performance landing pages that turn visits into customers.",
+  features = ["Strategy", "Premium design", "Performance"],
+  cta = "See the system",
+  ariaLabel = "Landing PRO System — high-performance landing pages",
+} = Astro.props;
 ---
 
 <a
   href="/landing-builder"
   data-reveal
   data-cursor-scale
-  aria-label="Sistema Landing PRO — landing pages de alto rendimiento"
+  aria-label={ariaLabel}
   class="cursor-target group relative block w-full max-w-lg overflow-hidden rounded-2xl border border-[#E2FF00]/25 bg-white/[0.02] p-5 sm:p-6 ring-1 ring-inset ring-white/5 shadow-[0_16px_50px_-20px_rgba(226,255,0,0.35)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/50 hover:shadow-[0_24px_70px_-18px_rgba(226,255,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/70"
 >
   <!-- Ambient glow -->
@@ -42,7 +58,7 @@ const features = ["Estrategia", "Diseño premium", "Performance"];
       <span
         class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#E2FF00] bg-[#E2FF00]/10 border border-[#E2FF00]/20 px-2.5 py-1 rounded-full"
       >
-        Para clientes
+        {eyebrow}
       </span>
     </div>
 
@@ -51,10 +67,10 @@ const features = ["Estrategia", "Diseño premium", "Performance"];
       <h3
         class="text-xl sm:text-2xl font-bold tracking-tight text-white text-balance leading-tight"
       >
-        Sistema Landing PRO
+        {title}
       </h3>
       <p class="mt-1.5 text-sm text-white/55 leading-relaxed max-w-[42ch]">
-        Landing pages de alto rendimiento que convierten visitas en clientes.
+        {subtitle}
       </p>
     </div>
 
@@ -71,7 +87,7 @@ const features = ["Estrategia", "Diseño premium", "Performance"];
 
     <!-- CTA row -->
     <div class="flex items-center justify-between border-t border-white/8 pt-4">
-      <span class="text-sm font-semibold text-[#E2FF00]">Ver el sistema</span>
+      <span class="text-sm font-semibold text-[#E2FF00]">{cta}</span>
       <span
         class="flex h-9 w-9 items-center justify-center rounded-full bg-[#E2FF00] text-black transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-8deg]"
         aria-hidden="true"

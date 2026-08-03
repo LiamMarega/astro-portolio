@@ -1,0 +1,11 @@
+---
+import LinktreeLayout from "../../layouts/LinktreeLayout.astro";
+import LinktreePage from "../../components/linktree/LinktreePage.astro";
+import { getLinktreeCopy } from "../../i18n/linktree";
+
+const t = getLinktreeCopy("en");
+---
+
+<LinktreeLayout title={t.meta.title} description={t.meta.description} lang="en">
+  <LinktreePage locale="en" />
+</LinktreeLayout>

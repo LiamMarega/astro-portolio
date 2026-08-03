@@ -1,6 +1,18 @@
 ---
 import { getProjects } from "../../data/projects";
 
+interface Props {
+  techSuffix?: string;
+  ariaSuffix?: string;
+  portfolioHref?: string;
+}
+
+const {
+  techSuffix = "technologies",
+  ariaSuffix = "view in portfolio",
+  portfolioHref = "/en/portfolio",
+} = Astro.props;
+
 const projects = getProjects().slice(0, 4);
 ---
 
@@ -12,9 +24,9 @@ const projects = getProjects().slice(0, 4);
     {
       projects.map((p) => (
         <a
-          href={`/portfolio#${p.id}`}
+          href={`${portfolioHref}#${p.id}`}
           data-cursor-scale
-          aria-label={`${p.title} — ver en portfolio`}
+          aria-label={`${p.title} — ${ariaSuffix}`}
           class="cursor-target group relative snap-start shrink-0 w-[180px] overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] ring-1 ring-inset ring-white/5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/40 hover:shadow-[0_16px_40px_-12px_rgba(226,255,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60"
         >
           <div class="relative h-[120px] overflow-hidden">
@@ -37,7 +49,7 @@ const projects = getProjects().slice(0, 4);
               {p.title}
             </p>
             <p class="text-[11px] text-white/50 mt-0.5">
-              {p.techStack.length} tecnologías
+              {p.techStack.length} {techSuffix}
             </p>
           </div>
         </a>

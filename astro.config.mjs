@@ -10,8 +10,26 @@ export default defineConfig({
   // with `export const prerender = false` (e.g. the Resend form endpoint).
   site: "https://www.liammarega.com",
   adapter: vercel(),
-  integrations: [tailwind(), react(), sitemap()],
-  
+  integrations: [
+    tailwind(),
+    react(),
+    sitemap({
+      i18n: {
+        defaultLocale: "en",
+        locales: { en: "en-US", es: "es-AR" },
+      },
+    }),
+  ],
+
+  // NOTE: intentionally NOT using Astro's built-in `i18n` config here.
+  // Enabling it makes Astro's router take over ALL routing and 404 every
+  // page that isn't under a locale folder (/portfolio, /landing-builder,
+  // /gallery, etc.) — verified locally. Since only the linktree hub is
+  // localized for now, /en and /es are plain file-based routes
+  // (src/pages/en/index.astro, src/pages/es/index.astro) and "/" is a
+  // manual geo/cookie redirect (see src/pages/index.astro). Revisit
+  // switching to core i18n once every route has en/es versions.
+
   // Performance optimizations
   build: {
     // Enable CSS inlining for critical CSS

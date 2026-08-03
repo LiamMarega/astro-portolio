@@ -7,16 +7,25 @@ import Analytics from "@vercel/analytics/astro";
 interface Props {
   title: string;
   description?: string;
+  lang?: "en" | "es";
+  navLabels?: { about: string; work: string; contact: string };
 }
 
 const {
   title,
   description = "Liam Marega - Frontend Developer specializing in responsive, attractive and functional applications.",
+  lang = "en",
+  navLabels,
 } = Astro.props;
+
+// hreflang alternates: swap the /en or /es prefix, offer both plus x-default
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/(en|es)\/?/, "");
+const enURL = new URL(`/en/${pathWithoutLocale}`, Astro.url).href;
+const esURL = new URL(`/es/${pathWithoutLocale}`, Astro.url).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +40,9 @@ const {
     <!-- Performance optimizations -->
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="x-default" href={enURL} />
 
     <!-- Preload critical resources -->
     <link
@@ -96,7 +108,9 @@ const {
         image: "https://liammarega.com/images/avatar.webp",
         sameAs: [
           "https://github.com/liammarega",
-          "https://linkedin.com/in/liammarega",
+          "https://www.linkedin.com/in/liam-marega/",
+          "https://instagram.com/liammdev",
+          "https://youtube.com/@liammdev",
         ],
       })}
     />
@@ -106,7 +120,7 @@ const {
   </head>
 
   <body class="overflow-x-hidden bg-black text-white min-h-screen">
-    <Navbar />
+    <Navbar locale={lang} labels={navLabels} />
     <slot />
     <NoiseBackground />
     <!-- <SquareBackground /> -->

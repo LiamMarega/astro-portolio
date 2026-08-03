@@ -1,5 +1,17 @@
 ---
+import type { Locale } from "../../i18n/linktree";
 
+interface Props {
+  locale?: Locale;
+  labels?: { about: string; work: string; contact: string };
+}
+
+const {
+  locale = "en",
+  labels = { about: "About", work: "Work", contact: "Contact" },
+} = Astro.props;
+
+const homeHref = `/${locale}/`;
 ---
 
 <header
@@ -17,7 +29,7 @@
       >
       </div>
       <a
-        href="/"
+        href={homeHref}
         class="text-sm sm:text-base md:text-lg lg:text-xl font-medium hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm"
         aria-label="Go to homepage"
       >
@@ -58,21 +70,21 @@
         <a
           href="#about"
           class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
-          role="menuitem">About</a
+          role="menuitem">{labels.about}</a
         >
       </li>
       <li role="none">
         <a
           href="#work"
           class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
-          role="menuitem">Work</a
+          role="menuitem">{labels.work}</a
         >
       </li>
       <li role="none">
         <a
           href="#contact"
           class="hover:text-yellow-300 focus:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm px-2 py-1"
-          role="menuitem">Contact</a
+          role="menuitem">{labels.contact}</a
         >
       </li>
     </ul>
@@ -116,21 +128,21 @@
             <a
               href="#about"
               class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
-              role="menuitem">About</a
+              role="menuitem">{labels.about}</a
             >
           </li>
           <li role="none">
             <a
               href="#work"
               class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
-              role="menuitem">Work</a
+              role="menuitem">{labels.work}</a
             >
           </li>
           <li role="none">
             <a
               href="#contact"
               class="block text-xl sm:text-2xl md:text-3xl hover:text-yellow-300 focus:text-yellow-300 transition-colors mobile-link focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black rounded-sm py-2"
-              role="menuitem">Contact</a
+              role="menuitem">{labels.contact}</a
             >
           </li>
         </ul>

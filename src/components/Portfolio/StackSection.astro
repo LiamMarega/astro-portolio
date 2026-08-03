@@ -1,0 +1,49 @@
+---
+import type { PortfolioCopy } from "../../i18n/portfolio";
+
+interface Props {
+  copy: PortfolioCopy["stack"];
+}
+
+const { copy } = Astro.props;
+
+// Cycle through the same pastel sticker palette used elsewhere on the
+// portfolio (bubble-card / tech-card colors) so the stack section feels
+// like part of the same scrapbook, not a bolted-on new component.
+const palette = ["bg-yellow-300", "bg-green-200", "bg-lime-200", "bg-[#E4F4E4]"];
+---
+
+<section
+  id="stack"
+  class="w-full flex flex-col items-center px-4 sm:px-6 py-16 sm:py-20"
+  role="region"
+  aria-label={copy.title}
+>
+  <div class="w-full max-w-4xl">
+    <div class="mb-8 sm:mb-10 text-center sm:text-left">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white">{copy.title}</h2>
+      <p class="mt-2 text-sm sm:text-base text-white/50">{copy.meta}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+      {
+        copy.groups.map((group, i) => (
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-[0.18em] text-white/40 mb-3">
+              {group.label}
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <span
+                  class={`text-black text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full shadow-sm ${palette[i % palette.length]}`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -9,9 +9,25 @@ import {
 } from "../../data/projects";
 import BentoGrid from "../ui/BentoGrid.astro";
 import Iridescense from "../ui/iridescense.astro";
+import { getPortfolioCopy, projectDescriptionsEs } from "../../i18n/portfolio";
+import type { Locale } from "../../i18n/linktree";
 
-// Get all projects from centralized data source
-const projects = getProjects(true); // Sort by featured first
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = getPortfolioCopy(locale);
+
+// Get all projects from centralized data source, swapping in translated
+// descriptions when available for the current locale.
+const projects = getProjects(true).map((project) => ({
+  ...project,
+  description:
+    locale === "es" && projectDescriptionsEs[project.id]
+      ? projectDescriptionsEs[project.id]
+      : project.description,
+})); // Sort by featured first
 ---
 
 <!-- Mobile Version: < 768px -->
@@ -22,7 +38,11 @@ const projects = getProjects(true); // Sort by featured first
 >
   {
     projects.map((project, index) => (
-      <WorkCardMobile {...project} isReversed={shouldReverse(project, index)} />
+      <WorkCardMobile
+        {...project}
+        isReversed={shouldReverse(project, index)}
+        techStackLabel={t.work.techStackLabel}
+      />
     ))
   }
 </section>
@@ -35,7 +55,11 @@ const projects = getProjects(true); // Sort by featured first
 >
   {
     projects.map((project, index) => (
-      <WorkCardTablet {...project} isReversed={shouldReverse(project, index)} />
+      <WorkCardTablet
+        {...project}
+        isReversed={shouldReverse(project, index)}
+        techStackLabel={t.work.techStackLabel}
+      />
     ))
   }
 </section>
@@ -54,20 +78,20 @@ const projects = getProjects(true); // Sort by featured first
           cardIndex={index}
           totalCards={projects.length + 1}
           isReversed={shouldReverse(project, index)}
+          techStackLabel={t.work.techStackLabel}
         />
       ))
     }
     <WorkCard
       id="more-works"
-      title="The Creative Vault"
-      description={[
-        "A curated ensemble of professional freelance work, academic breakthroughs, and technical explorations that showcase the depth and versatility of my engineering journey.",
-      ]}
+      title={t.work.moreWorksTitle}
+      description={[t.work.moreWorksDesc]}
       techStack={[techIcons.react, techIcons.typescript]}
       bgColor="bg-[#fde047]"
       textColor="text-[#000000]"
       cardIndex={projects.length}
       totalCards={projects.length + 1}
+      techStackLabel={t.work.techStackLabel}
       isReversed={true}
       useCustomContent
       fullWidthCustomContent

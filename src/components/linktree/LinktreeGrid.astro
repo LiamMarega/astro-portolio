@@ -11,13 +11,14 @@ interface CardData {
 
 interface Props {
   cards: CardData[];
+  ariaLabel?: string;
 }
 
-const { cards } = Astro.props;
+const { cards, ariaLabel = "Main links" } = Astro.props;
 ---
 
 <nav
-  aria-label="Enlaces principales"
+  aria-label={ariaLabel}
   class="w-full max-w-lg grid grid-cols-2 gap-3 px-0"
 >
   {cards.map((card) => {

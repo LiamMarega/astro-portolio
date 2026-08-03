@@ -1,3 +1,15 @@
+---
+import { getPortfolioCopy } from "../../../i18n/portfolio";
+import type { Locale } from "../../../i18n/linktree";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = getPortfolioCopy(locale).about2;
+---
+
 <!-- About Me Section 2 -->
 <div id="about_me_2" class="relative w-full max-w-6xl mx-auto">
   <div
@@ -13,7 +25,7 @@
           class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-nowrap font-bold text-black w-fit
           p-3 sm:p-4 md:p-5 rounded-2xl flex justify-center items-center bg-green-200 mx-auto md:mx-0"
         >
-          Nice and
+          {t.kicker}
         </h3>
 
         <!-- Mobile badges (shown only on mobile) -->
@@ -22,7 +34,7 @@
             class="z-10 shadow-md text-lg sm:text-xl font-bold text-black
             p-3 rounded-2xl flex justify-center items-center bg-yellow-300"
           >
-            Fast
+            {t.badgeFast}
           </div>
 
           <div
@@ -30,7 +42,7 @@
             class="text-base sm:text-lg font-bold text-black
             p-3 rounded-2xl flex justify-center items-center bg-green-500"
           >
-            Scalable
+            {t.badgeScalable}
           </div>
         </div>
       </div>
@@ -42,7 +54,7 @@
         text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-black
         p-3 sm:p-4 md:p-5 rounded-2xl justify-center items-center bg-yellow-300 hidden md:flex"
       >
-        Fast
+        {t.badgeFast}
       </div>
 
       <div
@@ -54,7 +66,7 @@
         text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-black
         p-3 md:p-4 lg:p-5 rounded-2xl justify-center items-center bg-green-500"
       >
-        Scalable
+        {t.badgeScalable}
       </div>
     </div>
 
@@ -64,8 +76,8 @@
         class="text-center md:text-start md:pl-4 lg:pl-6 xl:pl-8
         text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
       >
-        Create responsive, attractive, functional and easy to use
-        <b class="relative">applications.</b>
+        {t.descPrefix}
+        <b class="relative">{t.descSuffix}</b>
       </p>
 
       <img

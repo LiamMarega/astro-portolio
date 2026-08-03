@@ -1,3 +1,25 @@
+---
+interface Props {
+  mobileTitle?: string;
+  mobileDesc?: string;
+  webTitle?: string;
+  webDesc?: string;
+  stackLabel?: string;
+  badgeLabel?: string;
+}
+
+const {
+  mobileTitle = "MOBILE DEVELOPER",
+  mobileDesc = "Professional iOS and Android developer",
+  webTitle = "WEB DEVELOPER",
+  webDesc = "Developing websites with best practices",
+  stackLabel = "React · Flutter · Next.js",
+  badgeLabel = "UX/UI",
+} = Astro.props;
+
+const stackParts = stackLabel.split(" · ");
+---
+
 <section
   id="info-box"
   class="relative w-[100vw] sm:w-[95vw] md:w-[92vw] lg:w-[90vw] xl:w-[85vw] -ml-3 sm:-ml-4 md:-ml-6 lg:-ml-8 xl:-ml-12 2xl:-ml-16 mr-auto mt-24 mb-32"
@@ -27,12 +49,12 @@
       <h3
         class="text-black text-[10px] sm:text-xs md:text-sm lg:text-base font-bold leading-tight"
       >
-        MOBILE DEVELOPER
+        {mobileTitle}
       </h3>
       <span
         class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight"
       >
-        Professional iOS and Android developer
+        {mobileDesc}
       </span>
     </div>
 
@@ -46,12 +68,12 @@
       <h3
         class="text-black text-[10px] sm:text-xs md:text-sm lg:text-base font-bold leading-tight"
       >
-        WEB DEVELOPER
+        {webTitle}
       </h3>
       <span
         class="hidden sm:block text-black text-[8px] sm:text-[10px] md:text-xs leading-tight"
       >
-        Developing websites with best practices
+        {webDesc}
       </span>
     </div>
 
@@ -60,7 +82,7 @@
       class="tech-card absolute -top-12 right-6 sm:right-12 md:right-16 lg:right-32 xl:right-48
       rotate-3 sm:rotate-6 md:rotate-12 bg-yellow-300 delay-3 z-10"
       role="img"
-      aria-label="Primary technologies: React, Flutter, Next.js"
+      aria-label={`Primary technologies: ${stackParts.join(", ")}`}
     >
       <div
         class="corner-dot left-1 sm:left-2 top-1 sm:top-2"
@@ -82,21 +104,13 @@
         aria-hidden="true"
       >
       </div>
-      <h3
-        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
-      >
-        REACT
-      </h3>
-      <h3
-        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
-      >
-        FLUTTER
-      </h3>
-      <h3
-        class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
-      >
-        NEXT.JS
-      </h3>
+      {
+        stackParts.map((part) => (
+          <h3 class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight">
+            {part.toUpperCase()}
+          </h3>
+        ))
+      }
     </div>
 
     <!-- Technologies card 2 (BOTTOM-LEFT) -->
@@ -119,7 +133,7 @@
       <h3
         class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"
       >
-        UX/UI
+        {badgeLabel}
       </h3>
       <h3
         class="text-black font-bold text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight"

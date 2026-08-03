@@ -3,12 +3,16 @@ interface Props {
   name?: string;
   tagline?: string;
   avatar?: string;
+  availabilityText?: string;
+  socialsLabel?: string;
 }
 
 const {
   name = "Liam Marega",
   tagline = "Frontend Developer & Digital Strategist",
   avatar = "/images/avatar.webp",
+  availabilityText = "Available for projects",
+  socialsLabel = "Social links",
 } = Astro.props;
 
 const socials = [
@@ -81,13 +85,13 @@ const socials = [
       <span class="relative inline-flex h-2 w-2 rounded-full bg-[#E2FF00]"></span>
     </span>
     <span class="text-xs font-medium text-white/70"
-      >Disponible para proyectos</span
+      >{availabilityText}</span
     >
   </div>
 
   <!-- Social strip -->
   <nav
-    aria-label="Redes sociales"
+    aria-label={socialsLabel}
     class="flex items-center gap-4 mt-5"
     data-hero
   >

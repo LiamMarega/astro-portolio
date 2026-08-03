@@ -6,20 +6,27 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  lang?: "en" | "es";
 }
 
 const {
   title,
   description = "Hub de proyectos, redes y recursos de Liam Marega — Frontend Developer & Digital Strategist.",
   image = "/images/avatar.webp",
+  lang = "es",
 } = Astro.props;
 
 const canonicalURL = Astro.url.href;
 const ogImage = new URL(image, Astro.url).href;
+
+// hreflang alternates: swap the /en or /es prefix, always offer both plus x-default (en)
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/(en|es)\/?/, "");
+const enURL = new URL(`/en/${pathWithoutLocale}`, Astro.url).href;
+const esURL = new URL(`/es/${pathWithoutLocale}`, Astro.url).href;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,6 +39,9 @@ const ogImage = new URL(image, Astro.url).href;
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="x-default" href={enURL} />
 
     <!-- Preload critical resources -->
     <link
