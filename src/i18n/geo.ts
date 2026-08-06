@@ -41,3 +41,23 @@ export function resolveLocale(astro: Pick<APIContext, "cookies" | "request">): L
 
   return locale;
 }
+
+/**
+ * Visitor segment inferred from a `?ref=` query param, so a single bio
+ * link (Instagram, LinkedIn, CV, etc.) can personalize the linktree hub
+ * for the audience it mostly attracts — no separate URLs to maintain.
+ *
+ * Usage: liammarega.com/?ref=ig
+ */
+export type Segment = "client" | "company";
+
+const CLIENT_REFS = new Set(["ig", "instagram"]);
+const COMPANY_REFS = new Set(["li", "linkedin", "recruiter", "cv"]);
+
+export function resolveSegment(astro: Pick<APIContext, "url">): Segment | undefined {
+  const ref = astro.url.searchParams.get("ref")?.toLowerCase();
+  if (!ref) return undefined;
+  if (CLIENT_REFS.has(ref)) return "client";
+  if (COMPANY_REFS.has(ref)) return "company";
+  return undefined;
+}

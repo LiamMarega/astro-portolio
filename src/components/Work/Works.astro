@@ -2,13 +2,7 @@
 import WorkCard from "../Work/parts/WorkCard.astro";
 import WorkCardMobile from "../Work/parts/WorkCardMobile.astro";
 import WorkCardTablet from "../Work/parts/WorkCardTablet.astro";
-import {
-  getProjects,
-  shouldReverse,
-  techIcons,
-} from "../../data/projects";
-import BentoGrid from "../ui/BentoGrid.astro";
-import Iridescense from "../ui/iridescense.astro";
+import { getProjects, shouldReverse } from "../../data/projects";
 import { getPortfolioCopy, projectDescriptionsEs } from "../../i18n/portfolio";
 import type { Locale } from "../../i18n/linktree";
 
@@ -76,30 +70,12 @@ const projects = getProjects(true).map((project) => ({
         <WorkCard
           {...project}
           cardIndex={index}
-          totalCards={projects.length + 1}
+          totalCards={projects.length}
           isReversed={shouldReverse(project, index)}
           techStackLabel={t.work.techStackLabel}
         />
       ))
     }
-    <WorkCard
-      id="more-works"
-      title={t.work.moreWorksTitle}
-      description={[t.work.moreWorksDesc]}
-      techStack={[techIcons.react, techIcons.typescript]}
-      bgColor="bg-[#fde047]"
-      textColor="text-[#000000]"
-      cardIndex={projects.length}
-      totalCards={projects.length + 1}
-      techStackLabel={t.work.techStackLabel}
-      isReversed={true}
-      useCustomContent
-      fullWidthCustomContent
-    >
-      <Iridescense>
-        <BentoGrid />
-      </Iridescense>
-    </WorkCard>
   </div>
 
   <style>

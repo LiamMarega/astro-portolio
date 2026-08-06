@@ -7,6 +7,7 @@ import ProjectsPreview from "./ProjectsPreview.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import TargetCursor from "../ui/TargetCursor";
 import { getLinktreeCopy, type Locale } from "../../i18n/linktree";
+import type { Segment } from "../../i18n/geo";
 
 interface Project {
   title: string;
@@ -22,10 +23,27 @@ interface Project {
 
 interface Props {
   locale: Locale;
+  /** Inferred from ?ref= — reorders sections to lead with what that
+   * audience actually wants (e.g. Instagram traffic is ~95% clients
+   * looking for a landing page, not recruiters). Undefined = default order. */
+  segment?: Segment;
 }
 
-const { locale } = Astro.props;
+const { locale, segment } = Astro.props;
 const t = getLinktreeCopy(locale);
+
+// Flexbox `order` on the existing section markup — no duplication, no
+// reshuffled DOM. Default (no segment) leaves every section at order:0,
+// i.e. plain document order, so nothing changes for the common case.
+const isClient = segment === "client";
+const order = {
+  landingPro: isClient ? "order-2" : "",
+  paths: isClient ? "order-3" : "",
+  projects: isClient ? "order-4" : "",
+  builder: isClient ? "order-5" : "",
+  socials: isClient ? "order-6" : "",
+  footer: isClient ? "order-7" : "",
+};
 
 // Builder — apps propias en desarrollo
 const builder: Project[] = [
@@ -88,7 +106,10 @@ const socials: Project[] = [
   />
 
   <!-- Elegí tu camino / Pick your path — funnel dispatcher -->
-  <section class="w-full flex flex-col items-center" aria-label={t.paths.title}>
+  <section
+    class:list={["w-full flex flex-col items-center", order.paths]}
+    aria-label={t.paths.title}
+  >
     <SectionHeader title={t.paths.title} meta={t.paths.meta} />
     <div
       class="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-3"
@@ -98,7 +119,10 @@ const socials: Project[] = [
         href={`/${locale}/portfolio`}
         data-cursor-scale
         aria-label={t.paths.company.title}
-        class="cursor-target group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-white/12 bg-white/[0.03] p-5 ring-1 ring-inset ring-white/5 shadow-[0_16px_40px_-18px_rgba(0,0,0,0.7)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        class:list={[
+          "cursor-target group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-white/12 bg-white/[0.03] p-5 ring-1 ring-inset ring-white/5 shadow-[0_16px_40px_-18px_rgba(0,0,0,0.7)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+          isClient ? "order-2" : "",
+        ]}
       >
         <span
           class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white"
@@ -145,7 +169,10 @@ const socials: Project[] = [
         href="/landing-builder"
         data-cursor-scale
         aria-label={t.paths.client.title}
-        class="cursor-target group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-[#E2FF00]/25 bg-[#E2FF00]/[0.04] p-5 ring-1 ring-inset ring-white/5 shadow-[0_16px_40px_-18px_rgba(226,255,0,0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/50 hover:bg-[#E2FF00]/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60"
+        class:list={[
+          "cursor-target group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-[#E2FF00]/25 bg-[#E2FF00]/[0.04] p-5 ring-1 ring-inset ring-white/5 shadow-[0_16px_40px_-18px_rgba(226,255,0,0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/50 hover:bg-[#E2FF00]/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60",
+          isClient ? "order-1" : "",
+        ]}
       >
         <span
           class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2FF00]/30 bg-[#E2FF00]/10 text-[#E2FF00]"
@@ -191,7 +218,7 @@ const socials: Project[] = [
   </section>
 
   <!-- Sistema Landing PRO — oferta para clientes -->
-  <section class="w-full flex flex-col items-center">
+  <section class:list={["w-full flex flex-col items-center", order.landingPro]}>
     <SectionHeader title={t.landingPro.title} meta={t.landingPro.subtitle} />
     <LandingProCard
       eyebrow={t.landingPro.eyebrow}
@@ -204,7 +231,7 @@ const socials: Project[] = [
   </section>
 
   <!-- Proyectos — credibilidad para empresas -->
-  <section class="w-full flex flex-col items-center">
+  <section class:list={["w-full flex flex-col items-center", order.projects]}>
     <SectionHeader
       title={t.projects.title}
       meta={t.projects.meta}
@@ -219,7 +246,7 @@ const socials: Project[] = [
   </section>
 
   <!-- Builder — apps propias -->
-  <section class="w-full flex flex-col items-center">
+  <section class:list={["w-full flex flex-col items-center", order.builder]}>
     <SectionHeader title={t.builder.title} meta={t.builder.meta} />
     <nav
       aria-label={t.builder.title}
@@ -295,12 +322,12 @@ const socials: Project[] = [
   </section>
 
   <!-- Redes — el creador -->
-  <section class="w-full flex flex-col items-center">
+  <section class:list={["w-full flex flex-col items-center", order.socials]}>
     <SectionHeader title={t.socials.title} meta={t.socials.meta} />
     <LinktreeGrid cards={socials} ariaLabel={t.socials.title} />
   </section>
 
-  <footer class="mt-4 text-center">
+  <footer class:list={["mt-4 text-center", order.footer]}>
     <p class="text-xs text-white/20 tracking-widest uppercase">
       {t.footer} · {new Date().getFullYear()}
     </p>

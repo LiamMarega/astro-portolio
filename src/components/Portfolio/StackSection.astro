@@ -11,6 +11,19 @@ const { copy } = Astro.props;
 // portfolio (bubble-card / tech-card colors) so the stack section feels
 // like part of the same scrapbook, not a bolted-on new component.
 const palette = ["bg-yellow-300", "bg-green-200", "bg-lime-200", "bg-[#E4F4E4]"];
+
+// Icon-per-chip so recruiters get a scannable "what does he actually use"
+// summary instead of just text. Simple Icons CDN — no icon assets to
+// source/maintain locally. Slug overrides only for names that don't map
+// to a plain lowercase/no-punctuation slug (see simpleicons.org).
+const slugOverrides: Record<string, string> = {
+  "Next.js": "nextdotjs",
+  "Tailwind CSS": "tailwindcss",
+  "Node.js": "nodedotjs",
+  "iOS": "apple",
+};
+const iconSlug = (label: string) =>
+  slugOverrides[label] ?? label.toLowerCase().replace(/[^a-z0-9]/g, "");
 ---
 
 <section
@@ -35,8 +48,17 @@ const palette = ["bg-yellow-300", "bg-green-200", "bg-lime-200", "bg-[#E4F4E4]"]
             <div class="flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <span
-                  class={`text-black text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full shadow-sm ${palette[i % palette.length]}`}
+                  class={`inline-flex items-center gap-1.5 text-black text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full shadow-sm ${palette[i % palette.length]}`}
                 >
+                  <img
+                    src={`https://cdn.simpleicons.org/${iconSlug(item)}/000000`}
+                    alt=""
+                    width="14"
+                    height="14"
+                    loading="lazy"
+                    decoding="async"
+                    aria-hidden="true"
+                  />
                   {item}
                 </span>
               ))}

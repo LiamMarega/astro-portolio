@@ -1,11 +1,17 @@
 ---
+// Reads ?ref= to personalize section order for the audience the link
+// was shared with (e.g. Instagram bio → mostly clients, not recruiters).
+export const prerender = false;
+
 import LinktreeLayout from "../../layouts/LinktreeLayout.astro";
 import LinktreePage from "../../components/linktree/LinktreePage.astro";
 import { getLinktreeCopy } from "../../i18n/linktree";
+import { resolveSegment } from "../../i18n/geo";
 
 const t = getLinktreeCopy("es");
+const segment = resolveSegment(Astro);
 ---
 
 <LinktreeLayout title={t.meta.title} description={t.meta.description} lang="es">
-  <LinktreePage locale="es" />
+  <LinktreePage locale="es" segment={segment} />
 </LinktreeLayout>

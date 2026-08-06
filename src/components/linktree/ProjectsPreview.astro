@@ -24,7 +24,7 @@ const projects = getProjects().slice(0, 4);
     {
       projects.map((p) => (
         <a
-          href={`${portfolioHref}#${p.id}`}
+          href={portfolioHref}
           data-cursor-scale
           aria-label={`${p.title} — ${ariaSuffix}`}
           class="cursor-target group relative snap-start shrink-0 w-[180px] overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] ring-1 ring-inset ring-white/5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#E2FF00]/40 hover:shadow-[0_16px_40px_-12px_rgba(226,255,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2FF00]/60"

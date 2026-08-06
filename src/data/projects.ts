@@ -172,7 +172,7 @@ export const projects: Project[] = [
     },
 ];
 
-export const minorProjects = [
+export const minorProjects: { image: string; text: string; link?: string }[] = [
     {
         image: "/images/works/lamshoes.webp",
         text: "LamShoes E-commerce",
@@ -180,14 +180,17 @@ export const minorProjects = [
     {
         image: "/images/works/feroxPage.webp",
         text: "Ferox Landing Page",
+        link: "https://feroxapp.com/",
     },
     {
         image: "/images/works/advantis-home.webp",
         text: "Advantis Dashboard",
+        link: "https://www.figma.com/proto/8ShCMxzmpgONb3goAOGLBj/TARP-rebrand?node-id=139-907&t=P2Qw3j0XwZZ202Gd-1",
     },
     {
         image: "/images/works/fmoney.webp",
         text: "FMoney Platform",
+        link: "https://www.figma.com/proto/Ic2WlwbqBiSLBOBtOX4Je4/App-megapool?node-id=262-99250&t=52OuOuXFk5eiOAq2-1",
     },
 ];
 

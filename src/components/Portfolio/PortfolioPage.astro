@@ -6,6 +6,7 @@ import Contact from "../Contact/Contact.astro";
 import CursorFollow from "../ui/CursorFollow.astro";
 import Container from "../ui/Container.astro";
 import SaaSShowcase from "./SaaSShowcase.astro";
+import MoreProjects from "./MoreProjects.astro";
 import StackSection from "./StackSection.astro";
 import LanguageSwitcher from "../linktree/LanguageSwitcher.astro";
 import { getPortfolioCopy } from "../../i18n/portfolio";
@@ -107,6 +108,8 @@ const t = getPortfolioCopy(locale);
 <About locale={locale} />
 <hr class="mx-auto max-w-[80%] opacity-25" />
 <Works locale={locale} />
+<hr class="mx-auto max-w-[80%] opacity-25" />
+<MoreProjects title={t.work.moreWorksTitle} meta={t.work.moreWorksDesc} />
 <hr class="mx-auto max-w-[80%] opacity-25" />
 <SaaSShowcase copy={t.saas} />
 <hr class="mx-auto max-w-[80%] opacity-25" />
