@@ -1,0 +1,199 @@
+---
+import { getProjects, minorProjects } from "../../data/projects";
+import "@fontsource/source-serif-4/600.css";
+import "@fontsource/source-serif-4/400-italic.css";
+import "@fontsource/caveat/600.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/600.css";
+
+interface Props {
+  id?: string;
+  locale?: "es" | "en";
+  collection?: "web" | "all";
+  open?: boolean;
+}
+const { id = "project-book", locale = "es", collection = "web", open = false } = Astro.props;
+const es = locale === "es";
+const copy = es
+  ? { title: "Cuaderno de proyectos", open: "Abrir cuaderno", close: "Cerrar cuaderno", previous: "Anterior", next: "Siguiente", page: "Proyecto {current} de {total}", archive: "Selección de trabajos", visit: "Visitar proyecto", prototype: "Ver prototipo", capture: "Captura del proyecto", note: "del boceto a la pantalla", empty: "Próximamente, nuevos proyectos." }
+  : { title: "Project notebook", open: "Open notebook", close: "Close notebook", previous: "Previous", next: "Next", page: "Project {current} of {total}", archive: "Selected work", visit: "Visit project", prototype: "View prototype", capture: "Project screenshot", note: "from sketch to screen", empty: "New projects coming soon." };
+const summaries: Record<string, { es: string; en: string; kind: string }> = {
+  ferox: { es: "Una app social para conectar a la comunidad cinegética.", en: "A social app connecting the hunting community.", kind: "Mobile app" },
+  advantisAI: { es: "Interfaz de producto para una plataforma de análisis DeFi.", en: "A product interface for a DeFi analysis platform.", kind: "Web app" },
+  fmoney: { es: "Una plataforma de sorteos con tecnología blockchain.", en: "A raffle platform built with blockchain technology.", kind: "Web app" },
+};
+const webSelection = [
+  { name: "Ferox Landing Page", id: "ferox-web", kind: "Landing page", es: "La presentación web del proyecto Ferox.", en: "The website introducing the Ferox project." },
+  { name: "LamShoes E-commerce", id: "lamshoes", kind: "E-commerce", es: "Una experiencia de compra online para LamShoes.", en: "An online shopping experience for LamShoes." },
+  { name: "Advantis Dashboard", id: "advantis-web", kind: "Web app", es: "El producto digital de Advantis, llevado a la pantalla.", en: "The Advantis digital product, brought to the screen." },
+];
+// Reuse the repository's actual assets and URLs. Never invent results or links.
+const cards = collection === "web"
+  ? webSelection.flatMap((selection) => {
+      const project = minorProjects.find((item) => item.text === selection.name);
+      return project ? [{ id: selection.id, title: project.text, image: project.image, summary: selection[locale], kind: selection.kind, link: project.link }] : [];
+    })
+  : getProjects().filter((project) => project.images.length > 0).map((project) => ({
+      id: project.id, title: project.title, image: project.images[0].src,
+      summary: summaries[project.id]?.[locale] ?? project.description[0] ?? "",
+      kind: summaries[project.id]?.kind ?? "Digital product", link: project.link,
+    }));
+const coverImage = cards[0]?.image;
+---
+
+<project-scrapbook id={id} class="sb-root" data-page-format={copy.page}>
+  <details class="sb-book" open={open}>
+    <summary class="sb-summary">
+      <span class="sb-cover" aria-hidden="true">
+        <span class="sb-binding"></span>
+        <span class="sb-cover-meta">LIAM MAREGA <span>VOL. 01</span></span>
+        <span class="sb-cover-title">{copy.title}<span class="sb-cover-star">✳</span></span>
+        {coverImage && <span class="sb-cover-photo"><img src={coverImage} width="640" height="400" alt="" decoding="async" /><span class="sb-tape"></span></span>}
+        <span class="sb-cover-note">{copy.note}</span>
+        <span class="sb-cover-foot">WEB · MOBILE · IDEAS <span>↗</span></span>
+        <span class="sb-elastic"></span>
+      </span>
+      <span class="sb-open-label">{copy.open}<span aria-hidden="true">↗</span></span>
+      <span class="sb-close-label">{copy.close}<span aria-hidden="true">↙</span></span>
+    </summary>
+    <div class="sb-inside">
+      <div class="sb-index"><span>{copy.archive}</span><span aria-hidden="true">L / M</span></div>
+      <div id={`${id}-pages`} class="sb-pages">
+        {cards.map((card, index) => (
+          <article class="sb-spread" data-book-page id={`${id}-${card.id}`} aria-label={card.title}>
+            <div class="sb-visual-page">
+              <figure class="sb-photo">
+                <img src={card.image} width="800" height="600" alt={`${card.title} — ${copy.capture.toLowerCase()}`} loading="lazy" decoding="async" />
+                <span class="sb-tape" aria-hidden="true"></span>
+                <figcaption>{card.kind}</figcaption>
+              </figure>
+              <span class="sb-hand" aria-hidden="true">{copy.note} ↗</span>
+            </div>
+            <div class="sb-copy-page">
+              <span class="sb-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+              <p class="sb-eyebrow">{card.kind}</p>
+              <h3>{card.title}</h3>
+              <p class="sb-description">{card.summary}</p>
+              {card.link
+                ? <a class="sb-project-link" href={card.link} target="_blank" rel="noopener noreferrer">{card.link.includes("figma.com/") ? copy.prototype : copy.visit}<span aria-hidden="true">↗</span></a>
+                : <span class="sb-unlinked">{copy.capture}</span>}
+            </div>
+          </article>
+        ))}
+        {cards.length === 0 && <p class="sb-empty">{copy.empty}</p>}
+      </div>
+      <nav class="sb-pagination" data-book-controls aria-label={copy.title} hidden>
+        <button type="button" data-book-prev aria-controls={`${id}-pages`}><span aria-hidden="true">←</span> {copy.previous}</button>
+        <p data-book-status role="status" aria-live="polite" aria-atomic="true"></p>
+        <button type="button" data-book-next aria-controls={`${id}-pages`}>{copy.next} <span aria-hidden="true">→</span></button>
+      </nav>
+    </div>
+  </details>
+</project-scrapbook>
+
+<script>
+  class ProjectScrapbook extends HTMLElement {
+    private controller?: AbortController;
+    connectedCallback() {
+      this.controller?.abort();
+      this.controller = new AbortController();
+      const { signal } = this.controller;
+      const book = this.querySelector<HTMLDetailsElement>("details");
+      const pages = Array.from(this.querySelectorAll<HTMLElement>("[data-book-page]"));
+      const controls = this.querySelector<HTMLElement>("[data-book-controls]");
+      const previous = this.querySelector<HTMLButtonElement>("[data-book-prev]");
+      const next = this.querySelector<HTMLButtonElement>("[data-book-next]");
+      const status = this.querySelector<HTMLElement>("[data-book-status]");
+      if (!book || !pages.length || !controls || !previous || !next || !status) return;
+      let current = 0;
+      const show = (index: number) => {
+        current = Math.max(0, Math.min(pages.length - 1, index));
+        pages.forEach((page, i) => { page.hidden = i !== current; });
+        previous.disabled = current === 0;
+        next.disabled = current === pages.length - 1;
+        status.textContent = (this.dataset.pageFormat || "{current} / {total}")
+          .replace("{current}", String(current + 1)).replace("{total}", String(pages.length));
+      };
+      // Progressive enhancement: without JS, native details exposes every project.
+      show(0);
+      controls.hidden = pages.length < 2;
+      previous.addEventListener("click", () => show(current - 1), { signal });
+      next.addEventListener("click", () => show(current + 1), { signal });
+      controls.addEventListener("keydown", (event) => {
+        if (!book.open || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        show(event.key === "Home" ? 0 : event.key === "End" ? pages.length - 1 : current + (event.key === "ArrowRight" ? 1 : -1));
+      }, { signal });
+      const followHash = () => {
+        let hash = "";
+        try { hash = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+        const index = pages.findIndex((page) => page.id === hash);
+        if (hash === this.id || index >= 0) book.open = true;
+        if (index >= 0) show(index);
+      };
+      followHash();
+      window.addEventListener("hashchange", followHash, { signal });
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        const anchor = event.target.closest<HTMLAnchorElement>("a[data-open-book]");
+        if (anchor?.getAttribute("href") === `#${this.id}`) book.open = true;
+      }, { signal });
+    }
+    disconnectedCallback() { this.controller?.abort(); }
+  }
+  if (!customElements.get("project-scrapbook")) customElements.define("project-scrapbook", ProjectScrapbook);
+</script>
+
+<style>
+  .sb-root { display:block; container-type:inline-size; width:100%; min-width:0; color:#29251e; font:400 14px/1.5 "Inter",sans-serif; text-align:left; color-scheme:light; }
+  .sb-root *, .sb-root *::before, .sb-root *::after { box-sizing:border-box; }
+  .sb-book { position:relative; margin:0; border:0; }
+  .sb-summary { cursor:pointer; list-style:none; width:min(100%,340px); margin:auto; outline-offset:8px; }
+  .sb-summary::-webkit-details-marker { display:none; }
+  .sb-summary::marker { content:""; }
+  .sb-cover { position:relative; display:flex; flex-direction:column; min-height:405px; padding:28px 32px 25px 38px; border:1px solid #b6a077; border-radius:3px 12px 12px 3px; background:#cfb98d; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' opacity='.08' filter='url(%23n)' d='M0 0h140v140H0z'/%3E%3C/svg%3E"); box-shadow:3px 2px 0 #eee6d5,5px 4px 0 #a28c66,8px 6px 0 #eee6d5,10px 8px 0 #bca57d,14px 24px 36px #38291126; transform:rotate(3deg); transition:transform .3s ease,box-shadow .3s ease; }
+  .sb-binding { position:absolute; inset:0 auto 0 9px; width:9px; border-inline:1px solid #77634544; box-shadow:inset 3px 0 4px #59473116; }
+  .sb-cover-meta,.sb-cover-foot { display:flex; justify-content:space-between; gap:14px; font:600 9px/1.5 "Inter",sans-serif; letter-spacing:.12em; }
+  .sb-cover-title { position:relative; display:block; max-width:240px; margin:25px 0 20px; padding:12px 14px; color:#29251e; background:#f8f1dd; font:600 35px/.98 "Source Serif 4",Georgia,serif; letter-spacing:-.045em; transform:rotate(-3deg); box-shadow:1px 2px 3px #493b2020; }
+  .sb-cover-star { position:absolute; color:#575d39; top:-20px; right:-12px; font-size:42px; }
+  .sb-cover-photo { position:relative; display:block; width:88%; align-self:center; background:#fffcf3; padding:7px 7px 15px; transform:rotate(-6deg); box-shadow:0 5px 9px #38291129; }
+  .sb-cover-photo img { display:block; width:100%; height:105px; object-fit:cover; object-position:top; }
+  .sb-tape { position:absolute; top:-11px; left:33%; width:37%; height:25px; background:#e8d78eb3; transform:rotate(5deg); clip-path:polygon(2% 0,97% 3%,100% 91%,95% 100%,3% 97%,0 88%); }
+  .sb-cover-note { display:block; margin:15px 0 17px; font:600 24px/1 "Caveat",cursive; transform:rotate(-4deg); }
+  .sb-cover-foot { margin-top:auto; border-top:1px solid #74644466; padding-top:11px; }
+  .sb-elastic { position:absolute; right:17px; top:0; bottom:0; width:8px; border-inline:1px solid #39362b; background:#585443; box-shadow:2px 0 2px #0002; }
+  .sb-open-label,.sb-close-label { display:flex; justify-content:center; align-items:center; gap:30px; min-height:48px; font:600 13px/1.3 "Inter",sans-serif; }
+  .sb-open-label { margin-top:24px; text-decoration:underline; text-underline-offset:5px; }
+  .sb-close-label { display:none; }
+  .sb-book[open] { padding:7px; border:1px solid #bca781; border-radius:4px 9px 9px 4px; background:#c9b187; box-shadow:3px 4px 0 #ddd1b5,5px 6px 0 #a18d69,10px 16px 32px #3a30251a; }
+  .sb-book[open]>.sb-summary { width:100%; padding:0 12px; }
+  .sb-book[open]>.sb-summary .sb-cover,.sb-book[open]>.sb-summary .sb-open-label { display:none; }
+  .sb-book[open]>.sb-summary .sb-close-label { display:flex; justify-content:space-between; min-height:40px; }
+  .sb-inside { background:#faf7ed; }
+  .sb-index { display:flex; justify-content:space-between; gap:16px; padding:15px 22px; border-bottom:1px solid #d7ceba; font:600 10px/1.5 "Inter",sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+  .sb-spread { display:grid; grid-template-columns:1.1fr 1fr; min-height:325px; position:relative; transform-origin:left center; animation:sb-unfold .42s ease-out; }
+  .sb-spread[hidden],.sb-pagination[hidden] { display:none !important; }
+  .sb-spread + .sb-spread { border-top:1px solid #d7ceba; }
+  .sb-visual-page { position:relative; min-width:0; padding:37px 22px 25px; background:linear-gradient(90deg,transparent 92%,#91837114); border-right:1px solid #d7ceba; }
+  .sb-photo { position:relative; margin:0; background:#fffdf7; padding:8px 8px 12px; border:1px solid #e2ddcf; transform:rotate(-2deg); box-shadow:0 4px 9px #51483914; }
+  .sb-photo img { display:block; width:100%; height:180px; object-fit:contain; background:#efeee7; }
+  .sb-photo figcaption { margin-top:9px; color:#5d584c; font:400 10px/1.4 "Inter",sans-serif; }
+  .sb-hand { display:block; margin-top:17px; font:600 21px/1.1 "Caveat",cursive; color:#625d43; }
+  .sb-copy-page { position:relative; display:flex; flex-direction:column; justify-content:center; padding:33px 23px; min-width:0; background:linear-gradient(90deg,#9d8d6814,transparent 12%); }
+  .sb-number { position:absolute; top:11px; right:16px; font:italic 26px/1 "Source Serif 4",Georgia,serif; color:#8b806a; }
+  .sb-root .sb-eyebrow { margin:0 0 14px; color:#6b634f; text-transform:uppercase; font:600 10px/1.4 "Inter",sans-serif; letter-spacing:.1em; }
+  .sb-root .sb-copy-page h3 { margin:0 0 16px; font:600 clamp(24px,4cqi,36px)/1.04 "Source Serif 4",Georgia,serif; letter-spacing:-.035em; color:#29251e; overflow-wrap:anywhere; }
+  .sb-root .sb-description { margin:0 0 25px; color:#5a5549; font:400 14px/1.6 "Inter",sans-serif; }
+  .sb-project-link { display:inline-flex; align-self:flex-start; align-items:center; gap:12px; min-height:44px; border-bottom:1px solid #746b53; color:#29251e; font:600 12px/1.4 "Inter",sans-serif; text-decoration:none; }
+  .sb-unlinked { color:#6b634f; font-size:12px; }
+  .sb-pagination { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 15px; border-top:1px solid #d7ceba; }
+  .sb-pagination button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:44px; min-height:44px; padding:8px; border:0; background:transparent; color:#29251e; font:600 12px/1.4 "Inter",sans-serif; cursor:pointer; }
+  .sb-pagination button:disabled { opacity:.4; cursor:default; }
+  .sb-root .sb-pagination p { margin:0; color:#625b4d; text-align:center; font:400 10px/1.4 "Inter",sans-serif; }
+  .sb-empty { padding:30px; }
+  .sb-root :is(a,button,summary):focus-visible { outline:3px solid #625638; outline-offset:4px; }
+  @media (hover:hover) and (pointer:fine) { .sb-book:not([open])>.sb-summary:hover .sb-cover { transform:rotate(0) translateY(-5px); } .sb-project-link:hover { background:#eee4be; } }
+  @container (max-width:480px) { .sb-cover { min-height:370px; } .sb-spread { grid-template-columns:1fr; } .sb-visual-page { border-right:0; border-bottom:1px solid #e1d9c7; padding:26px 24px 20px; background:transparent; } .sb-photo img { height:180px; } .sb-hand { display:none; } .sb-copy-page { padding:28px 25px; background:transparent; } .sb-root .sb-copy-page h3 { font-size:29px; } .sb-root .sb-description { margin-bottom:12px; } .sb-root .sb-eyebrow { margin-bottom:9px; } .sb-pagination { padding:8px; gap:2px; } .sb-pagination button { font-size:11px; } .sb-cover { transform:rotate(1deg); } }
+  @keyframes sb-unfold { from { opacity:.6; transform:perspective(1000px) rotateY(9deg); } to { opacity:1; transform:none; } }
+  @media (prefers-reduced-motion:reduce) { .sb-root * { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
+</style>

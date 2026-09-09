@@ -1,131 +1,120 @@
 ---
-import InformativeBox from "../ui/InfoBox.astro";
 import About from "../About/About.astro";
 import Works from "../Work/Works.astro";
 import Contact from "../Contact/Contact.astro";
-import CursorFollow from "../ui/CursorFollow.astro";
-import Container from "../ui/Container.astro";
 import SaaSShowcase from "./SaaSShowcase.astro";
 import MoreProjects from "./MoreProjects.astro";
 import StackSection from "./StackSection.astro";
 import LanguageSwitcher from "../linktree/LanguageSwitcher.astro";
+import ProjectBook from "../scrapbook/ProjectBook.astro";
 import { getPortfolioCopy } from "../../i18n/portfolio";
 import type { Locale } from "../../i18n/linktree";
 
-interface Props {
-  locale: Locale;
-}
-
+interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = getPortfolioCopy(locale);
+const copy = locale === "es"
+  ? { kicker: "LIAM MAREGA / FRONTEND & MOBILE", title: "Ideas que se convierten", emphasis: "en productos.", intro: "Desarrollo interfaces web y aplicaciones mobile. Acá podés explorar una selección de mi trabajo.", projects: "Explorar proyectos", contact: "Hablemos", archive: "Más proyectos y detalle técnico", archiveNote: "Experiencias completas, productos propios y herramientas.", selected: "01 / TRABAJOS SELECCIONADOS", notebook: "Mi trabajo, en un cuaderno.", shortcut: "¿Buscás una landing para tu negocio?", service: "Conocé el servicio", skip: "Saltar al contenido" }
+  : { kicker: "LIAM MAREGA / FRONTEND & MOBILE", title: "Ideas turned", emphasis: "into products.", intro: "I build web interfaces and mobile apps. Explore a selection of my work below.", projects: "Explore projects", contact: "Get in touch", archive: "More projects and technical details", archiveNote: "Full project stories, independent products and tools.", selected: "01 / SELECTED WORK", notebook: "My work, in a notebook.", shortcut: "Looking for a landing page for your business?", service: "Explore the service (Spanish)", skip: "Skip to content" };
 ---
 
 <LanguageSwitcher currentLocale={locale} />
-
-<main
-  class="relative sm:pb-10 xl:pb-0 xl:min-h-screen pb-12 text-white"
-  role="main"
->
-  <CursorFollow />
-
-  <Container class="flex flex-col h-full justify-between">
-    <header class="hero-section">
-      <h1
-        class="main-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold italic leading-tight"
-        role="banner"
-      >
-        {t.hero.titleLine1} <br class="sm:block" /> {t.hero.titleLine2}
-      </h1>
-
-      <div class="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8"
-        >
-          <p
-            class="font-extralight text-sm sm:text-base md:text-lg text-center sm:text-start text-balance opacity-70 p-2"
-          >
-            {t.hero.subtitleA}
-          </p>
-
-          <p
-            class="text-center sm:text-start text-sm sm:text-base md:text-lg font-extralight text-balance opacity-70 p-2"
-          >
-            {t.hero.subtitleB}
-          </p>
-
-          <div class="flex items-center justify-center sm:justify-start p-2">
-            <a
-              href="#contact"
-              class="group flex items-center text-sm sm:text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black"
-              aria-label="Navigate to contact section"
-            >
-              {t.hero.cta}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="h-4 w-4 sm:h-5 sm:w-5 ml-2 group-hover:translate-x-1 transition-transform"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-6 sm:mt-16 md:mt-24 relative min-h-[550px] sm:min-h-0">
-        <InformativeBox
-          mobileTitle={t.infobox.mobileTitle}
-          mobileDesc={t.infobox.mobileDesc}
-          webTitle={t.infobox.webTitle}
-          webDesc={t.infobox.webDesc}
-          stackLabel={t.infobox.stackLabel}
-          badgeLabel={t.infobox.badgeLabel}
-        />
-      </div>
+<a class="pp-skip" href="#portfolio-main">{copy.skip}</a>
+<main id="portfolio-main" class="pp-main">
+  <section class="pp-notebook" aria-labelledby="pp-title">
+    <header class="pp-hero">
+      <p class="pp-kicker">{copy.kicker}</p>
+      <h1 id="pp-title">{copy.title}<br /><em>{copy.emphasis}</em></h1>
+      <p class="pp-lead">{copy.intro}</p>
+      <div class="pp-actions"><a class="pp-primary" href="#portfolio-book" data-open-book>{copy.projects}<span aria-hidden="true">↘</span></a><a class="pp-secondary" href="#contact">{copy.contact}<span aria-hidden="true">↗</span></a></div>
     </header>
+    <div class="pp-selected"><div class="pp-book-heading"><p class="pp-kicker">{copy.selected}</p><span aria-hidden="true">{copy.notebook}</span></div><ProjectBook id="portfolio-book" locale={locale} collection="all" open /></div>
+    <aside class="pp-service-link"><p>{copy.shortcut}</p><a href="/landing-builder">{copy.service}<span aria-hidden="true">↗</span></a></aside>
+  </section>
 
-    <div class="hero-decoration">
-      <img
-        src="/images/draws/arrowBucle.svg"
-        alt="Decorative arrow pointing down"
-        class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-36 xl:h-36 absolute bottom-12 sm:bottom-16 md:bottom-24 lg:bottom-32 right-3 sm:right-4 md:right-8 lg:right-16 xl:right-32 animate-draw"
-        loading="lazy"
-        decoding="async"
-      />
+  <About locale={locale} />
+
+  <details class="pp-disclosure" id="portfolio-details">
+    <summary><span><strong>{copy.archive}</strong><small>{copy.archiveNote}</small></span><span class="pp-plus" aria-hidden="true">+</span></summary>
+    <div class="pp-archive">
+      <Works locale={locale} />
+      <MoreProjects title={t.work.moreWorksTitle} meta={t.work.moreWorksDesc} />
+      <SaaSShowcase copy={t.saas} />
+      <StackSection copy={t.stack} />
     </div>
-  </Container>
+  </details>
 
-  <hr class="mx-auto max-w-[80%] opacity-25" />
+  <Contact title={t.contact.title} meta={t.contact.meta} />
+  <footer class="pp-footer"><p>{t.footer} · {new Date().getFullYear()}</p></footer>
 </main>
 
-<About locale={locale} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<Works locale={locale} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<MoreProjects title={t.work.moreWorksTitle} meta={t.work.moreWorksDesc} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<SaaSShowcase copy={t.saas} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<StackSection copy={t.stack} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<Contact title={t.contact.title} meta={t.contact.meta} />
-
-<footer class="pb-10 text-center">
-  <p class="text-xs text-white/20 tracking-widest uppercase">
-    {t.footer} · {new Date().getFullYear()}
-  </p>
-</footer>
+<script>
+  // Existing Navbar/CV links still open the complete project archive.
+  function revealPortfolioArchive() {
+    const disclosure = document.querySelector<HTMLDetailsElement>("#portfolio-details");
+    if (!disclosure) return;
+    let id = "";
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const target = document.getElementById(id);
+    if (target && disclosure.contains(target)) {
+      disclosure.open = true;
+      requestAnimationFrame(() => {
+        // Legacy Works has different anchors for desktop, tablet and mobile.
+        const visibleTarget = target.getClientRects().length ? target : disclosure;
+        visibleTarget.scrollIntoView({ block: "start", behavior: "instant" });
+      });
+    }
+  }
+  revealPortfolioArchive();
+  window.addEventListener("hashchange", revealPortfolioArchive);
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) return;
+    const anchor = event.target.closest<HTMLAnchorElement>("a[href^='#']");
+    if (!anchor) return;
+    let id = "";
+    try { id = decodeURIComponent(anchor.hash.slice(1)); } catch { return; }
+    const target = document.getElementById(id);
+    const disclosure = document.querySelector<HTMLDetailsElement>("#portfolio-details");
+    if (target && disclosure?.contains(target)) {
+      disclosure.open = true;
+      // Also support reopening the archive when the URL already has this hash.
+      if (location.hash === anchor.hash) requestAnimationFrame(revealPortfolioArchive);
+    }
+  });
+</script>
 
 <style>
-  .main-title {
-    position: static !important;
-    transform: none !important;
-  }
+  .pp-main { padding:120px 0 0; }
+  .pp-skip { position:fixed; top:-100px; left:18px; z-index:200; padding:14px 20px; color:#29251e; background:#f8f1dd; }
+  .pp-skip:focus { top:18px; }
+  .pp-notebook { position:relative; isolation:isolate; width:min(1130px,calc(100% - 64px)); margin:0 auto 65px; padding:64px 64px 0; border:1px solid #dfd7c3; border-radius:2px; color:#29251e; background:#f7f3e8; box-shadow:5px 6px 0 #ddd3bd,8px 9px 0 #8c8168; color-scheme:light; }
+  .pp-notebook::before { content:""; position:absolute; pointer-events:none; z-index:-1; inset:0; opacity:.16; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' opacity='.3' filter='url(%23n)' d='M0 0h140v140H0z'/%3E%3C/svg%3E"); }
+  .pp-hero { max-width:780px; }
+  .pp-notebook .pp-kicker { color:#746950; font:600 10px/1.6 "Inter",sans-serif; letter-spacing:.12em; margin:0 0 24px; }
+  .pp-notebook h1 { position:static; transform:none; margin:0; font:600 clamp(42px,5.2vw,70px)/1.04 "Source Serif 4",Georgia,serif; letter-spacing:-.05em; color:#29251e; }
+  .pp-notebook h1 em { font-weight:400; }
+  .pp-notebook .pp-lead { max-width:530px; margin:24px 0; color:#645d4e; font:400 16px/1.75 "Inter",sans-serif; }
+  .pp-actions { display:flex; align-items:center; flex-wrap:wrap; gap:20px; margin-top:26px; }
+  .pp-actions a { display:inline-flex; align-items:center; gap:28px; min-height:48px; padding:13px 19px; font:600 12px/1.5 "Inter",sans-serif; color:#29251e; text-decoration:none; }
+  .pp-primary { border:1px solid #b9a160; background:#ead183; box-shadow:3px 3px 0 #77653222; }
+  .pp-actions .pp-secondary { border-bottom:1px solid #b7aa88; padding-inline:0; }
+  .pp-selected { margin-top:54px; padding-top:24px; border-top:1px solid #d4cab4; }
+  .pp-book-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:22px; }
+  .pp-book-heading .pp-kicker { margin:0; }
+  .pp-book-heading>span { font:600 25px/1.2 "Caveat",cursive; color:#776a49; transform:rotate(-2deg); }
+  .pp-service-link { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:40px; padding:25px 0; border-top:1px solid #d4cab4; }
+  .pp-service-link p { margin:0; font:400 12px/1.6 "Inter",sans-serif; color:#6f6551; }
+  .pp-service-link a { display:inline-flex; align-items:center; gap:20px; min-height:44px; font:600 12px/1.5 "Inter",sans-serif; color:#29251e; text-decoration:underline; text-underline-offset:4px; }
+  .pp-disclosure { width:min(1300px,calc(100% - 64px)); margin:30px auto 55px; border-top:1px solid #ffffff30; border-bottom:1px solid #ffffff30; color:#fff; }
+  .pp-disclosure>summary { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:100px; padding:25px 5px; list-style:none; cursor:pointer; }
+  .pp-disclosure>summary::-webkit-details-marker { display:none; }
+  .pp-disclosure>summary strong { display:block; font:600 21px/1.4 "Inter",sans-serif; }
+  .pp-disclosure>summary small { display:block; margin-top:8px; font:400 12px/1.6 "Inter",sans-serif; color:#b8b5ac; }
+  .pp-plus { flex:none; font-size:30px; }
+  .pp-disclosure[open]>summary .pp-plus { transform:rotate(45deg); }
+  .pp-archive { padding:20px 0 40px; }
+  .pp-footer { padding:0 24px 40px; text-align:center; color:#aaa69c; font:400 11px/1.7 "Inter",sans-serif; }
+  .pp-notebook :is(a,summary,button):focus-visible { outline:3px solid #796138; outline-offset:5px; }
+  .pp-disclosure>summary:focus-visible { outline:3px solid #ead183; outline-offset:5px; }
+  @media(max-width:700px) { .pp-main { padding-top:100px; } .pp-notebook { width:calc(100% - 30px); padding:36px 21px 0; margin-bottom:35px; } .pp-notebook h1 { font-size:clamp(35px,9vw,50px); } .pp-notebook .pp-kicker { font-size:9px; letter-spacing:.08em; } .pp-notebook .pp-lead { font-size:15px; } .pp-selected { margin-top:35px; } .pp-book-heading>span { font-size:22px; } .pp-service-link { margin-top:26px; } .pp-disclosure { width:calc(100% - 36px); } .pp-disclosure>summary strong { font-size:18px; } .pp-disclosure>summary small { max-width:30ch; } }
 </style>
