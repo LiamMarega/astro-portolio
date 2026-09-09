@@ -1,0 +1,32 @@
+.lc-form { position: relative; min-width: 0; padding: clamp(22px, 4vw, 42px); background: #fffef9; border: 1px solid #d7cebb; border-radius: 3px 7px 5px 2px; box-shadow: 2px 3px 0 #e9e2d2, 4px 6px 0 #d8d0be, 0 20px 40px -28px #42342366; color: #1a1611; }
+.lc-form, .lc-form * { box-sizing: border-box; }
+.lc-form h3 { font-size: clamp(24px, 3vw, 32px); margin: 28px 0 24px; }
+.lc-progress { display: flex; gap: 12px; justify-content: space-between; font: 11px/1.5 'JetBrains Mono', monospace; }
+.lc-progress > span { display: flex; align-items: center; gap: 7px; color: #766c5a; }
+.lc-progress b { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid #d7cebb; border-radius: 50%; flex-shrink: 0; }
+.lc-progress .is-reached b { background: #ffe000; border-color: #aa921b; color: #1a1611; }
+.lc-progress [aria-current='step'] { color: #1a1611; font-weight: 700; }
+.lc-fields { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 22px; }
+.lc-field { display: grid; gap: 8px; min-width: 0; }
+.lc-field label { font-size: 17px; font-weight: 600; line-height: 1.4; }
+.lc-field input, .lc-field select { display: block; width: 100%; min-width: 0; min-height: 48px; border: 1px solid #cfc5b0; border-radius: 3px; padding: 12px; background: #fbfaf5; color: #1a1611; font: 16px/1.4 system-ui, sans-serif; }
+.lc-field select { padding-right: 28px; text-overflow: ellipsis; }
+.lc-field small, .lc-footnote { font: 12px/1.5 system-ui, sans-serif; color: #655d4f; }
+.lc-form [aria-invalid='true'] { border-color: #9f301d; }
+.lc-form .lc-error { color: #9f301d; font: 13px/1.5 system-ui, sans-serif; }
+.lc-form .lc-message { margin: 20px 0 0; padding: 12px; background: #fff2e9; border-left: 3px solid #9f301d; }
+.lc-consent { display: flex; align-items: flex-start; gap: 10px; font: 13px/1.6 system-ui, sans-serif; cursor: pointer; }
+.lc-consent input { width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a1611; }
+.lc-consent a { text-decoration: underline; text-underline-offset: 3px; }
+.lc-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-top: 28px; }
+.lc-submit { min-height: 48px; padding: 13px 22px; border: 1px solid #1a1611; border-radius: 3px; background: #ffe000; color: #1a1611; font: 600 13px/1.5 'JetBrains Mono', monospace; box-shadow: 3px 3px 0 #1a1611; cursor: pointer; margin-left: auto; }
+.lc-submit:hover:not(:disabled) { background: #f7d700; }
+.lc-back { min-height: 44px; display: inline-flex; align-items: center; background: none; border: 0; color: #514839; font: 13px/1.5 'JetBrains Mono', monospace; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.lc-form button:disabled, .lc-form fieldset:disabled { opacity: .65; cursor: wait; }
+.lc-form .lc-footnote { margin-top: 20px; }
+.lc-form :focus-visible { outline: 3px solid #5a4b00; outline-offset: 4px; }
+.lc-form h3:focus { outline: none; }
+.lc-eyebrow { font: 12px/1.5 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
+.lc-success p { margin-bottom: 22px; }
+.lc-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 420px) { .lc-progress { gap: 8px; } .lc-progress > span { flex-direction: column; align-items: flex-start; flex: 1; font-size: 10px; } }
