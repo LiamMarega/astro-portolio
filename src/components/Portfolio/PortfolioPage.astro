@@ -1,131 +1,39 @@
 ---
-import InformativeBox from "../ui/InfoBox.astro";
-import About from "../About/About.astro";
-import Works from "../Work/Works.astro";
-import Contact from "../Contact/Contact.astro";
-import CursorFollow from "../ui/CursorFollow.astro";
-import Container from "../ui/Container.astro";
-import SaaSShowcase from "./SaaSShowcase.astro";
-import MoreProjects from "./MoreProjects.astro";
-import StackSection from "./StackSection.astro";
-import LanguageSwitcher from "../linktree/LanguageSwitcher.astro";
-import { getPortfolioCopy } from "../../i18n/portfolio";
-import type { Locale } from "../../i18n/linktree";
-
-interface Props {
-  locale: Locale;
-}
-
+import Contact from '../Contact/Contact.astro';
+import SaaSShowcase from './SaaSShowcase.astro';
+import SelectedWork from './SelectedWork.astro';
+import LanguageSwitcher from '../linktree/LanguageSwitcher.astro';
+import { getPortfolioCopy } from '../../i18n/portfolio';
+import type { Locale } from '../../i18n/linktree';
+import '../../styles/portfolio-editorial.css';
+interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = getPortfolioCopy(locale);
+const es = locale === 'es';
 ---
-
 <LanguageSwitcher currentLocale={locale} />
-
-<main
-  class="relative sm:pb-10 xl:pb-0 xl:min-h-screen pb-12 text-white"
-  role="main"
->
-  <CursorFollow />
-
-  <Container class="flex flex-col h-full justify-between">
-    <header class="hero-section">
-      <h1
-        class="main-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold italic leading-tight"
-        role="banner"
-      >
-        {t.hero.titleLine1} <br class="sm:block" /> {t.hero.titleLine2}
-      </h1>
-
-      <div class="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8"
-        >
-          <p
-            class="font-extralight text-sm sm:text-base md:text-lg text-center sm:text-start text-balance opacity-70 p-2"
-          >
-            {t.hero.subtitleA}
-          </p>
-
-          <p
-            class="text-center sm:text-start text-sm sm:text-base md:text-lg font-extralight text-balance opacity-70 p-2"
-          >
-            {t.hero.subtitleB}
-          </p>
-
-          <div class="flex items-center justify-center sm:justify-start p-2">
-            <a
-              href="#contact"
-              class="group flex items-center text-sm sm:text-base md:text-lg border-b border-white hover:border-yellow-300 hover:text-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-black"
-              aria-label="Navigate to contact section"
-            >
-              {t.hero.cta}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="h-4 w-4 sm:h-5 sm:w-5 ml-2 group-hover:translate-x-1 transition-transform"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-6 sm:mt-16 md:mt-24 relative min-h-[550px] sm:min-h-0">
-        <InformativeBox
-          mobileTitle={t.infobox.mobileTitle}
-          mobileDesc={t.infobox.mobileDesc}
-          webTitle={t.infobox.webTitle}
-          webDesc={t.infobox.webDesc}
-          stackLabel={t.infobox.stackLabel}
-          badgeLabel={t.infobox.badgeLabel}
-        />
-      </div>
-    </header>
-
-    <div class="hero-decoration">
-      <img
-        src="/images/draws/arrowBucle.svg"
-        alt="Decorative arrow pointing down"
-        class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-36 xl:h-36 absolute bottom-12 sm:bottom-16 md:bottom-24 lg:bottom-32 right-3 sm:right-4 md:right-8 lg:right-16 xl:right-32 animate-draw"
-        loading="lazy"
-        decoding="async"
-      />
+<main class="pe" id="portfolio-content">
+  <header class="pe-hero">
+    <p class="pe-eyebrow">Liam Marega · {es ? 'Desarrollador web y mobile' : 'Web & mobile developer'}</p>
+    <h1>{t.hero.titleLine1}<br /><span>{t.hero.titleLine2}</span></h1>
+    <div class="pe-hero-bottom">
+      <p>{es ? 'Construyo interfaces para productos web y mobile. React, TypeScript y Flutter, del diseño a la implementación.' : 'I build interfaces for web and mobile products. React, TypeScript and Flutter, from design to implementation.'}</p>
+      <div class="pe-actions"><a class="pe-button" href="#work">{t.nav.work} <span aria-hidden="true">↓</span></a><a class="pe-text-link" href="#contact">{t.hero.cta} <span aria-hidden="true">↗</span></a></div>
     </div>
-  </Container>
-
-  <hr class="mx-auto max-w-[80%] opacity-25" />
+  </header>
+  <SelectedWork locale={locale} />
+  <div class="pe-product"><SaaSShowcase copy={t.saas} /></div>
+  <section class="pe-section pe-about" id="about" aria-labelledby="pe-about-title">
+    <div><p class="pe-eyebrow">{t.nav.about}</p><h2 id="pe-about-title">{es ? 'Detrás del trabajo, Liam.' : 'Behind the work, Liam.'}</h2><p>{t.about1.desc}</p></div>
+    <div class="pe-expertise">
+      <div><h3>{es ? 'Experiencia mobile' : 'Mobile experience'}</h3><p>{t.infobox.mobileDesc}</p></div>
+      <div><h3>{es ? 'Desarrollo web' : 'Web development'}</h3><p>{t.infobox.webDesc}</p></div>
+    </div>
+  </section>
+  <section class="pe-section" aria-labelledby="pe-stack-title">
+    <div class="pe-section-head"><h2 id="pe-stack-title">{t.stack.title}</h2><p>{t.stack.meta}</p></div>
+    <dl class="pe-stack">{t.stack.groups.map((group) => <div><dt>{group.label}</dt><dd>{group.items.join(' · ')}</dd></div>)}</dl>
+  </section>
+  <Contact title={t.contact.title} meta={t.contact.meta} />
 </main>
-
-<About locale={locale} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<Works locale={locale} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<MoreProjects title={t.work.moreWorksTitle} meta={t.work.moreWorksDesc} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<SaaSShowcase copy={t.saas} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<StackSection copy={t.stack} />
-<hr class="mx-auto max-w-[80%] opacity-25" />
-<Contact title={t.contact.title} meta={t.contact.meta} />
-
-<footer class="pb-10 text-center">
-  <p class="text-xs text-white/20 tracking-widest uppercase">
-    {t.footer} · {new Date().getFullYear()}
-  </p>
-</footer>
-
-<style>
-  .main-title {
-    position: static !important;
-    transform: none !important;
-  }
-</style>
+<footer class="pe-footer"><p>{t.footer} · {new Date().getFullYear()}</p><a href={`/${locale}/`}>{t.nav.backToLinks} ↗</a></footer>

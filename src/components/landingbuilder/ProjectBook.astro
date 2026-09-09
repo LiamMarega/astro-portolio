@@ -1,0 +1,60 @@
+---
+import { landingProjects } from '../../data/showcase';
+---
+
+<project-scrapbook class="sb-book">
+  <div class="sb-book-stage" data-book-stage>
+    <!-- Decorative only: the real open button never rotates or lives inside aria-hidden. -->
+    <div class="sb-book-cover" data-book-cover hidden aria-hidden="true">
+      <div class="sb-cover-front">
+        <span class="sb-cover-spine">LIAMDEV / TRABAJOS SELECCIONADOS</span>
+        <span class="sb-cover-label">Una selección<br />de mi trabajo</span>
+        <strong>Ideas, hechas<br /><em>realidad.</em></strong>
+        <span class="sb-cover-edition">CUADERNO DE PROYECTOS · VOL. 01</span>
+      </div>
+      <div class="sb-cover-back"></div>
+    </div>
+    <button type="button" class="sb-book-open sb-button" data-book-open hidden aria-expanded="false" aria-controls="sb-book-pages">Abrir cuaderno <span aria-hidden="true">↗</span></button>
+    <!-- All projects are server-rendered and visible when JavaScript is unavailable. -->
+    <div class="sb-book-pages" id="sb-book-pages" data-book-pages>
+      {landingProjects.map((project, index) => (
+        <article class="sb-project" data-book-panel data-title={project.title} aria-labelledby={`sb-title-${project.id}`}>
+          <div class="sb-project-copy">
+            <span class="sb-label">{String(index + 1).padStart(2, '0')} / {project.category}</span>
+            <h3 id={`sb-title-${project.id}`}>{project.title}</h3>
+            <p>{project.contribution}</p>
+            <a href={project.href} target={project.external ? '_blank' : undefined} rel={project.external ? 'noopener noreferrer' : undefined} class="sb-text-link">
+              {project.linkLabel} <span aria-hidden="true">↗</span>
+              {project.external && <span class="sb-sr-only"> (abre otra pestaña)</span>}
+            </a>
+            <span class="sb-hand-note">{project.note}</span>
+          </div>
+          <figure class="sb-project-figure">
+            <div class="sb-photo-mount">
+              <span class="sb-paper-tape" aria-hidden="true"></span>
+              <a href={project.image} aria-label={`Ver captura completa de ${project.title}`}>
+                <img src={project.image} alt={`Captura del proyecto ${project.title}`} loading="lazy" decoding="async" />
+              </a>
+            </div>
+            <figcaption>{project.title} / {project.category}</figcaption>
+          </figure>
+        </article>
+      ))}
+    </div>
+  </div>
+  <div class="sb-book-controls" data-book-controls hidden role="group" aria-label="Navegar por los proyectos">
+    <button type="button" data-book-prev class="sb-book-nav">← Anterior</button>
+    <span class="sb-book-count" data-book-count>01 / {String(landingProjects.length).padStart(2, '0')}</span>
+    <button type="button" data-book-next class="sb-book-nav">Siguiente →</button>
+    <button type="button" data-book-close class="sb-book-close">Cerrar cuaderno</button>
+  </div>
+  <div class="sb-book-alternatives">
+    <button type="button" data-book-list hidden class="sb-text-link" aria-pressed="false">Ver proyectos en lista</button>
+    <a href="/es/portfolio/#work" class="sb-text-link">Portfolio completo <span aria-hidden="true">↗</span></a>
+  </div>
+  <p class="sb-sr-only" role="status" aria-live="polite" aria-atomic="true" data-book-status></p>
+</project-scrapbook>
+
+<script>
+  import './project-book';
+</script>

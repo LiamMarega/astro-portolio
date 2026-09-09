@@ -1,409 +1,127 @@
 ---
 import Layout from '../layouts/LandingBuilderLayout.astro';
-import Navbar from '../components/landingbuilder/Navbar.astro';
-import Hero from '../components/landingbuilder/Hero.astro';
-import Trust from '../components/landingbuilder/Trust.astro';
-import Problems from '../components/landingbuilder/Problems.astro';
-import VSL from '../components/landingbuilder/VSL.astro';
-import TornDivider from '../components/landingbuilder/TornDivider.astro';
-import Approach from '../components/landingbuilder/Approach.astro';
-import Transformation from '../components/landingbuilder/Transformation.astro';
-import Portfolio from '../components/landingbuilder/Portfolio.astro';
-import Qualification from '../components/landingbuilder/Qualification.astro';
-import Caso from '../components/landingbuilder/Caso.astro';
-import FAQ from '../components/landingbuilder/FAQ.astro';
-import CTA from '../components/landingbuilder/CTA.astro';
-import Footer from '../components/landingbuilder/Footer.astro';
-import BookIntro from '../components/landingbuilder/BookIntro.astro';
-import BookTabs from '../components/landingbuilder/BookTabs.astro';
-import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
+import ProjectBook from '../components/landingbuilder/ProjectBook.astro';
+import QualForm from '../components/landingbuilder/QualForm';
+import '../styles/landing-scrapbook.css';
+
+const services = [
+  { n: '01', title: 'Mensaje y estructura', description: 'Ordenamos tu oferta y escribimos el contenido para que se entienda.', detail: 'Copy estratégico, jerarquía de la información y llamados a la acción.' },
+  { n: '02', title: 'Diseño y desarrollo', description: 'Una página a medida, cuidada en desktop y en el celular.', detail: 'Diseño sin plantillas, desarrollo responsive y optimización de carga.' },
+  { n: '03', title: 'Publicación e integraciones', description: 'Dejamos tu landing online y conectada con las herramientas que necesitás.', detail: 'Email, CRM y analíticas según el alcance acordado para tu proyecto.' },
+];
+const steps = [
+  { title: 'Entendemos tu negocio', description: 'Definimos qué ofrecés, a quién y qué acción debería tomar el visitante.' },
+  { title: 'Diseñamos tu landing', description: 'Trabajamos el contenido y el diseño; revisamos juntos antes de avanzar.' },
+  { title: 'Publicamos', description: 'Desarrollamos, probamos las integraciones y dejamos la página lista.' },
+];
+// Existing commercial conditions, shortened presentation only.
+const faqs = [
+  { q: '¿En cuánto tiempo está lista?', a: 'Entre 7 y 21 días hábiles según complejidad y flujo de feedback.' },
+  { q: '¿Incluye los textos?', a: 'Sí. Incluye copy estratégico enfocado en conversión.' },
+  { q: '¿La puedo editar después?', a: 'Sí, te entrego todo listo para que vos o tu equipo puedan editar.' },
+  { q: '¿Qué plataforma usás?', a: 'Desarrollo a medida (Webflow / Next.js) según necesidades del proyecto.' },
+  { q: '¿Qué pasa después del lanzamiento?', a: 'Incluye 14 días de soporte post-lanzamiento para ajustes y optimizaciones.' },
+];
 ---
 
-<Layout
-  title="LiamDev — Landings que convierten tráfico en oportunidades reales"
-  description="Diseño y desarrollo de landing pages estratégicas para coaches, consultores, marcas personales y negocios digitales que quieren vender más."
->
-  <BookIntro />
-  <Navbar />
-  <BookTabs />
-  <Hero />
-  <Trust />
-  <Problems />
-  <VSL />
-  <TornDivider />
-  <div class="band">
-    <Approach />
-    <Transformation />
+<Layout title="LiamDev — Diseño y desarrollo de landing pages a medida" description="Una landing que explique tu negocio y dé ganas de contactarte. Mirá mis proyectos y contame qué necesitás construir.">
+  <div class="sb" id="top">
+    <header class="sb-nav">
+      <a href="#top" class="sb-logo" aria-label="LiamDev — inicio">Liam<span class="sb-logo-suffix">Dev</span><span class="sb-logo-dot" aria-hidden="true">.</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="#proyectos">Proyectos</a>
+        <a href="#proceso">Cómo trabajo</a>
+        <a href="#calificar" class="sb-nav-contact">Hablemos</a>
+      </nav>
+    </header>
+
+    <div class="sb-container">
+      <section class="sb-hero" aria-labelledby="sb-hero-title">
+        <div class="sb-hero-copy">
+          <p class="sb-label">Diseño y desarrollo web a medida</p>
+          <h1 id="sb-hero-title">Una landing que explique tu negocio.<br /><em>Y dé ganas de <span class="sb-highlight">contactarte.</span></em></h1>
+          <p class="sb-lead">Diseño, escribo y desarrollo tu página para que tus visitantes entiendan lo que ofrecés y sepan cómo dar el siguiente paso.</p>
+          <div class="sb-hero-actions">
+            <a class="sb-button" href="#calificar">Hablemos de tu landing <span aria-hidden="true">↗</span></a>
+            <a class="sb-text-link" href="#proyectos">Ver proyectos <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="sb-price">Desde <strong>USD 600</strong> <span>· Según el alcance de tu proyecto</span></p>
+        </div>
+        <aside class="sb-personal-note" aria-label="Trabajo directo con Liam">
+          <span class="sb-paper-tape" aria-hidden="true"></span>
+          <p>De la primera idea al lanzamiento, trabajás conmigo.</p>
+          <span class="sb-signature">Liam</span>
+        </aside>
+      </section>
+
+      <section class="sb-section sb-projects" id="proyectos" aria-labelledby="sb-projects-title">
+        <span id="resultados" class="sb-anchor" aria-hidden="true"></span>
+        <div class="sb-section-heading">
+          <p class="sb-label">01 / Proyectos</p>
+          <h2 id="sb-projects-title">Trabajo que podés <em>explorar.</em></h2>
+          <p>Abrí el cuaderno o mirá los proyectos en lista.</p>
+        </div>
+        <ProjectBook />
+      </section>
+
+      <section class="sb-section" id="servicios" aria-labelledby="sb-services-title">
+        <span id="vsl" class="sb-anchor" aria-hidden="true"></span>
+        <span id="problemas" class="sb-anchor" aria-hidden="true"></span>
+        <div class="sb-section-heading">
+          <p class="sb-label">02 / Qué incluye</p>
+          <h2 id="sb-services-title">De la idea a <em>tu página.</em></h2>
+        </div>
+        <div class="sb-service-grid">
+          {services.map((service) => (
+            <article class="sb-service-card">
+              <span class="sb-service-number" aria-hidden="true">{service.n}</span>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <details><summary>Ver detalle</summary><p>{service.detail}</p></details>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="sb-section sb-process" id="proceso" aria-labelledby="sb-process-title">
+        <div class="sb-process-intro">
+          <p class="sb-label">03 / Cómo trabajo</p>
+          <h2 id="sb-process-title">Un proceso claro.<br /><em>Sin vueltas.</em></h2>
+          <figure class="sb-author" id="sobre">
+            <img src="/images/uploads/liam.jpg" alt="Liam Marega" width="80" height="96" loading="lazy" decoding="async" />
+            <figcaption><span class="sb-signature">Liam</span><span>Diseño y desarrollo.<br />Sin intermediarios.</span></figcaption>
+          </figure>
+        </div>
+        <ol class="sb-process-list">
+          {steps.map((step, index) => (
+            <li><span aria-hidden="true">0{index + 1}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="sb-section sb-faq" id="faq" aria-labelledby="sb-faq-title">
+        <div class="sb-section-heading"><p class="sb-label">04 / Preguntas frecuentes</p><h2 id="sb-faq-title">Antes de <em>empezar.</em></h2></div>
+        <div class="sb-faq-list">{faqs.map((faq) => <details><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div>
+      </section>
+
+      <section class="sb-section sb-contact" id="contacto" aria-labelledby="sb-contact-title">
+        <span id="calificar" class="sb-anchor" aria-hidden="true"></span>
+        <div class="sb-contact-copy">
+          <p class="sb-label">05 / Hablemos</p>
+          <h2 id="sb-contact-title">Contame qué necesitás <em>construir.</em></h2>
+          <p>Dejame algunos datos de tu proyecto y te respondo con el próximo paso.</p>
+          <a href="mailto:hola@liammdev.com" class="sb-text-link">¿Preferís email? Escribime <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="sb-contact-island">
+          <QualForm client:visible />
+          <noscript><p>El formulario necesita JavaScript. Podés contarme tu proyecto por <a href="mailto:hola@liammdev.com">email</a>.</p><style is:inline>.sb-contact-island .lc-form{display:none}</style></noscript>
+        </div>
+      </section>
+    </div>
+
+    <footer class="sb-footer">
+      <span>© {new Date().getFullYear()} · LiamDev</span>
+      <div><a href="/es/portfolio/">Portfolio</a><a href="/landing-builder/articulos">Artículos</a><a href="https://instagram.com/liammdev" target="_blank" rel="noopener noreferrer">Instagram<span class="sb-sr-only"> (abre otra pestaña)</span></a><a href="/landing/builder/privacy">Privacidad y términos</a></div>
+    </footer>
   </div>
-  <TornDivider up />
-  <Portfolio />
-  <Qualification />
-  <Caso />
-  <FAQ />
-  <CTA />
-  <Footer />
-  <StickyCTA />
 </Layout>
-
-<script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ---------- Reveal on scroll ----------
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          e.target.classList.add('in');
-          io.unobserve(e.target);
-        }
-      }
-    },
-    { threshold: 0.12, rootMargin: '0px 0px -60px 0px' },
-  );
-  document.querySelectorAll('.reveal, .hl, .scribble').forEach((el) => io.observe(el));
-
-  // ---------- Hand-drawn pencil borders (size to parent) ----------
-  function sizeSketch(svg: SVGSVGElement) {
-    const parent = svg.parentElement;
-    if (!parent) return;
-    const r = parent.getBoundingClientRect();
-    const w = r.width, h = r.height;
-    if (!w || !h) return;
-    const pad = parseFloat(svg.dataset.pad || '3');
-    const rad = 10;
-    const x0 = pad + 1, y0 = pad + 1, x1 = w - pad - 1, y1 = h - pad - 1;
-    const d =
-      `M ${x0 + rad} ${y0} L ${x1 - rad} ${y0} Q ${x1} ${y0} ${x1} ${y0 + rad} ` +
-      `L ${x1} ${y1 - rad} Q ${x1} ${y1} ${x1 - rad} ${y1} ` +
-      `L ${x0 + rad} ${y1} Q ${x0} ${y1} ${x0} ${y1 - rad} ` +
-      `L ${x0} ${y0 + rad} Q ${x0} ${y0} ${x0 + rad} ${y0} Z`;
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    svg.querySelector('path')?.setAttribute('d', d);
-  }
-  const sketches = document.querySelectorAll<SVGSVGElement>('svg.sketch-border[data-pad]');
-  if ('ResizeObserver' in window) {
-    const ro = new ResizeObserver((entries) => {
-      for (const en of entries) {
-        const svg = en.target.querySelector<SVGSVGElement>('svg.sketch-border[data-pad]');
-        if (svg) sizeSketch(svg);
-      }
-    });
-    sketches.forEach((svg) => { if (svg.parentElement) ro.observe(svg.parentElement); sizeSketch(svg); });
-  } else {
-    sketches.forEach(sizeSketch);
-    globalThis.addEventListener('resize', () => sketches.forEach(sizeSketch));
-  }
-
-  // ---------- GSAP: magnetic buttons + parallax + drift ----------
-  if (!reduce) {
-    const fine = window.matchMedia('(pointer: fine)').matches;
-    if (fine) {
-      document.querySelectorAll<HTMLElement>('.magnet').forEach((el) => {
-        const qx = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3' });
-        const qy = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3' });
-        const move = (e: MouseEvent) => {
-          const r = el.getBoundingClientRect();
-          qx((e.clientX - (r.left + r.width / 2)) * 0.3);
-          qy((e.clientY - (r.top + r.height / 2)) * 0.3);
-        };
-        const leave = () => { qx(0); qy(0); };
-        el.addEventListener('mousemove', move);
-        el.addEventListener('mouseleave', leave);
-      });
-    }
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    // ---------- Stickers / sellos: entran con "slap" ----------
-    document.querySelectorAll<HTMLElement>('.seal, .vsl-badge, .num-flag, .qual-arrow').forEach((el) => {
-      gsap.from(el, {
-        scale: 1.9, opacity: 0, duration: 0.5, ease: 'back.out(2.2)',
-        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
-      });
-    });
-
-    // ---------- Cintas: se "apoyan" sobre el papel ----------
-    document.querySelectorAll<HTMLElement>('.tape').forEach((el, i) => {
-      gsap.from(el, {
-        opacity: 0, scale: 1.4, duration: 0.38, delay: (i % 3) * 0.07, ease: 'power2.out',
-        scrollTrigger: { trigger: el.parentElement || el, start: 'top 90%', once: true },
-      });
-    });
-
-    // ---------- Tilt 3D en tarjetas (hover, desktop) ----------
-    if (fine) {
-      document.querySelectorAll<HTMLElement>('.card, .photo-card, .note, .faq-item, .art-card').forEach((el) => {
-        if (el.closest('.hero .collage')) return;
-        const max = 3.4;
-        const move = (e: MouseEvent) => {
-          const r = el.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          el.style.transition = 'transform 0.12s ease-out, box-shadow 0.2s ease';
-          el.style.transform =
-            `perspective(700px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateZ(8px)`;
-          el.classList.add('tilting');
-        };
-        const leave = () => {
-          el.style.transition = 'transform 0.45s ease, box-shadow 0.3s ease';
-          el.style.transform = '';
-          el.classList.remove('tilting');
-          setTimeout(() => { if (!el.classList.contains('tilting')) el.style.transition = ''; }, 480);
-        };
-        el.addEventListener('mousemove', move);
-        el.addEventListener('mouseleave', leave);
-      });
-    }
-
-    // ---------- Contadores del caso real ----------
-    document.querySelectorAll<HTMLElement>('#resultados .stats strong').forEach((el) => {
-      const raw = (el.textContent || '').trim();
-      const m = raw.match(/^([+\-]?)(\d+(?:\.\d+)?)(.*)$/);
-      if (!m) return;
-      const sign = m[1], end = parseFloat(m[2]), suffix = m[3];
-      const dec = m[2].includes('.') ? 1 : 0;
-      const obj = { v: 0 };
-      gsap.to(obj, {
-        v: end, duration: 1.6, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-        onUpdate: () => { el.textContent = sign + obj.v.toFixed(dec) + suffix; },
-      });
-    });
-
-    // ---------- Escritura a mano: las notas Caveat se "escriben" ----------
-    document
-      .querySelectorAll<HTMLElement>('.note p, .side, .qual-side, .signature, .hero-handwrite, .lbl-hand')
-      .forEach((el) => {
-        el.classList.add('write');
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top 88%',
-          once: true,
-          onEnter: () => el.classList.add('written'),
-        });
-      });
-
-    document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
-      const spd = parseFloat(el.getAttribute('data-parallax') || '0.2') || 0.2;
-      gsap.to(el, {
-        yPercent: spd * -100,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: el.closest('section, .caso-wrap, .vsl-wrap') || el,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-    });
-    document.querySelectorAll<HTMLElement>('[data-drift]').forEach((el, i) => {
-      gsap.to(el, { y: '+=18', x: '+=12', rotation: '+=4', duration: 6 + i, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    });
-    ScrollTrigger.refresh();
-
-    // ---------- Hero collage parallax on scroll ----------
-    const hero: Record<string, [number, number]> = {
-      photo: [1.2, -0.04], usd: [2.5, 0.05], dev: [-1.6, 0.07], seal: [-14, 0.03],
-    };
-    const heroEls = Object.entries(hero)
-      .map(([k, v]) => [document.querySelector<HTMLElement>(`[data-hero="${k}"]`), v] as const)
-      .filter(([el]) => el);
-    if (heroEls.length) {
-      const onScroll = () => {
-        const y = window.scrollY;
-        for (const [el, [rot, mul]] of heroEls) {
-          (el as HTMLElement).style.transform = `rotate(${rot}deg) translateY(${y * mul}px)`;
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
-
-    // ---------- Entrada del hero (después de la intro del libro) ----------
-    const playHero = () => {
-      // Revela los elementos que SOLO dependen del CSS .reveal (eyebrow, collage,
-      // CTA inferior). Los animados por GSAP abajo se controlan con fromTo.
-      document
-        .querySelectorAll('.hero .reveal')
-        .forEach((el) => el.classList.add('in'));
-      // Cada item: [sel, from, to?].
-      // - Con `to` => fromTo: fin explícito en opacity:1. Necesario para los
-      //   elementos .reveal (h1, lead, actions, meta): su base CSS es opacity:0
-      //   con transición de 0.8s, así que .from leería ~0 como fin y los dejaría
-      //   invisibles. Tienen transform identidad, por eso y:0 es seguro.
-      // - Sin `to` => from clásico: para photo-card/note/seal, que NO son
-      //   .reveal (base opacity:1) y conservan su rotación CSS de reposo.
-      const items: [string, gsap.TweenVars, gsap.TweenVars?][] = [
-        ['.hero .photo-card', { y: 60, rotation: -6, opacity: 0, scale: 0.94, duration: 0.7, ease: 'back.out(1.6)' }],
-        ['.hero h1', { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' }],
-        ['.hero .lead', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: 'power3.out' }],
-        ['.hero .actions', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }],
-        ['.hero .meta', { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }],
-        ['.hero .note', { scale: 1.5, opacity: 0, duration: 0.45, ease: 'back.out(2)' }],
-        ['.hero .seal', { scale: 2.2, rotation: 30, opacity: 0, duration: 0.5, ease: 'back.out(2.4)' }],
-      ];
-      const tl = gsap.timeline({ delay: 0.05 });
-      items.forEach(([sel, from, to], i) => {
-        const els = document.querySelectorAll(sel);
-        if (!els.length) return;
-        if (to) tl.fromTo(els, from, { ...to, stagger: 0.08 }, i * 0.09);
-        else tl.from(els, { ...from, stagger: 0.08 }, i * 0.09);
-      });
-      const hand = document.querySelector('.hero-handwrite');
-      if (hand) hand.classList.add('written');
-    };
-    if ((window as any).__lbIntroDone) playHero();
-    else window.addEventListener('lb:introDone', playHero, { once: true });
-  }
-
-  // ---------- UI de scroll: progreso, sticky CTA, nota flotante, pestañas ----------
-  {
-    const prog = document.getElementById('navProgress');
-    const sticky = document.getElementById('stickyCta');
-    const floatNote = document.getElementById('floatNote');
-    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.book-tabs .bt'));
-    const qual = document.getElementById('calificar');
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      if (prog) prog.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + '%';
-      // Ocultamos los CTAs flotantes cuando el formulario ya está a la vista.
-      const qr = qual?.getBoundingClientRect();
-      const onForm = !!qr && qr.top < innerHeight && qr.bottom > 0;
-      if (sticky) sticky.classList.toggle('show', scrollY > 650 && !onForm);
-      if (floatNote) floatNote.classList.toggle('show', scrollY > 900 && !onForm);
-      if (tabs.length) {
-        let cur = -1;
-        tabs.forEach((t, i) => {
-          const el = document.getElementById(t.dataset.tab || '');
-          if (el && el.getBoundingClientRect().top < innerHeight * 0.45) cur = i;
-        });
-        tabs.forEach((t, i) => t.classList.toggle('on', i === cur));
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
-</script>
-
-<!-- Pencil cursor drawing (vanilla, desktop fine-pointer only) -->
-<script>
-  (function () {
-    if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const root = document.querySelector('.lb-root') as HTMLElement | null;
-    if (!root) return;
-
-    const LIFESPAN = 15000, ERASE_DUR = 1700, MOVE_MIN = 4, INK = '26, 22, 16';
-    const canvas = document.createElement('canvas');
-    canvas.id = 'lb-pencil-layer';
-    let ctx: CanvasRenderingContext2D;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    function size() {
-      canvas.width = Math.floor(innerWidth * dpr);
-      canvas.height = Math.floor(innerHeight * dpr);
-      canvas.style.width = innerWidth + 'px';
-      canvas.style.height = innerHeight + 'px';
-      ctx = canvas.getContext('2d')!;
-      ctx.scale(dpr, dpr);
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-    }
-
-    type Pt = { x: number; y: number };
-    type Stroke = { pts: Pt[]; done: boolean; finishedAt: number };
-    const strokes: Stroke[] = [];
-    let current: Stroke | null = null;
-    let drawing = false, moved = 0;
-
-    function isInteractive(el: EventTarget | null) {
-      return !!(el && (el as Element).closest && (el as Element).closest(
-        'a, button, input, textarea, select, label, [role="button"], .btn, .qf-opt, .vsl-frame, [data-no-pencil]'));
-    }
-
-    document.body.appendChild(canvas);
-    size();
-    window.addEventListener('resize', size);
-
-    // Points are stored in DOCUMENT coordinates (clientX + scroll) so the
-    // drawing stays anchored to the page and scrolls away with it.
-    window.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch' || e.button !== 0) return;
-      if (isInteractive(e.target)) return;
-      drawing = true; moved = 0;
-      current = { pts: [{ x: e.clientX + window.scrollX, y: e.clientY + window.scrollY }], done: false, finishedAt: 0 };
-    }, true);
-
-    window.addEventListener('pointermove', (e) => {
-      if (!drawing || !current) return;
-      const px = e.clientX + window.scrollX, py = e.clientY + window.scrollY;
-      const last = current.pts[current.pts.length - 1];
-      const d = Math.hypot(px - last.x, py - last.y);
-      if (d < 1.2) return;
-      moved += d;
-      current.pts.push({ x: px, y: py });
-      if (moved > MOVE_MIN && strokes.indexOf(current) === -1) {
-        strokes.push(current);
-        root.classList.add('pencil-drawing');
-      }
-    }, true);
-
-    function end() {
-      if (current && moved > MOVE_MIN) { current.done = true; current.finishedAt = performance.now(); }
-      else if (current) { const i = strokes.indexOf(current); if (i !== -1) strokes.splice(i, 1); }
-      drawing = false; current = null;
-      root!.classList.remove('pencil-drawing');
-    }
-    window.addEventListener('pointerup', end, true);
-    window.addEventListener('pointercancel', end, true);
-    window.addEventListener('blur', end);
-
-    function drawRange(pts: Pt[], from: number, to: number) {
-      if (to - from < 2) {
-        if (to - from === 1) {
-          const p = pts[from];
-          ctx.beginPath(); ctx.arc(p.x, p.y, 0.8, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(' + INK + ',0.85)'; ctx.fill();
-        }
-        return;
-      }
-      ctx.beginPath();
-      ctx.moveTo(pts[from].x, pts[from].y);
-      for (let i = from + 1; i < to - 1; i++) {
-        const mx = (pts[i].x + pts[i + 1].x) / 2;
-        const my = (pts[i].y + pts[i + 1].y) / 2;
-        ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
-      }
-      ctx.lineTo(pts[to - 1].x, pts[to - 1].y);
-      ctx.strokeStyle = 'rgba(' + INK + ',0.82)'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.strokeStyle = 'rgba(' + INK + ',0.18)'; ctx.lineWidth = 2.6; ctx.stroke();
-    }
-
-    function loop(now: number) {
-      ctx.clearRect(0, 0, innerWidth, innerHeight);
-      ctx.save();
-      // Shift document-space points into the current viewport.
-      ctx.translate(-window.scrollX, -window.scrollY);
-      for (let s = strokes.length - 1; s >= 0; s--) {
-        const st = strokes[s];
-        const n = st.pts.length;
-        let from = 0;
-        if (st.done) {
-          const age = now - st.finishedAt;
-          if (age > LIFESPAN) {
-            const f = (age - LIFESPAN) / ERASE_DUR;
-            from = Math.floor(f * (n - 1));
-            if (from >= n - 1) { strokes.splice(s, 1); continue; }
-          }
-        }
-        drawRange(st.pts, from, n);
-      }
-      ctx.restore();
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-  })();
-</script>

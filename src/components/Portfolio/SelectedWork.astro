@@ -1,0 +1,45 @@
+---
+import { getProjects, minorProjects } from '../../data/projects';
+import { projectContributions } from '../../data/showcase';
+import type { Locale } from '../../i18n/linktree';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const es = locale === 'es';
+const projects = getProjects(true).slice(0, 3);
+const selectedImages = new Set(projects.flatMap((project) => project.images.map((image) => image.src)));
+const more = minorProjects.filter((project) => !selectedImages.has(project.image));
+const label = (link?: string) => !link ? (es ? 'Ver captura' : 'View screenshot') : link.includes('figma.com') ? (es ? 'Ver prototipo' : 'View prototype') : (es ? 'Visitar sitio' : 'Visit website');
+---
+<section class="pe-section" id="work" aria-labelledby="pe-work-title">
+  <span id="work-mobile" class="pe-anchor" aria-hidden="true"></span>
+  <span id="work-tablet" class="pe-anchor" aria-hidden="true"></span>
+  <div class="pe-section-head">
+    <div><p class="pe-eyebrow">{es ? 'Trabajos seleccionados' : 'Selected work'}</p><h2 id="pe-work-title">{es ? 'Menos palabras. Más trabajo.' : 'Less talk. More work.'}</h2></div>
+    <p>{es ? 'Web y mobile. Mi aporte, proyecto a proyecto.' : 'Web and mobile. My contribution to each project.'}</p>
+  </div>
+  <div class="pe-projects">
+    {projects.map((project, index) => <article class="pe-project" aria-labelledby={`pe-${project.id}`}>
+      <a class="pe-capture" href={project.link || project.images[0].src} target="_blank" rel="noopener noreferrer" aria-label={`${label(project.link)}: ${project.title} (${es ? 'otra pestaña' : 'new tab'})`}>
+        <img src={project.images[0].src} alt={project.images[0].alt} width="960" height="720" loading="lazy" decoding="async" />
+        <span class="pe-project-number" aria-hidden="true">0{index + 1}</span>
+      </a>
+      <div class="pe-project-copy">
+        <p class="pe-eyebrow">{project.id === 'ferox' ? 'Mobile / Flutter' : 'Frontend / Web'}</p>
+        <h3 id={`pe-${project.id}`}>{project.title}</h3>
+        <p>{projectContributions[locale][project.id] || project.description[0]}</p>
+        <ul class="pe-tech" aria-label={es ? 'Tecnologías principales' : 'Main technologies'}>
+          {project.techStack.slice(0, 3).map((tech) => <li>{tech.alt.replace(/ (framework|programming language|platform|library|language|markup|styling|backend|integration)$/i, '')}</li>)}
+        </ul>
+        <a class="pe-text-link" href={project.link || project.images[0].src} target="_blank" rel="noopener noreferrer">{label(project.link)} <span aria-hidden="true">↗</span><span class="pe-sr-only"> ({es ? 'abre otra pestaña' : 'opens a new tab'})</span></a>
+      </div>
+    </article>)}
+  </div>
+  {more.length > 0 && <details class="pe-more">
+    <summary>{es ? 'Explorar más trabajo' : 'Explore more work'} <span aria-hidden="true">+</span></summary>
+    <div class="pe-more-grid">{more.map((project) => <a href={project.link || project.image} target="_blank" rel="noopener noreferrer">
+      <img src={project.image} alt={project.text} width="720" height="480" loading="lazy" decoding="async" />
+      <span>{project.text} <span aria-hidden="true">↗</span></span>
+      <small>{label(project.link)} · {es ? 'otra pestaña' : 'new tab'}</small>
+    </a>)}</div>
+  </details>}
+</section>
