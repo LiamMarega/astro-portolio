@@ -3,11 +3,22 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bot" role="contentinfo">
-  <div>© {currentYear} · LiamDev · Hecho con foco en {`{conversión}`}.</div>
+  <div class="legal-info">
+    <span>© {currentYear} · Liam Marega (Persona Física · DNI: 44.497.692) · LiamDev & Lucero</span>
+  </div>
   <div class="links">
-    <a href="https://instagram.com/liammdev" target="_blank" rel="noopener">@LiammDev · Instagram</a>
-    <a href="https://x.com/liammdev" target="_blank" rel="noopener">@LiammDev · X</a>
-    <a href="mailto:hola@liammdev.com">hola@liammdev.com</a>
-    <a href="/landing/builder/privacy">Privacidad & Términos</a>
+    <a href="/terminos-y-condiciones">Términos y Condiciones</a>
+    <a href="/politica-de-reembolso">Envíos y Reembolsos</a>
+    <a href="/politica-de-privacidad">Privacidad</a>
+    <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a>
+    <a href="https://instagram.com/liammdev" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://api.whatsapp.com/send?phone=543436203341" target="_blank" rel="noopener">WhatsApp</a>
   </div>
 </footer>
+
+<style>
+  .bot .legal-info {
+    font-size: 11px;
+    opacity: 0.75;
+  }
+</style>

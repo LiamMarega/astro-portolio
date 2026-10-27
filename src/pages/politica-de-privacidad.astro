@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/LandingBuilderLayout.astro';
+import Footer from '../components/landingbuilder/Footer.astro';
+
+const currentYear = new Date().getFullYear();
+const lastUpdated = '26 de octubre de 2026';
+---
+
+<Layout
+  title="Política de Privacidad — Liam Marega | Lucero y LiamDev"
+  description="Política de privacidad y protección de datos personales de Liam Marega (LiamDev y Lucero)."
+>
+  <header class="nav" id="top">
+    <a class="logo" href="/" aria-label="Inicio — Liam Marega">Liam Marega</a>
+    <span></span>
+    <a href="/" class="btn" style="padding:9px 16px;font-size:11px">&larr; Volver al inicio</a>
+  </header>
+
+  <section class="block privacy">
+    <div class="kicker">Protección de Datos</div>
+    <h1>Política de <span class="hl in">Privacidad</span></h1>
+    <p class="lead">Última actualización: {lastUpdated}</p>
+
+    <div class="prose">
+      <article>
+        <h2>1. Identidad y Datos de Contacto del Responsable</h2>
+        <div class="note alt info">
+          <p><strong>Responsable del Tratamiento:</strong> Liam Marega (Persona Física)</p>
+          <p><strong>Identificación (DNI):</strong> 44.497.692</p>
+          <p><strong>Ubicación:</strong> Entre Ríos, República Argentina</p>
+          <p><strong>Email Oficial:</strong> <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a></p>
+          <p><strong>WhatsApp / Teléfono:</strong> <a href="https://api.whatsapp.com/send?phone=543436203341" target="_blank" rel="noopener">+54 343 620 3341</a></p>
+        </div>
+      </article>
+
+      <article>
+        <h2>2. Datos Personales que Recopilamos</h2>
+        <p>Recopilamos únicamente la información necesaria para gestionar la venta de productos digitales (Lucero), la contratación de servicios de desarrollo (LiamDev / Landing PRO) y la atención al cliente:</p>
+        <ul>
+          <li><strong>Datos de contacto e identificación:</strong> Nombre completo, correo electrónico, número de teléfono/WhatsApp y país de residencia provistos al solicitar un presupuesto o al realizar una compra.</li>
+          <li><strong>Datos de facturación y pago:</strong> La información financiera sensible (números de tarjeta de crédito/débito) es procesada directamente y de forma segura por las pasarelas de pago habilitadas (<strong>dLocal Go</strong>, Mercado Pago, Stripe) bajo estrictos estándares de seguridad PCI-DSS. Liam Marega no almacena ni tiene acceso a los datos completos de sus tarjetas.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>3. Finalidad del Tratamiento</h2>
+        <p>Los datos recabados se utilizan exclusivamente con los siguientes fines legítimos:</p>
+        <ul>
+          <li>Procesar las compras y enviar automáticamente el acceso a los productos digitales adquiridos (Lucero, mapas, guías en PDF o plataformas web).</li>
+          <li>Gestionar la cotización, desarrollo y entrega de los servicios de diseño y desarrollo web contratados.</li>
+          <li>Brindar soporte técnico posventa, responder consultas y procesar solicitudes de reembolso conforme a nuestras políticas.</li>
+          <li>Cumplir con las obligaciones legales, contables y tributarias vigentes.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>4. Seguridad y Confidencialidad</h2>
+        <p>Implementamos medidas técnicas y organizativas adecuadas para proteger sus datos personales contra el acceso no autorizado, alteración, pérdida o divulgación indebida. No comercializamos, alquilamos ni cedemos sus datos personales a terceros con fines publicitarios o ajenos a la prestación del servicio.</p>
+      </article>
+
+      <article>
+        <h2>5. Derechos del Titular de los Datos</h2>
+        <p>En conformidad con la Ley N° 25.326 de Protección de los Datos Personales de la República Argentina y los estándares internacionales aplicables, usted tiene derecho a acceder, rectificar, actualizar o suprimir sus datos personales de nuestros registros en cualquier momento. Para ejercer estos derechos, simplemente envíe un correo a <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a>.</p>
+      </article>
+    </div>
+
+    <div class="privacy-foot">
+      <p>&copy; {currentYear} Liam Marega · DNI 44.497.692 · liammaregadevelop@gmail.com · Entre Ríos, Argentina.</p>
+      <div style="margin-top:12px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <a href="/terminos-y-condiciones">Términos y Condiciones</a>
+        <a href="/politica-de-reembolso">Política de Reembolsos y Envíos</a>
+        <a href="/politica-de-privacidad">Política de Privacidad</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .lb-root .privacy {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 100px 20px 60px;
+  }
+  .lb-root .privacy h1 {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    margin-top: 14px;
+    font-weight: 700;
+  }
+  .lb-root .privacy .lead {
+    margin-top: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .lb-root .privacy .prose {
+    margin-top: 40px;
+    display: grid;
+    gap: 36px;
+  }
+  .lb-root .privacy article h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .lb-root .privacy article p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    color: var(--ink-2);
+  }
+  .lb-root .privacy article p strong {
+    color: var(--ink);
+  }
+  .lb-root .privacy article ul {
+    margin: 6px 0 12px;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+  }
+  .lb-root .privacy article li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .lb-root .privacy .info {
+    display: grid;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .lb-root .privacy .info p {
+    margin: 0;
+  }
+  .lb-root .privacy .privacy-foot {
+    margin-top: 56px;
+    border-top: 1px dashed rgba(120, 105, 70, 0.3);
+    padding-top: 24px;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .lb-root .privacy .privacy-foot a {
+    color: var(--ink-2);
+    text-decoration: underline;
+  }
+  .lb-root .privacy .privacy-foot a:hover {
+    color: var(--ink);
+  }
+</style>

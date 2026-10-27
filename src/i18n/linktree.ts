@@ -64,6 +64,14 @@ export interface LinktreeCopy {
     };
   };
   footer: string;
+  legal: {
+    holder: string;
+    idNumber: string;
+    location: string;
+    terms: string;
+    refunds: string;
+    privacy: string;
+  };
   langSwitch: {
     label: string;
   };
@@ -126,6 +134,14 @@ export const linktreeCopy: Record<Locale, LinktreeCopy> = {
       },
     },
     footer: "liammarega.com",
+    legal: {
+      holder: "Liam Marega (Sole Proprietor)",
+      idNumber: "National ID (DNI): 44.497.692",
+      location: "Entre Ríos, Argentina",
+      terms: "Terms & Conditions",
+      refunds: "Shipping & Refunds",
+      privacy: "Privacy Policy",
+    },
     langSwitch: { label: "Español" },
   },
   es: {
@@ -184,6 +200,14 @@ export const linktreeCopy: Record<Locale, LinktreeCopy> = {
       },
     },
     footer: "liammarega.com",
+    legal: {
+      holder: "Liam Marega (Persona Física)",
+      idNumber: "DNI: 44.497.692",
+      location: "Entre Ríos, Argentina",
+      terms: "Términos y Condiciones",
+      refunds: "Envíos y Devoluciones",
+      privacy: "Política de Privacidad",
+    },
     langSwitch: { label: "English" },
   },
 };
