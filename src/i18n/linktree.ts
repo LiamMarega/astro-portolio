@@ -66,7 +66,6 @@ export interface LinktreeCopy {
   footer: string;
   legal: {
     holder: string;
-    idNumber: string;
     location: string;
     terms: string;
     refunds: string;
@@ -135,8 +134,7 @@ export const linktreeCopy: Record<Locale, LinktreeCopy> = {
     },
     footer: "liammarega.com",
     legal: {
-      holder: "Liam Marega (Sole Proprietor)",
-      idNumber: "National ID (DNI): 44.497.692",
+      holder: "Liam Marega",
       location: "Entre Ríos, Argentina",
       terms: "Terms & Conditions",
       refunds: "Shipping & Refunds",
@@ -201,8 +199,7 @@ export const linktreeCopy: Record<Locale, LinktreeCopy> = {
     },
     footer: "liammarega.com",
     legal: {
-      holder: "Liam Marega (Persona Física)",
-      idNumber: "DNI: 44.497.692",
+      holder: "Liam Marega",
       location: "Entre Ríos, Argentina",
       terms: "Términos y Condiciones",
       refunds: "Envíos y Devoluciones",
