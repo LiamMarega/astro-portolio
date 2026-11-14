@@ -213,7 +213,7 @@ export default function QualForm() {
     setStatus("sending");
     setErrorMsg("");
     try {
-      const res = await fetch("/api/diagnostico", {
+      const res = await fetch("/api/diagnostico/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, whatsapp, consent, verdict, answers: ans, questions: QF_QUESTIONS.map((x) => ({ id: x.id, q: x.q })) }),

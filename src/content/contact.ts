@@ -12,7 +12,7 @@ import type { LeadFormConfig } from '../lib/forms';
 import { useContent, type Locale } from './site';
 
 /** Where every lead form POSTs its JSON (a Vercel Function, see api/contact.ts). */
-export const LEAD_ENDPOINT = '/api/contact';
+export const LEAD_ENDPOINT = '/api/contact/';
 
 /** The two URLs of the contact page, used by the nav language switch and the hreflang tags. */
 export const contactPath: Record<Locale, string> = { es: '/contact/', en: '/en/contact/' };
