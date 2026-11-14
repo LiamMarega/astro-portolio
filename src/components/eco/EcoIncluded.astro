@@ -2,21 +2,21 @@
 import * as lucide from 'lucide-static';
 import SectionHead from './SectionHead.astro';
 import TagsArt from './EcoTagsArt.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 import { useContent } from '../../content/site';
 
-const { site } = useContent('es');
-const inc = ecommerce.included;
+const { site } = useContent(Astro.currentLocale);
+const inc = useEcommerce(Astro.currentLocale).included;
 const icon = (name: string) =>
   ((lucide as Record<string, string>)[name] ?? '').replace(/\s(width|height)="24"/g, '').replace('class="', 'aria-hidden="true" focusable="false" class="');
 ---
 
-<section class="esec einc" aria-labelledby="inc-title">
+<section id="incluye" class="esec einc" aria-labelledby="inc-title">
   <SectionHead note={inc.note} title={inc.title} intro={inc.intro} id="inc-title" />
 
   <div class="einc__grid">
     <div class="einc__art" data-reveal>
-      <TagsArt tags={inc.tags} name={site.name} label={`Incluye: ${inc.tags.map((t) => t.label).join(', ')}`} />
+      <TagsArt tags={inc.tags} name={site.name} label={`${inc.includes}: ${inc.tags.map((t) => t.label).join(', ')}`} />
     </div>
     <ul class="einc__list" data-reveal style="--reveal-delay:.08s">
       {
@@ -51,7 +51,7 @@ const icon = (name: string) =>
   .einc__list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    align-content: start;
+    align-content: center;
     gap: clamp(18px, 1.9vw, 32px) clamp(16px, 2vw, 34px);
     margin: 0;
     padding: clamp(22px, 2.73vw, 48px);

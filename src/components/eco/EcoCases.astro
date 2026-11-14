@@ -1,10 +1,17 @@
 ---
 import SectionHead from './SectionHead.astro';
 import CtaBand from './CtaBand.astro';
-import Logo from '../Logo.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce, SHOT } from '../../content/ecommerce';
 
-const c = ecommerce.cases;
+const e = useEcommerce(Astro.currentLocale);
+const c = e.cases;
+// the screenshots alternate sides from one store to the next
+const layouts = [
+  { site: { l: 0, w: 70, t: 8, r: -0.8, hx: -8, hy: -44, hr: -2.4, hs: 1.03 }, phone: { l: 76, w: 18, t: 20, r: 2.6, hx: 12, hy: -60, hr: 5, hs: 1.05 } },
+  { phone: { l: 6, w: 18, t: 20, r: -2.6, hx: -12, hy: -60, hr: -5, hs: 1.05 }, site: { l: 30, w: 70, t: 6, r: 1, hx: 8, hy: -44, hr: 2.6, hs: 1.03 } },
+];
+const vars = (m: { l: number; w: number; t: number; r: number; hx: number; hy: number; hr: number; hs: number }) =>
+  `--l:${m.l}%;--w:${m.w}%;--t:${m.t};--r:${m.r}deg;--hx:${m.hx}px;--hy:${m.hy}px;--hr:${m.hr}deg;--hs:${m.hs}`;
 ---
 
 <section id="casos" class="esec ecases" aria-labelledby="cases-title">
@@ -12,52 +19,66 @@ const c = ecommerce.cases;
 
   <div class="ecases__list">
     {
-      c.items.map((p) => (
-        <article class="ecase" data-reveal>
-          <div class="ecase__glow" aria-hidden="true" />
-          <header class="ecase__head">
-            <span class="ecase__logo">
-              <Logo id={p.logo} />
-            </span>
-            <h3 class="ecase__name">{p.name}</h3>
-            <span class="ecase__cat">{p.category}</span>
-          </header>
+      e.stores.map((p, i) => {
+        const lay = layouts[i % 2];
+        return (
+          <article class="ecase" data-reveal>
+            <div class="ecase__glow" aria-hidden="true" />
+            <header class="ecase__head">
+              <h3 class="ecase__name">{p.name}</h3>
+              <span class="ecase__cat">{p.category}</span>
+            </header>
 
-          <div class="ecase__body">
-            <div>
-              <p class="ecase__desc">{p.summary}</p>
-              <ul class="ecase__tags" aria-label="Qué se hizo">
-                {p.tags.map((t) => (
-                  <li>{t}</li>
-                ))}
-              </ul>
+            <div class="ecase__body">
+              <div>
+                <p class="ecase__desc">{p.summary}</p>
+                <ul class="ecase__tags" aria-label={c.tagsLabel}>
+                  {p.tags.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+                <a class="ecase__visit" href={p.url} target="_blank" rel="noopener">
+                  {c.visit}
+                  <span>{p.host}</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+                </a>
+              </div>
+              <div class="ecase__feats">
+                <h4>{c.features}</h4>
+                <ul>
+                  {p.features.map((f) => (
+                    <li>
+                      <span class="echeck">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M6 12.5l4 4 8-9" />
+                        </svg>
+                      </span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <ul class="ecase__stats">
-              {p.stats.map((s) => (
-                <li>
-                  <b>{s.value}</b>
-                  <span>{s.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          <div class="ecase__media" aria-hidden="true">
-            {p.media.map((m) => (
-              <figure
-                class="ecase__img"
-                style={`--l:${m.left}%;--w:${m.width}%;--t:${m.top};--r:${m.rotate}deg;--hx:${m.hover?.x ?? 0}px;--hy:${m.hover?.y ?? -60}px;--hr:${m.hover?.rotate ?? m.rotate * 2}deg;--hs:${m.hover?.scale ?? 1.05}`}
-              >
-                <img src={m.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" draggable="false" />
+            <div class="ecase__media">
+              <figure class="ecase__dev ecase__dev--site" style={vars(lay.site)}>
+                <div class="ecase__bar" aria-hidden="true">
+                  <i /><i /><i />
+                  <span>{p.host}</span>
+                </div>
+                <img src={`/img/ecommerce/${p.id}-site.webp`} alt={p.alt.site} width={SHOT.site.w} height={SHOT.site.h} loading="lazy" decoding="async" draggable="false" />
               </figure>
-            ))}
-          </div>
-        </article>
-      ))
+              <figure class="ecase__dev ecase__dev--phone" style={vars(lay.phone)}>
+                <img src={`/img/ecommerce/${p.id}-phone.webp`} alt={p.alt.phone} width={SHOT.phone.w} height={SHOT.phone.h} loading="lazy" decoding="async" draggable="false" />
+              </figure>
+            </div>
+          </article>
+        );
+      })
     }
   </div>
 
-  <CtaBand text={c.band.text} cta={c.band.cta} />
+  <CtaBand text={c.band.text} cta={c.band.cta} href={e.contactHref} />
 </section>
 
 <style>
@@ -94,20 +115,6 @@ const c = ecommerce.cases;
     flex-wrap: wrap;
     align-items: center;
     gap: clamp(10px, 1.16vw, 20px);
-  }
-  .ecase__logo {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: clamp(34px, 3.41vw, 58px);
-    aspect-ratio: 1;
-    border-radius: 24%;
-    background: #000;
-    color: #fff;
-  }
-  .ecase__logo :global(svg) {
-    width: 76%;
-    height: 76%;
   }
   .ecase__name {
     font-size: clamp(26px, 3.14vw, 54px);
@@ -155,68 +162,147 @@ const c = ecommerce.cases;
     color: #111;
   }
 
-  .ecase__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  .ecase__visit {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin-top: clamp(14px, 1.4vw, 22px);
+    font-size: clamp(15px, 1.1vw, 18px);
+    font-weight: 520;
+    color: #111;
   }
-  .ecase__stats li {
-    display: grid;
-    align-content: start;
-    gap: 6px;
-    padding: clamp(14px, 1.4vw, 22px);
+  .ecase__visit span {
+    color: var(--ink-mute);
+    font-weight: 450;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.2);
+    text-underline-offset: 0.2em;
+  }
+  .ecase__visit svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.35s var(--ease-spring);
+  }
+  .ecase__visit:hover svg {
+    transform: translate(2px, -2px);
+  }
+  .ecase__visit:hover span {
+    text-decoration-color: currentColor;
+  }
+
+  .ecase__feats {
+    padding: clamp(16px, 1.6vw, 26px);
     border-radius: clamp(12px, 1vw, 18px);
     background: #fff;
   }
-  .ecase__stats b {
-    font-size: clamp(26px, 2.6vw, 48px);
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    white-space: nowrap;
-  }
-  .ecase__stats span {
+  .ecase__feats h4 {
     font-size: clamp(13px, 0.98vw, 16px);
-    line-height: 1.3;
+    font-weight: 520;
     color: var(--ink-mute);
+  }
+  .ecase__feats ul {
+    display: grid;
+    gap: clamp(10px, 1vw, 16px);
+    margin: clamp(12px, 1.2vw, 18px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ecase__feats li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(16px, 1.35vw, 22px);
+    font-weight: 480;
+    line-height: 1.25;
+    color: #1a1a1a;
   }
 
   .ecase__media {
     position: relative;
     margin-top: clamp(28px, 3.55vw, 60px);
-    height: clamp(210px, 24.7vw, 420px);
+    height: clamp(240px, 29vw, 480px);
   }
-  .ecase__img {
+  .ecase__dev {
     position: absolute;
     left: var(--l);
     width: var(--w);
     top: calc(var(--t) * 0.0682vw);
     margin: 0;
-    padding: clamp(3px, 0.41vw, 7px);
-    border-radius: clamp(10px, 1.1vw, 18px);
+    overflow: hidden;
     background: #fff;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.06),
-      0 8px 30px rgba(0, 0, 0, 0.08);
+      0 8px 30px rgba(0, 0, 0, 0.1);
     transform: rotate(var(--r));
     transform-origin: 50% 30%;
     transition: transform 0.7s cubic-bezier(0.3, 1.18, 0.4, 1);
     will-change: transform;
   }
-  .ecase__img img {
+  .ecase__dev img {
+    display: block;
     width: 100%;
-    border-radius: clamp(7px, 0.75vw, 12px);
+    height: auto;
     user-select: none;
+  }
+  /* browser window */
+  .ecase__dev--site {
+    border-radius: clamp(10px, 1.1vw, 18px) clamp(10px, 1.1vw, 18px) 0 0;
+  }
+  .ecase__bar {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 0.45vw, 8px);
+    padding: clamp(6px, 0.7vw, 12px) clamp(8px, 1vw, 16px);
+    background: #f1f1f1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .ecase__bar i {
+    width: clamp(6px, 0.6vw, 10px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #d4d4d4;
+  }
+  .ecase__bar i:nth-child(1) {
+    background: #ff6159;
+  }
+  .ecase__bar i:nth-child(2) {
+    background: #ffbd2e;
+  }
+  .ecase__bar i:nth-child(3) {
+    background: #28c941;
+  }
+  .ecase__bar span {
+    margin-left: clamp(4px, 0.6vw, 10px);
+    padding: 0.2em 0.9em;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #fff;
+    font-size: clamp(8px, 0.85vw, 14px);
+    color: #6d6d6d;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* phone */
+  .ecase__dev--phone {
+    padding: clamp(2px, 0.3vw, 5px);
+    border-radius: clamp(14px, 1.9vw, 30px) clamp(14px, 1.9vw, 30px) 0 0;
+    background: #111;
+  }
+  .ecase__dev--phone img {
+    border-radius: clamp(11px, 1.55vw, 25px) clamp(11px, 1.55vw, 25px) 0 0;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .ecase:hover .ecase__glow {
       opacity: 1;
     }
-    .ecase:hover .ecase__img {
+    .ecase:hover .ecase__dev {
       transform: translate(var(--hx), var(--hy)) rotate(var(--hr)) scale(var(--hs));
     }
   }
@@ -237,21 +323,23 @@ const c = ecommerce.cases;
     .ecase__head {
       row-gap: 12px;
     }
-    .ecase__stats {
-      gap: 6px;
-    }
-    .ecase__stats li {
-      padding: 12px 10px;
-    }
-    .ecase__stats b {
-      font-size: clamp(22px, 6.6vw, 30px);
-    }
     .ecase__media {
-      height: 40vw;
+      height: 60vw;
       margin-top: 24px;
     }
-    .ecase__img {
+    .ecase__dev {
       top: calc(var(--t) * 0.16vw);
+    }
+    .ecase__dev--site {
+      left: calc(var(--l) * 1.2);
+      width: calc(var(--w) * 0.9);
+    }
+    .ecase__dev--phone {
+      left: calc(var(--l) - 6%);
+      width: calc(var(--w) * 1.7);
+    }
+    .ecase__bar span {
+      font-size: 8px;
     }
   }
 </style>

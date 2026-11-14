@@ -1,11 +1,13 @@
 ---
-import { ecommerce } from '../../content/ecommerce';
-const s = ecommerce.sticky;
+import { useEcommerce } from '../../content/ecommerce';
+
+const e = useEcommerce(Astro.currentLocale);
+const s = e.sticky;
 ---
 
 <div class="esticky" data-esticky aria-hidden="true" inert>
   <span class="esticky__text">{s.text}</span>
-  <a class="esticky__btn" href="#aplicar" tabindex="-1">{s.cta}</a>
+  <a class="esticky__btn" href={e.contactHref} tabindex="-1">{s.cta}</a>
 </div>
 
 <style>

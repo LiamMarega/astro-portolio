@@ -1,8 +1,8 @@
 ---
 import SectionHead from './SectionHead.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
-const f = ecommerce.faq;
+const f = useEcommerce(Astro.currentLocale).faq;
 const half = Math.ceil(f.items.length / 2);
 const cols = [f.items.slice(0, half), f.items.slice(half)];
 ---

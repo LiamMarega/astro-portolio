@@ -1,15 +1,15 @@
 ---
 import SectionHead from './SectionHead.astro';
 import Doodle from '../Doodle.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
-const m = ecommerce.method;
+const m = useEcommerce(Astro.currentLocale).method;
 // highlight the method name inside the intro
 const key = m.name.toLowerCase();
 const at = m.intro.toLowerCase().indexOf(key);
 const intro = at < 0 ? [m.intro, '', ''] : [m.intro.slice(0, at), m.intro.slice(at, at + key.length), m.intro.slice(at + key.length)];
-const [creative, sell, responsible] = m.pillars;
-const days = Array.from({ length: 35 }, (_, i) => i);
+const [creative, sell, ops] = m.pillars;
+const rows = [78, 54, 66, 40];
 ---
 
 <section class="esec emethod" aria-labelledby="method-title">
@@ -26,8 +26,8 @@ const days = Array.from({ length: 35 }, (_, i) => i);
         <span class="swatch" style="--c:#7be0b0;--x:18%;--r:-3deg"></span>
         <span class="swatch" style="--c:#8f7bff;--x:58%;--r:9deg"></span>
         <span class="pillar__aa">Aa</span>
-        <span class="pillar__hand hand">tu marca</span>
-        <Doodle name="sparkles" seed="pb" class="pillar__spark" onView duration={0.7} />
+        <span class="pillar__hand hand">{creative.art}</span>
+        <Doodle name="sparkles" seed="pb" class="pillar__stars" onView duration={0.7} />
       </div>
       <p class="pillar__tag">{creative.tag}</p>
       <h3 class="pillar__title">{creative.title}</h3>
@@ -47,26 +47,29 @@ const days = Array.from({ length: 35 }, (_, i) => i);
     </article>
 
     <article class="pillar" data-reveal style="--reveal-delay:.16s">
-      <div class="pillar__art pillar__art--cal" aria-hidden="true">
-        <div class="cal">
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d) => <span class="cal__head">{d}</span>)}
+      <div class="pillar__art pillar__art--cat" aria-hidden="true">
+        <ul class="cat">
           {
-            days.map((d) =>
-              d === 32 ? (
-                <span class="cal__day is-launch">
-                  <Doodle name="ring" seed="pc" class="cal__ring" onView duration={0.7} delay={0.3} />
-                  <span class="cal__label hand">{responsible.launch}</span>
+            rows.map((w, i) => (
+              <li class="cat__row" style={`--w:${w}%;--i:${i}`}>
+                <span class="cat__thumb" />
+                <span class="cat__lines">
+                  <i />
+                  <i />
                 </span>
-              ) : (
-                <span class:list={['cal__day', { 'is-fri': d % 7 === 4 && d < 32 }]} />
-              ),
-            )
+                <span class="cat__ok">
+                  <svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9" /></svg>
+                </span>
+              </li>
+            ))
           }
-        </div>
+        </ul>
+        <span class="cat__hand hand">{ops.art}</span>
+        <Doodle name="arrow" seed="pc" class="cat__arrow" onView duration={0.7} delay={0.3} />
       </div>
-      <p class="pillar__tag">{responsible.tag}</p>
-      <h3 class="pillar__title">{responsible.title}</h3>
-      <p class="pillar__text">{responsible.text}</p>
+      <p class="pillar__tag">{ops.tag}</p>
+      <h3 class="pillar__title">{ops.title}</h3>
+      <p class="pillar__text">{ops.text}</p>
     </article>
   </div>
 </section>
@@ -175,7 +178,7 @@ const days = Array.from({ length: 35 }, (_, i) => i);
     color: #555;
     transform: rotate(6deg);
   }
-  .pillar__art :global(.pillar__spark) {
+  .pillar__art :global(.pillar__stars) {
     position: absolute;
     right: 8%;
     top: 34%;
@@ -251,54 +254,102 @@ const days = Array.from({ length: 35 }, (_, i) => i);
     }
   }
 
-  /* 3 · calendar with the launch day circled */
-  .pillar__art--cal {
-    display: grid;
-    place-items: center;
+  /* 3 · catalog rows being migrated */
+  .pillar__art--cat {
     background: #fff;
   }
-  .cal {
-    display: grid;
-    grid-template-columns: repeat(7, 7.4cqw);
-    gap: 1.7cqw;
-  }
-  .cal__head {
-    font-size: max(10px, 3.4cqw);
-    font-weight: 600;
-    color: #a0a0a0;
-    text-align: center;
-  }
-  .cal__day {
-    aspect-ratio: 1;
-    border-radius: 1.6cqw;
-    background: #f0f0f0;
-  }
-  .cal__day.is-fri {
-    background: #dfeedd;
-    box-shadow: inset 0 0 0 0.6cqw #8bd19a;
-  }
-  .cal__day.is-launch {
-    position: relative;
-    background: var(--sun);
-  }
-  .cal__day.is-launch :global(.cal__ring) {
+  .cat {
     position: absolute;
-    left: 50%;
+    left: 6cqw;
     top: 50%;
-    width: 290%;
-    max-width: none;
-    color: #111;
-    transform: translate(-50%, -50%) rotate(-8deg);
+    display: grid;
+    gap: 2.6cqw;
+    width: 58cqw;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transform: translateY(-50%);
   }
-  .cal__label {
+  .cat__row {
+    display: flex;
+    align-items: center;
+    gap: 3cqw;
+    padding: 2.2cqw 3cqw;
+    border-radius: 3cqw;
+    background: #f4f4f4;
+  }
+  .cat__thumb {
+    flex: none;
+    width: 8cqw;
+    aspect-ratio: 1;
+    border-radius: 2cqw;
+    background: #e0dcc8;
+  }
+  .cat__row:nth-child(2) .cat__thumb {
+    background: #cfe1ee;
+  }
+  .cat__row:nth-child(3) .cat__thumb {
+    background: #e7d2cf;
+  }
+  .cat__row:nth-child(4) .cat__thumb {
+    background: #d3e6d2;
+  }
+  .cat__lines {
+    flex: 1;
+    display: grid;
+    gap: 1.4cqw;
+  }
+  .cat__lines i {
+    display: block;
+    height: 1.6cqw;
+    border-radius: 999px;
+    background: #d8d8d8;
+  }
+  .cat__lines i:first-child {
+    width: var(--w);
+    background: #bdbdbd;
+  }
+  .cat__lines i:last-child {
+    width: calc(var(--w) * 0.6);
+  }
+  .cat__ok {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 6cqw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--sun);
+    transition: transform 0.5s var(--ease-spring);
+  }
+  .cat__ok svg {
+    width: 60%;
+    height: 60%;
+    fill: none;
+    stroke: #111;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .pillar:hover .cat__ok {
+    transform: scale(1.18);
+  }
+  .cat__hand {
     position: absolute;
-    left: 40%;
-    top: 128%;
-    font-size: max(17px, 6.4cqw);
+    right: 6%;
+    bottom: 12%;
+    font-size: max(17px, 7cqw);
     line-height: 1;
-    white-space: nowrap;
     color: #333;
-    transform: rotate(-8deg);
+    transform: rotate(-6deg);
+  }
+  .pillar__art :global(.cat__arrow) {
+    position: absolute;
+    right: 20%;
+    bottom: 26%;
+    width: 14cqw;
+    color: #555;
+    transform: rotate(-150deg) scaleX(-1);
   }
 
   @media (max-width: 900px) {

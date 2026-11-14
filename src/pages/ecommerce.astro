@@ -1,11 +1,10 @@
 ---
 /**
- * /ecommerce — sales page for brands that need an online store.
- * Funnel order: promise → proof in numbers → "that's me" (pains) → why it works (method)
- * → proof (cases, quotes) → value (what's included, process, who) → why me (comparison)
- * → offer (plans + guarantee) → objections (FAQ) → close (form).
- * All copy: src/content/ecommerce.ts (Spanish only until /en/ecommerce exists, so no language link in the nav
- * and the layout announces only itself + x-default as hreflang).
+ * /ecommerce (es) and /en/ecommerce (en): sales page for the custom headless e-commerce service.
+ * /en/ecommerce re-uses this file (src/pages/en/ecommerce.astro); the language comes from Astro.currentLocale.
+ * Funnel order: promise → proof in numbers → "that's me" (pains) → how it works (method)
+ * → proof (real stores) → what's included → quote CTA → process → who → fair comparison → objections (FAQ) → close.
+ * All copy: src/content/ecommerce.ts. Every CTA goes to the contact form (/contact, /en/contact).
  */
 import Base from '../layouts/Base.astro';
 import Sky from '../components/Sky.astro';
@@ -17,41 +16,40 @@ import EcoStats from '../components/eco/EcoStats.astro';
 import EcoPains from '../components/eco/EcoPains.astro';
 import EcoMethod from '../components/eco/EcoMethod.astro';
 import EcoCases from '../components/eco/EcoCases.astro';
-import EcoQuotes from '../components/eco/EcoQuotes.astro';
 import EcoIncluded from '../components/eco/EcoIncluded.astro';
+import CtaBand from '../components/eco/CtaBand.astro';
 import EcoProcess from '../components/eco/EcoProcess.astro';
 import EcoAbout from '../components/eco/EcoAbout.astro';
 import EcoCompare from '../components/eco/EcoCompare.astro';
-import EcoPricing from '../components/eco/EcoPricing.astro';
-import EcoGuarantee from '../components/eco/EcoGuarantee.astro';
 import EcoFaq from '../components/eco/EcoFaq.astro';
 import EcoClose from '../components/eco/EcoClose.astro';
 import EcoSticky from '../components/eco/EcoSticky.astro';
-import { ecommerce } from '../content/ecommerce';
+import { useEcommerce, ecommercePath } from '../content/ecommerce';
 import { useContent } from '../content/site';
 import '../styles/ecommerce.css';
 
-const { site } = useContent('es');
-const e = ecommerce;
+const { lang, site } = useContent(Astro.currentLocale);
+const e = useEcommerce(lang);
+const other = lang === 'es' ? 'en' : 'es';
 ---
 
-<Base title={e.meta.title} description={e.meta.description} ogImage={e.meta.og}>
+<Base title={e.meta.title} description={e.meta.description} ogImage={e.meta.og} alternates={ecommercePath}>
   <Sky />
   <TopBlur />
-  <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={null} />
+  <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={ecommercePath[other]} />
   <main id="top" class="eco">
     <EcoHero />
     <EcoStats />
     <EcoPains />
     <EcoMethod />
     <EcoCases />
-    <EcoQuotes />
     <EcoIncluded />
+    <section class="esec equote">
+      <CtaBand note={e.quote.note} text={e.quote.text} cta={e.quote.cta} href={e.contactHref} />
+    </section>
     <EcoProcess />
     <EcoAbout />
     <EcoCompare />
-    <EcoPricing />
-    <EcoGuarantee />
     <EcoFaq />
     <EcoClose />
     <footer class="efoot">

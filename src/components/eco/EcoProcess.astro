@@ -1,8 +1,8 @@
 ---
 import SectionHead from './SectionHead.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
-const p = ecommerce.process;
+const p = useEcommerce(Astro.currentLocale).process;
 ---
 
 <section id="proceso" class="esec eproc" aria-labelledby="proc-title">
@@ -13,7 +13,6 @@ const p = ecommerce.process;
       p.steps.map((s, i) => (
         <li class="estep" data-reveal style={`--reveal-delay:${i * 0.07}s`}>
           <span class="estep__num">{i + 1}</span>
-          <span class="estep__when">{s.when}</span>
           <h3 class="estep__title">{s.title}</h3>
           <p class="estep__text">{s.text}</p>
         </li>
@@ -75,18 +74,8 @@ const p = ecommerce.process;
   .estep:last-child .estep__num {
     box-shadow: 0 0 0 6px #f3ecd0;
   }
-  .estep__when {
-    align-self: flex-start;
-    margin-top: clamp(16px, 1.6vw, 26px);
-    padding: 0.3em 0.75em;
-    border-radius: 999px;
-    background: #fff;
-    font-size: clamp(12.5px, 0.92vw, 15px);
-    font-weight: 520;
-    color: #333;
-  }
   .estep__title {
-    margin-top: 12px;
+    margin-top: clamp(16px, 1.6vw, 26px);
     font-size: clamp(19px, 1.55vw, 27px);
     font-weight: 500;
     line-height: 1.12;
@@ -120,16 +109,14 @@ const p = ecommerce.process;
       column-gap: 16px;
     }
     .estep__num {
-      grid-row: 1 / span 3;
-    }
-    .estep__when {
-      grid-column: 2;
-      justify-self: start;
-      margin-top: 0;
+      grid-row: 1 / span 2;
     }
     .estep__title,
     .estep__text {
       grid-column: 2;
+    }
+    .estep__title {
+      margin-top: 0;
     }
   }
 </style>

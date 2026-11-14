@@ -19,7 +19,7 @@ const { text, cta, href = '#aplicar', note } = Astro.props;
     {cta}
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
   </a>
-  <Doodle name="sparkles" seed={text.length} class="eband__spark" onView duration={0.6} />
+  <Doodle name="sparkles" seed={text.length} class="eband__stars" onView duration={0.6} />
 </div>
 
 <style>
@@ -50,7 +50,7 @@ const { text, cta, href = '#aplicar', note } = Astro.props;
     color: #7a7a7a;
     letter-spacing: 0;
   }
-  .eband :global(.eband__spark) {
+  .eband :global(.eband__stars) {
     position: absolute;
     right: 1.4%;
     top: 8%;
@@ -66,7 +66,7 @@ const { text, cta, href = '#aplicar', note } = Astro.props;
     .eband .ebtn {
       width: 100%;
     }
-    .eband :global(.eband__spark) {
+    .eband :global(.eband__stars) {
       top: 10px;
       right: 10px;
     }

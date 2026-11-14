@@ -1,9 +1,10 @@
 ---
 import * as lucide from 'lucide-static';
 import SectionHead from './SectionHead.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
-const p = ecommerce.pains;
+const e = useEcommerce(Astro.currentLocale);
+const p = e.pains;
 const icon = (name: string) =>
   ((lucide as Record<string, string>)[name] ?? '').replace(/\s(width|height)="24"/g, '').replace('class="', 'aria-hidden="true" focusable="false" class="');
 ---
@@ -32,7 +33,7 @@ const icon = (name: string) =>
 
   <div class="epains__foot">
     <p class="epains__msg hand" data-pains-msg aria-live="polite">{p.idle}</p>
-    <a class="ebtn" href="#aplicar" data-pains-cta>
+    <a class="ebtn" href={e.contactHref} data-pains-cta>
       {p.cta}
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
     </a>

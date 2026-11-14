@@ -3,15 +3,12 @@ import StickerWord from '../StickerWord.astro';
 import Sticker from '../EcoSticker.astro';
 import Doodle from '../Doodle.astro';
 import Keycap from '../Keycap.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce, SHOT } from '../../content/ecommerce';
 
-const h = ecommerce.hero;
+const e = useEcommerce(Astro.currentLocale);
+const h = e.hero;
 const v = h.visual;
-const money = (n: number) => `${v.currency}${n.toLocaleString('es-CO')}`;
-// the two newest orders are already on screen when the page loads
-const shown = [v.orders[1], v.orders[0]];
-const when = [v.now, v.ago.replace('{n}', '2')];
-const bars = [34, 52, 40, 66, 58, 80, 72, 94];
+const stores = e.stores;
 ---
 
 <section class="ehero" data-ehero aria-labelledby="ehero-title">
@@ -41,7 +38,7 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
       <p class="ehero__sub">{h.sub}</p>
 
       <div class="ehero__ctas">
-        <Keycap href="#aplicar" label={h.cta} w="clamp(250px, 21.5vw, 350px)" doodles="top" />
+        <Keycap href={e.contactHref} label={h.cta} w="clamp(250px, 21.5vw, 350px)" doodles="top" />
         <a class="ehero__more" href="#casos">
           {h.secondary}
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
@@ -65,55 +62,55 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
       </ul>
     </div>
 
-    <div class="ehero__visual" role="img" aria-label="Ejemplo de tienda online con pedidos nuevos llegando" data-ehero-visual>
+    <div class="ehero__visual" role="group" aria-label={v.label} data-ehero-visual data-stores={JSON.stringify(stores.map((s) => ({ host: s.host, name: s.name, url: s.url, alt: s.alt.site })))}>
       <figure class="ehero__shot">
-        <img src={v.image.src} alt="" width={v.image.w} height={v.image.h} fetchpriority="high" decoding="async" draggable="false" />
+        <div class="ehero__bar" aria-hidden="true">
+          <i /><i /><i />
+          <span class="ehero__url" data-ehero-url>{stores[0].host}</span>
+        </div>
+        <div class="ehero__screen" style={`aspect-ratio:${SHOT.site.w}/${SHOT.site.h}`}>
+          {
+            stores.map((s, i) => (
+              <img
+                class:list={['ehero__img', { 'is-on': i === 0 }]}
+                src={`/img/ecommerce/${s.id}-site.webp`}
+                alt={i === 0 ? s.alt.site : ''}
+                data-store={s.host}
+                width={SHOT.site.w}
+                height={SHOT.site.h}
+                fetchpriority={i === 0 ? 'high' : 'low'}
+                decoding="async"
+                draggable="false"
+              />
+            ))
+          }
+        </div>
       </figure>
 
-      <div class="ehero__counter" aria-hidden="true">
-        <small>{v.counter}</small>
-        <b data-ehero-total data-value={v.start}>{money(v.start)}</b>
-        <span class="ehero__bars">
-          {bars.map((b) => <i style={`height:${b}%`} />)}
-        </span>
-      </div>
+      <figure class="ehero__phone">
+        <div class="ehero__phone-screen" style={`aspect-ratio:${SHOT.phone.w}/${SHOT.phone.h}`}>
+          {
+            stores.map((s, i) => (
+              <img
+                class:list={['ehero__img', { 'is-on': i === 0 }]}
+                src={`/img/ecommerce/${s.id}-phone.webp`}
+                alt=""
+                width={SHOT.phone.w}
+                height={SHOT.phone.h}
+                fetchpriority={i === 0 ? 'high' : 'low'}
+                decoding="async"
+                draggable="false"
+              />
+            ))
+          }
+        </div>
+      </figure>
 
-      <ul
-        class="ehero__toasts"
-        aria-hidden="true"
-        data-ehero-toasts
-        data-orders={JSON.stringify(v.orders)}
-        data-labels={JSON.stringify({ app: v.app, order: v.order, now: v.now, ago: v.ago, currency: v.currency })}
-      >
-        {
-          shown.map((o, i) => (
-            <li class="htoast is-in">
-              <div>
-                <div class="htoast__card">
-                  <span class="htoast__app">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M5 8h14l-1 12.5H6z" />
-                      <path d="M9 10V7a3 3 0 0 1 6 0v3" />
-                    </svg>
-                  </span>
-                  <span class="htoast__body">
-                    <span class="htoast__top">
-                      <span>{v.app}</span>
-                      <span data-when>{when[i]}</span>
-                    </span>
-                    <b class="htoast__title">
-                      {v.order} #{o.n}
-                    </b>
-                    <span class="htoast__text">
-                      {o.items} · {money(o.amount)}
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="ehero__counter">
+        <small>{v.badge.label}</small>
+        <b>{v.badge.value}</b>
+        <a class="ehero__live" href={stores[0].url} target="_blank" rel="noopener" data-ehero-live data-live={v.live}>{v.live} · {stores[0].name}</a>
+      </div>
 
       <p class="ehero__vnote hand" aria-hidden="true">
         {v.note}
@@ -305,181 +302,150 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
     container-type: inline-size;
   }
 
+  /* browser window with a real store screenshot (cycles through the stores) */
   .ehero__shot {
     position: absolute;
     left: 0;
     top: 2%;
-    width: 88%;
+    width: 86%;
     margin: 0;
-    padding: 0.8cqw;
-    border-radius: 2.6cqw;
+    overflow: hidden;
+    border-radius: 2.2cqw;
     background: #fff;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.06),
       0 24px 60px rgba(140, 100, 0, 0.18);
     transform: rotate(-2.2deg);
   }
-  .ehero__shot img {
+  .ehero__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.9cqw;
+    padding: 1.5cqw 2cqw;
+    background: #f1f1f1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .ehero__bar i {
+    width: 1.5cqw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #d4d4d4;
+  }
+  .ehero__bar i:nth-child(1) {
+    background: #ff6159;
+  }
+  .ehero__bar i:nth-child(2) {
+    background: #ffbd2e;
+  }
+  .ehero__bar i:nth-child(3) {
+    background: #28c941;
+  }
+  .ehero__url {
+    flex: 1;
+    max-width: 52%;
+    margin-left: 1.4cqw;
+    padding: 0.5cqw 1.6cqw;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #fff;
+    font-size: max(9.5px, 1.6cqw);
+    color: #6d6d6d;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ehero__screen,
+  .ehero__phone-screen {
+    position: relative;
     width: 100%;
-    border-radius: 2cqw;
+    overflow: hidden;
+    background: #eee;
+  }
+  .ehero__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.7s ease;
     user-select: none;
+  }
+  .ehero__screen .ehero__img {
+    aspect-ratio: 1440 / 900;
+  }
+  .ehero__phone-screen .ehero__img {
+    aspect-ratio: 600 / 1298;
+  }
+  .ehero__img.is-on {
+    opacity: 1;
+  }
+
+  .ehero__phone {
+    position: absolute;
+    right: 4%;
+    bottom: 0;
+    z-index: 4;
+    width: 24%;
+    margin: 0;
+    padding: 0.9cqw;
+    border-radius: 4.2cqw;
+    background: #111;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.12),
+      0 20px 44px rgba(0, 0, 0, 0.28);
+    transform: rotate(3deg);
+  }
+  .ehero__phone-screen {
+    border-radius: 3.4cqw;
   }
 
   .ehero__counter {
     position: absolute;
-    right: 1%;
-    top: 7%;
-    z-index: 3;
+    left: 3%;
+    bottom: 3%;
+    z-index: 5;
     display: grid;
     gap: 0.4cqw;
+    max-width: 44%;
     padding: 2.2cqw 2.6cqw 2.4cqw;
     border-radius: 3cqw;
     background: #fff;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.06),
       0 14px 34px rgba(0, 0, 0, 0.12);
-    transform: rotate(3deg);
+    transform: rotate(-2.4deg);
   }
   .ehero__counter small {
     font-size: max(11px, 1.9cqw);
     color: #8a8a8a;
   }
   .ehero__counter b {
-    font-size: max(17px, 4.2cqw);
+    font-size: max(24px, 6cqw);
     font-weight: 600;
+    line-height: 1;
     letter-spacing: -0.03em;
     color: #111;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.3s ease;
   }
-  .ehero__counter b.is-bump {
-    color: #1a9e50;
-  }
-  .ehero__bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 0.6cqw;
-    height: 5cqw;
+  .ehero__live {
     margin-top: 0.6cqw;
-  }
-  .ehero__bars i {
-    flex: 1;
-    min-width: 3px;
-    border-radius: 2px;
-    background: linear-gradient(#ffe14d, #fec81a);
-  }
-
-  .ehero__toasts {
-    position: absolute;
-    right: -1%;
-    bottom: 0;
-    z-index: 4;
-    width: 57%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .htoast {
-    display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
-    transition:
-      grid-template-rows 0.55s var(--ease-out),
-      opacity 0.35s ease;
-  }
-  .htoast.is-in {
-    grid-template-rows: 1fr;
-    opacity: 1;
-  }
-  .htoast > div {
-    min-height: 0;
     overflow: hidden;
-    padding: 0 6px;
-    margin: 0 -6px;
-  }
-  .htoast__card {
-    display: flex;
-    align-items: flex-start;
-    gap: 2.2cqw;
-    margin: 1.6cqw 0 4px;
-    padding: 2.1cqw 2.4cqw;
-    border-radius: 3.2cqw;
-    background: rgba(255, 255, 255, 0.86);
-    -webkit-backdrop-filter: blur(14px) saturate(1.4);
-    backdrop-filter: blur(14px) saturate(1.4);
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.07),
-      0 10px 26px rgba(0, 0, 0, 0.12);
-  }
-  .htoast.is-new .htoast__card {
-    animation: buzz 0.5s 0.25s ease-in-out;
-  }
-  @keyframes buzz {
-    0%,
-    100% {
-      transform: none;
-    }
-    20%,
-    60% {
-      transform: translateX(-3px) rotate(-0.6deg);
-    }
-    40%,
-    80% {
-      transform: translateX(3px) rotate(0.6deg);
-    }
-  }
-  .htoast__app {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: max(30px, 6cqw);
-    aspect-ratio: 1;
-    border-radius: 24%;
-    background: var(--sun);
-  }
-  .htoast__app svg {
-    width: 58%;
-    height: 58%;
-    fill: none;
-    stroke: #111;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .htoast__body {
-    flex: 1;
-    min-width: 0;
-    display: grid;
-    gap: 1px;
-    line-height: 1.25;
-  }
-  .htoast__top {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    font-size: max(10.5px, 1.8cqw);
+    font-size: max(11px, 1.9cqw);
     font-weight: 500;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: #8f8f8f;
-  }
-  .htoast__title {
-    font-size: max(13.5px, 2.45cqw);
-    font-weight: 600;
     color: #111;
-  }
-  .htoast__text {
-    overflow: hidden;
-    font-size: max(12.5px, 2.25cqw);
-    color: #555;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    text-underline-offset: 0.2em;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .ehero__live:hover {
+    text-decoration-color: currentColor;
   }
 
   .ehero__vnote {
     position: absolute;
-    left: 4%;
-    bottom: 9%;
+    right: 3%;
+    top: -5%;
     z-index: 3;
     font-size: max(20px, 4.2cqw);
     line-height: 1;
@@ -512,15 +478,15 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
     width: 17%;
   }
   .ehero__stk--star {
-    right: 18%;
-    top: -7%;
+    left: 38%;
+    top: -9%;
     width: 13%;
     animation-duration: 7s;
     animation-delay: -2s;
   }
   .ehero__stk--tag {
-    left: 34%;
-    bottom: 1%;
+    left: 46%;
+    bottom: 0%;
     width: 11%;
     animation-duration: 5.4s;
     animation-delay: -1s;
@@ -587,20 +553,16 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
     .ehero__shot {
       width: 94%;
     }
-    .ehero__toasts {
-      width: 80%;
-      right: -2%;
+    .ehero__phone {
+      right: 0;
+      width: 31%;
     }
     .ehero__counter {
-      top: auto;
-      bottom: 34%;
-      right: auto;
-      left: -2%;
-      transform: rotate(-3deg);
+      left: -1%;
+      bottom: 2%;
+      max-width: 62%;
     }
     .ehero__vnote {
-      left: 0;
-      bottom: 30%;
       display: none;
     }
     .ehero__stk--cart {
@@ -610,6 +572,7 @@ const bars = [34, 52, 40, 66, 58, 80, 72, 94];
     }
     .ehero__stk--star {
       width: 15%;
+      left: auto;
       right: -1%;
       top: -8%;
     }

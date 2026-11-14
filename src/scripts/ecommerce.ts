@@ -5,13 +5,12 @@ import { initReveal } from './reveal';
 import { initEcoStickers } from './eco-stickers';
 import { initKeycaps } from './keycap';
 import { initTags } from './story';
-import { initLeadForms } from './leadform';
 import { initEcoHero } from './ehero';
 import { $, $$, inView, reduceMotion } from './util';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-/** "¿Te suena alguna?": tap the pains that apply; they travel with the lead. */
+/** "Sound familiar?": tap the pains that apply; the message below reacts to the count. */
 function initPains() {
   const box = $('[data-pains]');
   if (!box) return;
@@ -25,7 +24,6 @@ function initPains() {
       msg.textContent = n === 0 ? copy.idle : n === 1 ? copy.one : n === items.length ? copy.all : copy.some.replace('{n}', String(n));
       msg.classList.toggle('is-on', n > 0);
     }
-    document.dispatchEvent(new CustomEvent('lf:set', { detail: { name: 'pains', value: on.map((b) => b.dataset.pain).join(' · ') } }));
   };
   items.forEach((b) =>
     b.addEventListener('click', () => {
@@ -35,16 +33,16 @@ function initPains() {
   );
 }
 
-/** Phones: a call-to-action bar shows up after the hero and hides near the form. */
+/** Phones: a call-to-action bar shows up after the hero and hides when the closing section is on screen. */
 function initSticky() {
   const bar = $('[data-esticky]');
   const hero = $('[data-ehero]');
-  const form = $('#aplicar');
-  if (!bar || !hero || !form) return;
+  const close = $('#cierre');
+  if (!bar || !hero || !close) return;
   let pastHero = false;
-  let nearForm = false;
+  let nearClose = false;
   const paint = () => {
-    const on = pastHero && !nearForm;
+    const on = pastHero && !nearClose;
     bar.classList.toggle('is-on', on);
     if (on) {
       bar.removeAttribute('inert');
@@ -60,13 +58,13 @@ function initSticky() {
     paint();
   }).observe(hero);
   inView(
-    form.closest('section') || form,
+    close,
     () => {
-      nearForm = true;
+      nearClose = true;
       paint();
     },
     () => {
-      nearForm = false;
+      nearClose = false;
       paint();
     },
   );
@@ -103,7 +101,6 @@ const boot = () => {
   initEcoStickers($('[data-ehero]') ?? document);
   initKeycaps();
   initTags();
-  initLeadForms();
   initEcoHero();
   initPains();
   initSticky();

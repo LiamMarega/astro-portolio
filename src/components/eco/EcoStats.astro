@@ -1,11 +1,13 @@
 ---
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
+
+const st = useEcommerce(Astro.currentLocale).stats;
 ---
 
-<section class="estats" aria-label="Resultados en números">
+<section class="estats" aria-label={st.label}>
   <ul class="estats__list" data-reveal>
     {
-      ecommerce.stats.map((s) => (
+      st.items.map((s) => (
         <li>
           <b>{s.value}</b>
           <span>{s.label}</span>

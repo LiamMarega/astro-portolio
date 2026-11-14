@@ -1,14 +1,15 @@
 ---
 import Doodle from '../Doodle.astro';
-import LeadForm from '../LeadForm.astro';
-import { ecommerce } from '../../content/ecommerce';
+import Keycap from '../Keycap.astro';
+import { useEcommerce } from '../../content/ecommerce';
 import { useContent } from '../../content/site';
 
-const { site } = useContent('es');
-const c = ecommerce.close;
+const { site } = useContent(Astro.currentLocale);
+const e = useEcommerce(Astro.currentLocale);
+const c = e.close;
 ---
 
-<section class="esec eclose" aria-labelledby="close-title">
+<section id="cierre" class="esec eclose" aria-labelledby="close-title">
   <div class="eclose__grid">
     <div class="eclose__copy">
       <p class="shead__note hand" data-fade>
@@ -19,42 +20,37 @@ const c = ecommerce.close;
         {c.title.map((l, i) => <>{i > 0 && ' '}<span>{l}</span></>)}
       </h2>
       <p class="eclose__text" data-fade>{c.text}</p>
-
-      <div class="eclose__next">
-        <h3>{c.nextTitle}</h3>
-        <ol>
-          {
-            c.next.map((s, i) => (
-              <li>
-                <span>{i + 1}</span>
-                {s}
-              </li>
-            ))
-          }
-        </ol>
-        <p class="eclose__direct">
-          {c.direct}
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-        </p>
+      <div class="eclose__cta">
+        <Keycap href={e.contactHref} label={c.cta} w="clamp(250px, 21.5vw, 350px)" doodles="top" />
       </div>
     </div>
 
-    <div id="aplicar" class="eclose__form">
-      <LeadForm config={ecommerce.form} />
-    </div>
+    <aside class="eclose__next" data-reveal style="--reveal-delay:.1s">
+      <h3>{c.nextTitle}</h3>
+      <ol>
+        {
+          c.next.map((s, i) => (
+            <li>
+              <span>{i + 1}</span>
+              {s}
+            </li>
+          ))
+        }
+      </ol>
+      <p class="eclose__direct">
+        {c.direct}
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+    </aside>
   </div>
 </section>
 
 <style>
   .eclose__grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
-    align-items: start;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
     gap: clamp(20px, 3vw, 56px);
-  }
-  .eclose__copy {
-    position: sticky;
-    top: 100px;
   }
   .eclose__copy .shead__note {
     position: relative;
@@ -84,10 +80,14 @@ const c = ecommerce.close;
     line-height: 1.45;
     color: var(--ink-soft);
   }
-  .eclose__next {
+  .eclose__cta {
     margin-top: clamp(26px, 3vw, 46px);
-    padding-top: clamp(20px, 2vw, 30px);
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-left: 4px;
+  }
+  .eclose__next {
+    padding: clamp(20px, 2.4vw, 40px);
+    border-radius: var(--radius-card);
+    background: var(--card-warm);
   }
   .eclose__next h3 {
     font-size: clamp(18px, 1.35vw, 23px);
@@ -134,22 +134,17 @@ const c = ecommerce.close;
     text-underline-offset: 0.2em;
     word-break: break-all;
   }
-  .eclose__form {
-    scroll-margin-top: 80px;
-  }
-
   @media (max-width: 1000px) {
     .eclose__grid {
       grid-template-columns: 1fr;
     }
-    .eclose__copy {
-      position: static;
-    }
-    .eclose__next {
-      display: none;
-    }
     .eclose__title span {
       display: inline;
+    }
+  }
+  @media (max-width: 560px) {
+    .eclose__cta :global(.key) {
+      --w: min(calc(100vw - 60px), 310px) !important;
     }
   }
 </style>

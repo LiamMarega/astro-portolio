@@ -1,13 +1,12 @@
 ---
 import SectionHead from './SectionHead.astro';
 import Doodle from '../Doodle.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
-const c = ecommerce.compare;
+const c = useEcommerce(Astro.currentLocale).compare;
 const me = c.columns.length - 1;
 // mobile shows your column first
 const order = [me, ...c.columns.map((_, i) => i).filter((i) => i !== me).reverse()];
-const mark = (col: number) => (col === me ? 'yes' : col === 0 ? 'no' : 'meh');
 const closerWords = c.closer[1].split(' ');
 const lastWord = closerWords.pop();
 ---
@@ -31,8 +30,8 @@ const lastWord = closerWords.pop();
               <th scope="row">{r.label}</th>
               {r.values.map((v, i) => (
                 <td class:list={{ 'is-me': i === me }}>
-                  <span class:list={['ecmp__mark', `ecmp__mark--${mark(i)}`]} aria-hidden="true" />
-                  {v}
+                  <span class:list={['ecmp__mark', `ecmp__mark--${v.tone}`]} aria-hidden="true" />
+                  {v.text}
                 </td>
               ))}
             </tr>
@@ -51,10 +50,10 @@ const lastWord = closerWords.pop();
           <ul>
             {c.rows.map((r) => (
               <li>
-                <span class:list={['ecmp__mark', `ecmp__mark--${mark(col)}`]} aria-hidden="true" />
+                <span class:list={['ecmp__mark', `ecmp__mark--${r.values[col].tone}`]} aria-hidden="true" />
                 <span>
                   <small>{r.label}</small>
-                  {r.values[col]}
+                  {r.values[col].text}
                 </span>
               </li>
             ))}
@@ -158,6 +157,9 @@ const lastWord = closerWords.pop();
   .ecmp__mark--meh {
     background-color: #e2e2e2;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
+  }
+  .ecmp__mark--none {
+    visibility: hidden;
   }
   .ecmp__mark--yes {
     background-color: var(--sun);

@@ -1,10 +1,10 @@
 ---
 import Doodle from '../Doodle.astro';
-import { ecommerce } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 import { useContent } from '../../content/site';
 
-const { site } = useContent('es');
-const a = ecommerce.about;
+const { site } = useContent(Astro.currentLocale);
+const a = useEcommerce(Astro.currentLocale).about;
 const first = site.name.split(' ')[0];
 const icons: Record<string, string> = {
   sparkle: 'M12 3.5l2.1 5.4 5.4 2.1-5.4 2.1L12 18.5l-2.1-5.4L4.5 11l5.4-2.1zM18.5 16.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z',
@@ -18,7 +18,7 @@ const icons: Record<string, string> = {
     <div class="eabout__photo" data-reveal>
       <figure class="eabout__pol">
         <div class="eabout__img">
-          <img src={a.photo.src} alt={a.photo.alt} width="600" height="600" loading="lazy" decoding="async" />
+          <img src={a.photo.src} alt={a.photo.alt} width={a.photo.w} height={a.photo.h} loading="lazy" decoding="async" />
         </div>
         <figcaption class="hand">{a.photo.caption}</figcaption>
       </figure>

@@ -1,560 +1,493 @@
-import type { LeadFormConfig } from '../lib/forms';
-import { useContent, type MediaItem } from './site';
+import { useContent, type Locale } from './site';
+import { useContact, contactPath } from './contact';
 import type { NavItem } from '../components/Nav.astro';
 import type { StickerType } from '../components/EcoSticker.astro';
 
 /**
  * ─────────────────────────────────────────────────────────────────────
- *  TODO EL CONTENIDO DE /ecommerce VIVE ACÁ.
- *  Página de venta para conseguir marcas que necesitan una tienda online.
- *  El orden de los bloques es el del embudo (ver src/pages/ecommerce.astro).
+ *  ALL THE COPY OF /ecommerce (es) AND /en/ecommerce LIVES HERE.
+ *  The page is a sales page for Liam's custom headless e-commerce service
+ *  (Next.js storefronts decoupled from the commerce engine, Vendure).
  *
- *  ⚠️ ANTES DE PUBLICAR
- *  · [RELLENO]   números, casos y testimonios de ejemplo. Cámbialos por los tuyos
- *                o borra el bloque: nunca publiques resultados que no son reales.
- *  · [CONFIRMAR] promesas comerciales (cupos, garantía, formas de pago, plazos).
- *                Déjalas solo si las vas a cumplir.
- *  Los textos están en español neutro con "tú". Para pasarlos a "vos" alcanza con este archivo.
+ *  TRUTH RULES. Every claim must come from one of:
+ *   · src/content/site.ts  → the "commerce" project (Headless Commerce), impact metrics, bio, stack, socials
+ *   · src/content/contact.ts → the "what happens next" steps and the public email
+ *   · what is visible on the five live stores (their public home pages)
+ *  Do NOT add prices, delivery times, guarantees, discounts, testimonials, ratings,
+ *  client counts, revenue / conversion / speed percentages, "limited spots" or urgency
+ *  unless the owner supplies real data for them.
+ *
+ *  Voice: Argentine Spanish ("vos") to match src/content/site.ts, plain English for /en.
  * ─────────────────────────────────────────────────────────────────────
  */
 
-/** Marks drawn by `Logo.astro` (fictional sample stores until T3b). */
-export type LogoId = 'leaf' | 'bolt' | 'rings' | 'loop' | 'spark' | 'shield' | 'bean' | 'sprout' | 'pulse' | 'house' | 'sun';
+/** The two URLs of this page: nav language switch + hreflang. */
+export const ecommercePath: Record<Locale, string> = { es: '/ecommerce/', en: '/en/ecommerce/' };
 
-/** /ecommerce is Spanish-only for now (T3b adds /en/ecommerce with t()). */
-const { site } = useContent('es');
-
-/* ───────────── Formulario (paso a paso) ───────────── */
-const form: LeadFormConfig = {
-  source: 'ecommerce',
-  lang: 'es',
-  hidden: [
-    // se llena solo cuando alguien toca "Quiero este plan" en los precios
-    { name: 'plan', label: 'Plan elegido', chip: true },
-    // se llena con los problemas que la persona marcó en "¿Te suena alguna?"
-    { name: 'pains', label: 'Problemas que marcó' },
-  ],
-  steps: [
-    {
-      title: '¿Qué necesitas?',
-      fields: [
-        {
-          kind: 'choice',
-          name: 'need',
-          label: 'Qué necesita',
-          required: true,
-          options: [
-            { label: 'Una tienda nueva desde cero', icon: 'Store' },
-            { label: 'Rediseñar mi tienda actual', icon: 'Paintbrush' },
-            { label: 'Pasar mi tienda a otra plataforma', icon: 'ArrowLeftRight' },
-            { label: 'Una landing que venda un producto', icon: 'Rocket' },
-            { label: 'Otra cosa', icon: 'MessageCircle' },
-          ],
-        },
-      ],
-    },
-    {
-      title: 'Cuéntame de tu marca',
-      fields: [
-        {
-          kind: 'text',
-          name: 'product',
-          label: '¿Qué vendes?',
-          placeholder: 'Ej.: café de especialidad, ropa deportiva…',
-          required: true,
-          maxlength: 160,
-        },
-        {
-          kind: 'choice',
-          name: 'channels',
-          label: '¿Dónde vendes hoy?',
-          multiple: true,
-          look: 'chips',
-          options: [
-            { label: 'Instagram' },
-            { label: 'WhatsApp' },
-            { label: 'Marketplace' },
-            { label: 'Tienda online propia' },
-            { label: 'Local físico' },
-            { label: 'Todavía no vendo' },
-          ],
-        },
-        { kind: 'url', name: 'link', label: 'Link de tu marca', placeholder: '@tumarca o tumarca.com', maxlength: 200 },
-      ],
-    },
-    {
-      title: 'Hablemos de alcance',
-      hint: 'Sin compromiso. Me ayuda a proponerte algo que tenga sentido para tu marca.',
-      fields: [
-        {
-          kind: 'choice',
-          name: 'budget',
-          label: '¿Cuánto quieres invertir?',
-          look: 'chips',
-          required: true,
-          options: [
-            { label: 'Menos de US$ 1.000' },
-            { label: 'US$ 1.000 a 2.500' },
-            { label: 'US$ 2.500 a 5.000' },
-            { label: 'Más de US$ 5.000' },
-            { label: 'Prefiero que me orientes' },
-          ],
-        },
-        {
-          kind: 'choice',
-          name: 'timing',
-          label: '¿Para cuándo la necesitas?',
-          look: 'chips',
-          required: true,
-          options: [{ label: 'Lo antes posible' }, { label: 'En 1 a 2 meses' }, { label: 'Sin apuro' }],
-        },
-      ],
-    },
-    {
-      title: '¿A dónde te respondo?',
-      fields: [
-        { kind: 'text', name: 'name', label: 'Tu nombre', autocomplete: 'name', required: true, half: true, maxlength: 120 },
-        { kind: 'email', name: 'email', label: 'Email', autocomplete: 'email', required: true, half: true, maxlength: 160 },
-        { kind: 'tel', name: 'whatsapp', label: 'WhatsApp', placeholder: 'Con código de país', autocomplete: 'tel', maxlength: 40 },
-        { kind: 'textarea', name: 'message', label: '¿Algo más que deba saber?', rows: 3, maxlength: 2000 },
-      ],
-    },
-  ],
-  text: {
-    step: 'Paso {n} de {total}',
-    next: 'Siguiente',
-    back: 'Atrás',
-    submit: 'Quiero mi propuesta',
-    sending: 'Enviando…',
-    optional: 'opcional',
-    errors: {
-      required: 'Este dato me hace falta.',
-      choose: 'Elige una opción.',
-      email: 'Revisa el email, parece que falta algo.',
-      url: 'Revisa el link, parece que falta algo.',
-    },
-    privacy: 'Uso tus datos solo para responderte. Nada de spam.',
-    chosen: 'Plan elegido:',
-    clear: 'Quitar el plan elegido',
-    success: {
-      title: '¡Listo, {name}!',
-      body: 'Ya tengo tus respuestas. En menos de 24 h hábiles te escribo a {email} para agendar la charla.',
-      steps: ['Leo tus respuestas y miro tu marca', 'Te escribo para agendar 30 min', 'Recibes tu propuesta por escrito'],
-    },
-    error: {
-      title: 'No se pudo enviar',
-      body: 'Algo falló de mi lado. Mándamelo por email: tus respuestas ya van escritas.',
-      mail: 'Enviar por email',
-      retry: 'Intentar de nuevo',
-      subject: 'Quiero una tienda',
-      intro: '¡Hola! Te dejo mis respuestas del formulario:',
-    },
-  },
-};
-
-/* ───────────── Casos (proyectos de ejemplo) ───────────── */
-export interface EcoCase {
+export interface EcoStore {
+  /** key of the screenshots in /public/img/ecommerce: `<id>-site.webp` and `<id>-phone.webp` */
+  id: string;
   name: string;
-  logo: LogoId;
+  url: string;
+  host: string;
   category: string;
   summary: string;
-  stats: { value: string; label: string }[];
+  /** things you can see on the live store */
+  features: string[];
   tags: string[];
-  media: MediaItem[];
+  alt: { site: string; phone: string };
 }
 
-const cases: EcoCase[] = [
-  // [RELLENO] los 4 casos: marcas, números e imágenes son de ejemplo
-  {
-    name: 'Brasa Café',
-    logo: 'bean',
-    category: 'Café de especialidad',
-    summary: 'Vendían solo por Instagram y anotaban los pedidos a mano. Hoy tienen tienda propia con suscripción mensual.',
-    stats: [
-      { value: '+212 %', label: 'ventas online en 4 meses' },
-      { value: '38 %', label: 'de los pedidos son suscripción' },
-      { value: '1,1 s', label: 'de carga en el celular' },
-    ],
-    tags: ['Tienda nueva', 'Suscripciones', 'Pagos locales'],
-    media: [
-      { src: '/img/ecommerce/brasa-phone.webp', alt: 'Ficha de producto de Brasa Café en un celular, con suscripción', w: 848, h: 960, left: 0, width: 37.4, top: 22, rotate: -2, hover: { x: -12, y: -74, rotate: -4.4, scale: 1.06 } },
-      { src: '/img/ecommerce/brasa-site.webp', alt: 'Tienda de Brasa Café en una laptop', w: 1430, h: 960, left: 38.1, width: 63, top: 8, rotate: 1.2, hover: { x: 10, y: -44, rotate: 3.2, scale: 1.03 } },
-    ],
-  },
-  {
-    name: 'Flora Botánica',
-    logo: 'sprout',
-    category: 'Cosmética natural',
-    summary: 'Tenían una plantilla linda que no vendía. Rediseñamos las fichas, armamos rutinas en combo y acortamos el checkout.',
-    stats: [
-      { value: 'x2,4', label: 'tasa de conversión' },
-      { value: '+31 %', label: 'ticket promedio con combos' },
-      { value: '−48 %', label: 'carritos abandonados' },
-    ],
-    tags: ['Rediseño', 'Combos', 'Checkout corto'],
-    media: [
-      { src: '/img/ecommerce/flora-site.webp', alt: 'Tienda de Flora Botánica en una laptop luminosa', w: 1430, h: 960, left: 0, width: 62.7, top: 4, rotate: -0.8, hover: { x: -10, y: -52, rotate: -2.8, scale: 1.04 } },
-      { src: '/img/ecommerce/flora-phone.webp', alt: 'Armador de rutinas de Flora en un celular', w: 848, h: 960, left: 63.1, width: 37.4, top: 20, rotate: 1.6, hover: { x: 12, y: -72, rotate: 4.2, scale: 1.06 } },
-    ],
-  },
-  {
-    name: 'Pulso',
-    logo: 'pulse',
-    category: 'Ropa deportiva',
-    summary: 'Su tienda tardaba 6 segundos en abrir. La pasamos a una plataforma nueva con 600 productos y sin perder un solo pedido.',
-    stats: [
-      { value: '0,9 s', label: 'de carga (antes 6,2 s)' },
-      { value: '+64 %', label: 'ventas desde el celular' },
-      { value: '600', label: 'productos migrados' },
-    ],
-    tags: ['Migración', 'Velocidad', 'Catálogo grande'],
-    media: [
-      { src: '/img/ecommerce/pulso-phone.webp', alt: 'Colección de zapatillas de Pulso con filtros en un celular', w: 848, h: 960, left: 0, width: 37.4, top: 26, rotate: -1.6, hover: { x: -12, y: -74, rotate: -4, scale: 1.06 } },
-      { src: '/img/ecommerce/pulso-site.webp', alt: 'Tienda de Pulso en una laptop sobre fondo oscuro', w: 1430, h: 960, left: 38.1, width: 63, top: 4, rotate: 1.4, hover: { x: 10, y: -46, rotate: 3.4, scale: 1.03 } },
-    ],
-  },
-  {
-    name: 'Nido Casa',
-    logo: 'house',
-    category: 'Deco y textiles',
-    summary: 'Vendían por WhatsApp con un catálogo en PDF. Ahora la tienda arma el pedido y el chat solo lo confirma.',
-    stats: [
-      { value: '+180', label: 'pedidos el primer mes' },
-      { value: '4,1 %', label: 'tasa de conversión' },
-      { value: '−60 %', label: 'mensajes repetidos' },
-    ],
-    tags: ['Tienda nueva', 'WhatsApp', 'Envíos por zona'],
-    media: [
-      { src: '/img/ecommerce/nido-site.webp', alt: 'Tienda de Nido Casa en una laptop', w: 1430, h: 960, left: 0, width: 62.7, top: 10, rotate: -1.2, hover: { x: -8, y: -56, rotate: -3, scale: 1.04 } },
-      { src: '/img/ecommerce/nido-phone.webp', alt: 'Carrito de Nido Casa con botón de WhatsApp en un celular', w: 848, h: 960, left: 63.1, width: 37.4, top: 24, rotate: 1.8, hover: { x: 12, y: -70, rotate: 4.6, scale: 1.06 } },
-    ],
-  },
-];
+/** Screenshots are 1440x900 (desktop) and 600x1298 (390x844 phone at 2x). */
+export const SHOT = { site: { w: 1440, h: 900 }, phone: { w: 600, h: 1298 } } as const;
 
-/* ───────────── Toda la página ───────────── */
-export const ecommerce = {
-  meta: {
-    title: `Tiendas online a medida que venden | ${site.name}`,
-    description:
-      'Diseño y programo ecommerce a medida para marcas que quieren vender más: únicos, rápidos en el celular y fáciles de administrar. Precio cerrado y fecha por escrito.',
-    og: '/og-ecommerce.png',
-  },
+const cache = new Map<Locale, ReturnType<typeof build>>();
 
-  nav: {
-    items: [
-      { key: 'casos', label: 'Casos', href: '#casos', section: 'casos' },
-      { key: 'proceso', label: 'Proceso', href: '#proceso', section: 'proceso', hide: 'xs' },
-      { key: 'planes', label: 'Planes', href: '#planes', section: 'planes' },
-      { key: 'faq', label: 'FAQ', href: '#faq', section: 'faq', hide: 'sm' },
-    ] satisfies NavItem[],
-    cta: { label: 'Hablemos', href: '#aplicar' },
-  },
+function build(lang: Locale) {
+  const L = (es: string, en: string) => (lang === 'es' ? es : en);
+  const { site } = useContent(lang);
+  const contact = useContact(lang);
+  const contactHref = contactPath[lang];
 
-  hero: {
-    // [CONFIRMAR] cámbialo cada mes; si no hay cupos reales, pon `availability: ''` y desaparece
-    availability: 'Agenda abierta · 2 cupos para diciembre',
-    titleLead: 'Una tienda a tu medida que',
-    // cada letra se cambia por un sticker al pasar el mouse
-    titleWord: 'vende.',
-    stickers: ['bag', 'cart', 'card', 'star', 'heart'] as StickerType[],
-    note: 'sin plantillas =)',
-    sub: 'Diseño y programo tu ecommerce desde cero: con la cara de tu marca, rápido en el celular y pensado para que las visitas terminen en pedidos.',
-    cta: 'Quiero mi tienda',
-    ctaNote: 'Charla gratis de 30 min · Respuesta en 24 h',
-    secondary: 'Ver tiendas que hice',
-    trust: ['Precio cerrado', 'Fecha por escrito', 'La tienda es 100 % tuya'],
-    visual: {
-      image: { src: '/img/ecommerce/hero-store.webp', alt: 'Tienda online de ejemplo en una laptop', w: 1520, h: 1000 },
-      note: 'así suena tu celular =)',
-      app: 'Tu tienda',
-      order: 'Nuevo pedido',
-      now: 'ahora',
-      ago: 'hace {n} min',
-      counter: 'Ventas de hoy',
-      currency: '$',
-      // [RELLENO] pedidos decorativos que van llegando al celular
-      start: 486300,
-      orders: [
-        { n: 1043, items: '2 productos', amount: 189900 },
-        { n: 1044, items: 'Huila Lavado · 340 g', amount: 54900 },
-        { n: 1045, items: '3 productos', amount: 236400 },
-        { n: 1046, items: 'Rutina completa', amount: 148000 },
-        { n: 1047, items: '1 producto', amount: 72500 },
-        { n: 1048, items: '4 productos', amount: 312800 },
+  /* ───────────── The five real stores ───────────── */
+  const stores: EcoStore[] = [
+    {
+      id: 'floridahome',
+      name: 'Florida Home Furniture',
+      url: 'https://www.floridahomefurniture.com/',
+      host: 'floridahomefurniture.com',
+      category: L('Muebles · Miami, FL', 'Furniture · Miami, FL'),
+      summary: L(
+        'Mueblería de Miami con un storefront a medida: colecciones por ambiente, listado de productos con orden y filtros, y carrito.',
+        'A Miami furniture store with a custom storefront: collections by room, a product listing with sorting and filters, and a cart.',
+      ),
+      features: [
+        L('Colecciones por categoría', 'Collections by category'),
+        L('Listado con orden y filtros', 'Listing with sorting and filters'),
+        L('Carrito y botón de WhatsApp', 'Cart and WhatsApp button'),
+      ],
+      tags: [L('Storefront a medida', 'Custom storefront'), L('Catálogo', 'Catalog')],
+      alt: {
+        site: L('Home de Florida Home Furniture en el navegador', 'Florida Home Furniture home page in a browser'),
+        phone: L('Florida Home Furniture en un celular', 'Florida Home Furniture on a phone'),
+      },
+    },
+    {
+      id: 'easyhomebr',
+      name: 'Easy Home Appliances',
+      url: 'https://www.easyhomeappliancesbr.com/',
+      host: 'easyhomeappliancesbr.com',
+      category: L('Electrodomésticos · Miami, FL', 'Appliances · Miami, FL'),
+      summary: L(
+        'Casa de electrodomésticos de Miami: buscador, categorías y marcas, carrito y pago con tarjeta procesado por Stripe.',
+        'A Miami appliance store: search, categories and brands, a cart and card payments processed by Stripe.',
+      ),
+      features: [
+        L('Buscador, categorías y marcas', 'Search, categories and brands'),
+        L('Pago con tarjeta vía Stripe', 'Card payments through Stripe'),
+        L('Español e inglés, y WhatsApp', 'Spanish and English, plus WhatsApp'),
+      ],
+      tags: [L('Storefront a medida', 'Custom storefront'), L('Pagos', 'Payments'), L('Bilingüe', 'Bilingual')],
+      alt: {
+        site: L('Home de Easy Home Appliances en el navegador', 'Easy Home Appliances home page in a browser'),
+        phone: L('Easy Home Appliances en un celular', 'Easy Home Appliances on a phone'),
+      },
+    },
+    {
+      id: 'discount305',
+      name: '305 Discount',
+      url: 'https://305discount.com/',
+      host: '305discount.com',
+      category: L('Muebles y electrodomésticos · Miami, FL', 'Furniture and appliances · Miami, FL'),
+      summary: L(
+        'Muebles, electrodomésticos y colchones en un solo catálogo, con buscador, categorías, marcas y productos destacados.',
+        'Furniture, appliances and mattresses in a single catalog, with search, categories, brands and featured products.',
+      ),
+      features: [
+        L('Buscador y categorías', 'Search and categories'),
+        L('Navegación por marca', 'Browse by brand'),
+        L('Español e inglés, y WhatsApp', 'Spanish and English, plus WhatsApp'),
+      ],
+      tags: [L('Storefront a medida', 'Custom storefront'), L('Catálogo', 'Catalog'), L('Bilingüe', 'Bilingual')],
+      alt: {
+        site: L('Home de 305 Discount en el navegador', '305 Discount home page in a browser'),
+        phone: L('305 Discount en un celular', '305 Discount on a phone'),
+      },
+    },
+    {
+      id: 'mendohome',
+      name: 'Mendo Home Furniture',
+      url: 'https://www.mendohomefurniture.com/',
+      host: 'mendohomefurniture.com',
+      category: L('Muebles de diseño · Miami, FL', 'Design furniture · Miami, FL'),
+      summary: L(
+        'Muebles contemporáneos y diseño interior, con colecciones por tipo de seccional, carrito y pago con tarjeta vía Stripe.',
+        'Contemporary furniture and interior design, with collections by sectional type, a cart and card payments through Stripe.',
+      ),
+      features: [
+        L('Colecciones por tipo de producto', 'Collections by product type'),
+        L('Pago con tarjeta vía Stripe', 'Card payments through Stripe'),
+        L('Español e inglés, y WhatsApp', 'Spanish and English, plus WhatsApp'),
+      ],
+      tags: [L('Storefront a medida', 'Custom storefront'), L('Pagos', 'Payments'), L('Bilingüe', 'Bilingual')],
+      alt: {
+        site: L('Home de Mendo Home Furniture en el navegador', 'Mendo Home Furniture home page in a browser'),
+        phone: L('Mendo Home Furniture en un celular', 'Mendo Home Furniture on a phone'),
+      },
+    },
+    {
+      id: 'romeoflorida',
+      name: 'Romeo Furniture',
+      url: 'https://www.romeofloridafurniture.com/',
+      host: 'romeofloridafurniture.com',
+      category: L('Sofás y seccionales · Miami, FL', 'Sofas and sectionals · Miami, FL'),
+      summary: L(
+        'Sofás y seccionales con catálogo por categoría y colección, carrito y consultas por WhatsApp antes de comprar.',
+        'Sofas and sectionals with a catalog by category and collection, a cart and WhatsApp questions before buying.',
+      ),
+      features: [
+        L('Catálogo por categoría y colección', 'Catalog by category and collection'),
+        L('Carrito y cuenta de cliente', 'Cart and customer account'),
+        L('Español e inglés, y WhatsApp', 'Spanish and English, plus WhatsApp'),
+      ],
+      tags: [L('Storefront a medida', 'Custom storefront'), L('Catálogo', 'Catalog'), L('Bilingüe', 'Bilingual')],
+      alt: {
+        site: L('Home de Romeo Furniture en el navegador', 'Romeo Furniture home page in a browser'),
+        phone: L('Romeo Furniture en un celular', 'Romeo Furniture on a phone'),
+      },
+    },
+  ];
+
+  return {
+    lang,
+    contactHref,
+    stores,
+
+    meta: {
+      title: L('Desarrollo de e-commerce a medida con Next.js y Vendure | Liam Marega', 'Custom E-commerce Development with Next.js and Vendure | Liam Marega'),
+      description: L(
+        'Tiendas online a medida con Next.js y Vendure: storefront desacoplado, catálogo, checkout y pagos. 5 tiendas reales en producción en Miami. Remoto, desde Argentina.',
+        'Custom online stores with Next.js and Vendure: decoupled storefront, catalog, checkout and payments. 5 real stores in production in Miami. Remote, from Argentina.',
+      ),
+      og: '/og-ecommerce.png',
+    },
+
+    nav: {
+      items: [
+        { key: 'casos', label: L('Casos', 'Work'), href: '#casos', section: 'casos' },
+        { key: 'incluye', label: L('Qué incluye', 'What’s included'), href: '#incluye', section: 'incluye', hide: 'xs' },
+        { key: 'proceso', label: L('Proceso', 'Process'), href: '#proceso', section: 'proceso', hide: 'sm' },
+        { key: 'faq', label: 'FAQ', href: '#faq', section: 'faq', hide: 'sm' },
+      ] satisfies NavItem[],
+      cta: { label: L('Hablemos', 'Connect'), href: contactHref },
+    },
+
+    hero: {
+      /** the same "open to projects" line the home page shows */
+      availability: site.available,
+      titleLead: L('Tiendas online a medida,', 'Custom online stores,'),
+      /** every letter swaps for a sticker on hover */
+      titleWord: L('headless.', 'headless.'),
+      stickers: ['bag', 'cart', 'card', 'star', 'heart'] as StickerType[],
+      note: L('sin plantillas =)', 'no templates =)'),
+      sub: L(
+        'Desarrollo storefronts en Next.js desacoplados del motor de e-commerce (Vendure): catálogo, checkout y pagos pensados para tu negocio. Soy Liam y trabajás directo conmigo.',
+        'I build Next.js storefronts decoupled from the commerce engine (Vendure): catalog, checkout and payments shaped around your business. I’m Liam, and you work with me directly.',
+      ),
+      cta: L('Contame tu tienda', 'Start your store'),
+      ctaNote: L('Completás un formulario corto y te escribo por email.', 'Fill in a short form and I’ll email you back.'),
+      secondary: L('Ver tiendas reales', 'See live stores'),
+      trust: [L('Next.js + Vendure', 'Next.js + Vendure'), L('Storefront desacoplado del motor', 'Storefront decoupled from the engine'), L('Tiendas reales en producción', 'Real stores in production')],
+      visual: {
+        label: L('Capturas de tiendas reales que construí: cada pocos segundos cambia la tienda', 'Screenshots of real stores I built: the store changes every few seconds'),
+        note: L('tiendas de verdad =)', 'real stores =)'),
+        badge: { value: '5', label: L('tiendas en producción', 'stores in production') },
+        live: L('Ver en vivo', 'Visit live'),
+      },
+    },
+
+    /** numbers that already appear in src/content/site.ts (impact + the commerce project metrics) */
+    stats: {
+      label: L('El trabajo en números', 'The work in numbers'),
+      items: [
+        { value: L('1.000+', '1,000+'), label: L('productos migrados a e-commerce headless', 'products migrated into headless commerce') },
+        { value: '5', label: L('tiendas en producción', 'stores in production') },
+        { value: 'Miami, FL', label: L('showrooms reales', 'real showrooms') },
+        { value: '4+', label: L('años lanzando software a producción', 'years shipping production software') },
       ],
     },
-  },
 
-  // [RELLENO] pon tus números reales (o borra los que no tengas)
-  stats: [
-    { value: '40+', label: 'tiendas lanzadas' },
-    { value: 'x2,3', label: 'conversión promedio después del rediseño' },
-    { value: '1,3 s', label: 'de carga promedio en celular' },
-    { value: '4,9/5', label: 'valoración de mis clientes' },
-  ],
+    pains: {
+      note: L('seamos honestos =)', 'let’s be honest =)'),
+      title: L('¿Te suena alguna?', 'Sound familiar?'),
+      items: [
+        { icon: 'Copy', title: L('Tu tienda se ve igual a las demás', 'Your store looks like everyone else’s'), text: L('Corre sobre un tema y tu marca se pierde entre las que usan el mismo.', 'It runs on a theme, so your brand gets lost among the others using it.') },
+        { icon: 'Hourglass', title: L('En el celular se siente lenta', 'It feels slow on a phone'), text: L('Un front pesado le pone fricción a cada visita antes de que llegue al producto.', 'A heavy front end adds friction to every visit before people reach the product.') },
+        { icon: 'Boxes', title: L('Tu catálogo es grande y cuesta manejarlo', 'Your catalog is big and hard to manage'), text: L('Cargar, migrar y mantener cientos de productos a mano no escala.', 'Loading, migrating and maintaining hundreds of products by hand doesn’t scale.') },
+        { icon: 'MessagesSquare', title: L('Vendés por WhatsApp a mano', 'You sell over WhatsApp by hand'), text: L('Respondés lo mismo una y otra vez y anotás los pedidos en el chat.', 'You answer the same questions again and again and jot orders down in the chat.') },
+        { icon: 'Lock', title: L('El motor de la tienda te ata', 'Your store engine locks you in'), text: L('Cada cambio de diseño o de lógica depende de la plataforma, sus plugins y su tema.', 'Every design or logic change depends on the platform, its plugins and its theme.') },
+        { icon: 'Workflow', title: L('Tu operación no entra en una plantilla', 'Your operation doesn’t fit a template'), text: L('Reglas de negocio, integraciones o automatizaciones que la plataforma no resuelve de fábrica.', 'Business rules, integrations or automations the platform doesn’t cover out of the box.') },
+      ],
+      idle: L('Tocá las que te pasan.', 'Tap the ones that apply.'),
+      one: L('Te pasa 1 de 6. Es justo el tipo de problema que resuelvo.', 'That’s 1 of 6. It’s exactly the kind of problem I work on.'),
+      some: L('Te pasan {n} de 6. Es justo el tipo de problema que resuelvo.', 'That’s {n} of 6. It’s exactly the kind of problem I work on.'),
+      all: L('Te pasan las 6. Contame tu caso y vemos por dónde empezar.', 'All 6. Tell me about your case and we’ll see where to start.'),
+      cta: L('Contame tu caso', 'Tell me your case'),
+    },
 
-  pains: {
-    note: 'seamos honestos =)',
-    title: '¿Te suena alguna?',
-    items: [
-      { icon: 'Copy', title: 'Tu tienda se ve igual a otras mil', text: 'Elegiste una plantilla linda y tu marca se perdió entre todas las que usan la misma.' },
-      { icon: 'MousePointerClick', title: 'Te visitan, pero no te compran', text: 'Llegan desde tus anuncios, miran dos productos y se van. Cada visita te costó plata.' },
-      { icon: 'Hourglass', title: 'En el celular tarda una eternidad', text: 'Casi todos te compran desde el teléfono. Si la página tarda, se van antes de ver el precio.' },
-      { icon: 'MessagesSquare', title: 'Vendes por WhatsApp a mano', text: 'Respondes lo mismo cien veces, anotas pedidos en el chat y alguno siempre se pierde.' },
-      { icon: 'Ghost', title: 'El último desarrollador desapareció', text: 'Te dejó la tienda a medias, sin accesos ni explicaciones. Ahora nadie quiere tocarla.' },
-      { icon: 'Lock', title: 'Cada cambio chico te cuesta días', text: 'Quieres cambiar un banner y dependes de alguien que contesta cuando puede.' },
-    ],
-    idle: 'Toca las que te pasan.',
-    one: 'Te pasa 1 de 6. Tiene arreglo, y es justo lo que hago.',
-    some: 'Te pasan {n} de 6. Todas tienen arreglo, y es justo lo que hago.',
-    all: 'Te pasan las 6. Respira: es más común de lo que crees y todas tienen arreglo.',
-    cta: 'Quiero resolverlo',
-  },
+    method: {
+      note: L('cómo trabajo', 'how I work'),
+      title: [L('Primero entiendo cómo vende tu negocio.', 'First I understand how your business sells.'), L('Después lo construyo.', 'Then I build it.')],
+      intro: L(
+        'Una plantilla está pensada para cualquier tienda; la tuya tiene un catálogo, una operación y clientes propios. Construyo el storefront en Next.js y lo conecto al motor de e-commerce, Vendure: es una arquitectura de storefront desacoplado, donde el front y el motor evolucionan por separado.',
+        'A template is made for any store; yours has its own catalog, operation and customers. I build the storefront in Next.js and connect it to the commerce engine, Vendure: a decoupled storefront architecture, where the front end and the engine evolve separately.',
+      ),
+      name: L('storefront desacoplado', 'decoupled storefront'),
+      pillars: [
+        {
+          tag: L('a medida', 'custom'),
+          title: L('Storefront a medida en Next.js', 'A custom Next.js storefront'),
+          text: L('Diseño e implemento la interfaz de tu tienda desde cero, con tu marca y tu forma de vender, no a partir de un tema.', 'I design and build your store’s interface from scratch, around your brand and the way you sell, not from a theme.'),
+          art: L('tu marca', 'your brand'),
+        },
+        {
+          tag: L('desacoplado', 'decoupled'),
+          title: L('Conectado a un motor de e-commerce', 'Connected to a commerce engine'),
+          text: L('El storefront habla con Vendure: catálogo, carrito, checkout y pagos pasan por el motor, y el front puede cambiar sin tocar el backend.', 'The storefront talks to Vendure: catalog, cart, checkout and payments go through the engine, and the front end can change without touching the backend.'),
+          flow: ['Next.js', 'API', 'Vendure', L('Pedido', 'Order')],
+        },
+        {
+          tag: L('operación real', 'real operation'),
+          title: L('Catálogo y operación', 'Catalog and operations'),
+          text: L('Migración de catálogo, scraping y automatización, lógica de negocio a medida e infraestructura en Railway y Vercel.', 'Catalog migration, scraping and automation, custom business logic and Railway / Vercel infrastructure.'),
+          art: L('catálogo', 'catalog'),
+        },
+      ],
+    },
 
-  method: {
-    note: 'mi método, sin misterio',
-    title: ['Primero entiendo cómo te compran.', 'Después diseño.'],
-    intro:
-      'Una plantilla está hecha para cualquier tienda. La tuya tiene clientes con dudas, miedos y razones propias para comprar. Antes de diseñar una sola pantalla armo el mapa de compra de tu marca: qué buscan tus clientes, qué los frena y qué necesitan ver para animarse. Cada página de tu tienda responde una parte de ese mapa.',
-    name: 'Mapa de compra',
-    pillars: [
-      {
-        tag: 'creativo',
-        title: 'Diseño desde cero',
-        text: 'Tu tienda nace de tu marca, no de una plantilla. Colores, fotos, tono y detalles que hacen que te reconozcan sin ver el logo.',
-      },
-      {
-        tag: 'pensado para vender',
-        title: 'Cada página tiene un trabajo',
-        text: 'Fichas que despejan dudas, carrito sin vueltas, checkout corto y los medios de pago que tu cliente ya usa.',
-        flow: ['Producto', 'Carrito', 'Pago', '¡Pedido!'],
-      },
-      {
-        tag: 'responsable',
-        title: 'Fechas y precio por escrito',
-        text: 'Sabes cuánto pagas y cuándo lanzas desde el primer día. Te muestro avances cada semana y respondo el mismo día.',
-        launch: 'lanzamiento',
-      },
-    ],
-  },
+    cases: {
+      note: L('tiendas que hoy están en producción', 'stores in production today'),
+      title: L('Casos reales', 'Real work'),
+      intro: L('Tiendas de Miami, FL que construí con Next.js y Vendure. Podés visitarlas en vivo.', 'Miami, FL stores I built with Next.js and Vendure. You can visit them live.'),
+      features: L('Qué se ve en la tienda', 'What you see in the store'),
+      tagsLabel: L('Qué se hizo', 'What was built'),
+      visit: L('Ver tienda en vivo', 'Visit the live store'),
+      band: { text: L('¿Querés una tienda así?', 'Want a store like these?'), cta: L('Contame tu proyecto', 'Tell me about your project') },
+    },
 
-  cases: {
-    note: 'tiendas que hoy están vendiendo',
-    title: 'Casos que hablan por mí',
-    intro: 'Cada una arrancó con un problema distinto. Ninguna arrancó de una plantilla.',
-    items: cases,
-    band: { text: '¿Quieres números así en tu tienda?', cta: 'Pedir mi propuesta' },
-  },
+    included: {
+      note: L('lo que construyo', 'what I build'),
+      title: L('Qué puede incluir tu tienda', 'What your store can include'),
+      intro: L('Cada proyecto arma su propio alcance. Estas son las piezas con las que trabajo en mis tiendas.', 'Every project sets its own scope. These are the pieces I work with in my stores.'),
+      includes: L('Incluye', 'Includes'),
+      /** animated chips of the big card */
+      tags: [
+        { label: 'Next.js', icon: 'globe', tone: 'lime' },
+        { label: 'Vendure', icon: 'cart', tone: 'mint' },
+        { label: L('Checkout', 'Checkout'), icon: 'card', tone: 'blue' },
+        { label: L('Catálogo', 'Catalog'), icon: 'pen', tone: 'orange' },
+        { label: 'WhatsApp', icon: 'phone', tone: 'violet' },
+      ],
+      items: [
+        { icon: 'LayoutTemplate', title: L('Storefront a medida', 'Custom storefront'), text: L('Interfaz en Next.js pensada para tu marca y tu forma de vender.', 'A Next.js interface shaped around your brand and the way you sell.') },
+        { icon: 'Boxes', title: L('Migración de catálogo', 'Catalog migration'), text: L('Pasar tus productos a un e-commerce headless.', 'Moving your products into headless commerce.') },
+        { icon: 'Search', title: L('Búsqueda y filtros', 'Search and filters'), text: L('Para encontrar productos en catálogos grandes.', 'To find products in large catalogs.') },
+        { icon: 'CreditCard', title: L('Checkout y pagos', 'Checkout and payments'), text: L('Integraciones de pago como Stripe y un checkout armado para tu operación.', 'Payment integrations such as Stripe and a checkout built for your operation.') },
+        { icon: 'Workflow', title: L('Scraping y automatización', 'Scraping and automation'), text: L('Automatización de catálogo y de tareas repetitivas.', 'Catalog automation and repetitive tasks.') },
+        { icon: 'Blocks', title: L('Lógica de negocio', 'Business logic'), text: L('Reglas propias de tu negocio sobre el motor de e-commerce.', 'Your own business rules on top of the commerce engine.') },
+        { icon: 'MessageCircle', title: L('Ventas por WhatsApp', 'WhatsApp sales'), text: L('Contacto directo con tu equipo para consultas y ventas.', 'Direct contact with your team for questions and sales.') },
+        { icon: 'Server', title: L('Infraestructura', 'Infrastructure'), text: L('Deploy en Railway y Vercel.', 'Deployed on Railway and Vercel.') },
+      ],
+    },
 
-  testimonials: {
-    note: 'lo que dicen después de lanzar',
-    title: 'Me volverían a elegir',
-    // [RELLENO] testimonios de ejemplo: usa frases reales de tus clientes (con su permiso)
-    items: [
-      {
-        quote: 'Cumplió cada fecha que puso. Hasta la del lanzamiento, que yo daba por hecho que se iba a correr.',
-        name: 'Mariana R.',
-        role: 'Fundadora de Brasa Café',
-        tone: '#ffb27a',
-      },
-      {
-        quote: 'Por primera vez la tienda se parece a mi marca. Y vende: en marzo facturamos lo mismo que en todo el año anterior.',
-        name: 'Lucía G.',
-        role: 'Flora Botánica',
-        tone: '#bfd3b0',
-      },
-      {
-        quote: 'Venía de dos agencias que me dejaron a medias. Esta vez la tienda estuvo lista en 5 semanas y el precio fue el que acordamos.',
-        name: 'Tomás V.',
-        role: 'Pulso',
-        tone: '#e2ff6b',
-      },
-      {
-        quote: 'Me explicó todo con paciencia. Hoy cargo productos y armo promociones sola, sin pedirle nada a nadie.',
-        name: 'Andrea P.',
-        role: 'Nido Casa',
-        tone: '#f2b59a',
-      },
-    ],
-  },
+    /** replaces the old pricing section: no list prices, quotes depend on scope */
+    quote: {
+      note: L('sin precios de lista', 'no list prices'),
+      text: L('Cada tienda tiene su propio alcance, por eso cotizo a medida.', 'Every store has its own scope, so I quote on a per-project basis.'),
+      cta: L('Pedir una cotización', 'Ask for a quote'),
+    },
 
-  included: {
-    note: 'sin letra chica',
-    title: 'Todo lo que trae tu tienda',
-    intro: 'Viene en todos los planes. Sin extras escondidos ni apps que pagas aparte para cosas básicas.',
-    // chips animados de la tarjeta grande
-    tags: [
-      { label: 'diseño único', icon: 'sparkle', tone: 'blue' },
-      { label: 'checkout', icon: 'cart', tone: 'mint' },
-      { label: 'pagos', icon: 'card', tone: 'lime' },
-      { label: 'velocidad', icon: 'bolt', tone: 'violet' },
-      { label: 'envíos', icon: 'truck', tone: 'orange' },
-    ],
-    items: [
-      { icon: 'Palette', title: 'Diseño único para tu marca', text: 'Se diseña desde tu identidad, no desde una plantilla.' },
-      { icon: 'Smartphone', title: 'Pensada primero para celular', text: 'Ahí está la mayoría de tus ventas.' },
-      { icon: 'Zap', title: 'Carga en menos de 2 segundos', text: 'Para que nadie se vaya esperando.' },
-      { icon: 'ShoppingBag', title: 'Fichas de producto que venden', text: 'Fotos, beneficios, dudas resueltas y el botón a la vista.' },
-      { icon: 'CreditCard', title: 'Checkout corto y pagos locales', text: 'Mercado Pago, Wompi, PayU, Stripe o la pasarela que uses.' },
-      { icon: 'Truck', title: 'Envíos configurados', text: 'Tarifas por zona, retiro en tienda y seguimiento.' },
-      { icon: 'MessageCircle', title: 'WhatsApp integrado', text: 'Botón, mensajes listos y pedidos que llegan ordenados.' },
-      { icon: 'Search', title: 'SEO técnico desde el día uno', text: 'Para que Google te encuentre sin pagar anuncios.' },
-      { icon: 'ChartLine', title: 'Píxel, Analytics y eventos', text: 'Meta, Google y TikTok midiendo bien cada venta.' },
-      { icon: 'LayoutDashboard', title: 'Panel fácil de usar', text: 'Cargas productos y cambias precios sin ayuda.' },
-      { icon: 'GraduationCap', title: 'Capacitación y videos', text: 'Una sesión en vivo y tutoriales cortos para tu equipo.' },
-      { icon: 'LifeBuoy', title: '30 días de soporte', text: 'Después del lanzamiento sigo a tu lado.' },
-    ],
-  },
+    process: {
+      note: L('cada proyecto marca su ritmo', 'every project sets its own pace'),
+      title: L('De la primera charla a la tienda en producción', 'From the first chat to a store in production'),
+      steps: [
+        { title: L('Conversación', 'Conversation'), text: L('Me contás tu negocio, tu catálogo y lo que tenés hoy. Si headless no es lo que te conviene, te lo digo.', 'You tell me about your business, your catalog and what you have today. If headless isn’t what suits you, I’ll say so.') },
+        { title: L('Propuesta', 'Proposal'), text: L('Si avanzamos, te paso una propuesta con alcance, plazos y precio.', 'If we go ahead, I send a proposal with scope, timeline and price.') },
+        { title: L('Arquitectura y diseño', 'Architecture and design'), text: L('Defino cómo se conecta el storefront con el motor y diseño las pantallas clave: catálogo, producto, carrito y checkout.', 'I define how the storefront connects to the engine and design the key screens: catalog, product, cart and checkout.') },
+        { title: L('Desarrollo e integraciones', 'Build and integrations'), text: L('Construyo el storefront en Next.js, migro el catálogo y conecto checkout, pagos y lo que pida tu operación.', 'I build the storefront in Next.js, migrate the catalog and connect checkout, payments and whatever your operation needs.') },
+        { title: L('Producción', 'Production'), text: L('Se publica en Vercel y Railway y queda listo para seguir evolucionando con tu negocio.', 'It goes live on Vercel and Railway, ready to keep evolving with your business.') },
+      ],
+    },
 
-  process: {
-    note: 'en promedio, de 4 a 6 semanas',
-    title: 'De la primera charla a tu primer pedido',
-    steps: [
-      { when: 'Día 1', title: 'Charla de diagnóstico', text: '30 minutos, gratis. Me cuentas de tu marca y tus metas. Si no soy la persona indicada, te lo digo.' },
-      { when: 'Día 2 a 3', title: 'Propuesta por escrito', text: 'Alcance, precio cerrado y fecha de lanzamiento. Sin sorpresas después.' },
-      { when: 'Semana 1 a 2', title: 'Diseño que apruebas', text: 'Ves tu tienda en el celular y en la compu antes de programar. Incluye 2 rondas de cambios.' },
-      { when: 'Semana 2 a 5', title: 'Desarrollo y carga', text: 'Programo, conecto pagos y envíos y cargo tus productos. Cada viernes te muestro avances.' },
-      { when: 'Lanzamiento', title: 'Salimos a vender', text: 'Te capacito, revisamos juntos los primeros pedidos y te acompaño 30 días.' },
-    ],
-  },
+    about: {
+      note: L('quién está del otro lado', 'who’s on the other side'),
+      /** "Hola, soy" + the first name of site.name */
+      hello: L('Hola, soy', 'Hi, I’m'),
+      text: [
+        L(
+          'Soy developer frontend y mobile, con más de 4 años lanzando productos a producción. Construyo e-commerce a medida donde el storefront está completamente desacoplado del motor de comercio.',
+          'I’m a frontend and mobile developer with 4+ years shipping products to production. I build custom e-commerce where the storefront is completely decoupled from the commerce engine.',
+        ),
+        L(
+          'Trabajo de forma independiente y a distancia desde Entre Ríos, Argentina, así que hablás directo con quien construye tu tienda.',
+          'I work independently and remotely from Entre Ríos, Argentina, so you talk directly to the person building your store.',
+        ),
+      ],
+      values: [
+        { label: 'Next.js', icon: 'sparkle', tone: 'blue' },
+        { label: 'Vendure', icon: 'bolt', tone: 'mint' },
+        { label: 'TypeScript', icon: 'cursor', tone: 'orange' },
+      ],
+      photo: { src: '/images/uploads/liam.jpg', alt: L('Liam Marega, developer frontend y mobile', 'Liam Marega, frontend and mobile developer'), caption: site.location, w: 1000, h: 985 },
+    },
 
-  about: {
-    note: 'quién está del otro lado',
-    // "Hola, soy" + el primer nombre de site.name
-    hello: 'Hola, soy',
-    // [CONFIRMAR] tu historia real, en dos párrafos cortos
-    text: [
-      'Hace 7 años diseño y programo tiendas online para marcas de Latinoamérica. Trabajo con pocas marcas a la vez porque me gusta conocer cada negocio como si fuera mío.',
-      'Soy diseñador y desarrollador, así que hablas directo con quien hace tu tienda. Sin intermediarios ni teléfono descompuesto.',
-    ],
-    values: [
-      { label: 'creativo', icon: 'sparkle', tone: 'blue' },
-      { label: 'responsable', icon: 'bolt', tone: 'mint' },
-      { label: 'trato directo', icon: 'cursor', tone: 'orange' },
-    ],
-    photo: { src: '/img/story/studio.webp', alt: 'Escritorio soleado con un cuaderno de bocetos y café', caption: 'donde nacen las tiendas' },
-  },
+    compare: {
+      note: L('sin vueltas', 'no sugarcoating'),
+      title: L('Cada opción, en qué es buena', 'Each option, and what it’s good at'),
+      /** the last column is mine: it shows first on phones */
+      columns: [L('Tienda de plantilla (SaaS)', 'Template store (SaaS)'), L('Monolito con tema', 'Monolith with a theme'), L('Headless a medida', 'Custom headless')],
+      /** tone drives the little mark: yes = strength, meh = trade-off, no = limit, none = no mark */
+      rows: [
+        {
+          label: L('Diseño', 'Design'),
+          values: [
+            { text: L('Limitado por el tema', 'Limited by the theme'), tone: 'no' },
+            { text: L('Personalizable dentro de lo que permite el tema', 'Customizable within what the theme allows'), tone: 'meh' },
+            { text: L('Libre: el front es código propio', 'Free: the front end is your own code'), tone: 'yes' },
+          ],
+        },
+        {
+          label: L('Puesta en marcha', 'Getting started'),
+          values: [
+            { text: L('La más rápida y simple de arrancar', 'The quickest and simplest to start'), tone: 'yes' },
+            { text: L('Hay que configurar tema y plugins', 'You configure a theme and plugins'), tone: 'meh' },
+            { text: L('Más trabajo inicial: se construye el front', 'More upfront work: the front end gets built'), tone: 'meh' },
+          ],
+        },
+        {
+          label: L('Flexibilidad técnica', 'Technical flexibility'),
+          values: [
+            { text: L('Hasta donde llega la plataforma', 'As far as the platform goes'), tone: 'no' },
+            { text: L('Depende de plugins y del tema', 'Depends on plugins and the theme'), tone: 'meh' },
+            { text: L('Integraciones y lógica de negocio a medida', 'Custom integrations and business logic'), tone: 'yes' },
+          ],
+        },
+        {
+          label: L('Cambiar de motor', 'Changing the engine'),
+          values: [
+            { text: L('Implica rehacer la tienda', 'Means rebuilding the store'), tone: 'no' },
+            { text: L('Implica rehacer la tienda', 'Means rebuilding the store'), tone: 'no' },
+            { text: L('El front es independiente del motor, así que el cambio es más acotado', 'The front end is independent from the engine, so the change is more contained'), tone: 'yes' },
+          ],
+        },
+        {
+          label: L('Mantenimiento', 'Maintenance'),
+          values: [
+            { text: L('La plataforma se ocupa de casi todo', 'The platform takes care of almost everything'), tone: 'yes' },
+            { text: L('Actualizaciones de núcleo, tema y plugins', 'Core, theme and plugin updates'), tone: 'meh' },
+            { text: L('Hay más piezas: front y motor', 'More moving parts: front end and engine'), tone: 'meh' },
+          ],
+        },
+        {
+          label: L('Suele convenir cuando', 'Usually fits when'),
+          values: [
+            { text: L('El catálogo es chico y no necesitás nada especial', 'The catalog is small and you need nothing special'), tone: 'none' },
+            { text: L('Querés algo conocido con muchos plugins', 'You want something familiar with plenty of plugins'), tone: 'none' },
+            { text: L('Tu marca o tu operación ya no entran en una plantilla', 'Your brand or operation no longer fits a template'), tone: 'none' },
+          ],
+        },
+      ],
+      closer: [L('Headless no es para todos.', 'Headless isn’t for everyone.'), L('Es para cuando una plantilla ya no alcanza.', 'It’s for when a template stops being enough.')],
+    },
 
-  compare: {
-    note: 'sin vueltas',
-    title: 'Tus opciones, una al lado de la otra',
-    // la última columna es la tuya: se muestra primero en el celular
-    columns: ['Plantilla por tu cuenta', 'Agencia grande', 'Conmigo'],
-    rows: [
-      { label: 'Diseño', values: ['Igual a miles de tiendas', 'Bueno, si pagas la tarifa', 'Único, hecho para tu marca'] },
-      { label: 'Pensada para vender', values: ['Depende de ti', 'Depende del equipo que te toque', 'Sí, sobre tu mapa de compra'] },
-      { label: 'Precio', values: ['Barato al inicio, caro en apps', 'Alto y con extras', 'Cerrado desde el primer día'] },
-      { label: 'Con quién hablas', values: ['Con nadie', 'Con un ejecutivo de cuentas', 'Directo con quien diseña y programa'] },
-      { label: 'Plazos', values: ['Cuando tengas tiempo', 'Largos y se estiran', 'Fecha de lanzamiento por escrito'] },
-      { label: 'Después de lanzar', values: ['Te arreglas solo', 'Soporte por ticket', '30 días de acompañamiento'] },
-    ],
-    closer: ['No soy la opción más barata.', 'Soy la que no vas a tener que reemplazar.'],
-  },
+    faq: {
+      note: L('lo que suelen preguntar', 'what people ask'),
+      title: L('Preguntas frecuentes', 'Frequently asked questions'),
+      items: [
+        {
+          q: L('¿Qué es un e-commerce headless?', 'What is headless e-commerce?'),
+          a: L(
+            'Es una tienda donde el storefront, lo que ve y usa tu cliente, está separado del motor de e-commerce que maneja catálogo, carrito, pedidos y pagos. Yo construyo el storefront en Next.js y lo conecto a Vendure.',
+            'It’s a store where the storefront, what your customer sees and uses, is separate from the commerce engine that handles catalog, cart, orders and payments. I build the storefront in Next.js and connect it to Vendure.',
+          ),
+        },
+        {
+          q: L('¿Con qué tecnologías trabajás?', 'What technologies do you use?'),
+          a: L(
+            'Next.js y TypeScript en el front; Vendure como motor de e-commerce, con PostgreSQL; Stripe para pagos con tarjeta; e infraestructura en Railway y Vercel.',
+            'Next.js and TypeScript on the front end; Vendure as the commerce engine, with PostgreSQL; Stripe for card payments; and Railway and Vercel for infrastructure.',
+          ),
+        },
+        {
+          q: L('¿Cuánto cuesta y cuánto tarda?', 'How much does it cost and how long does it take?'),
+          a: L(
+            'Depende del alcance: tamaño del catálogo, integraciones y lógica de negocio. Por eso no tengo precios de lista: después de entender tu proyecto te paso una propuesta con alcance, plazos y precio.',
+            'It depends on the scope: catalog size, integrations and business logic. That’s why I don’t have list prices: once I understand your project I send a proposal with scope, timeline and price.',
+          ),
+        },
+        {
+          q: L('¿Pueden migrar mi catálogo actual?', 'Can you migrate my current catalog?'),
+          a: L(
+            'Sí, es parte del trabajo: migré más de 1.000 productos a e-commerce headless, y cuando hace falta lo complemento con scraping y automatización de catálogo.',
+            'Yes, it’s part of the work: I’ve migrated 1,000+ products into headless commerce, and when needed I add scraping and catalog automation.',
+          ),
+        },
+        {
+          q: L('¿Una tienda headless es para mí?', 'Is a headless store right for me?'),
+          a: L(
+            'Si tu catálogo es chico y no necesitás nada fuera de lo común, una plantilla puede alcanzar y es más simple de mantener. Headless tiene más sentido cuando tu marca, tu catálogo o tu operación piden algo a medida. En la primera charla lo vemos con honestidad.',
+            'If your catalog is small and you need nothing out of the ordinary, a template may be enough and is simpler to maintain. Headless makes more sense when your brand, catalog or operation call for something custom. We’ll look at it honestly in the first chat.',
+          ),
+        },
+        {
+          q: L('¿Trabajás con tiendas de otros países?', 'Do you work with stores in other countries?'),
+          a: L(
+            'Sí. Trabajo de forma remota desde Entre Ríos, Argentina, y las tiendas que muestro acá son de Miami, FL.',
+            'Yes. I work remotely from Entre Ríos, Argentina, and the stores I show here are in Miami, FL.',
+          ),
+        },
+        {
+          q: L('¿Se puede vender por WhatsApp además de la web?', 'Can you also sell over WhatsApp, not just on the site?'),
+          a: L(
+            'Sí. En las tiendas que construí, WhatsApp es parte del flujo de venta: el cliente puede consultar con el equipo antes de comprar.',
+            'Yes. In the stores I built, WhatsApp is part of the sales flow: customers can ask the team before buying.',
+          ),
+        },
+        {
+          q: L('¿Cómo empiezo?', 'How do I get started?'),
+          a: L(
+            'Escribime desde el formulario de contacto contando qué tenés hoy y qué querés lograr. Te respondo por email para ver si encajo y coordinar una charla.',
+            'Write to me through the contact form telling me what you have today and what you want to achieve. I’ll email you to see if I’m a good fit and set up a chat.',
+          ),
+        },
+      ],
+    },
 
-  pricing: {
-    note: 'precio cerrado, siempre',
-    title: 'Elige cómo empezamos',
-    intro: 'Tres puntos de partida. En la charla ajustamos el alcance a tu marca y te paso el precio final por escrito.',
-    // false = los precios se reemplazan por "Cotización en 48 h"
-    showPrices: true,
-    from: 'desde',
-    quote: 'Cotización en 48 h',
-    // [CONFIRMAR] precios, plazos y lo que incluye cada plan
-    plans: [
-      {
-        id: 'lanzamiento',
-        name: 'Lanzamiento',
-        for: 'Para marcas que venden por redes y quieren su primera tienda.',
-        price: 'US$ 1.200',
-        time: 'Lista en 3 a 4 semanas',
-        features: ['Diseño a medida de inicio, catálogo, producto y carrito', 'Hasta 50 productos cargados', 'Pagos, envíos y WhatsApp configurados', 'SEO técnico y analítica', 'Capacitación y 30 días de soporte'],
-        cta: 'Quiero este plan',
-      },
-      {
-        id: 'crecimiento',
-        name: 'Crecimiento',
-        badge: 'el más elegido',
-        featured: true,
-        for: 'Para marcas que ya venden y quieren vender más.',
-        price: 'US$ 2.400',
-        time: 'Lista en 4 a 6 semanas',
-        features: [
-          'Todo lo de Lanzamiento',
-          'Mapa de compra completo de tu cliente',
-          'Landing de producto para tus anuncios',
-          'Combos, venta cruzada y recuperación de carritos',
-          'Píxel de Meta y eventos de conversión',
-          'Migración desde tu tienda actual',
-          'Hasta 300 productos cargados',
-        ],
-        cta: 'Quiero este plan',
-      },
-      {
-        id: 'a-medida',
-        name: 'A medida',
-        for: 'Para catálogos grandes o funciones especiales.',
-        price: '',
-        time: 'Plazo según alcance',
-        features: ['Venta mayorista o B2B', 'Suscripciones y membresías', 'Integración con tu facturación o inventario', 'Varios países y monedas', 'Desarrollo headless a medida'],
-        cta: 'Pedir cotización',
-      },
-    ],
-    // [CONFIRMAR]
-    terms: 'Pagas 50 % para empezar y 50 % al lanzar.',
-    trust: ['Precio cerrado', 'Contrato y factura', 'Todo queda a tu nombre'],
-  },
+    close: {
+      note: L('el primer paso es una charla =)', 'the first step is a chat =)'),
+      title: [L('¿Armamos', 'Shall we build'), L('tu tienda?', 'your store?')],
+      text: L('Contame qué vendés, qué tenés hoy y qué te gustaría que haga tu tienda. Con eso vemos si encajo y por dónde empezar.', 'Tell me what you sell, what you have today and what you want your store to do. From there we’ll see if I’m a fit and where to start.'),
+      cta: L('Contame tu tienda', 'Start your store'),
+      /** "what happens next" and the direct-email line are the ones of the contact form page */
+      nextTitle: contact.nextTitle,
+      next: contact.next,
+      direct: contact.direct,
+    },
 
-  guarantee: {
-    note: 'lo pongo por escrito',
-    title: 'Tranquilidad de punta a punta',
-    // [CONFIRMAR] no publiques una garantía que no vas a cumplir
-    items: [
-      {
-        icon: 'Paintbrush',
-        title: 'Apruebas antes de pagar el resto',
-        text: 'Ves y apruebas el diseño antes de que escriba una línea de código. Si después de dos rondas de cambios no te convence, frenamos ahí y no pagas el segundo 50 %.',
-      },
-      {
-        icon: 'CalendarCheck',
-        title: 'Fecha de lanzamiento en el contrato',
-        text: 'Si me atraso por mi parte, te descuento un 5 % del total por cada semana de demora.',
-      },
-      {
-        icon: 'KeyRound',
-        title: 'Todo es tuyo',
-        text: 'Dominio, tienda, accesos y código quedan a tu nombre desde el primer día. Nunca vas a depender de mí para entrar a tu propia tienda.',
-      },
-    ],
-  },
+    /** bottom bar on phones (appears after the hero) */
+    sticky: { text: L('¿Tenés una tienda en mente?', 'Got a store in mind?'), cta: L('Hablemos', 'Let’s talk') },
 
-  faq: {
-    note: 'lo que todos preguntan',
-    title: 'Preguntas frecuentes',
-    items: [
-      { q: '¿Cuánto tarda en estar lista mi tienda?', a: 'Entre 3 y 6 semanas según el plan. La fecha exacta va en la propuesta, por escrito.' },
-      { q: '¿Con qué plataforma trabajas?', a: 'Con la que mejor le sirva a tu negocio: Shopify, WooCommerce o una tienda a medida. En la primera charla te explico pros y contras para tu caso.' },
-      { q: '¿Voy a poder administrarla sin ayuda?', a: 'Sí. Te entrego un panel simple, una capacitación en vivo y videos cortos para cargar productos, cambiar precios y armar promociones.' },
-      { q: '¿Cómo son los pagos?', a: '50 % para empezar y 50 % al lanzar. Puedes pagar por transferencia, tarjeta o PayPal, siempre con factura.' },
-      { q: 'Ya tengo una tienda. ¿La puedes mejorar o migrar?', a: 'Sí. Rediseño tiendas que ya existen y migro productos, clientes y pedidos sin que pierdas ventas ni posicionamiento en Google.' },
-      { q: '¿Qué pasa después del lanzamiento?', a: 'Tienes 30 días de soporte incluidos. Después, si quieres, seguimos con un plan mensual de mejoras.' },
-      { q: '¿Trabajas con marcas de otros países?', a: 'Sí. Trabajo a distancia con marcas de toda Latinoamérica y España, en tu horario.' },
-      { q: '¿Qué necesito tener listo para empezar?', a: 'Tu logo, fotos de tus productos y ganas de vender. Si te falta algo, te digo cómo resolverlo.' },
-    ],
-  },
+    footer: L('Tiendas online a medida con Next.js y Vendure.', 'Custom online stores with Next.js and Vendure.'),
+  };
+}
 
-  close: {
-    note: 'el primer paso es gratis =)',
-    title: ['¿Arrancamos', 'con tu tienda?'],
-    text: 'En unas semanas puedes estar viendo pedidos en una tienda que se ve como tu marca. Solo tienes que contarme de ella.',
-    nextTitle: 'Qué pasa después',
-    next: ['Leo tus respuestas y miro tu marca.', 'En menos de 24 h hábiles te escribo para agendar la charla.', 'Recibes tu propuesta con precio y fecha por escrito.'],
-    direct: '¿Prefieres escribirme directo?',
-  },
-
-  form,
-
-  // barra fija abajo en el celular (aparece después del inicio y se esconde en el formulario)
-  sticky: { text: 'Respuesta en 24 h', cta: 'Pedir propuesta' },
-
-  footer: 'Tiendas online a medida para marcas de Latinoamérica.',
-};
+/** Everything /ecommerce needs, in one language. */
+export function useEcommerce(locale?: string) {
+  const l: Locale = locale === 'en' ? 'en' : 'es';
+  let c = cache.get(l);
+  if (!c) {
+    c = build(l);
+    cache.set(l, c);
+  }
+  return c;
+}
