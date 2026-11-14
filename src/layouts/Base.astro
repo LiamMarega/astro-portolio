@@ -4,7 +4,9 @@ import '@fontsource-variable/caveat/wght.css';
 import '@fontsource/modak/400.css';
 import '../styles/global.css';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url';
+import Analytics from '@vercel/analytics/astro';
 import { useContent, homeHref, LOCALES, type Locale } from '../content/site';
+import { homeSeo, homeGraph, ldJson } from '../content/seo';
 
 interface Props {
   /** <title> and og:title. Defaults to the home title. */
@@ -19,14 +21,21 @@ interface Props {
    * (self + x-default only). Omitted = the home pair (/ and /en/).
    */
   alternates?: Partial<Record<Locale, string>>;
-  /** Home pages only: Person JSON-LD and the profile card. Inferred from `title` being absent. */
+  /** Home pages only: brand title/description, Person graph and the profile card. Inferred from `title` being absent. */
   home?: boolean;
+  /**
+   * Structured data of the page: one object (usually `{ '@context', '@graph' }`) or a list of them, each
+   * emitted as its own `<script type="application/ld+json">`. Builders live in src/content/seo.ts.
+   * Omitted on the home pages = the Person + WebSite graph.
+   */
+  jsonLd?: object | object[];
 }
 
 const { site, lang } = useContent(Astro.currentLocale);
-const { title: pageTitle, description: pageDescription, ogImage: ogPath = '/og.jpg', alternates, home = pageTitle === undefined } = Astro.props;
-const title = pageTitle ?? site.title;
-const description = pageDescription ?? site.description;
+const { title: pageTitle, description: pageDescription, ogImage: ogPath = '/og.jpg', alternates, home = pageTitle === undefined, jsonLd } = Astro.props;
+// the home head is tuned for brand queries (src/content/seo.ts); site.ts keeps the title the page body shows
+const title = pageTitle ?? homeSeo[lang].title;
+const description = pageDescription ?? homeSeo[lang].description;
 const base = Astro.site ?? new URL(site.url);
 // pages are served as /name/ (directory output), so every URL we publish keeps the trailing slash
 const path = Astro.url.pathname.replace(/\/?$/, '/');
@@ -38,21 +47,7 @@ const alt: [string, string][] = home
   : alternates && Object.keys(alternates).length
     ? [...(Object.entries(alternates) as [Locale, string][]), ['x-default', alternates.es ?? path]]
     : [[lang, path], ['x-default', path]];
-
-const person = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: site.name,
-  alternateName: site.brand,
-  jobTitle: site.role,
-  description: site.description,
-  url: canonical,
-  email: `mailto:${site.email}`,
-  image: ogImage,
-  address: { '@type': 'PostalAddress', addressRegion: 'Entre Ríos', addressCountry: 'AR' },
-  knowsAbout: ['Flutter', 'Dart', 'React', 'Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Node.js', 'Headless commerce', 'AI SaaS'],
-  sameAs: site.socials.map((s) => s.href),
-};
+const graphs = [jsonLd ?? (home ? homeGraph(lang) : [])].flat();
 ---
 
 <!doctype html>
@@ -80,7 +75,12 @@ const person = {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    {home && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
+    <meta name="twitter:creator" content={site.handle} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {graphs.map((graph) => <script type="application/ld+json" set:html={ldJson(graph)} />)}
+    <Analytics />
 
     <script is:inline>
       document.documentElement.classList.remove('js-off');

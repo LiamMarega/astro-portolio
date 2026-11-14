@@ -15,6 +15,7 @@ import "@fontsource/caveat/600.css";
 import "@fontsource/caveat/700.css";
 import { SEO } from "astro-seo";
 import Analytics from "@vercel/analytics/astro";
+import { abs, canonicalUrl, ldJson, landingServiceNode, LANDING_DESCRIPTION, OG_LANDING } from "../content/seo";
 
 interface Props {
   title: string;
@@ -24,14 +25,13 @@ interface Props {
 
 const {
   title,
-  description = "Diseño y desarrollo de landing pages estratégicas que convierten tráfico en oportunidades reales. Para coaches, consultores, marcas personales y negocios digitales.",
-  image = "/images/og-landing-builder.jpg",
+  description = LANDING_DESCRIPTION,
+  image = OG_LANDING.path,
 } = Astro.props;
 
-const canonicalURL = new URL(
-  Astro.url.pathname,
-  Astro.site || "https://www.liammarega.com",
-);
+// one canonical per page, trailing-slash form (vercel.json redirects the slash-less URL to it)
+const canonical = canonicalUrl(Astro.url.pathname);
+const ogImage = abs(image);
 ---
 
 <!doctype html>
@@ -39,66 +39,34 @@ const canonicalURL = new URL(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonicalURL.href} />
 
+    {/* title, description, canonical, robots, hreflang, Open Graph and Twitter come from astro-seo, once */}
     <SEO
       title={title}
       description={description}
+      canonical={canonical}
+      languageAlternates={[
+        { hrefLang: "es", href: canonical },
+        { hrefLang: "x-default", href: canonical },
+      ]}
       openGraph={{
-        basic: {
-          title: title,
-          type: "website",
-          image: image,
-        },
-        optional: {
-          locale: "es_AR",
-          siteName: "LiamDev",
-        },
+        basic: { title, type: "website", image: ogImage, url: canonical },
+        optional: { description, locale: "es_AR", siteName: "LiamDev" },
+        image: { width: OG_LANDING.width, height: OG_LANDING.height, alt: "LiamDev: landing pages que convierten" },
       }}
       twitter={{
-        creator: "@liammdev",
         card: "summary_large_image",
+        creator: "@liammdev",
+        title,
+        description,
+        image: ogImage,
       }}
-      extend={{
-        link: [{ rel: "icon", href: "/favicon.svg" }],
-        meta: [
-          { name: "twitter:image", content: image },
-          { name: "twitter:title", content: title },
-          { name: "twitter:description", content: description },
-          { name: "theme-color", content: "#fbfaf5" },
-        ],
-      }}
+      extend={{ meta: [{ name: "theme-color", content: "#fbfaf5" }] }}
     />
 
-    <!-- JSON-LD Structured Data -->
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        name: "LiamDev",
-        description: description,
-        url: canonicalURL.href,
-        priceRange: "$$",
-        serviceType: "Diseño y desarrollo de landing pages",
-        areaServed: "Worldwide",
-        knowsLanguage: ["es", "en"],
-        offers: {
-          "@type": "Offer",
-          priceCurrency: "USD",
-          price: "600",
-          priceSpecification: {
-            "@type": "PriceSpecification",
-            priceCurrency: "USD",
-            price: "600",
-            unitText: "desde",
-          },
-        },
-      })}
-    />
+    {/* JSON-LD: the Landing PRO service, founded by the Person in the home graph */}
+    <script is:inline type="application/ld+json" set:html={ldJson(landingServiceNode())} />
     <Analytics />
   </head>
   <body>

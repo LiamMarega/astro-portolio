@@ -26,6 +26,7 @@ import EcoClose from '../components/eco/EcoClose.astro';
 import EcoSticky from '../components/eco/EcoSticky.astro';
 import { useEcommerce, ecommercePath } from '../content/ecommerce';
 import { useContent } from '../content/site';
+import { ecommerceGraph } from '../content/seo';
 import '../styles/ecommerce.css';
 
 const { lang, site } = useContent(Astro.currentLocale);
@@ -33,7 +34,13 @@ const e = useEcommerce(lang);
 const other = lang === 'es' ? 'en' : 'es';
 ---
 
-<Base title={e.meta.title} description={e.meta.description} ogImage={e.meta.og} alternates={ecommercePath}>
+<Base
+  title={e.meta.title}
+  description={e.meta.description}
+  ogImage={e.meta.og}
+  alternates={ecommercePath}
+  jsonLd={ecommerceGraph(lang, { path: ecommercePath[lang], title: e.meta.title, description: e.meta.description })}
+>
   <Sky />
   <TopBlur />
   <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={ecommercePath[other]} />

@@ -4,3 +4,6 @@ dist/
 tools/studio/studio.html
 .DS_Store
 .vercel/
+
+# hook-generated
+.impeccable/

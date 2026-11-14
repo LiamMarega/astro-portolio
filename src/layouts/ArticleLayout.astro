@@ -15,6 +15,7 @@ import { SEO } from "astro-seo";
 import { getArticulo, getRelacionados } from "../data/articulos";
 import Footer from "../components/landingbuilder/Footer.astro";
 import Analytics from "@vercel/analytics/astro";
+import { abs, ldJson, personRef, OG_LANDING } from "../content/seo";
 
 interface FaqItem {
   q: string;
@@ -28,8 +29,11 @@ interface Props {
 const { slug, faq = [] } = Astro.props;
 const art = getArticulo(slug);
 const relacionados = getRelacionados(slug);
-const site = "https://www.liammarega.com";
-const url = `${site}/landing-builder/articulos/${slug}`;
+// canonical form of every URL below: absolute, trailing slash (vercel.json redirects the slash-less one)
+const url = abs(`/landing-builder/articulos/${slug}/`);
+const landingUrl = abs("/landing-builder/");
+const articlesUrl = abs("/landing-builder/articulos/");
+const ogImage = abs(OG_LANDING.path);
 const fecha = new Date(art.date).toLocaleDateString("es-AR", {
   year: "numeric",
   month: "long",
@@ -48,21 +52,16 @@ const jsonLd: Record<string, unknown>[] = [
     keywords: art.keywords.join(", "),
     url,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
-    author: {
-      "@type": "Person",
-      name: "Liam Marega",
-      url: site,
-      jobTitle: "Desarrollador web especializado en conversión",
-      sameAs: ["https://instagram.com/liammdev", "https://x.com/liammdev"],
-    },
-    publisher: { "@type": "Organization", name: "LiamDev", url: site },
+    image: ogImage,
+    author: personRef("es"),
+    publisher: personRef("es"),
   },
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "LiamDev", item: `${site}/landing-builder` },
-      { "@type": "ListItem", position: 2, name: "Artículos", item: `${site}/landing-builder/articulos` },
+      { "@type": "ListItem", position: 1, name: "LiamDev", item: landingUrl },
+      { "@type": "ListItem", position: 2, name: "Artículos", item: articlesUrl },
       { "@type": "ListItem", position: 3, name: art.title, item: url },
     ],
   },
@@ -85,37 +84,43 @@ if (faq.length) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={url} />
     <meta name="keywords" content={art.keywords.join(", ")} />
     <meta name="author" content="Liam Marega" />
 
+    {/* title, description, canonical, robots, hreflang, Open Graph and Twitter come from astro-seo, once */}
     <SEO
       title={art.metaTitle}
       description={art.description}
+      canonical={url}
+      languageAlternates={[
+        { hrefLang: "es", href: url },
+        { hrefLang: "x-default", href: url },
+      ]}
       openGraph={{
-        basic: { title: art.metaTitle, type: "article", image: "/images/og-landing-builder.jpg" },
-        optional: { locale: "es_AR", siteName: "LiamDev" },
+        basic: { title: art.metaTitle, type: "article", image: ogImage, url },
+        optional: { description: art.description, locale: "es_AR", siteName: "LiamDev" },
+        image: { width: OG_LANDING.width, height: OG_LANDING.height, alt: "LiamDev: landing pages que convierten" },
         article: {
           publishedTime: art.date,
+          modifiedTime: art.updated || art.date,
           authors: ["Liam Marega"],
           section: art.category,
           tags: art.keywords,
         },
       }}
-      twitter={{ creator: "@liammdev", card: "summary_large_image" }}
-      extend={{
-        meta: [
-          { name: "twitter:title", content: art.metaTitle },
-          { name: "twitter:description", content: art.description },
-          { name: "theme-color", content: "#fbfaf5" },
-        ],
+      twitter={{
+        card: "summary_large_image",
+        creator: "@liammdev",
+        title: art.metaTitle,
+        description: art.description,
+        image: ogImage,
       }}
+      extend={{ meta: [{ name: "theme-color", content: "#fbfaf5" }] }}
     />
 
     {jsonLd.map((s) => (
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />
+      <script is:inline type="application/ld+json" set:html={ldJson(s)} />
     ))}
     <Analytics />
   </head>
@@ -135,15 +140,15 @@ if (faq.length) {
 
     <div class="lb-root">
       <header class="nav" id="top">
-        <a class="logo" href="/landing-builder" aria-label="LiamDev — inicio">LiamDev</a>
+        <a class="logo" href="/landing-builder/" aria-label="LiamDev — inicio">LiamDev</a>
         <nav aria-label="Navegación principal">
           <ul>
-            <li><a href="/landing-builder/articulos">Artículos</a></li>
-            <li><a href="/landing-builder#servicios">Servicios</a></li>
-            <li><a href="/landing-builder#resultados">Resultados</a></li>
+            <li><a href="/landing-builder/articulos/">Artículos</a></li>
+            <li><a href="/landing-builder/#servicios">Servicios</a></li>
+            <li><a href="/landing-builder/#resultados">Resultados</a></li>
           </ul>
         </nav>
-        <a href="/landing-builder#calificar" class="btn btn-yellow nav-cta" style="padding:10px 18px;font-size:11.5px">
+        <a href="/landing-builder/#calificar" class="btn btn-yellow nav-cta" style="padding:10px 18px;font-size:11.5px">
           Diagnóstico gratis
         </a>
       </header>
@@ -151,9 +156,9 @@ if (faq.length) {
       <main id="main-content" role="main">
         <article class="article">
           <nav class="crumbs" aria-label="Migas de pan">
-            <a href="/landing-builder">LiamDev</a>
+            <a href="/landing-builder/">LiamDev</a>
             <span>/</span>
-            <a href="/landing-builder/articulos">Artículos</a>
+            <a href="/landing-builder/articulos/">Artículos</a>
             <span>/</span>
             <span>{art.category}</span>
           </nav>
@@ -176,7 +181,7 @@ if (faq.length) {
               Hago un diagnóstico gratuito de tu landing o sitio web: qué está
               frenando tus conversiones y cómo solucionarlo. Sin compromiso.
             </p>
-            <a href="/landing-builder#calificar" class="btn btn-yellow">
+            <a href="/landing-builder/#calificar" class="btn btn-yellow">
               Pedir mi diagnóstico gratis
               <span class="arr">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
@@ -190,7 +195,7 @@ if (faq.length) {
           <ul>
             {relacionados.map((r) => (
               <li>
-                <a href={`/landing-builder/articulos/${r.slug}`}>{r.title}</a>
+                <a href={`/landing-builder/articulos/${r.slug}/`}>{r.title}</a>
               </li>
             ))}
           </ul>

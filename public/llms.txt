@@ -1,0 +1,42 @@
+# Liam Marega (LiamDev)
+
+> Liam Marega (also known as LiamDev, @liammdev) is a frontend and mobile developer based in Entre Ríos, Argentina, working remotely. He has 4+ years shipping production products with Flutter, React, Next.js, TypeScript and Supabase: mobile apps, custom headless e-commerce storefronts and AI-powered SaaS. He is open to full-time roles, freelance projects and collaborations. The site is bilingual: Spanish is the default (no prefix) and English lives under /en/.
+
+Public handles: GitHub https://github.com/liamMarega · LinkedIn https://www.linkedin.com/in/liam-marega/ · Instagram https://instagram.com/liammdev · YouTube https://youtube.com/@liammdev · Email liammaregadevelop@gmail.com
+
+## Portfolio
+
+- [Portfolio (Spanish)](https://www.liammarega.com/): who Liam is, the products he shipped, his story, stack and impact numbers.
+- [Portfolio (English)](https://www.liammarega.com/en/): the same portfolio in English.
+
+## What he builds (real projects)
+
+- [Ferox](https://www.feroxapp.com/): a social network for hunters with 60K+ downloads: real-time feeds, chat and a store on iOS and Android. Liam is a Flutter developer on the team.
+- [SwipeLoop](https://swipeloop.app/): his own AI SaaS that turns a topic or a brand's URL into ready-to-post carousels for Instagram, LinkedIn and TikTok.
+- [Headless Commerce](https://www.mendohomefurniture.com/): custom Next.js storefronts for Miami furniture and appliance stores, decoupled from the commerce engine (Vendure). Live stores: [Florida Home Furniture](https://www.floridahomefurniture.com/), [Easy Home Appliances](https://www.easyhomeappliancesbr.com/), [Mendo Home Furniture](https://www.mendohomefurniture.com/), [Romeo Furniture](https://www.romeofloridafurniture.com/), [305 Discount](https://305discount.com/). 1,000+ products migrated.
+- [ClientiX](https://www.clientix.app/): finds Google Maps businesses without a website, tells you who to write to today and drafts the message.
+- [Lucero](https://lucerobiblia.com.ar/): the Catholic Bible explained and played: 5-minute lessons, maps, audio and prayers, in the browser. 1,300+ people learning.
+- [Guita](https://spend.liammarega.com/): his personal finance app: expenses, savings boxes, goals and subscriptions.
+
+## Services
+
+- [Custom e-commerce development (Spanish)](https://www.liammarega.com/ecommerce/): online stores built with Next.js and Vendure: decoupled storefront, catalog, checkout and payments. Five real stores in production.
+- [Custom e-commerce development (English)](https://www.liammarega.com/en/ecommerce/): the same service page in English.
+- [Landing PRO (Spanish)](https://www.liammarega.com/landing-builder/): design and development of landing pages that turn traffic into real opportunities, for coaches, consultants, personal brands and digital businesses.
+- [Landing PRO articles (Spanish)](https://www.liammarega.com/landing-builder/articulos/): guides on landing pages, conversion (CRO), web speed, pricing and hiring a web developer.
+
+## Contact
+
+- [Contact (Spanish)](https://www.liammarega.com/contact/): a short form to describe the project (online store, landing page, Flutter mobile app, SaaS or custom web product). Liam reads every message himself and replies by email.
+- [Contact (English)](https://www.liammarega.com/en/contact/): the same form in English.
+
+## Legal
+
+- [Privacy policy](https://www.liammarega.com/politica-de-privacidad/)
+- [Terms and conditions](https://www.liammarega.com/terminos-y-condiciones/)
+- [Shipping, delivery and refund policy](https://www.liammarega.com/politica-de-reembolso/)
+- [Landing PRO privacy and terms](https://www.liammarega.com/landing/builder/privacy/)
+
+## Optional
+
+- [Sitemap](https://www.liammarega.com/sitemap-index.xml)

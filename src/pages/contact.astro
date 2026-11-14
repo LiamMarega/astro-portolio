@@ -13,6 +13,7 @@ import LeadForm from '../components/LeadForm.astro';
 import ContactBar from '../components/ContactBar.astro';
 import { useContact, contactPath } from '../content/contact';
 import { useContent } from '../content/site';
+import { contactGraph } from '../content/seo';
 
 const { lang } = useContent(Astro.currentLocale);
 const c = useContact(lang);
@@ -20,7 +21,12 @@ const { site } = useContent(lang);
 const other = lang === 'es' ? 'en' : 'es';
 ---
 
-<Base title={c.title} description={c.description} alternates={contactPath}>
+<Base
+  title={c.title}
+  description={c.description}
+  alternates={contactPath}
+  jsonLd={contactGraph(lang, { path: contactPath[lang], title: c.title, description: c.description })}
+>
   <Sky />
   <TopBlur />
   <Nav items={c.nav.items} active={c.nav.active} langHref={contactPath[other]} />
