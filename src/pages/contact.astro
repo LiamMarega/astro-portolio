@@ -1,0 +1,208 @@
+---
+/**
+ * /contact (es) and /en/contact (en): the lead form page.
+ * /en/contact re-uses this file (src/pages/en/contact.astro); the language comes from Astro.currentLocale.
+ * All copy: src/content/contact.ts
+ */
+import Base from '../layouts/Base.astro';
+import Sky from '../components/Sky.astro';
+import TopBlur from '../components/TopBlur.astro';
+import Nav from '../components/Nav.astro';
+import Doodle from '../components/Doodle.astro';
+import LeadForm from '../components/LeadForm.astro';
+import ContactBar from '../components/ContactBar.astro';
+import { useContact, contactPath } from '../content/contact';
+import { useContent } from '../content/site';
+
+const { lang } = useContent(Astro.currentLocale);
+const c = useContact(lang);
+const { site } = useContent(lang);
+const other = lang === 'es' ? 'en' : 'es';
+---
+
+<Base title={c.title} description={c.description} alternates={contactPath}>
+  <Sky />
+  <TopBlur />
+  <Nav items={c.nav.items} active={c.nav.active} langHref={contactPath[other]} />
+  <main id="top" class="cpage">
+    <header class="cpage__head">
+      <p class="cpage__note hand" data-fade>
+        {c.note}
+        <Doodle name="arrow" seed="cn" class="cpage__arrow" onView duration={0.6} delay={0.5} />
+      </p>
+      <h1 class="cpage__title" data-ink>{c.heading.map((l) => <><span>{l}</span>{' '}</>)}</h1>
+      <p class="cpage__intro" data-fade>{c.intro}</p>
+    </header>
+
+    <div class="cpage__grid">
+      <LeadForm config={c.form} class="cpage__form" />
+
+      <aside class="cpage__aside" data-reveal style="--reveal-delay:.1s">
+        <h2 class="cpage__aside-title">{c.nextTitle}</h2>
+        <ol class="cpage__steps">
+          {
+            c.next.map((s, i) => (
+              <li>
+                <span class="cpage__num">{i + 1}</span>
+                <span>{s}</span>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="cpage__direct">
+          {c.direct}
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </aside>
+    </div>
+
+    <ContactBar class="cpage__bar" />
+  </main>
+</Base>
+
+<script>
+  import '../scripts/contact';
+</script>
+
+<style>
+  .cpage {
+    position: relative;
+    z-index: 2;
+    padding: clamp(120px, 13vw, 210px) 0 clamp(14px, 1.64vw, 28px);
+  }
+
+  .cpage__head {
+    width: var(--wrap);
+    margin: 0 auto;
+  }
+  .cpage__note {
+    position: relative;
+    display: inline-block;
+    font-size: clamp(22px, 2.3vw, 40px);
+    line-height: 1;
+    color: #858585;
+    transform: rotate(-3deg);
+  }
+  .cpage__note :global(.cpage__arrow) {
+    position: absolute;
+    left: 102%;
+    top: 62%;
+    width: 1.6em;
+    color: #858585;
+    transform: rotate(38deg);
+  }
+  .cpage__title {
+    margin-top: clamp(14px, 1.4vw, 24px);
+    font-size: clamp(44px, 6.98vw, 124px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .cpage__title span {
+    display: block;
+  }
+  .cpage__intro {
+    max-width: 32em;
+    margin-top: clamp(18px, 2vw, 32px);
+    font-size: clamp(17px, 1.6vw, 26px);
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .cpage__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(10px, 1.09vw, 18px);
+    width: var(--wrap);
+    margin: clamp(34px, 4vw, 70px) auto 0;
+  }
+
+  .cpage__aside {
+    position: sticky;
+    top: 90px;
+    padding: clamp(20px, 2.4vw, 40px);
+    border-radius: var(--radius-card);
+    background: var(--card-warm);
+  }
+  .cpage__aside-title {
+    font-size: clamp(22px, 1.9vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .cpage__steps {
+    display: grid;
+    gap: 16px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cpage__steps li {
+    display: flex;
+    gap: 14px;
+    font-size: clamp(16px, 1.2vw, 19px);
+    line-height: 1.4;
+    color: #444;
+  }
+  .cpage__num {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #0b0b0b;
+    color: var(--sun-text);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .cpage__direct {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 16px;
+    color: #666;
+  }
+  .cpage__direct a {
+    display: block;
+    margin-top: 4px;
+    font-size: clamp(17px, 1.3vw, 21px);
+    color: #111;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    text-underline-offset: 0.2em;
+    word-break: break-all;
+  }
+  .cpage__direct a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .cpage :global(.cpage__bar) {
+    margin-top: clamp(60px, 8vw, 140px);
+  }
+
+  @media (max-width: 900px) {
+    .cpage__grid {
+      grid-template-columns: 1fr;
+    }
+    .cpage__aside {
+      position: static;
+    }
+  }
+  @media (max-width: 760px) {
+    .cpage__head,
+    .cpage__grid {
+      width: calc(100% - 32px);
+    }
+    .cpage__grid {
+      width: calc(100% - 24px);
+    }
+    .cpage__note :global(.cpage__arrow) {
+      top: 40%;
+      width: 1.3em;
+    }
+    .cpage__title span {
+      display: inline;
+    }
+  }
+</style>

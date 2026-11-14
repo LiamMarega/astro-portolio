@@ -1,0 +1,94 @@
+---
+/**
+ * /ecommerce — sales page for brands that need an online store.
+ * Funnel order: promise → proof in numbers → "that's me" (pains) → why it works (method)
+ * → proof (cases, quotes) → value (what's included, process, who) → why me (comparison)
+ * → offer (plans + guarantee) → objections (FAQ) → close (form).
+ * All copy: src/content/ecommerce.ts (Spanish only until /en/ecommerce exists, so no language link in the nav
+ * and the layout announces only itself + x-default as hreflang).
+ */
+import Base from '../layouts/Base.astro';
+import Sky from '../components/Sky.astro';
+import TopBlur from '../components/TopBlur.astro';
+import Nav from '../components/Nav.astro';
+import ContactBar from '../components/ContactBar.astro';
+import EcoHero from '../components/eco/EcoHero.astro';
+import EcoStats from '../components/eco/EcoStats.astro';
+import EcoPains from '../components/eco/EcoPains.astro';
+import EcoMethod from '../components/eco/EcoMethod.astro';
+import EcoCases from '../components/eco/EcoCases.astro';
+import EcoQuotes from '../components/eco/EcoQuotes.astro';
+import EcoIncluded from '../components/eco/EcoIncluded.astro';
+import EcoProcess from '../components/eco/EcoProcess.astro';
+import EcoAbout from '../components/eco/EcoAbout.astro';
+import EcoCompare from '../components/eco/EcoCompare.astro';
+import EcoPricing from '../components/eco/EcoPricing.astro';
+import EcoGuarantee from '../components/eco/EcoGuarantee.astro';
+import EcoFaq from '../components/eco/EcoFaq.astro';
+import EcoClose from '../components/eco/EcoClose.astro';
+import EcoSticky from '../components/eco/EcoSticky.astro';
+import { ecommerce } from '../content/ecommerce';
+import { useContent } from '../content/site';
+import '../styles/ecommerce.css';
+
+const { site } = useContent('es');
+const e = ecommerce;
+---
+
+<Base title={e.meta.title} description={e.meta.description} ogImage={e.meta.og}>
+  <Sky />
+  <TopBlur />
+  <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={null} />
+  <main id="top" class="eco">
+    <EcoHero />
+    <EcoStats />
+    <EcoPains />
+    <EcoMethod />
+    <EcoCases />
+    <EcoQuotes />
+    <EcoIncluded />
+    <EcoProcess />
+    <EcoAbout />
+    <EcoCompare />
+    <EcoPricing />
+    <EcoGuarantee />
+    <EcoFaq />
+    <EcoClose />
+    <footer class="efoot">
+      <ContactBar />
+      <p class="efoot__legal">© {new Date().getFullYear()} {site.name} · {e.footer}</p>
+    </footer>
+  </main>
+  <EcoSticky />
+</Base>
+
+<script>
+  import '../scripts/ecommerce';
+</script>
+
+<style>
+  .efoot {
+    padding: clamp(80px, 9vw, 160px) 0 clamp(14px, 1.64vw, 28px);
+  }
+  .efoot :global(.cbar) {
+    margin-top: 0;
+  }
+  .efoot__legal {
+    width: min(86.1vw, 1640px);
+    margin: 18px auto 0;
+    padding: 0 clamp(16px, 2.18vw, 36px);
+    font-size: 14px;
+    color: var(--ink-mute);
+  }
+  @media (max-width: 900px) {
+    .efoot {
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+    }
+  }
+  @media (max-width: 760px) {
+    .efoot__legal {
+      width: calc(100% - 24px);
+      padding: 0 18px;
+    }
+  }
+</style>

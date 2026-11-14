@@ -4,12 +4,40 @@ import '@fontsource-variable/caveat/wght.css';
 import '@fontsource/modak/400.css';
 import '../styles/global.css';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url';
-import { useContent, homeHref, LOCALES } from '../content/site';
+import { useContent, homeHref, LOCALES, type Locale } from '../content/site';
+
+interface Props {
+  /** <title> and og:title. Defaults to the home title. */
+  title?: string;
+  /** meta + og description. Defaults to the home description. */
+  description?: string;
+  /** Social share image, relative to /public. Defaults to the home card. */
+  ogImage?: string;
+  /**
+   * Counterparts of this page per language (paths, trailing slash), e.g. `{ es: '/contact/', en: '/en/contact/' }`.
+   * Emits hreflang es/en + x-default (the es one). Pass `{}` for single-language pages
+   * (self + x-default only). Omitted = the home pair (/ and /en/).
+   */
+  alternates?: Partial<Record<Locale, string>>;
+  /** Home pages only: Person JSON-LD and the profile card. Inferred from `title` being absent. */
+  home?: boolean;
+}
 
 const { site, lang } = useContent(Astro.currentLocale);
+const { title: pageTitle, description: pageDescription, ogImage: ogPath = '/og.jpg', alternates, home = pageTitle === undefined } = Astro.props;
+const title = pageTitle ?? site.title;
+const description = pageDescription ?? site.description;
 const base = Astro.site ?? new URL(site.url);
-const canonical = new URL(homeHref(lang), base).toString();
-const ogImage = new URL('/og.jpg', base).toString();
+// pages are served as /name/ (directory output), so every URL we publish keeps the trailing slash
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const canonical = new URL(home ? homeHref(lang) : path, base).toString();
+const ogImage = new URL(ogPath, base).toString();
+// [hreflang, path] pairs. A page that exists in one language only announces itself + x-default.
+const alt: [string, string][] = home
+  ? [...LOCALES.map((l): [string, string] => [l, homeHref(l)]), ['x-default', '/']]
+  : alternates && Object.keys(alternates).length
+    ? [...(Object.entries(alternates) as [Locale, string][]), ['x-default', alternates.es ?? path]]
+    : [[lang, path], ['x-default', path]];
 
 const person = {
   '@context': 'https://schema.org',
@@ -32,28 +60,27 @@ const person = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{site.title}</title>
-    <meta name="description" content={site.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <meta name="author" content={site.name} />
     <link rel="canonical" href={canonical} />
-    {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(homeHref(l), base).toString()} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL('/', base).toString()} />
+    {alt.map(([hreflang, href]) => <link rel="alternate" hreflang={hreflang} href={new URL(href, base).toString()} />)}
     <meta name="theme-color" content="#ffd60a" />
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={home ? 'profile' : 'website'} />
     <meta property="og:site_name" content={site.brand} />
     <meta property="og:locale" content={lang === 'es' ? 'es_AR' : 'en_US'} />
-    <meta property="og:title" content={site.title} />
-    <meta property="og:description" content={site.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    {home && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
 
     <script is:inline>
       document.documentElement.classList.remove('js-off');

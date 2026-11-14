@@ -1,0 +1,217 @@
+---
+import Doodle from '../Doodle.astro';
+import { ecommerce } from '../../content/ecommerce';
+import { useContent } from '../../content/site';
+
+const { site } = useContent('es');
+const a = ecommerce.about;
+const first = site.name.split(' ')[0];
+const icons: Record<string, string> = {
+  sparkle: 'M12 3.5l2.1 5.4 5.4 2.1-5.4 2.1L12 18.5l-2.1-5.4L4.5 11l5.4-2.1zM18.5 16.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z',
+  bolt: 'M7 4.5h9l-3.4 5.1H18L8.8 19.5l2.4-6.6H6z',
+  cursor: 'M5 4.5l13 5.2-5.6 1.8 3.9 6.1-2.4 1.5-3.9-6.1-3.6 4.6z',
+};
+---
+
+<section class="esec eabout" aria-labelledby="about-title">
+  <div class="eabout__grid">
+    <div class="eabout__photo" data-reveal>
+      <figure class="eabout__pol">
+        <div class="eabout__img">
+          <img src={a.photo.src} alt={a.photo.alt} width="600" height="600" loading="lazy" decoding="async" />
+        </div>
+        <figcaption class="hand">{a.photo.caption}</figcaption>
+      </figure>
+      <Doodle name="heart" seed="ab1" class="eabout__d eabout__d--a" onView duration={0.8} />
+      <Doodle name="sparkles" seed="ab2" class="eabout__d eabout__d--b" onView duration={0.7} delay={0.3} />
+    </div>
+
+    <div class="eabout__copy" data-reveal style="--reveal-delay:.08s">
+      <p class="shead__note hand" data-fade>{a.note}</p>
+      <h2 class="eabout__title" id="about-title" data-ink>{a.hello} {first}</h2>
+      {a.text.map((p) => <p class="eabout__text">{p}</p>)}
+      <ul class="eabout__values">
+        {
+          a.values.map((v) => (
+            <li class={`tagchip tagchip--${v.tone}`}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d={icons[v.icon]} />
+              </svg>
+              {v.label}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="eabout__sign hand" aria-hidden="true">{first}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .eabout__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: clamp(10px, 1.09vw, 18px);
+  }
+  .eabout__photo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(380px, 36vw, 620px);
+    border-radius: var(--radius-bento);
+    background: var(--card);
+    overflow: hidden;
+  }
+  .eabout__pol {
+    --w: clamp(190px, 21vw, 360px);
+    width: var(--w);
+    margin: 0;
+    padding: calc(var(--w) * 0.052) calc(var(--w) * 0.052) 0;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 12px 30px rgba(0, 0, 0, 0.1);
+    transform: rotate(-3.4deg);
+  }
+  .eabout__img {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #ddd;
+  }
+  .eabout__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .eabout__pol figcaption {
+    display: grid;
+    place-items: center;
+    height: calc(var(--w) * 0.25);
+    font-size: calc(var(--w) * 0.088);
+    color: #151515;
+    white-space: nowrap;
+  }
+  .eabout__photo :global(.eabout__d) {
+    position: absolute;
+    width: clamp(60px, 7vw, 120px);
+    color: #0c0c0c;
+  }
+  .eabout__photo :global(.eabout__d--a) {
+    left: 8%;
+    top: 12%;
+  }
+  .eabout__photo :global(.eabout__d--b) {
+    right: 8%;
+    bottom: 12%;
+  }
+
+  .eabout__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(22px, 2.73vw, 48px);
+    border-radius: var(--radius-bento);
+    background: var(--card);
+  }
+  .eabout__title {
+    margin-top: 10px;
+    font-size: clamp(40px, 4.6vw, 84px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .eabout__text {
+    max-width: 30em;
+    margin-top: clamp(14px, 1.4vw, 24px);
+    font-size: clamp(16px, 1.45vw, 24px);
+    line-height: 1.42;
+    color: var(--ink-soft);
+  }
+  .eabout__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: clamp(20px, 2.2vw, 36px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tagchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    padding: 0.32em 0.66em 0.38em;
+    border-radius: 0.4em;
+    font-size: clamp(17px, 1.5vw, 26px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--top), var(--bot));
+    box-shadow:
+      inset 0 0.05em 0 rgba(255, 255, 255, 0.85),
+      inset 0 -0.07em 0 var(--edge),
+      0 0.06em 0.02em rgba(0, 0, 0, 0.06),
+      0 0.18em 0.32em -0.08em var(--shadow);
+  }
+  .tagchip:nth-child(1) {
+    transform: rotate(-3deg);
+  }
+  .tagchip:nth-child(2) {
+    transform: rotate(2deg);
+  }
+  .tagchip:nth-child(3) {
+    transform: rotate(-1.5deg);
+  }
+  .tagchip svg {
+    width: 0.86em;
+    height: 0.86em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tagchip--blue {
+    --top: #dcebff;
+    --bot: #a9cffd;
+    --ink: #3d86ea;
+    --edge: rgba(46, 116, 214, 0.22);
+    --shadow: rgba(55, 120, 220, 0.35);
+  }
+  .tagchip--mint {
+    --top: #d9fbe9;
+    --bot: #9becc3;
+    --ink: #1fae6b;
+    --edge: rgba(24, 150, 92, 0.2);
+    --shadow: rgba(30, 160, 100, 0.32);
+  }
+  .tagchip--orange {
+    --top: #ffeeb0;
+    --bot: #ffcb64;
+    --ink: #ee8715;
+    --edge: rgba(220, 130, 20, 0.22);
+    --shadow: rgba(230, 140, 30, 0.35);
+  }
+  .eabout__sign {
+    margin-top: clamp(14px, 1.6vw, 26px);
+    font-size: clamp(34px, 3.2vw, 56px);
+    line-height: 1;
+    color: #111;
+    transform: rotate(-5deg);
+    transform-origin: left center;
+  }
+
+  @media (max-width: 900px) {
+    .eabout__grid {
+      grid-template-columns: 1fr;
+    }
+    .eabout__photo {
+      min-height: 0;
+      aspect-ratio: 1 / 0.86;
+    }
+    .eabout__pol {
+      --w: 50vw;
+    }
+  }
+</style>

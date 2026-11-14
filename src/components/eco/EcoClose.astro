@@ -1,0 +1,155 @@
+---
+import Doodle from '../Doodle.astro';
+import LeadForm from '../LeadForm.astro';
+import { ecommerce } from '../../content/ecommerce';
+import { useContent } from '../../content/site';
+
+const { site } = useContent('es');
+const c = ecommerce.close;
+---
+
+<section class="esec eclose" aria-labelledby="close-title">
+  <div class="eclose__grid">
+    <div class="eclose__copy">
+      <p class="shead__note hand" data-fade>
+        {c.note}
+        <Doodle name="curlyArrow" seed="cl" class="eclose__arrow" onView duration={0.7} delay={0.4} />
+      </p>
+      <h2 class="eclose__title" id="close-title" data-ink>
+        {c.title.map((l, i) => <>{i > 0 && ' '}<span>{l}</span></>)}
+      </h2>
+      <p class="eclose__text" data-fade>{c.text}</p>
+
+      <div class="eclose__next">
+        <h3>{c.nextTitle}</h3>
+        <ol>
+          {
+            c.next.map((s, i) => (
+              <li>
+                <span>{i + 1}</span>
+                {s}
+              </li>
+            ))
+          }
+        </ol>
+        <p class="eclose__direct">
+          {c.direct}
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+
+    <div id="aplicar" class="eclose__form">
+      <LeadForm config={ecommerce.form} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .eclose__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+    align-items: start;
+    gap: clamp(20px, 3vw, 56px);
+  }
+  .eclose__copy {
+    position: sticky;
+    top: 100px;
+  }
+  .eclose__copy .shead__note {
+    position: relative;
+  }
+  .eclose__copy :global(.eclose__arrow) {
+    position: absolute;
+    left: 103%;
+    top: 30%;
+    width: 1.5em;
+    color: #8a8a8a;
+    transform: rotate(-30deg);
+  }
+  .eclose__title {
+    margin-top: clamp(10px, 1vw, 18px);
+    font-size: clamp(42px, 5.4vw, 98px);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .eclose__title span {
+    display: block;
+  }
+  .eclose__text {
+    max-width: 26em;
+    margin-top: clamp(16px, 1.8vw, 28px);
+    font-size: clamp(17px, 1.45vw, 24px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .eclose__next {
+    margin-top: clamp(26px, 3vw, 46px);
+    padding-top: clamp(20px, 2vw, 30px);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .eclose__next h3 {
+    font-size: clamp(18px, 1.35vw, 23px);
+    font-weight: 520;
+  }
+  .eclose__next ol {
+    display: grid;
+    gap: 14px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .eclose__next li {
+    display: flex;
+    gap: 12px;
+    font-size: clamp(15.5px, 1.12vw, 18px);
+    line-height: 1.4;
+    color: #444;
+  }
+  .eclose__next li span {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0b0b0b;
+    color: var(--sun-text);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .eclose__direct {
+    margin-top: 22px;
+    font-size: 16px;
+    color: #666;
+  }
+  .eclose__direct a {
+    display: block;
+    margin-top: 2px;
+    font-size: clamp(17px, 1.3vw, 21px);
+    color: #111;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    text-underline-offset: 0.2em;
+    word-break: break-all;
+  }
+  .eclose__form {
+    scroll-margin-top: 80px;
+  }
+
+  @media (max-width: 1000px) {
+    .eclose__grid {
+      grid-template-columns: 1fr;
+    }
+    .eclose__copy {
+      position: static;
+    }
+    .eclose__next {
+      display: none;
+    }
+    .eclose__title span {
+      display: inline;
+    }
+  }
+</style>

@@ -1,0 +1,627 @@
+---
+import StickerWord from '../StickerWord.astro';
+import Sticker from '../EcoSticker.astro';
+import Doodle from '../Doodle.astro';
+import Keycap from '../Keycap.astro';
+import { ecommerce } from '../../content/ecommerce';
+
+const h = ecommerce.hero;
+const v = h.visual;
+const money = (n: number) => `${v.currency}${n.toLocaleString('es-CO')}`;
+// the two newest orders are already on screen when the page loads
+const shown = [v.orders[1], v.orders[0]];
+const when = [v.now, v.ago.replace('{n}', '2')];
+const bars = [34, 52, 40, 66, 58, 80, 72, 94];
+---
+
+<section class="ehero" data-ehero aria-labelledby="ehero-title">
+  <div class="ehero__inner">
+    <div class="ehero__copy">
+      {
+        h.availability && (
+          <p class="ehero__avail">
+            <i aria-hidden="true" />
+            {h.availability}
+          </p>
+        )
+      }
+
+      <h1 id="ehero-title" class="ehero__title" data-ink>
+        <span class="ehero__lead">{h.titleLead}</span>{' '}
+        <span class="sr-only">{h.titleWord}</span>
+        <span class="ehero__row">
+          <StickerWord text={h.titleWord} stickers={h.stickers} uid="hw" class="ehero__word" />
+          <span class="ehero__note hand" aria-hidden="true">
+            <Doodle name="bigArrow" seed="hn" class="ehero__note-arrow" drawn />
+            {h.note}
+          </span>
+        </span>
+      </h1>
+
+      <p class="ehero__sub">{h.sub}</p>
+
+      <div class="ehero__ctas">
+        <Keycap href="#aplicar" label={h.cta} w="clamp(250px, 21.5vw, 350px)" doodles="top" />
+        <a class="ehero__more" href="#casos">
+          {h.secondary}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+        </a>
+      </div>
+      <p class="ehero__ctanote">{h.ctaNote}</p>
+
+      <ul class="ehero__trust">
+        {
+          h.trust.map((t) => (
+            <li>
+              <span class="echeck">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 12.5l4 4 8-9" />
+                </svg>
+              </span>
+              {t}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="ehero__visual" role="img" aria-label="Ejemplo de tienda online con pedidos nuevos llegando" data-ehero-visual>
+      <figure class="ehero__shot">
+        <img src={v.image.src} alt="" width={v.image.w} height={v.image.h} fetchpriority="high" decoding="async" draggable="false" />
+      </figure>
+
+      <div class="ehero__counter" aria-hidden="true">
+        <small>{v.counter}</small>
+        <b data-ehero-total data-value={v.start}>{money(v.start)}</b>
+        <span class="ehero__bars">
+          {bars.map((b) => <i style={`height:${b}%`} />)}
+        </span>
+      </div>
+
+      <ul
+        class="ehero__toasts"
+        aria-hidden="true"
+        data-ehero-toasts
+        data-orders={JSON.stringify(v.orders)}
+        data-labels={JSON.stringify({ app: v.app, order: v.order, now: v.now, ago: v.ago, currency: v.currency })}
+      >
+        {
+          shown.map((o, i) => (
+            <li class="htoast is-in">
+              <div>
+                <div class="htoast__card">
+                  <span class="htoast__app">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 8h14l-1 12.5H6z" />
+                      <path d="M9 10V7a3 3 0 0 1 6 0v3" />
+                    </svg>
+                  </span>
+                  <span class="htoast__body">
+                    <span class="htoast__top">
+                      <span>{v.app}</span>
+                      <span data-when>{when[i]}</span>
+                    </span>
+                    <b class="htoast__title">
+                      {v.order} #{o.n}
+                    </b>
+                    <span class="htoast__text">
+                      {o.items} · {money(o.amount)}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="ehero__vnote hand" aria-hidden="true">
+        {v.note}
+        <Doodle name="bigArrow" seed="hv" class="ehero__vnote-arrow" drawn />
+      </p>
+
+      <span class="ehero__stk ehero__stk--cart" aria-hidden="true"><Sticker type="cart" uid="hs-cart" /></span>
+      <span class="ehero__stk ehero__stk--star" aria-hidden="true"><Sticker type="star" uid="hs-star" /></span>
+      <span class="ehero__stk ehero__stk--tag" aria-hidden="true"><Sticker type="tag" uid="hs-tag" /></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ehero {
+    position: relative;
+    z-index: 2;
+    min-height: 100svh;
+    padding: clamp(100px, 9.6vw, 150px) 0 clamp(30px, 4vw, 70px);
+  }
+
+  .ehero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    align-items: center;
+    gap: clamp(24px, 3.6vw, 70px);
+    width: min(92vw, 1640px);
+    margin: 0 auto;
+  }
+
+  /* ── copy ── */
+  .ehero__avail {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 15px 7px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 480;
+    color: #2b2b2b;
+  }
+  .ehero__avail i {
+    position: relative;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #1fb35c;
+  }
+  .ehero__avail i::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid #1fb35c;
+    opacity: 0;
+    animation: avail-ping 2.2s ease-out infinite;
+  }
+  @keyframes avail-ping {
+    0% {
+      transform: scale(0.5);
+      opacity: 0.7;
+    }
+    80%,
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  .ehero__title {
+    position: relative;
+    margin-top: clamp(16px, 1.6vw, 26px);
+    font-size: clamp(36px, 4.25vw, 78px);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+  .ehero__lead {
+    display: block;
+    max-width: 12em;
+    text-wrap: balance;
+  }
+  .ehero__row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.3em;
+  }
+  .ehero__title :global(.ehero__word) {
+    font-size: 2.35em;
+    line-height: 0.92;
+    letter-spacing: -0.065em;
+    margin-left: -0.04em;
+  }
+
+  .ehero__note {
+    position: relative;
+    max-width: 6.4em;
+    margin-bottom: 0.7em;
+    font-size: clamp(21px, 1.9vw, 34px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #7d7d7d;
+    transform: rotate(-6deg);
+  }
+  .ehero__note :global(.ehero__note-arrow) {
+    display: block;
+    width: 2.3em;
+    margin: 0 0 0.2em -0.5em;
+    color: #8a8a8a;
+    transform: rotate(192deg);
+  }
+
+  .ehero__sub {
+    max-width: 29em;
+    margin-top: clamp(18px, 2vw, 32px);
+    font-size: clamp(17px, 1.4vw, 24px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  .ehero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 22px clamp(26px, 2.6vw, 44px);
+    margin-top: clamp(30px, 3.2vw, 52px);
+    padding-left: 4px;
+  }
+  .ehero__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: clamp(16px, 1.2vw, 20px);
+    font-weight: 480;
+    color: #222;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.2);
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .ehero__more:hover {
+    text-decoration-color: currentColor;
+  }
+  .ehero__more svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.35s var(--ease-spring);
+  }
+  .ehero__more:hover svg {
+    transform: translateY(3px);
+  }
+  .ehero__ctanote {
+    margin-top: clamp(22px, 2vw, 30px);
+    font-size: clamp(14px, 1vw, 16px);
+    color: #6f6f6f;
+  }
+
+  .ehero__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin: clamp(18px, 1.8vw, 28px) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(15px, 1.05vw, 17px);
+    font-weight: 470;
+    color: #2a2a2a;
+  }
+  .ehero__trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── visual: store + orders coming in ── */
+  .ehero__visual {
+    position: relative;
+    aspect-ratio: 1 / 0.86;
+    container-type: inline-size;
+  }
+
+  .ehero__shot {
+    position: absolute;
+    left: 0;
+    top: 2%;
+    width: 88%;
+    margin: 0;
+    padding: 0.8cqw;
+    border-radius: 2.6cqw;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 24px 60px rgba(140, 100, 0, 0.18);
+    transform: rotate(-2.2deg);
+  }
+  .ehero__shot img {
+    width: 100%;
+    border-radius: 2cqw;
+    user-select: none;
+  }
+
+  .ehero__counter {
+    position: absolute;
+    right: 1%;
+    top: 7%;
+    z-index: 3;
+    display: grid;
+    gap: 0.4cqw;
+    padding: 2.2cqw 2.6cqw 2.4cqw;
+    border-radius: 3cqw;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 14px 34px rgba(0, 0, 0, 0.12);
+    transform: rotate(3deg);
+  }
+  .ehero__counter small {
+    font-size: max(11px, 1.9cqw);
+    color: #8a8a8a;
+  }
+  .ehero__counter b {
+    font-size: max(17px, 4.2cqw);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #111;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+  }
+  .ehero__counter b.is-bump {
+    color: #1a9e50;
+  }
+  .ehero__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6cqw;
+    height: 5cqw;
+    margin-top: 0.6cqw;
+  }
+  .ehero__bars i {
+    flex: 1;
+    min-width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(#ffe14d, #fec81a);
+  }
+
+  .ehero__toasts {
+    position: absolute;
+    right: -1%;
+    bottom: 0;
+    z-index: 4;
+    width: 57%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .htoast {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 0.55s var(--ease-out),
+      opacity 0.35s ease;
+  }
+  .htoast.is-in {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .htoast > div {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 6px;
+    margin: 0 -6px;
+  }
+  .htoast__card {
+    display: flex;
+    align-items: flex-start;
+    gap: 2.2cqw;
+    margin: 1.6cqw 0 4px;
+    padding: 2.1cqw 2.4cqw;
+    border-radius: 3.2cqw;
+    background: rgba(255, 255, 255, 0.86);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.07),
+      0 10px 26px rgba(0, 0, 0, 0.12);
+  }
+  .htoast.is-new .htoast__card {
+    animation: buzz 0.5s 0.25s ease-in-out;
+  }
+  @keyframes buzz {
+    0%,
+    100% {
+      transform: none;
+    }
+    20%,
+    60% {
+      transform: translateX(-3px) rotate(-0.6deg);
+    }
+    40%,
+    80% {
+      transform: translateX(3px) rotate(0.6deg);
+    }
+  }
+  .htoast__app {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: max(30px, 6cqw);
+    aspect-ratio: 1;
+    border-radius: 24%;
+    background: var(--sun);
+  }
+  .htoast__app svg {
+    width: 58%;
+    height: 58%;
+    fill: none;
+    stroke: #111;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .htoast__body {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+    line-height: 1.25;
+  }
+  .htoast__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: max(10.5px, 1.8cqw);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #8f8f8f;
+  }
+  .htoast__title {
+    font-size: max(13.5px, 2.45cqw);
+    font-weight: 600;
+    color: #111;
+  }
+  .htoast__text {
+    overflow: hidden;
+    font-size: max(12.5px, 2.25cqw);
+    color: #555;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ehero__vnote {
+    position: absolute;
+    left: 4%;
+    bottom: 9%;
+    z-index: 3;
+    font-size: max(20px, 4.2cqw);
+    line-height: 1;
+    color: #7d7d7d;
+    transform: rotate(-4deg);
+  }
+  .ehero__vnote :global(.ehero__vnote-arrow) {
+    display: block;
+    width: 2.6em;
+    margin: 0.15em 0 0 3.2em;
+    color: #8a8a8a;
+    transform: rotate(12deg);
+  }
+
+  .ehero__stk {
+    position: absolute;
+    z-index: 5;
+    display: block;
+    animation: float 6s ease-in-out infinite;
+  }
+  .ehero__stk :global(svg) {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.16)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.14));
+  }
+  .ehero__stk--cart {
+    left: -4%;
+    top: -6%;
+    width: 17%;
+  }
+  .ehero__stk--star {
+    right: 18%;
+    top: -7%;
+    width: 13%;
+    animation-duration: 7s;
+    animation-delay: -2s;
+  }
+  .ehero__stk--tag {
+    left: 34%;
+    bottom: 1%;
+    width: 11%;
+    animation-duration: 5.4s;
+    animation-delay: -1s;
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-6px) rotate(-3deg);
+    }
+  }
+
+  @media (max-width: 1100px) and (min-width: 901px) {
+    .ehero__title {
+      font-size: 3.9vw;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .ehero {
+      min-height: 0;
+      padding-top: 96px;
+    }
+    .ehero__inner {
+      grid-template-columns: 1fr;
+      width: calc(100% - 32px);
+      gap: 46px;
+    }
+    .ehero__title {
+      font-size: clamp(34px, 8.6vw, 56px);
+    }
+    .ehero__title :global(.ehero__word) {
+      font-size: 2.3em;
+    }
+    .ehero__note {
+      max-width: 5em;
+      margin-bottom: 0.5em;
+      font-size: clamp(19px, 4.8vw, 28px);
+    }
+    .ehero__note :global(.ehero__note-arrow) {
+      width: 1.8em;
+    }
+    .ehero__visual {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ehero__ctas {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 26px;
+    }
+    .ehero__ctas :global(.key) {
+      --w: min(calc(100vw - 60px), 310px) !important;
+    }
+    .ehero__visual {
+      aspect-ratio: 1 / 1.02;
+    }
+    .ehero__shot {
+      width: 94%;
+    }
+    .ehero__toasts {
+      width: 80%;
+      right: -2%;
+    }
+    .ehero__counter {
+      top: auto;
+      bottom: 34%;
+      right: auto;
+      left: -2%;
+      transform: rotate(-3deg);
+    }
+    .ehero__vnote {
+      left: 0;
+      bottom: 30%;
+      display: none;
+    }
+    .ehero__stk--cart {
+      width: 19%;
+      left: -3%;
+      top: -9%;
+    }
+    .ehero__stk--star {
+      width: 15%;
+      right: -1%;
+      top: -8%;
+    }
+    .ehero__stk--tag {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ehero__stk,
+    .ehero__avail i::after {
+      animation: none;
+    }
+  }
+</style>

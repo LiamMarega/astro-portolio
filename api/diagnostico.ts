@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { isAllowedOrigin } from "./_lib/origin.js";
 
 // Plain Vercel Function (Node.js runtime, Web-standard handler). The Astro
 // site stays fully static; this file lives at the repo root in `api/` and
@@ -27,32 +28,6 @@ function json(body: unknown, status = 200, headers: Record<string, string> = {})
     status,
     headers: { "Content-Type": "application/json", ...headers },
   });
-}
-
-// Replaces Astro's `security.checkOrigin` (lost with the adapter): only the
-// production site, Vercel previews and local dev may call this endpoint.
-// Origin is preferred; Referer is the fallback. Neither present => rejected.
-function isAllowedOrigin(request: Request): boolean {
-  const raw = request.headers.get("origin") || request.headers.get("referer");
-  if (!raw) return false;
-  let url: URL;
-  try {
-    url = new URL(raw);
-  } catch {
-    return false;
-  }
-  const { protocol, hostname } = url;
-  if (protocol === "https:") {
-    return (
-      hostname === "www.liammarega.com" ||
-      hostname === "liammarega.com" ||
-      hostname.endsWith(".vercel.app")
-    );
-  }
-  if (protocol === "http:") {
-    return hostname === "localhost" || hostname === "127.0.0.1";
-  }
-  return false;
 }
 
 export async function POST(request: Request): Promise<Response> {

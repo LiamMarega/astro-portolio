@@ -1,39 +1,97 @@
 ---
 import Doodle from './Doodle.astro';
 import { useContent, homeHref } from '../content/site';
+
+export interface NavItem {
+  /** used to mark the active item */
+  key: string;
+  label: string;
+  href: string;
+  /** id of an in-page section: the item lights up while that section is on screen */
+  section?: string;
+  /** hide on small phones: 'sm' ≤ 560px, 'xs' ≤ 380px */
+  hide?: 'sm' | 'xs';
+}
+
+/**
+ * With no props this is the home nav (section links + case-study layer), unchanged.
+ * Other pages (/ecommerce, /contact) pass their own `items`.
+ */
+interface Props {
+  items?: NavItem[];
+  /** key of the item active on load ('' = none until a section scrolls in) */
+  active?: string;
+  /** permanent yellow pill on the right of the nav */
+  cta?: { label: string; href: string };
+  /** second layer used by the case study sheet (home only; on by default when `items` is not given) */
+  caseLayer?: boolean;
+  /** aria-label of the sunrise button */
+  sunLabel?: string;
+  /** aria-label of the <nav> */
+  label?: string;
+  /** ES/EN counterpart of the current page. Default: the home of the other language. `null` hides the link. */
+  langHref?: string | null;
+}
+
 const { site, lang } = useContent(Astro.currentLocale);
 const other = lang === 'es' ? 'en' : 'es';
+const custom = Astro.props.items !== undefined;
+const items = Astro.props.items ?? [];
+const {
+  active = items[0]?.key ?? '',
+  cta,
+  caseLayer = !custom,
+  sunLabel = site.ui.replaySunrise,
+  label = site.ui.sections,
+  langHref = homeHref(other),
+} = Astro.props;
 ---
 
 <header class="nav" data-nav>
   <div class="nav__pill" data-nav-pill>
     <div class="nav__layer nav__main" data-nav-main>
-      <button class="nav__sun" type="button" data-sunrise aria-label={site.ui.replaySunrise}>
+      <button class="nav__sun" type="button" data-sunrise aria-label={sunLabel}>
         <Doodle name="navSun" drawn width={1.7} />
       </button>
-      <nav aria-label={site.ui.sections}>
+      <nav aria-label={label}>
         <ul class="nav__list">
           {
-            site.nav.map((item, i) => (
-              <li>
-                <a class:list={['nav__link', { 'is-active': i === 0 }]} href={`#${item.id}`} data-nav-link={item.id}>
-                  {item.label}
-                </a>
-              </li>
-            ))
+            custom
+              ? items.map((item) => (
+                  <li class:list={[item.hide && `nav__item--${item.hide}`]}>
+                    <a
+                      class:list={['nav__link', { 'is-active': item.key === active }]}
+                      href={item.href}
+                      data-nav-key={item.key}
+                      data-nav-link={item.section}
+                      aria-current={item.key === active && !item.section ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              : site.nav.map((item, i) => (
+                  <li>
+                    <a class:list={['nav__link', { 'is-active': i === 0 }]} href={`#${item.id}`} data-nav-link={item.id}>
+                      {item.label}
+                    </a>
+                  </li>
+                ))
           }
         </ul>
       </nav>
-      <a class="nav__lang" href={homeHref(other)} hreflang={other} lang={other} title={site.ui.switchTo} aria-label={site.ui.switchTo}>{site.ui.langShort}</a>
-      <span class="nav__indicator" data-nav-indicator aria-hidden="true"></span>
+      {cta && <a class="nav__cta nav__cta--main" href={cta.href} data-nav-cta>{cta.label}</a>}{langHref && <a class="nav__lang" href={langHref} hreflang={other} lang={other} title={site.ui.switchTo} aria-label={site.ui.switchTo}>{site.ui.langShort}</a>}
+      {custom && !active ? <span class="nav__indicator is-off" data-nav-indicator aria-hidden="true"></span> : <span class="nav__indicator" data-nav-indicator aria-hidden="true"></span>}
     </div>
 
-    <div class="nav__layer nav__case" data-nav-case aria-hidden="true" inert>
-      <button class="nav__close" type="button" data-case-close aria-label={site.ui.closeProject}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-      </button>
-      <a class="nav__cta" href={`mailto:${site.email}?subject=${encodeURIComponent(lang === "es" ? "Nuevo proyecto" : "New project")}`}>{site.ctaLabel}</a>
-    </div>
+    {caseLayer && (
+      <div class="nav__layer nav__case" data-nav-case aria-hidden="true" inert>
+        <button class="nav__close" type="button" data-case-close aria-label={site.ui.closeProject}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+        <a class="nav__cta" href={`mailto:${site.email}?subject=${encodeURIComponent(lang === "es" ? "Nuevo proyecto" : "New project")}`}>{site.ctaLabel}</a>
+      </div>
+    )}
   </div>
 </header>
 
@@ -178,7 +236,12 @@ const other = lang === 'es' ? 'en' : 'es';
     background: var(--sun-pill);
     transition:
       transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1),
-      width 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
+      width 0.5s cubic-bezier(0.3, 1.3, 0.5, 1),
+      opacity 0.3s ease;
+  }
+  /* pages where no item is active yet (e.g. /ecommerce before a section scrolls in) */
+  .nav__indicator.is-off {
+    opacity: 0;
   }
   .nav__indicator.no-anim {
     transition: none;
@@ -237,6 +300,18 @@ const other = lang === 'es' ? 'en' : 'es';
   .nav__cta:hover {
     background: rgba(255, 210, 30, 0.38);
   }
+  /* permanent CTA inside the main layer: solid sun, reads as the main action */
+  .nav__cta--main {
+    position: relative;
+    z-index: 1;
+    margin-left: 4px;
+    color: #111;
+    background: var(--sun);
+    font-weight: 520;
+  }
+  .nav__cta--main:hover {
+    background: #ffe14d;
+  }
 
   @media (max-width: 560px) {
     .nav {
@@ -249,12 +324,29 @@ const other = lang === 'es' ? 'en' : 'es';
     .nav__link {
       padding: 0 10.5px;
     }
+    .nav__cta--main {
+      padding: 0 12px;
+    }
     .nav__sun {
       width: 32px;
     }
     .nav__sun :global(svg) {
       width: 21px;
       height: 21px;
+    }
+    .nav__item--sm {
+      display: none;
+    }
+  }
+  @media (max-width: 380px) {
+    .nav__pill {
+      font-size: 15.5px;
+    }
+    .nav__link {
+      padding: 0 9px;
+    }
+    .nav__item--xs {
+      display: none;
     }
   }
 </style>

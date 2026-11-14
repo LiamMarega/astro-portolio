@@ -1,0 +1,117 @@
+---
+import * as lucide from 'lucide-static';
+import Doodle from '../Doodle.astro';
+import { ecommerce } from '../../content/ecommerce';
+
+const g = ecommerce.guarantee;
+const icon = (name: string) =>
+  ((lucide as Record<string, string>)[name] ?? '').replace(/\s(width|height)="24"/g, '').replace('class="', 'aria-hidden="true" focusable="false" class="');
+---
+
+<section class="esec eguar" aria-labelledby="guar-title">
+  <div class="eguar__card" data-reveal>
+    <div class="eguar__head">
+      <div class="eguar__seal" aria-hidden="true">
+        <Doodle name="seal" seed="g" class="eguar__seal-svg" onView duration={1.1} />
+      </div>
+      <div>
+        <p class="shead__note hand" data-fade>{g.note}</p>
+        <h2 class="eguar__title" id="guar-title" data-ink>{g.title}</h2>
+      </div>
+    </div>
+    <ul class="eguar__list">
+      {
+        g.items.map((it) => (
+          <li>
+            <span class="eguar__icon" set:html={icon(it.icon)} />
+            <h3>{it.title}</h3>
+            <p>{it.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .eguar__card {
+    padding: clamp(24px, 3.3vw, 60px);
+    border-radius: var(--radius-card);
+    background:
+      radial-gradient(ellipse 60% 90% at 0% 0%, rgba(254, 200, 26, 0.5) 0%, rgba(251, 220, 90, 0.28) 34%, rgba(242, 235, 189, 0) 78%),
+      var(--card-warm);
+  }
+  .eguar__head {
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2.4vw, 40px);
+  }
+  .eguar__seal {
+    flex: none;
+    width: clamp(92px, 9vw, 160px);
+    color: #111;
+  }
+  .eguar__seal :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+  .eguar__title {
+    margin-top: 8px;
+    font-size: clamp(34px, 4.4vw, 80px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .eguar__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(10px, 1.09vw, 18px);
+    margin: clamp(26px, 3vw, 50px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .eguar__list li {
+    padding: clamp(18px, 2vw, 32px);
+    border-radius: var(--radius-bento);
+    background: rgba(255, 255, 255, 0.72);
+  }
+  .eguar__icon {
+    display: grid;
+    place-items: center;
+    width: clamp(40px, 3.2vw, 52px);
+    aspect-ratio: 1;
+    border-radius: 26%;
+    background: #0b0b0b;
+    color: var(--sun);
+  }
+  .eguar__icon :global(svg) {
+    width: 52%;
+    height: 52%;
+    stroke-width: 1.8;
+  }
+  .eguar__list h3 {
+    margin-top: 16px;
+    font-size: clamp(19px, 1.6vw, 28px);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+  .eguar__list p {
+    margin-top: 8px;
+    font-size: clamp(15px, 1.12vw, 18px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 900px) {
+    .eguar__list {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .eguar__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

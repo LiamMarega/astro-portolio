@@ -1,0 +1,57 @@
+---
+import { ecommerce } from '../../content/ecommerce';
+const s = ecommerce.sticky;
+---
+
+<div class="esticky" data-esticky aria-hidden="true" inert>
+  <span class="esticky__text">{s.text}</span>
+  <a class="esticky__btn" href="#aplicar" tabindex="-1">{s.cta}</a>
+</div>
+
+<style>
+  .esticky {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 58;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 6px 18px;
+    border-radius: 999px;
+    background: #000;
+    color: #b9b9b9;
+    font-size: 14.5px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(140%);
+    transition: transform 0.5s var(--ease-spring);
+  }
+  .esticky.is-on {
+    transform: none;
+  }
+  .esticky__text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .esticky__btn {
+    flex: none;
+    display: flex;
+    align-items: center;
+    height: 46px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: var(--sun);
+    color: #111;
+    font-size: 16px;
+    font-weight: 560;
+  }
+  @media (max-width: 900px) {
+    .esticky {
+      display: flex;
+    }
+  }
+</style>

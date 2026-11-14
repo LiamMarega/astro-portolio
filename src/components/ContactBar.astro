@@ -1,0 +1,222 @@
+---
+import { socialLogo } from '../lib/logos';
+import { useContent } from '../content/site';
+
+interface Props {
+  class?: string;
+  /** where the email chip points (defaults to a mailto: link) */
+  mailHref?: string;
+}
+const { site, lang } = useContent(Astro.currentLocale);
+const { class: className, mailHref = `mailto:${site.email}` } = Astro.props;
+---
+
+<footer class:list={['cbar', className]}>
+  <a class="cbar__mail" href={mailHref}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.8L2.6 10.4l7.6 3.3 3.3 7.6zM10.2 13.7l5.6-5.6"></path></svg>
+    <span>{site.email}</span>
+  </a>
+
+  <ul class="cbar__socials">
+    {
+      site.socials.map((s) => (
+        <li>
+          <a class:list={['soc', `soc--${s.id}`]} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name}>
+            <span class="soc__icon" aria-hidden="true" set:html={socialLogo(s.id, lang)} />
+            <span class="soc__label">{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>
+
+<style>
+  /* ── contact bar ── */
+  .cbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: min(86.1vw, 1640px);
+    margin: clamp(40px, 6vw, 100px) auto 0;
+    padding: 0 clamp(16px, 2.4vw, 40px) 0 clamp(16px, 2.18vw, 36px);
+    height: clamp(64px, 5.87vw, 100px);
+    border-radius: clamp(14px, 1.16vw, 20px);
+    background: #efefef;
+  }
+
+  .cbar__mail {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 0.82vw, 14px);
+    font-size: clamp(16px, 1.78vw, 30px);
+    letter-spacing: -0.01em;
+    color: #0a0a0a;
+    min-width: 0;
+  }
+  .cbar__mail span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .cbar__mail:hover span {
+    text-decoration-color: currentColor;
+  }
+  .cbar__mail svg {
+    flex: none;
+    width: clamp(20px, 1.84vw, 32px);
+    height: auto;
+    fill: none;
+    stroke: #111;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .cbar__socials {
+    display: flex;
+    gap: clamp(4px, 0.655vw, 12px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* the link box stays put (hover target + label anchor); only the icon moves */
+  .soc {
+    position: relative;
+    display: block;
+    width: clamp(40px, 4.09vw, 72px);
+    aspect-ratio: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .soc--instagram {
+    --sr: 3.2deg;
+    --hr: 14deg;
+  }
+  .soc--youtube {
+    --sx: -0.16vw;
+    --sy: 1.5%;
+    --sr: -2.9deg;
+    --hr: -19.4deg;
+  }
+  .soc--github {
+    --sx: -0.09vw;
+    --sy: -7.5%;
+    --sr: 8.7deg;
+    --hr: 21.8deg;
+  }
+  .soc--linkedin {
+    --sr: -3deg;
+    --hr: -22.6deg;
+  }
+
+  .soc__icon {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 24%;
+    background: var(--bg, #fff);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.12),
+      0 6px 12px rgba(0, 0, 0, 0.12);
+    transform: translate(var(--sx, 0px), calc(var(--sy, 0%) + 0.27vw)) rotate(var(--sr, 0deg));
+    transition:
+      transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1),
+      box-shadow 0.3s ease;
+  }
+  /* keycap bevel drawn over the logo */
+  .soc__icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+      inset 0 1.5px 1px rgba(255, 255, 255, 0.4),
+      inset 0 -2.5px 3px rgba(0, 0, 0, 0.22);
+    pointer-events: none;
+  }
+  .soc__icon :global(svg) {
+    display: block;
+    width: var(--logo, 100%);
+    height: var(--logo, 100%);
+  }
+  .soc--instagram .soc__icon {
+    --bg: #fff;
+  }
+  .soc--instagram .soc__icon :global(svg) {
+    width: 106%;
+    height: 106%;
+  }
+  .soc--youtube .soc__icon {
+    --bg: linear-gradient(180deg, #fff, #ececec);
+    --logo: 64%;
+  }
+  .soc--github .soc__icon {
+    --bg: linear-gradient(180deg, #2b2b2d, #0d0d0e);
+    --logo: 60%;
+  }
+  .soc--linkedin .soc__icon {
+    --bg: #fff;
+  }
+  .soc--linkedin .soc__icon :global(svg) {
+    width: 104%;
+    height: 104%;
+  }
+
+  .soc__label {
+    position: absolute;
+    left: 50%;
+    top: 79%;
+    font-size: clamp(11px, 0.887vw, 16px);
+    font-weight: 480;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    color: #111;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 35%);
+    transition:
+      opacity 0.18s ease,
+      transform 0.35s var(--ease-out);
+    pointer-events: none;
+  }
+
+  .soc:hover,
+  .soc:focus-visible {
+    z-index: 2;
+  }
+  .soc:hover .soc__icon,
+  .soc:focus-visible .soc__icon {
+    --sy: -40%;
+    --sr: var(--hr);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.12),
+      0 12px 22px rgba(0, 0, 0, 0.16);
+  }
+  .soc:hover .soc__label,
+  .soc:focus-visible .soc__label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+
+  @media (max-width: 760px) {
+    .cbar {
+      width: calc(100% - 24px);
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
+      padding: 18px 18px 22px;
+      gap: 18px;
+    }
+  }
+</style>

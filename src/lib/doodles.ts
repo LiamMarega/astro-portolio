@@ -274,6 +274,44 @@ export const doodles: Record<string, DoodleDef> = {
     ],
   },
 
+  /* ── /ecommerce ── */
+  ring: {
+    viewBox: '0 0 120 90',
+    width: 3.8,
+    wobble: 1.2,
+    strokes: ['M72 10 C36 4 8 20 10 46 C12 72 52 84 84 76 C108 70 118 50 108 32 C98 14 64 8 38 18'],
+  },
+  underline: {
+    viewBox: '0 0 300 30',
+    width: 6,
+    wobble: 1,
+    strokes: ['M6 20 C60 11 140 7 220 11 C250 13 276 15 294 18'],
+  },
+  curlyArrow: {
+    viewBox: '0 0 120 110',
+    width: 3.6,
+    wobble: 0.8,
+    strokes: ['M10 14 C40 6 70 16 74 40 C78 64 48 70 46 52 C44 34 76 34 90 56 C98 70 100 84 98 98', 'M84 86 L98 100 L110 84'],
+  },
+  seal: {
+    viewBox: '0 0 200 200',
+    width: 4.2,
+    wobble: 1.4,
+    strokes: [circle(100, 100, 84, 0.03), circle(100, 100, 66, 0.07, -1), 'M68 102 L92 126 L136 76'],
+  },
+  quote: {
+    viewBox: '0 0 120 90',
+    width: 5,
+    wobble: 0.8,
+    strokes: ['M48 14 C26 22 14 40 16 62 C18 74 26 80 36 78 C46 76 50 66 46 58 C42 50 32 50 24 56', 'M100 14 C78 22 66 40 68 62 C70 74 78 80 88 78 C98 76 102 66 98 58 C94 50 84 50 76 56'],
+  },
+  bigArrow: {
+    viewBox: '0 0 160 60',
+    width: 4.2,
+    wobble: 0.8,
+    strokes: ['M6 34 C40 24 90 22 148 30', 'M126 12 C134 20 142 26 150 31 C140 36 132 42 124 52'],
+  },
+
   /* ── Nav sun icon ── */
   navSun: {
     viewBox: '0 0 32 32',
