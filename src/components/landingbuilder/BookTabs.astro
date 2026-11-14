@@ -1,0 +1,18 @@
+---
+/* Pestañas laterales tipo separador de libro (desktop). */
+const tabs = [
+  { id: "vsl", label: "El problema", c: "#e8b73a" },
+  { id: "servicios", label: "Servicios", c: "#1a1611" },
+  { id: "resultados", label: "Resultados", c: "#b88e00" },
+  { id: "calificar", label: "Calificar", c: "#d96f32" },
+  { id: "contacto", label: "Contacto", c: "#7a5cc4" },
+];
+---
+
+<nav class="book-tabs" aria-label="Capítulos del cuaderno">
+  {tabs.map((t, i) => (
+    <a class={`bt bt-${i + 1}`} href={`#${t.id}`} style={`--tabc:${t.c}`} data-tab={t.id}>
+      {t.label}
+    </a>
+  ))}
+</nav>

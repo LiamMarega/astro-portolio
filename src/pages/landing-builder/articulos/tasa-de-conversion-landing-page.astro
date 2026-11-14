@@ -1,0 +1,116 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Qué es una buena tasa de conversión para una landing page?",
+    a: "Depende de la industria y del tipo de oferta, pero como referencia 2026: el promedio general ronda entre 4% y 6,6%, el top 25% de páginas supera el 10%, y el cuartil más bajo convierte por debajo del 3%.",
+  },
+  {
+    q: "¿Cómo se calcula la tasa de conversión?",
+    a: "Conversiones divididas por visitantes únicos, por cien. Si 1.000 personas visitan tu landing y 50 completan el formulario, tu tasa es del 5%.",
+  },
+  {
+    q: "¿Qué factor impacta más la conversión?",
+    a: "La fuente de tráfico y la coherencia entre anuncio y página suelen pesar más que la industria. El tráfico de email convierte hasta 77% más que el de búsqueda paga cuando la página está construida específicamente para esa campaña.",
+  },
+];
+---
+
+<Layout slug="tasa-de-conversion-landing-page" faq={faq}>
+  <p>
+    Antes de mejorar tu tasa de conversión necesitás saber dos cosas:
+    <span class="hl">cuánto convertís hoy y contra qué compararte</span>. Acá
+    están los benchmarks 2026 por industria y, más importante, las palancas que
+    separan a las páginas promedio de las que convierten arriba del 10%.
+  </p>
+
+  <h2>Benchmarks 2026: los números de referencia</h2>
+  <p>
+    Los reportes de la industria de este año muestran un panorama claro:
+  </p>
+  <ul>
+    <li>La <strong>mediana general</strong> se ubica entre el 4,3% y el 6,6% según la fuente y la mezcla de industrias.</li>
+    <li>El <strong>top 25%</strong> de landing pages convierte al 10% o más.</li>
+    <li>El <strong>cuartil inferior</strong> queda por debajo del 3%.</li>
+  </ul>
+  <p>Por industria, los promedios orientativos:</p>
+  <table>
+    <thead>
+      <tr><th>Industria</th><th>Conversión promedio</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Eventos y entretenimiento</td><td>~12%</td></tr>
+      <tr><td>Servicios financieros</td><td>~8%</td></tr>
+      <tr><td>Lead gen de servicios (hogar, profesionales)</td><td>~8%</td></tr>
+      <tr><td>SaaS (free trial)</td><td>~7%</td></tr>
+      <tr><td>SaaS / tecnología (general)</td><td>~4%</td></tr>
+      <tr><td>E-commerce</td><td>~3%</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    Si tu landing convierte al 2%, no tenés un problema de tráfico. Tenés una
+    página que deja ir al 98% de las personas que ya pagaste por traer.
+  </blockquote>
+
+  <h2>El dato que casi nadie mira: la fuente del tráfico</h2>
+  <p>
+    Los estudios de 2026 confirman algo contraintuitivo: <strong>la fuente de
+    tráfico impacta más que la industria</strong>. Una misma página puede
+    convertir al 3% con tráfico frío de display y al 9% con tráfico de email.
+    Las implicancias prácticas:
+  </p>
+  <ul>
+    <li>Una landing por campaña, no una landing para todo.</li>
+    <li>El mensaje del anuncio y el titular de la página tienen que ser casi idénticos.</li>
+    <li>Medí la conversión por fuente, no el promedio global que mezcla todo.</li>
+  </ul>
+
+  <h2>Las palancas para pasar del promedio al top 10%</h2>
+  <h3>1. Claridad del mensaje</h3>
+  <p>
+    El visitante tiene que entender qué ofrecés y qué gana en menos de 5
+    segundos. Si tu titular necesita explicación, no es un titular.
+  </p>
+  <h3>2. CTAs personalizados</h3>
+  <p>
+    Los datos muestran que los CTAs personalizados convierten hasta un
+    <strong>202% mejor</strong> que los genéricos. "Quiero mi diagnóstico
+    gratis" supera por paliza a "Enviar".
+  </p>
+  <h3>3. Video</h3>
+  <p>
+    Agregar video relevante puede aumentar conversiones hasta un 86%. Un VSL de
+    90 segundos que explica tu proceso vale más que tres secciones de texto.
+  </p>
+  <h3>4. Velocidad de carga</h3>
+  <p>
+    Cada segundo extra de carga reduce conversiones de forma medible. Si tu
+    LCP supera los 2,5 segundos, ahí está tu primera optimización — lo explico
+    en detalle en
+    <a href="/landing-builder/articulos/velocidad-web-core-web-vitals">velocidad web y Core Web Vitals</a>.
+  </p>
+  <h3>5. Formularios más cortos (o mejor diseñados)</h3>
+  <p>
+    Cada campo innecesario es fricción. Para ofertas premium, un formulario de
+    calificación con opciones cerradas mantiene la calidad del lead sin matar
+    el volumen.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;right:24px;transform:rotate(7deg)"></span>
+    <span class="an-hand">Regla práctica ✓</span>
+    Por debajo del 3%: problema de estructura o mensaje — revisá la
+    <a href="/landing-builder/articulos/como-crear-una-landing-page-que-convierta">anatomía completa</a>.
+    Entre 3% y 7%: optimizá con tests. Arriba del 10%: escalá el tráfico, tu
+    página ya trabaja bien.
+  </div>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

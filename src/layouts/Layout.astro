@@ -1,0 +1,243 @@
+---
+import Navbar from "../components/ui/Navbar.astro";
+import "lenis/dist/lenis.css";
+import NoiseBackground from "../components/ui/NoiseBackground.astro";
+import Analytics from "@vercel/analytics/astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: "en" | "es";
+  navLabels?: { about: string; work: string; contact: string };
+}
+
+const {
+  title,
+  description = "Liam Marega - Frontend Developer specializing in responsive, attractive and functional applications.",
+  lang = "en",
+  navLabels,
+} = Astro.props;
+
+// hreflang alternates: swap the /en or /es prefix, offer both plus x-default
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/(en|es)\/?/, "");
+const enURL = new URL(`/en/${pathWithoutLocale}`, Astro.url).href;
+const esURL = new URL(`/es/${pathWithoutLocale}`, Astro.url).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" />
+    <meta name="author" content="Liam Marega" />
+    <meta
+      name="keywords"
+      content="frontend developer, web development, responsive design, portfolio, Liam Marega"
+    />
+
+    <!-- Performance optimizations -->
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="x-default" href={enURL} />
+
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="/fonts/HelveticaNeueBold.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="preload" href="/images/avatar.webp" as="image" />
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//images.unsplash.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+    <!-- Favicon with multiple sizes -->
+    <link rel="icon" href="/images/avatar.webp" type="image/webp" />
+    <link
+      rel="icon"
+      href="/favicon.ico"
+      type="image/x-icon"
+      sizes="16x16 32x32"
+    />
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/images/avatar.webp" sizes="180x180" />
+
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta
+      property="og:image"
+      content={new URL("/images/avatar.webp", Astro.url).href}
+    />
+    <meta property="og:site_name" content="Liam Marega Portfolio" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta
+      name="twitter:image"
+      content={new URL("/images/avatar.webp", Astro.url).href}
+    />
+
+    <!-- Structured Data -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Liam Marega",
+        jobTitle: "Frontend Developer",
+        description:
+          "Frontend Developer specializing in responsive, attractive and functional applications",
+        url: "https://liammarega.com",
+        image: "https://liammarega.com/images/avatar.webp",
+        sameAs: [
+          "https://github.com/liammarega",
+          "https://www.linkedin.com/in/liam-marega/",
+          "https://instagram.com/liammdev",
+          "https://youtube.com/@liammdev",
+        ],
+      })}
+    />
+
+    <title>{title}</title>
+    <Analytics />
+  </head>
+
+  <body class="overflow-x-hidden bg-black text-white min-h-screen">
+    <Navbar locale={lang} labels={navLabels} />
+    <slot />
+    <NoiseBackground />
+    <!-- <SquareBackground /> -->
+  </body>
+
+  <style is:global>
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("fonts/HelveticaNeueBold.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("fonts/HelveticaBlkIt.ttf") format("truetype");
+      font-style: italic;
+      font-display: swap;
+      font-weight: 800;
+    }
+    @font-face {
+      font-family: "OpenSans";
+      src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "OpenSans";
+      src: url("fonts/OpenSans-Medium.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 500;
+    }
+    @font-face {
+      font-family: "OpenSans";
+      src: url("fonts/OpenSans-Light.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 300;
+    }
+    @font-face {
+      font-family: "OpenSans";
+      src: url("fonts/OpenSans-ExtraBold.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 800;
+    }
+    @font-face {
+      font-family: "OpenSans";
+      src: url("fonts/OpenSans-ExtraBoldItalic.ttf") format("truetype");
+      font-style: italic;
+      font-display: swap;
+      font-weight: 800;
+    }
+
+    ::selection {
+      background: rgba(255, 255, 0, 0.5);
+    }
+
+    html {
+      color-scheme: dark light;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "OpenSans", sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "HelveticaNeue", sans-serif;
+      line-height: 1.2;
+    }
+
+    /* Additional responsive utilities */
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+  <script>
+    import Lenis from "lenis";
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Handle browser resize
+    function handleResize() {
+      // Force refresh if needed
+      if (lenis) {
+        lenis.resize();
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+  </script>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "Liam Marega - Frontend Developer Portfolio",
+  "short_name": "Liam Marega",
+  "description": "Frontend Developer specializing in responsive, attractive and functional applications",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/images/avatar.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/avatar.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "developer", "frontend"],
+  "screenshots": [
+    {
+      "src": "/images/avatar.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+---
+const src = "/images/avatar-withoutbg.png";
+---
+
+<style>
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .avatar-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: white; /* color del contorno */
+        -webkit-mask-image: var(--avatar-mask);
+        mask-image: var(--avatar-mask);
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        transform: scale(1.05); /* grosor del borde */
+        z-index: -1;
+    }
+</style>
+
+<div
+    class="avatar-wrapper absolute bottom-20
+            w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:h-48 lg:w-48
+            xl:h-96 xl:w-96"
+>
+    <img
+        style={`--avatar-mask: url('${src}');`}
+        class="w-full h-full object-contain hover:scale-105
+           transition-transform duration-300
+           animate-slide-in-with-container
+           motion-reduce:transform-none motion-reduce:transition-none"
+        src={src}
+        alt="Liam Marega - Professional Developer Avatar"
+        loading="eager"
+        decoding="async"
+    />
+</div>

@@ -1,0 +1,238 @@
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import Lenis from "lenis";
+
+  // Device and performance detection
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+  const isDesktop = window.innerWidth >= 1024;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const isTouchDevice = window.matchMedia(
+    "(hover: none) and (pointer: coarse)",
+  ).matches;
+
+  // Performance monitoring
+  let performanceIssues = false;
+  let frameCount = 0;
+  let lastTime = performance.now();
+
+  function checkPerformance() {
+    frameCount++;
+    const currentTime = performance.now();
+    const elapsed = currentTime - lastTime;
+
+    if (elapsed >= 1000) {
+      const fps = Math.round((frameCount * 1000) / elapsed);
+      if (fps < 30) {
+        performanceIssues = true;
+        console.warn("Performance issues detected, simplifying animations");
+      }
+      frameCount = 0;
+      lastTime = currentTime;
+    }
+  }
+
+  // Wait for DOM to be ready
+  document.addEventListener("DOMContentLoaded", () => {
+    // Skip animations if user prefers reduced motion
+    if (prefersReducedMotion) {
+      console.log("Reduced motion preferred, skipping animations");
+      return;
+    }
+
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Small delay to ensure everything is loaded
+    setTimeout(() => {
+      // Initialize Lenis smooth scroll (only on desktop and if supported)
+      let lenis: any = null;
+
+      if (isDesktop && !isTouchDevice) {
+        try {
+          lenis = new Lenis({
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: "vertical",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+          });
+
+          function raf(time: number) {
+            lenis.raf(time);
+            checkPerformance();
+            requestAnimationFrame(raf);
+          }
+
+          requestAnimationFrame(raf);
+        } catch (error) {
+          console.warn("Lenis initialization failed:", error);
+        }
+      }
+
+      // Title animation
+      const title = document.querySelector(".gallery-heading.gallery-title");
+      if (title) {
+        // Set initial state
+        gsap.set(title, {
+          visibility: "visible",
+          opacity: 0,
+          scale: isMobile ? 0.8 : 0,
+          filter: isMobile ? "blur(5px)" : "blur(20px)",
+          textShadow: "0 0 0 rgba(255,255,255,0)",
+        });
+
+        // Show timeline - simplified for mobile
+        let titleTimeline = gsap.timeline({ paused: true });
+
+        if (isMobile) {
+          // Simplified animation for mobile
+          titleTimeline.set(title, { visibility: "visible" }).to(title, {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        } else {
+          // Full animation for tablet/desktop
+          titleTimeline
+            .set(title, { visibility: "visible" })
+            .to(title, {
+              opacity: 1,
+              scale: 1.2,
+              filter: "blur(5px)",
+              duration: 0.4,
+              ease: "power2.out",
+            })
+            .to(title, {
+              scale: 1,
+              filter: "blur(0px)",
+              textShadow: "0 0 20px rgba(255,255,255,0.5)",
+              duration: 0.8,
+              ease: "elastic.out(1, 0.3)",
+            });
+        }
+
+        // Hide timeline
+        let titleHideTimeline = gsap.timeline({ paused: true });
+
+        titleHideTimeline.to(title, {
+          opacity: 0,
+          scale: isMobile ? 0.8 : 0.5,
+          filter: isMobile ? "blur(5px)" : "blur(20px)",
+          textShadow: "0 0 0 rgba(255,255,255,0)",
+          duration: isMobile ? 0.3 : 0.5,
+          ease: "power2.in",
+          onComplete: () => {
+            gsap.set(title, { visibility: "hidden" });
+          },
+        });
+
+        // ScrollTrigger for title
+        ScrollTrigger.create({
+          trigger: "#gallery-section",
+          start: isMobile ? "top 80%" : "top 70%",
+          end: isMobile ? "bottom 20%" : "bottom 10%",
+          onEnter: () => {
+            titleHideTimeline.pause();
+            titleTimeline.restart();
+          },
+          onLeave: () => {
+            titleTimeline.pause();
+            titleHideTimeline.restart();
+          },
+          onEnterBack: () => {
+            titleHideTimeline.pause();
+            titleTimeline.restart();
+          },
+          onLeaveBack: () => {
+            titleTimeline.pause();
+            titleHideTimeline.restart();
+          },
+          // markers: true, // Uncomment for debugging
+        });
+      }
+
+      // Gallery images animation
+      const galleryImages = document.querySelectorAll(".img");
+
+      if (galleryImages.length > 0) {
+        // Responsive animation values
+        const animationDistance = isMobile ? -300 : isTablet ? -500 : -700;
+        const staggerAmount = isMobile ? 0.1 : isTablet ? 0.15 : 0.2;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#gallery-section",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: isMobile ? 0.5 : true, // Less scrub on mobile for better performance
+            // markers: true, // Uncomment for debugging
+            onEnter: () => {
+              console.log("Gallery entering view");
+            },
+            // Disable on performance issues
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Simplified animation for mobile/performance issues
+        if (isMobile || performanceIssues) {
+          tl.to(".img", {
+            stagger: staggerAmount,
+            y: animationDistance,
+            ease: "none",
+          });
+        } else {
+          // Full animation for desktop
+          tl.to(".img", {
+            stagger: staggerAmount,
+            y: animationDistance,
+            ease: "none",
+          });
+        }
+      }
+
+      // Refresh ScrollTrigger
+      ScrollTrigger.refresh();
+
+      // Handle resize with debounce
+      let resizeTimeout: number;
+      const handleResize = () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 250);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      // Cleanup on page unload
+      window.addEventListener("beforeunload", () => {
+        if (lenis) {
+          lenis.destroy();
+        }
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        window.removeEventListener("resize", handleResize);
+      });
+
+      // Handle visibility change (tab switching)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // Pause animations when tab is hidden
+          gsap.globalTimeline.pause();
+        } else {
+          // Resume animations when tab is visible
+          gsap.globalTimeline.resume();
+          ScrollTrigger.refresh();
+        }
+      });
+    }, 500);
+  });
+</script>

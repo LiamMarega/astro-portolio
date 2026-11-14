@@ -1,28 +1,12 @@
 ---
-import Base from '../layouts/Base.astro';
-import Sky from '../components/Sky.astro';
-import TopBlur from '../components/TopBlur.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import Work from '../components/Work.astro';
-import Story from '../components/Story.astro';
-import Chat from '../components/Chat.astro';
-import CaseStudy from '../components/CaseStudy.astro';
+// Root "/" — this is the URL that lives on the CV, LinkedIn, Instagram bio,
+// etc. It never renders content itself; it picks a locale and redirects to
+// /en/ or /es/ so the rest of the site stays static and cacheable.
+export const prerender = false;
+
+import { resolveLocale } from "../i18n/geo";
+
+const locale = resolveLocale(Astro);
+
+return Astro.redirect(`/${locale}/${Astro.url.search}`, 302);
 ---
-
-<Base>
-  <Sky />
-  <TopBlur />
-  <Nav caseLayer />
-  <main id="top">
-    <Hero />
-    <Work />
-    <Story />
-    <Chat />
-  </main>
-  <CaseStudy />
-</Base>
-
-<script>
-  import '../scripts/main';
-</script>

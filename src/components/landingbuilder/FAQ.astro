@@ -1,0 +1,21 @@
+---
+const items = [
+  { q: "¿En cuánto tiempo está lista mi landing?", a: "Entre 7 y 21 días hábiles según complejidad y flujo de feedback." },
+  { q: "¿Incluye copy o tengo que enviarlo?", a: "Incluye copy estratégico enfocado en conversión." },
+  { q: "¿Puedo editar mi landing después?", a: "Sí, te entrego todo listo para que vos o tu equipo puedan editar." },
+  { q: "¿Qué plataforma usás?", a: "Desarrollo a medida (Webflow / Next.js) según necesidades del proyecto." },
+  { q: "¿Ofrecés garantía?", a: "Sí, 14 días de soporte post-lanzamiento para ajustes y optimizaciones." },
+];
+---
+
+<section id="faq" class="block" style="padding-top:50px;padding-bottom:40px">
+  <div class="kicker reveal" style="margin-bottom:28px">Preguntas frecuentes</div>
+  <div class="faq-grid">
+    {items.map((it, i) => (
+      <div class={`faq-item reveal d${i + 1}`}>
+        <h4>{it.q}</h4>
+        <p>{it.a}</p>
+      </div>
+    ))}
+  </div>
+</section>

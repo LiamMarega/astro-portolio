@@ -1,23 +1,46 @@
 {
-  "name": "sunny-portfolio",
+  "name": "astro-practice",
   "type": "module",
-  "version": "1.0.0",
-  "private": true,
+  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "start": "astro dev",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@fontsource-variable/caveat": "^5.3.0",
-    "@fontsource-variable/inter": "^5.3.0",
-    "@fontsource/modak": "^5.3.0",
-    "astro": "^7.4.12",
-    "lenis": "^1.3.27",
-    "lucide-static": "^1.72.0"
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/vercel": "^8.2.11",
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/permanent-marker": "^5.2.7",
+    "@fontsource/source-serif-4": "^5.2.9",
+    "@fontsource/space-grotesk": "^5.2.10",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.183.1",
+    "@vercel/analytics": "^2.0.1",
+    "astro": "^5.16.6",
+    "astro-seo": "^1.1.0",
+    "framer-motion": "^12.34.3",
+    "gsap": "^3.13.0",
+    "lenis": "^1.1.13",
+    "material-icons": "^1.13.14",
+    "motion": "^12.34.3",
+    "ogl": "^1.0.11",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "resend": "^6.12.4",
+    "tailwindcss": "^3.4.1",
+    "three": "^0.183.2",
+    "typescript": "^5.3.3"
   },
-  "engines": {
-    "node": ">=22.23.4"
+  "devDependencies": {
+    "terser": "^5.44.1"
   }
 }

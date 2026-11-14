@@ -1,0 +1,126 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Cuántas secciones debe tener una landing page?",
+    a: "Entre 7 y 10 para ofertas de servicios: hero, prueba social, problema, solución, oferta, proceso, caso real, FAQ y CTA final. Ofertas simples (un lead magnet) pueden funcionar con 3 o 4.",
+  },
+  {
+    q: "¿Qué es lo más importante en una landing page?",
+    a: "El titular del hero. El 80% de los visitantes decide en los primeros 5 segundos si sigue leyendo. Si el titular no comunica un beneficio claro para un público específico, el resto de la página no importa.",
+  },
+  {
+    q: "¿Cuántos CTA debe tener una landing page?",
+    a: "Una sola acción, repetida varias veces. El error no es repetir el botón, es ofrecer acciones distintas que compiten entre sí.",
+  },
+];
+---
+
+<Layout slug="como-crear-una-landing-page-que-convierta" faq={faq}>
+  <p>
+    Hay miles de plantillas de landing pages, pero muy pocas explican
+    <span class="hl">por qué cada sección va donde va</span>. Esta es la
+    estructura que uso en cada proyecto, con la lógica psicológica detrás de
+    cada bloque. No es decoración: es una conversación de ventas ordenada.
+  </p>
+
+  <h2>1. El hero: 5 segundos para ganar o perder</h2>
+  <p>
+    Lo primero que ve tu visitante tiene que responder tres preguntas al
+    instante: <strong>¿qué es esto? ¿es para mí? ¿qué gano?</strong>
+  </p>
+  <ul>
+    <li><strong>Titular:</strong> beneficio concreto + público específico. "Landings que convierten tráfico en oportunidades reales" le habla a quien ya invierte en tráfico.</li>
+    <li><strong>Subtítulo:</strong> el cómo y el para quién, en una frase.</li>
+    <li><strong>CTA primario:</strong> visible sin scrollear, con un verbo de acción.</li>
+    <li><strong>Señal de confianza inmediata:</strong> una foto real, un dato, una promesa verificable ("respuesta en menos de 24h").</li>
+  </ul>
+
+  <h2>2. Prueba social temprana</h2>
+  <p>
+    Antes de pedir nada, demostrá que otros ya confiaron. Logos, nichos
+    atendidos, cantidad de proyectos. El cerebro busca atajos: "si funcionó
+    para gente como yo, puede funcionar para mí".
+  </p>
+
+  <h2>3. El problema: agitar antes de resolver</h2>
+  <p>
+    La sección más subestimada. Describí el problema de tu cliente
+    <em>mejor de lo que él mismo lo describiría</em>: "tu tráfico no es el
+    problema, tu página sí". Cuando alguien siente que entendés su situación,
+    asume que también tenés la solución.
+  </p>
+
+  <h2>4. La solución y la oferta</h2>
+  <p>
+    Recién acá hablás de vos. Qué hacés, cómo lo hacés y qué lo hace diferente.
+    Tres reglas:
+  </p>
+  <ul>
+    <li>Beneficios antes que características ("cargas en menos de 2 segundos" → "no perdés ventas por lentitud").</li>
+    <li>Especificidad: "desde USD 600" convierte más que "precios accesibles".</li>
+    <li>Reducción de riesgo: garantías, soporte post-entrega, proceso claro.</li>
+  </ul>
+
+  <h2>5. El proceso: eliminar el miedo a lo desconocido</h2>
+  <p>
+    Mostrá los pasos: descubrimiento → estrategia → diseño → desarrollo →
+    lanzamiento. Un proceso visible transmite profesionalismo y baja la
+    ansiedad de compra. La gente no compra lo que no entiende.
+  </p>
+
+  <h2>6. Caso real con números</h2>
+  <p>
+    "+214% en conversiones" vale más que diez párrafos de promesas. Si todavía
+    no tenés casos, usá resultados de proyectos personales o un antes/después
+    visual. Los números concretos son el lenguaje de la confianza. Para saber
+    qué números son buenos, mirá los
+    <a href="/landing-builder/articulos/tasa-de-conversion-landing-page">benchmarks de conversión 2026</a>.
+  </p>
+
+  <h2>7. Calificación: el filtro que aumenta la calidad</h2>
+  <p>
+    Un mini-formulario de calificación ("¿calificamos para trabajar juntos?")
+    hace dos cosas: filtra curiosos y aumenta el valor percibido. Lo que cuesta
+    conseguir, se desea más. Formularios de 4-6 preguntas con opciones cerradas
+    convierten mejor que campos de texto libre.
+  </p>
+
+  <h2>8. FAQ: las objeciones, respondidas antes de que existan</h2>
+  <p>
+    Cada pregunta frecuente es una objeción de venta disfrazada. "¿Cuánto
+    tarda?" = miedo a proyectos eternos. "¿Incluye copy?" = miedo a costos
+    ocultos. Respondelas con honestidad y números concretos. Bonus: el marcado
+    FAQ con Schema.org te da visibilidad extra en Google.
+  </p>
+
+  <h2>9. CTA final: el cierre</h2>
+  <p>
+    Repetí la promesa central y la acción. A esta altura solo llegan los
+    interesados de verdad: no los marees con opciones nuevas. Un titular
+    emocional, un botón, una línea de confianza.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;right:24px;transform:rotate(7deg)"></span>
+    <span class="an-hand">Checklist rápido ✓</span>
+    Titular con beneficio + público · CTA repetido y único · prueba social con
+    números · proceso visible · FAQ que responde objeciones · carga en menos de
+    3 segundos · mobile primero.
+  </div>
+
+  <h2>Los 3 errores que matan conversiones</h2>
+  <ul>
+    <li><strong>Hablar de vos antes que del problema.</strong> A nadie le importa tu historia hasta que demuestres que entendés la suya.</li>
+    <li><strong>CTAs múltiples que compiten.</strong> "Comprá", "Suscribite" y "Seguime en Instagram" en la misma página = parálisis de decisión.</li>
+    <li><strong>Ignorar la velocidad.</strong> El mejor copy del mundo no convierte si la página tarda 6 segundos en cargar. Más sobre esto en <a href="/landing-builder/articulos/velocidad-web-core-web-vitals">Core Web Vitals y conversión</a>.</li>
+  </ul>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

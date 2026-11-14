@@ -1,0 +1,11 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PortfolioPage from "../../../components/Portfolio/PortfolioPage.astro";
+import { getPortfolioCopy } from "../../../i18n/portfolio";
+
+const t = getPortfolioCopy("en");
+---
+
+<Layout title={t.meta.title} description={t.meta.description} lang="en" navLabels={t.nav}>
+  <PortfolioPage locale="en" />
+</Layout>

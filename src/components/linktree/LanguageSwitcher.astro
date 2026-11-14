@@ -1,0 +1,67 @@
+---
+import type { Locale } from "../../i18n/linktree";
+
+interface Props {
+  currentLocale: Locale;
+}
+
+const { currentLocale } = Astro.props;
+
+// Swap the leading /en or /es segment of the current path, keep the rest
+// (hash, sub-path) intact so switching language never loses your place.
+const path = Astro.url.pathname;
+const rest = path.replace(/^\/(en|es)\/?/, "");
+const buildHref = (locale: Locale) => `/${locale}/${rest}`.replace(/\/+$/, "/") + Astro.url.search;
+
+const enHref = buildHref("en");
+const esHref = buildHref("es");
+---
+
+<div
+  class="fixed top-4 right-4 sm:top-5 sm:right-5 z-[60] flex items-center gap-0.5 rounded-full border border-white/10 bg-black/50 backdrop-blur-md px-1 py-1 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]"
+  data-lang-switcher
+  role="group"
+  aria-label="Language / Idioma"
+>
+  <a
+    href={enHref}
+    data-lang="en"
+    aria-current={currentLocale === "en" ? "true" : undefined}
+    class:list={[
+      "cursor-target px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide transition-all duration-200",
+      currentLocale === "en"
+        ? "bg-[#E2FF00] text-black"
+        : "text-white/50 hover:text-white",
+    ]}
+  >
+    EN
+  </a>
+  <a
+    href={esHref}
+    data-lang="es"
+    aria-current={currentLocale === "es" ? "true" : undefined}
+    class:list={[
+      "cursor-target px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide transition-all duration-200",
+      currentLocale === "es"
+        ? "bg-[#E2FF00] text-black"
+        : "text-white/50 hover:text-white",
+    ]}
+  >
+    ES
+  </a>
+</div>
+
+<script>
+  // Remember the explicit choice so the root "/" redirect (geo/cookie based)
+  // respects it on future visits, regardless of where the visitor is.
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-lang-switcher] a[data-lang]")
+    .forEach((a) => {
+      a.addEventListener("click", () => {
+        const locale = a.getAttribute("data-lang");
+        if (locale) {
+          document.cookie = `liam_lang=${locale}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+        }
+      });
+    });
+</script>

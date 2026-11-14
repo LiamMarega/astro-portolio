@@ -1,0 +1,45 @@
+---
+import AboutMe1 from "../About/parts/AboutMe1.astro";
+import AboutMe2 from "../About/parts/AboutMe2.astro";
+import AboutMe3 from "../About/parts/AboutMe3.astro";
+import type { Locale } from "../../i18n/linktree";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+---
+
+<section
+  id="about"
+  class="w-full relative overflow-hidden mt-20 sm:mt-24 md:mt-32 lg:mt-40"
+  role="region"
+  aria-label="About me section"
+>
+  <div class="min-h-screen flex flex-col md:flex-row md:w-[300%]">
+    <div
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 1"
+    >
+      <AboutMe1 locale={locale} />
+    </div>
+    <div
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 2"
+    >
+      <AboutMe2 locale={locale} />
+    </div>
+    <div
+      class="section w-full md:w-1/3 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 min-h-[50vh] md:min-h-screen"
+      role="article"
+      aria-label="About me - Part 3"
+    >
+      <AboutMe3 locale={locale} />
+    </div>
+  </div>
+</section>
+
+<script src="../../utils/gsap.js"></script>
