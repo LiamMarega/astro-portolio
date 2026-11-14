@@ -1,0 +1,110 @@
+---
+import * as lucide from 'lucide-static';
+import SectionHead from './SectionHead.astro';
+import TagsArt from '../TagsArt.astro';
+import { ecommerce } from '../../content/ecommerce';
+import { site } from '../../content/site';
+
+const inc = ecommerce.included;
+const icon = (name: string) =>
+  ((lucide as Record<string, string>)[name] ?? '').replace(/\s(width|height)="24"/g, '').replace('class="', 'aria-hidden="true" focusable="false" class="');
+---
+
+<section class="esec einc" aria-labelledby="inc-title">
+  <SectionHead note={inc.note} title={inc.title} intro={inc.intro} id="inc-title" />
+
+  <div class="einc__grid">
+    <div class="einc__art" data-reveal>
+      <TagsArt tags={inc.tags} name={site.name} label={`Incluye: ${inc.tags.map((t) => t.label).join(', ')}`} />
+    </div>
+    <ul class="einc__list" data-reveal style="--reveal-delay:.08s">
+      {
+        inc.items.map((it) => (
+          <li>
+            <span class="einc__icon" set:html={icon(it.icon)} />
+            <span>
+              <b>{it.title}</b>
+              <small>{it.text}</small>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .einc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(10px, 1.09vw, 18px);
+    margin-top: clamp(34px, 4vw, 64px);
+  }
+  .einc__art {
+    position: relative;
+    min-height: clamp(380px, 38vw, 660px);
+    border-radius: var(--radius-bento);
+    background: var(--card);
+    overflow: hidden;
+  }
+  .einc__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: start;
+    gap: clamp(18px, 1.9vw, 32px) clamp(16px, 2vw, 34px);
+    margin: 0;
+    padding: clamp(22px, 2.73vw, 48px);
+    list-style: none;
+    border-radius: var(--radius-bento);
+    background: var(--card);
+  }
+  .einc__list li {
+    display: flex;
+    gap: 14px;
+  }
+  .einc__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: clamp(38px, 2.9vw, 48px);
+    aspect-ratio: 1;
+    border-radius: 26%;
+    background: #fff;
+    color: #111;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  .einc__icon :global(svg) {
+    width: 52%;
+    height: 52%;
+    stroke-width: 1.8;
+  }
+  .einc__list b {
+    display: block;
+    font-size: clamp(16px, 1.25vw, 21px);
+    font-weight: 520;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .einc__list small {
+    display: block;
+    margin-top: 4px;
+    font-size: clamp(14px, 1vw, 16.5px);
+    line-height: 1.38;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 900px) {
+    .einc__grid {
+      grid-template-columns: 1fr;
+    }
+    .einc__art {
+      min-height: 0;
+      aspect-ratio: 1 / 0.9;
+    }
+  }
+  @media (max-width: 560px) {
+    .einc__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

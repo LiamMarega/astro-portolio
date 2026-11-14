@@ -1,0 +1,232 @@
+---
+import { site } from '../content/site';
+
+interface Props {
+  class?: string;
+  /** where the email chip points (defaults to a mailto: link) */
+  mailHref?: string;
+}
+const { class: className, mailHref = `mailto:${site.email}` } = Astro.props;
+---
+
+<footer class:list={['cbar', className]}>
+  <a class="cbar__mail" href={mailHref}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.8L2.6 10.4l7.6 3.3 3.3 7.6zM10.2 13.7l5.6-5.6"></path></svg>
+    <span>{site.email}</span>
+  </a>
+
+  <ul class="cbar__socials">
+    {
+      site.socials.map((s) => (
+        <li>
+          <a class:list={['soc', `soc--${s.id}`]} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name}>
+            <span class="soc__icon" aria-hidden="true">
+              {s.id === 'x' && (
+                <svg viewBox="0 0 64 64">
+                  <g transform="translate(32 32) scale(0.86) translate(-32 -32)">
+                    <path d="M15 14h11.5l9 12.6L46.4 14h5.1L37.9 29.6 52 50H40.5l-9.8-13.8L18.4 50h-5.1l14.9-17.1z" fill="none" stroke="#d6d6d6" stroke-width="2.8" stroke-linejoin="round" />
+                    <path d="M20.5 17.4h4.6l18.6 29.2h-4.6z" fill="#d6d6d6" />
+                  </g>
+                </svg>
+              )}
+              {s.id === 'dribbble' && (
+                <svg viewBox="0 0 64 64">
+                  <g transform="translate(32 32) scale(2.08) translate(-12 -12)" fill="none" stroke="#b9539e" stroke-width="1.4" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32M8.56 2.75c4.37 6 6 9.42 8 17.72" />
+                  </g>
+                </svg>
+              )}
+              {s.id === 'instagram' && (
+                <svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="4.6">
+                  <rect x="10.5" y="10.5" width="43" height="43" rx="13" />
+                  <circle cx="32" cy="32" r="10.6" />
+                  <circle cx="44" cy="20.6" r="1.4" fill="#fff" stroke-width="2.8" />
+                </svg>
+              )}
+              {s.id === 'linkedin' && (
+                <svg viewBox="0 0 64 64">
+                  <g transform="translate(32 33) scale(1.1) translate(-32 -33)" fill="#e2e6ee">
+                    <rect x="16" y="26" width="7.4" height="23" rx="1.2" />
+                    <circle cx="19.7" cy="18.6" r="4.4" />
+                    <path d="M28.6 26h7v3.4c1.5-2.6 4.3-4 7.6-4 6 0 7.6 3.9 7.6 9.6V49h-7.4V36.4c0-3-.8-4.8-3.4-4.8-2.8 0-4 2-4 5V49h-7.4z" />
+                  </g>
+                </svg>
+              )}
+            </span>
+            <span class="soc__label">{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>
+
+<style>
+  /* ── contact bar ── */
+  .cbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: min(86.1vw, 1640px);
+    margin: clamp(40px, 6vw, 100px) auto 0;
+    padding: 0 clamp(16px, 2.4vw, 40px) 0 clamp(16px, 2.18vw, 36px);
+    height: clamp(64px, 5.87vw, 100px);
+    border-radius: clamp(14px, 1.16vw, 20px);
+    background: #efefef;
+  }
+
+  .cbar__mail {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 0.82vw, 14px);
+    font-size: clamp(16px, 1.78vw, 30px);
+    letter-spacing: -0.01em;
+    color: #0a0a0a;
+    min-width: 0;
+  }
+  .cbar__mail span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .cbar__mail:hover span {
+    text-decoration-color: currentColor;
+  }
+  .cbar__mail svg {
+    flex: none;
+    width: clamp(20px, 1.84vw, 32px);
+    height: auto;
+    fill: none;
+    stroke: #111;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .cbar__socials {
+    display: flex;
+    gap: clamp(4px, 0.655vw, 12px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* the link box stays put (hover target + label anchor); only the icon moves */
+  .soc {
+    position: relative;
+    display: block;
+    width: clamp(40px, 4.09vw, 72px);
+    aspect-ratio: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .soc--x {
+    --sr: 3.2deg;
+    --hr: 14deg;
+  }
+  .soc--dribbble {
+    --sx: -0.16vw;
+    --sy: 1.5%;
+    --sr: -2.9deg;
+    --hr: -19.4deg;
+  }
+  .soc--instagram {
+    --sx: -0.09vw;
+    --sy: -7.5%;
+    --sr: 8.7deg;
+    --hr: 21.8deg;
+  }
+  .soc--linkedin {
+    --sr: -3deg;
+    --hr: -22.6deg;
+  }
+
+  .soc__icon {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 24%;
+    background: var(--bg);
+    box-shadow:
+      inset 0 1.5px 1px rgba(255, 255, 255, 0.35),
+      inset 0 -2.5px 3px rgba(0, 0, 0, 0.22),
+      0 1px 2px rgba(0, 0, 0, 0.12),
+      0 6px 12px rgba(0, 0, 0, 0.12);
+    transform: translate(var(--sx, 0px), calc(var(--sy, 0%) + 0.27vw)) rotate(var(--sr, 0deg));
+    transition:
+      transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1),
+      box-shadow 0.3s ease;
+  }
+  .soc__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .soc--x .soc__icon {
+    --bg: linear-gradient(180deg, #353536, #1b1b1c);
+  }
+  .soc--dribbble .soc__icon {
+    --bg: linear-gradient(180deg, #fbb0e3, #f6a0d9);
+  }
+  .soc--instagram .soc__icon {
+    --bg: radial-gradient(circle at 22% 108%, #ffdd7a 0%, #fd9a38 22%, #f24a55 46%, #d9307f 64%, #a63ab0 84%, #8540c4 100%);
+  }
+  .soc--linkedin .soc__icon {
+    --bg: linear-gradient(180deg, #2c5cbd, #1b4596);
+  }
+
+  .soc__label {
+    position: absolute;
+    left: 50%;
+    top: 79%;
+    font-size: clamp(11px, 0.887vw, 16px);
+    font-weight: 480;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    color: #111;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 35%);
+    transition:
+      opacity 0.18s ease,
+      transform 0.35s var(--ease-out);
+    pointer-events: none;
+  }
+
+  .soc:hover,
+  .soc:focus-visible {
+    z-index: 2;
+  }
+  .soc:hover .soc__icon,
+  .soc:focus-visible .soc__icon {
+    --sy: -40%;
+    --sr: var(--hr);
+    box-shadow:
+      inset 0 1.5px 1px rgba(255, 255, 255, 0.35),
+      inset 0 -2.5px 3px rgba(0, 0, 0, 0.22),
+      0 2px 4px rgba(0, 0, 0, 0.12),
+      0 12px 22px rgba(0, 0, 0, 0.16);
+  }
+  .soc:hover .soc__label,
+  .soc:focus-visible .soc__label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 760px) {
+    .cbar {
+      width: calc(100% - 24px);
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
+      padding: 18px 18px 22px;
+      gap: 18px;
+    }
+  }
+</style>

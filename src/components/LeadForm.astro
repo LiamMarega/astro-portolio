@@ -1,0 +1,905 @@
+---
+/**
+ * Multi-step lead form. Everything it says comes from a LeadFormConfig
+ * (see src/lib/forms.ts); the behaviour lives in src/scripts/leadform.ts.
+ */
+import * as lucide from 'lucide-static';
+import Doodle from './Doodle.astro';
+import Sticker from './Sticker.astro';
+import type { FormField, LeadFormConfig } from '../lib/forms';
+import { site } from '../content/site';
+
+interface Props {
+  config: LeadFormConfig;
+  id?: string;
+  class?: string;
+}
+const { config, id = `lf-${config.source}`, class: className } = Astro.props;
+const endpoint = site.leadEndpoint;
+const t = config.text;
+const total = config.steps.length;
+const fmt = (s: string, n: number) => s.replace('{n}', String(n)).replace('{total}', String(total));
+
+const icon = (name?: string) => {
+  if (!name) return '';
+  const svg = (lucide as Record<string, string>)[name] ?? '';
+  return svg.replace(/\s(width|height)="24"/g, '').replace('class="', 'aria-hidden="true" focusable="false" class="');
+};
+const fid = (f: FormField) => `${id}-${f.name}`;
+const isLoneChoice = (fields: FormField[]) => fields.length === 1 && fields[0].kind === 'choice';
+---
+
+<div class:list={['lf', className]} data-lead-form-root>
+  <form
+    id={id}
+    class="lf__form"
+    data-lead-form
+    data-source={config.source}
+    data-lang={config.lang}
+    data-endpoint={endpoint}
+    data-mail={site.email}
+    data-text={JSON.stringify(t)}
+    action={endpoint || undefined}
+    method="post"
+    novalidate
+  >
+    <div class="lf__head">
+      <p class="lf__count hand" data-lf-count>{fmt(t.step, 1)}</p>
+      <div class="lf__bar" role="progressbar" aria-label={fmt(t.step, 1)} aria-valuemin="1" aria-valuemax={total} aria-valuenow="1" data-lf-bar>
+        <i style={`--p:${(1 / total).toFixed(4)}`}></i>
+      </div>
+    </div>
+
+    {
+      config.hidden?.map((h) => (
+        <input type="hidden" name={h.name} value="" data-lf-hidden data-label={h.label} data-chip={h.chip ? '' : undefined} />
+      ))
+    }
+    {
+      config.hidden?.some((h) => h.chip) && (
+        <p class="lf__chosen" data-lf-chosen hidden>
+          <span class="lf__chosen-label">{t.chosen}</span>
+          <b data-lf-chosen-value></b>
+          <button type="button" class="lf__chosen-x" data-lf-chosen-clear aria-label={t.clear}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 7l10 10M17 7L7 17" />
+            </svg>
+          </button>
+        </p>
+      )
+    }
+
+    <div class="lf__steps" data-lf-steps>
+      {
+        config.steps.map((step, si) => (
+          <section class:list={['lf__step', { 'is-active': si === 0 }]} data-lf-step={si} role="group" aria-labelledby={`${id}-t${si}`}>
+            <h3 class="lf__title" id={`${id}-t${si}`} tabindex="-1">
+              {step.title}
+            </h3>
+            {step.hint && <p class="lf__hint">{step.hint}</p>}
+
+            <div class="lf__fields">
+              {step.fields.map((f) =>
+                f.kind === 'choice' ? (
+                  <fieldset
+                    class:list={['lf__field', 'lf__choice', `lf__choice--${f.look ?? 'cards'}`]}
+                    data-lf-field
+                    data-name={f.name}
+                    data-kind="choice"
+                    data-required={f.required ? '' : undefined}
+                    data-auto={isLoneChoice(step.fields) && !f.multiple ? '' : undefined}
+                    aria-describedby={`${fid(f)}-err`}
+                  >
+                    <legend class:list={['lf__label', { 'sr-only': isLoneChoice(step.fields) }]}>
+                      {f.label ?? step.title}
+                      {!f.required && !isLoneChoice(step.fields) && <span class="lf__optional">({t.optional})</span>}
+                    </legend>
+                    <div class="lf__opts">
+                      {f.options.map((o) => (
+                        <label class="lf__opt">
+                          <input type={f.multiple ? 'checkbox' : 'radio'} name={f.name} value={o.value ?? o.label} data-label={o.label} />
+                          <span class="lf__optbox">
+                            {o.icon && <span class="lf__opticon" set:html={icon(o.icon)} />}
+                            <span class="lf__opttext">{o.label}</span>
+                            <span class="lf__tick" aria-hidden="true">
+                              <svg viewBox="0 0 24 24">
+                                <path d="M6 12.5l4 4 8-9" />
+                              </svg>
+                            </span>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <p class="lf__err" id={`${fid(f)}-err`} data-lf-err aria-live="polite" />
+                  </fieldset>
+                ) : (
+                  <div
+                    class:list={['lf__field', { 'lf__field--half': f.kind !== 'textarea' && f.half }]}
+                    data-lf-field
+                    data-name={f.name}
+                    data-kind={f.kind}
+                    data-required={f.required ? '' : undefined}
+                  >
+                    <label class="lf__label" for={fid(f)}>
+                      {f.label}
+                      {!f.required && <span class="lf__optional">({t.optional})</span>}
+                    </label>
+                    {f.kind === 'textarea' ? (
+                      <textarea
+                        class="lf__input lf__input--area"
+                        id={fid(f)}
+                        name={f.name}
+                        rows={f.rows ?? 4}
+                        placeholder={f.placeholder}
+                        maxlength={f.maxlength}
+                        aria-required={f.required ? 'true' : undefined}
+                        aria-describedby={`${fid(f)}-err`}
+                      />
+                    ) : (
+                      <input
+                        class="lf__input"
+                        id={fid(f)}
+                        name={f.name}
+                        type={f.kind === 'url' ? 'text' : f.kind}
+                        inputmode={f.kind === 'url' ? 'url' : f.kind === 'tel' ? 'tel' : f.kind === 'email' ? 'email' : undefined}
+                        autocomplete={f.autocomplete}
+                        placeholder={f.placeholder}
+                        maxlength={f.maxlength}
+                        autocapitalize={f.kind === 'email' || f.kind === 'url' ? 'off' : undefined}
+                        spellcheck={f.kind === 'email' || f.kind === 'url' ? 'false' : undefined}
+                        aria-required={f.required ? 'true' : undefined}
+                        aria-describedby={`${fid(f)}-err`}
+                      />
+                    )}
+                    <p class="lf__err" id={`${fid(f)}-err`} data-lf-err aria-live="polite" />
+                  </div>
+                ),
+              )}
+            </div>
+
+            <div class="lf__nav">
+              {si > 0 && (
+                <button type="button" class="lf__back" data-lf-back>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15 5l-7 7 7 7" />
+                  </svg>
+                  {t.back}
+                </button>
+              )}
+              {si < total - 1 ? (
+                <button type="button" class="lf__btn" data-lf-next>
+                  {t.next}
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h13M13 6l6 6-6 6" />
+                  </svg>
+                </button>
+              ) : (
+                <button type="submit" class="lf__btn lf__btn--send" data-lf-submit>
+                  <span class="lf__send-label">{t.submit}</span>
+                  <span class="lf__send-busy" aria-hidden="true">
+                    <i />
+                    {t.sending}
+                  </span>
+                </button>
+              )}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+
+    <!-- bots fill every field; people never see this one -->
+    <div class="lf__hp" aria-hidden="true">
+      <label>Website <input type="text" name="company_site" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <p class="lf__privacy">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z M9 12l2 2 4-4" /></svg>
+      {t.privacy}
+    </p>
+  </form>
+
+  <div class="lf__panel lf__done" data-lf-success hidden tabindex="-1" role="status">
+    <div class="lf__burst" aria-hidden="true">
+      <Doodle name="sparkles" seed={`${id}-s1`} class="lf__spark lf__spark--a" duration={0.6} />
+      <Doodle name="sparkles" seed={`${id}-s2`} class="lf__spark lf__spark--b" duration={0.6} delay={0.15} />
+      <span class="lf__sticker"><Sticker type="smiley" uid={`${id}-ok`} /></span>
+    </div>
+    <h3 class="lf__panel-title" data-lf-success-title>{t.success.title}</h3>
+    <p class="lf__panel-body" data-lf-success-body>{t.success.body}</p>
+    {
+      t.success.steps && (
+        <ol class="lf__next-steps">
+          {t.success.steps.map((s, i) => (
+            <li>
+              <span>{i + 1}</span>
+              {s}
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </div>
+
+  <div class="lf__panel lf__fail" data-lf-error hidden tabindex="-1" role="alert">
+    <h3 class="lf__panel-title">{t.error.title}</h3>
+    <p class="lf__panel-body">{t.error.body}</p>
+    <div class="lf__fail-actions">
+      <a class="lf__btn" href={`mailto:${site.email}`} data-lf-mail>
+        {t.error.mail}
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.8L2.6 10.4l7.6 3.3 3.3 7.6zM10.2 13.7l5.6-5.6" /></svg>
+      </a>
+      <button type="button" class="lf__back" data-lf-retry>{t.error.retry}</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lf {
+    --lf-pad: clamp(20px, 3.1vw, 52px);
+    --lf-radius: clamp(14px, 1.2vw, 18px);
+    position: relative;
+    border-radius: var(--radius-card);
+    background: var(--card);
+    padding: var(--lf-pad);
+    scroll-margin-top: 90px;
+  }
+
+  .lf__form[hidden],
+  .lf__panel[hidden] {
+    display: none;
+  }
+
+  /* ── progress ── */
+  .lf__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .lf__count {
+    flex: none;
+    font-size: clamp(20px, 1.7vw, 28px);
+    line-height: 1;
+    color: #858585;
+    transform: rotate(-2deg);
+  }
+  .lf__bar {
+    position: relative;
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: #e2e2e2;
+    overflow: hidden;
+  }
+  .lf__bar i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--p, 0.25) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, #fec81a, #ffd60a 60%, #ffe24d);
+    transition: width 0.6s var(--ease-spring);
+  }
+
+  /* chip for values picked elsewhere on the page (e.g. the plan) */
+  .lf__chosen {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 6px 6px 6px 14px;
+    border-radius: 999px;
+    background: #0b0b0b;
+    color: #bdbdbd;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+  .lf__chosen[hidden] {
+    display: none;
+  }
+  .lf__chosen b {
+    color: var(--sun-text);
+    font-weight: 520;
+  }
+  .lf__chosen-x {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #8a8a8a;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+  .lf__chosen-x:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .lf__chosen-x svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  /* ── steps ── */
+  .lf__steps {
+    position: relative;
+  }
+  :global(.js) .lf__step:not(.is-active) {
+    display: none;
+  }
+  .lf__step + .lf__step {
+    /* without JS every step is visible, stacked */
+    margin-top: 40px;
+  }
+  :global(.js) .lf__step + .lf__step {
+    margin-top: 0;
+  }
+  .lf__step.is-entering {
+    animation: lf-in 0.5s var(--ease-out) both;
+  }
+  .lf__step.is-entering.is-back {
+    animation-name: lf-in-back;
+  }
+  @keyframes lf-in {
+    from {
+      opacity: 0;
+      transform: translate3d(28px, 0, 0);
+    }
+  }
+  @keyframes lf-in-back {
+    from {
+      opacity: 0;
+      transform: translate3d(-28px, 0, 0);
+    }
+  }
+
+  .lf__title {
+    margin-top: clamp(20px, 2.2vw, 34px);
+    font-size: clamp(26px, 2.45vw, 42px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    outline: none;
+  }
+  .lf__hint {
+    margin-top: 8px;
+    font-size: clamp(15px, 1.15vw, 19px);
+    color: var(--ink-mute);
+  }
+
+  .lf__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 1.5vw, 24px) 14px;
+    margin-top: clamp(18px, 2vw, 30px);
+  }
+  .lf__field {
+    grid-column: 1 / -1;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .lf__field--half {
+    grid-column: span 1;
+  }
+
+  .lf__label {
+    display: block;
+    margin-bottom: 9px;
+    padding: 0;
+    font-size: clamp(15px, 1.1vw, 18px);
+    font-weight: 480;
+    color: #3d3d3d;
+  }
+  .lf__optional {
+    margin-left: 0.35em;
+    font-weight: 400;
+    color: var(--ink-mute);
+  }
+
+  /* ── inputs ── */
+  .lf__input {
+    display: block;
+    width: 100%;
+    height: 58px;
+    padding: 0 18px;
+    border: 1.5px solid transparent;
+    border-radius: var(--lf-radius);
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.05),
+      0 6px 18px rgba(0, 0, 0, 0.04);
+    font: inherit;
+    /* 16px+ keeps iOS from zooming in on focus */
+    font-size: 17px;
+    color: var(--ink);
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .lf__input::placeholder {
+    color: #a9a9a9;
+  }
+  .lf__input--area {
+    height: auto;
+    min-height: 132px;
+    padding: 15px 18px;
+    line-height: 1.45;
+    resize: vertical;
+  }
+  .lf__input:hover {
+    border-color: #d9d9d9;
+  }
+  .lf__input:focus {
+    border-color: #111;
+    box-shadow:
+      0 0 0 4px rgba(255, 214, 10, 0.5),
+      0 6px 18px rgba(0, 0, 0, 0.04);
+  }
+  .lf__input[aria-invalid='true'] {
+    border-color: #e0452f;
+  }
+
+  /* ── choices (real radios/checkboxes, styled) ── */
+  .lf__opts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 10px;
+  }
+  .lf__choice--chips .lf__opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .lf__opt {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lf__opt input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .lf__optbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 60px;
+    padding: 12px 16px;
+    border-radius: var(--lf-radius);
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 6px 18px rgba(0, 0, 0, 0.05);
+    font-size: 17px;
+    font-weight: 460;
+    line-height: 1.2;
+    color: #151515;
+    pointer-events: none;
+    transition:
+      transform 0.4s var(--ease-spring),
+      background 0.22s ease,
+      color 0.22s ease,
+      box-shadow 0.3s ease;
+  }
+  .lf__choice--chips .lf__optbox {
+    min-height: 46px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 16px;
+  }
+  .lf__opticon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: #f1f1f1;
+    color: #111;
+    transition:
+      background 0.22s ease,
+      color 0.22s ease;
+  }
+  .lf__opticon :global(svg) {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.8;
+  }
+  .lf__opttext {
+    flex: 1;
+  }
+  .lf__tick {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid #d6d6d6;
+    transition:
+      background 0.22s ease,
+      border-color 0.22s ease,
+      transform 0.4s var(--ease-spring);
+  }
+  .lf__choice--chips .lf__tick {
+    display: none;
+  }
+  .lf__tick svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: #111;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    transition: stroke-dashoffset 0.35s var(--ease-out) 0.05s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .lf__opt:hover .lf__optbox {
+      transform: translateY(-2px);
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.06),
+        0 12px 26px rgba(0, 0, 0, 0.08);
+    }
+  }
+  .lf__opt input:focus-visible + .lf__optbox {
+    outline: 2px solid #111;
+    outline-offset: 3px;
+  }
+  .lf__opt input:checked + .lf__optbox {
+    background: #0b0b0b;
+    color: #fff;
+  }
+  .lf__opt input:checked + .lf__optbox .lf__opticon {
+    background: rgba(255, 214, 10, 0.16);
+    color: var(--sun);
+  }
+  .lf__opt input:checked + .lf__optbox .lf__tick {
+    background: var(--sun);
+    border-color: var(--sun);
+    transform: scale(1.06);
+  }
+  .lf__opt input:checked + .lf__optbox .lf__tick svg {
+    stroke-dashoffset: 0;
+  }
+  .lf__choice--chips .lf__opt input:checked + .lf__optbox {
+    color: var(--sun-text);
+  }
+  .lf__choice[aria-invalid='true'] .lf__optbox {
+    box-shadow:
+      0 0 0 1.5px #e0452f,
+      0 6px 18px rgba(0, 0, 0, 0.05);
+  }
+
+  .lf__err {
+    margin-top: 7px;
+    font-size: 14.5px;
+    font-weight: 480;
+    color: #c23b22;
+  }
+  .lf__err:empty {
+    display: none;
+  }
+
+  /* ── step navigation ── */
+  .lf__nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: clamp(24px, 2.4vw, 36px);
+  }
+  .lf__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 48px;
+    margin-right: auto;
+    padding: 0 8px 0 2px;
+    font-size: 17px;
+    color: #777;
+    border-radius: 999px;
+    transition: color 0.2s ease;
+  }
+  .lf__back:hover {
+    color: #111;
+  }
+  .lf__back svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .lf__btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 0 26px;
+    border-radius: 999px;
+    background: #0b0b0b;
+    color: var(--sun-text);
+    font-size: 18px;
+    font-weight: 520;
+    letter-spacing: -0.005em;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      0 8px 20px rgba(0, 0, 0, 0.16);
+    transition:
+      transform 0.35s var(--ease-spring),
+      box-shadow 0.3s ease,
+      background 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lf__btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.35s var(--ease-spring);
+  }
+  .lf__btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      0 0 0 4px rgba(255, 214, 10, 0.28),
+      0 14px 30px rgba(0, 0, 0, 0.2);
+  }
+  .lf__btn:hover svg {
+    transform: translateX(3px);
+  }
+  .lf__btn:active {
+    transform: translateY(1px);
+  }
+
+  /* the send key: lit like the Connect button */
+  .lf__btn--send {
+    background: linear-gradient(180deg, #ffe14d 0%, #ffd60a 55%, #f6c800 100%);
+    color: #1a1400;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 4px 0 #c9a100,
+      0 10px 26px rgba(255, 196, 0, 0.45);
+  }
+  .lf__btn--send:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 6px 0 #c9a100,
+      0 16px 36px rgba(255, 196, 0, 0.55);
+  }
+  .lf__btn--send:active {
+    transform: translateY(3px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 1px 0 #c9a100,
+      0 6px 16px rgba(255, 196, 0, 0.4);
+  }
+  .lf__send-busy {
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .lf__send-busy i {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(26, 20, 0, 0.25);
+    border-top-color: #1a1400;
+    animation: lf-spin 0.8s linear infinite;
+  }
+  @keyframes lf-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .lf__form.is-sending .lf__send-label {
+    display: none;
+  }
+  .lf__form.is-sending .lf__send-busy {
+    display: inline-flex;
+  }
+  .lf__form.is-sending .lf__btn--send {
+    pointer-events: none;
+  }
+
+  :global(.js-off) .lf__nav [data-lf-next],
+  :global(.js-off) .lf__nav [data-lf-back],
+  :global(.js-off) .lf__head {
+    display: none;
+  }
+
+  .lf__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .lf__privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 22px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-mute);
+  }
+  .lf__privacy svg {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── success / error ── */
+  .lf__panel {
+    padding: clamp(10px, 2vw, 30px) 0 clamp(6px, 1vw, 16px);
+    text-align: center;
+    outline: none;
+    animation: lf-pop 0.6s var(--ease-out) both;
+  }
+  @keyframes lf-pop {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+  .lf__burst {
+    position: relative;
+    width: clamp(110px, 10vw, 150px);
+    margin: 0 auto;
+  }
+  .lf__sticker {
+    display: block;
+    animation: lf-sticker 0.9s cubic-bezier(0.3, 1.8, 0.45, 1) 0.1s both;
+  }
+  .lf__sticker :global(svg) {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.16)) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.14));
+  }
+  @keyframes lf-sticker {
+    from {
+      opacity: 0;
+      transform: scale(0.4) rotate(-30deg);
+    }
+  }
+  .lf__burst :global(.lf__spark) {
+    position: absolute;
+    width: 46%;
+    color: #111;
+  }
+  .lf__burst :global(.lf__spark--a) {
+    left: -46%;
+    top: -12%;
+  }
+  .lf__burst :global(.lf__spark--b) {
+    right: -48%;
+    bottom: -6%;
+    transform: rotate(18deg);
+  }
+  .lf__panel-title {
+    margin-top: clamp(18px, 2vw, 28px);
+    font-size: clamp(30px, 3vw, 52px);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+  .lf__panel-body {
+    max-width: 30em;
+    margin: 14px auto 0;
+    font-size: clamp(16px, 1.35vw, 22px);
+    line-height: 1.42;
+    color: var(--ink-soft);
+  }
+  .lf__next-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 44em;
+    margin: clamp(24px, 2.6vw, 40px) auto 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+  .lf__next-steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-radius: var(--lf-radius);
+    background: #fff;
+    font-size: 15.5px;
+    line-height: 1.35;
+    color: #333;
+  }
+  .lf__next-steps span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #0b0b0b;
+    color: var(--sun-text);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .lf__fail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 18px;
+    margin-top: 24px;
+  }
+  .lf__fail-actions .lf__back {
+    margin-right: 0;
+  }
+
+  @media (max-width: 760px) {
+    .lf {
+      border-radius: 22px;
+    }
+    .lf__fields {
+      grid-template-columns: 1fr;
+    }
+    .lf__field--half {
+      grid-column: 1 / -1;
+    }
+    .lf__nav .lf__btn {
+      flex: 1;
+    }
+    .lf__next-steps {
+      grid-template-columns: 1fr;
+    }
+    .lf__next-steps li {
+      flex-direction: row;
+      align-items: center;
+    }
+    .lf__next-steps span {
+      flex: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lf__step.is-entering,
+    .lf__panel,
+    .lf__sticker {
+      animation: none;
+    }
+  }
+</style>

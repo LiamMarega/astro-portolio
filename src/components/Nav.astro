@@ -1,0 +1,322 @@
+---
+import Doodle from './Doodle.astro';
+import { site } from '../content/site';
+
+export interface NavItem {
+  /** used to mark the active item */
+  key: string;
+  label: string;
+  href: string;
+  /** id of an in-page section: the item lights up while that section is on screen */
+  section?: string;
+  /** hide on small phones: 'sm' ≤ 560px, 'xs' ≤ 380px */
+  hide?: 'sm' | 'xs';
+}
+
+interface Props {
+  items?: NavItem[];
+  /** key of the item active on load ('' = none until a section scrolls in) */
+  active?: string;
+  /** permanent yellow pill on the right of the nav */
+  cta?: { label: string; href: string };
+  /** second layer used by the case study sheet (home page only) */
+  caseLayer?: boolean;
+  sunLabel?: string;
+  /** aria-label of the <nav> */
+  label?: string;
+}
+
+const defaultItems: NavItem[] = site.nav.map((n) => ({ key: n.id, label: n.label, href: `#${n.id}`, section: n.id }));
+const {
+  items = defaultItems,
+  active = items[0]?.key ?? '',
+  cta,
+  caseLayer = false,
+  sunLabel = 'Replay the sunrise',
+  label = 'Sections',
+} = Astro.props;
+---
+
+<header class="nav" data-nav>
+  <div class="nav__pill" data-nav-pill>
+    <div class="nav__layer nav__main" data-nav-main>
+      <button class="nav__sun" type="button" data-sunrise aria-label={sunLabel}>
+        <Doodle name="navSun" drawn width={1.7} />
+      </button>
+      <nav aria-label={label}>
+        <ul class="nav__list">
+          {
+            items.map((item) => (
+              <li class:list={[item.hide && `nav__item--${item.hide}`]}>
+                <a
+                  class:list={['nav__link', { 'is-active': item.key === active }]}
+                  href={item.href}
+                  data-nav-key={item.key}
+                  data-nav-link={item.section}
+                  aria-current={item.key === active && !item.section ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      {cta && (
+        <a class="nav__cta nav__cta--main" href={cta.href} data-nav-cta>
+          {cta.label}
+        </a>
+      )}
+      <span class:list={['nav__indicator', { 'is-off': !active }]} data-nav-indicator aria-hidden="true"></span>
+    </div>
+
+    {
+      caseLayer && (
+        <div class="nav__layer nav__case" data-nav-case aria-hidden="true" inert>
+          <button class="nav__close" type="button" data-case-close aria-label="Close project">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+          <a class="nav__cta" href="/contact" data-nav-case-cta>
+            {site.ctaLabel}
+          </a>
+        </div>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 13px 0 auto 0;
+    z-index: 60;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .nav__pill {
+    --h: 42px;
+    --pad: 3.5px;
+    position: relative;
+    height: var(--h);
+    width: var(--w-main, auto);
+    border-radius: 999px;
+    background: #000;
+    pointer-events: auto;
+    transition: width 0.55s cubic-bezier(0.3, 1.25, 0.5, 1);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    font-size: 19.6px;
+    letter-spacing: -0.012em;
+    font-weight: 450;
+    line-height: 1;
+  }
+
+  :global(.is-case) .nav__pill {
+    width: var(--w-case, auto);
+  }
+
+  :global(.js) .nav__pill {
+    animation: nav-in 0.75s var(--ease-spring) 0.62s both;
+  }
+
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.86);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .nav__layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: var(--pad);
+    white-space: nowrap;
+    transition:
+      opacity 0.28s ease,
+      filter 0.28s ease;
+  }
+
+  .nav__main {
+    position: relative;
+    inset: auto;
+    height: 100%;
+    width: max-content;
+  }
+
+  .nav__case {
+    justify-content: space-between;
+    opacity: 0;
+    filter: blur(4px);
+    pointer-events: none;
+  }
+
+  :global(.is-case) .nav__main {
+    opacity: 0;
+    filter: blur(4px);
+    pointer-events: none;
+  }
+  :global(.is-case) .nav__case {
+    opacity: 1;
+    filter: none;
+    pointer-events: auto;
+  }
+
+  .nav__sun {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: calc(var(--h) - var(--pad) * 2);
+    color: #7b7b7b;
+    border-radius: 999px;
+    transition: color 0.2s ease;
+  }
+  .nav__sun :global(svg) {
+    width: 23px;
+    height: 23px;
+    transition: transform 0.6s var(--ease-spring);
+  }
+  .nav__sun:hover {
+    color: var(--sun-text);
+  }
+  .nav__sun:hover :global(svg) {
+    transform: rotate(45deg);
+  }
+
+  .nav__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav__link {
+    display: flex;
+    align-items: center;
+    height: calc(var(--h) - var(--pad) * 2);
+    padding: 0 12.4px;
+    color: #7b7b7b;
+    border-radius: 999px;
+    transition: color 0.35s ease;
+  }
+  .nav__link:hover {
+    color: #b9b9b9;
+  }
+  .nav__link.is-active {
+    color: var(--sun-text);
+  }
+
+  .nav__indicator {
+    position: absolute;
+    top: var(--pad);
+    left: 0;
+    height: calc(var(--h) - var(--pad) * 2);
+    width: var(--ind-w, 58px);
+    transform: translateX(var(--ind-x, 40px));
+    border-radius: 999px;
+    background: var(--sun-pill);
+    transition:
+      transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1),
+      width 0.5s cubic-bezier(0.3, 1.3, 0.5, 1),
+      opacity 0.3s ease;
+  }
+  .nav__indicator.no-anim {
+    transition: none;
+  }
+  .nav__indicator.is-off {
+    opacity: 0;
+  }
+
+  .nav__close {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 100%;
+    color: #8a8a8a;
+    border-radius: 999px;
+  }
+  .nav__close svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+  }
+  .nav__close:hover {
+    color: #fff;
+  }
+
+  .nav__cta {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 13.5px;
+    border-radius: 999px;
+    color: var(--sun-text);
+    background: var(--sun-pill);
+    transition: background 0.25s ease;
+  }
+  .nav__cta:hover {
+    background: rgba(255, 210, 30, 0.38);
+  }
+  /* permanent CTA inside the main layer: solid sun, reads as the main action */
+  .nav__cta--main {
+    position: relative;
+    z-index: 1;
+    margin-left: 4px;
+    color: #111;
+    background: var(--sun);
+    font-weight: 520;
+  }
+  .nav__cta--main:hover {
+    background: #ffe14d;
+  }
+
+  @media (max-width: 560px) {
+    .nav {
+      top: 10px;
+    }
+    .nav__pill {
+      --h: 40px;
+      font-size: 16.5px;
+    }
+    .nav__link {
+      padding: 0 10.5px;
+    }
+    .nav__cta--main {
+      padding: 0 12px;
+    }
+    .nav__sun {
+      width: 32px;
+    }
+    .nav__sun :global(svg) {
+      width: 21px;
+      height: 21px;
+    }
+    .nav__item--sm {
+      display: none;
+    }
+  }
+  @media (max-width: 380px) {
+    .nav__pill {
+      font-size: 15.5px;
+    }
+    .nav__link {
+      padding: 0 9px;
+    }
+    .nav__item--xs {
+      display: none;
+    }
+  }
+</style>

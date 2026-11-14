@@ -1,0 +1,21 @@
+---
+interface Props {
+  note?: string;
+  title: string | readonly string[];
+  intro?: string;
+  center?: boolean;
+  id?: string;
+  class?: string;
+}
+const { note, title, intro, center = false, id, class: className } = Astro.props;
+const lines = typeof title === 'string' ? [title] : title;
+---
+
+<header class:list={['shead', { 'shead--center': center }, className]}>
+  {note && <p class="shead__note hand" data-fade>{note}</p>}
+  <h2 class="shead__title" id={id} data-ink>
+    {lines.map((l, i) => <>{i > 0 && ' '}<span>{l}</span></>)}
+  </h2>
+  {intro && <p class="shead__intro" data-fade>{intro}</p>}
+  <slot />
+</header>
