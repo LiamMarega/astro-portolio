@@ -164,10 +164,10 @@ function build(lang: Locale) {
     stores,
 
     meta: {
-      title: L('Desarrollo de e-commerce a medida con Next.js y Vendure | Liam Marega', 'Custom E-commerce Development with Next.js and Vendure | Liam Marega'),
+      title: L('E-commerce a medida con Next.js y Vendure | Liam Marega', 'Custom Headless E-commerce with Next.js | Liam Marega'),
       description: L(
-        'Tiendas online a medida con Next.js y Vendure: storefront desacoplado, catálogo, checkout y pagos. 5 tiendas reales en producción en Miami. Remoto, desde Argentina.',
-        'Custom online stores with Next.js and Vendure: decoupled storefront, catalog, checkout and payments. 5 real stores in production in Miami. Remote, from Argentina.',
+        'Tiendas online a medida con Next.js y Vendure: storefront desacoplado, catálogo, checkout y pagos. 5 tiendas reales en producción. Remoto desde Argentina.',
+        'Custom online stores with Next.js and Vendure: decoupled storefront, catalog, checkout and payments. 5 live stores in production. Remote, from Argentina.',
       ),
       og: '/og-ecommerce.png',
     },

@@ -149,10 +149,10 @@ function build(lang: Locale) {
 
   return {
     lang,
-    title: L('Contacto: empecemos tu proyecto | Liam Marega', 'Contact: let’s start your project | Liam Marega'),
+    title: L('Contacto: contame tu proyecto web o app | Liam Marega', 'Contact: tell me about your project | Liam Marega'),
     description: L(
-      'Contame qué necesitás: una tienda online, una landing, una app mobile o un SaaS. Lo leo yo mismo y te respondo por email.',
-      'Tell me what you need: an online store, a landing page, a mobile app or a SaaS. I read every message myself and reply by email.',
+      'Contame qué necesitás: una tienda online, una landing, una app mobile o un SaaS. Formulario en tres pasos; lo leo yo mismo y te respondo por email.',
+      'Tell me what you need: an online store, a landing page, a mobile app or a SaaS. Three quick steps; I read every message myself and reply by email.',
     ),
     note: L('tres pasos rápidos =)', 'three quick steps =)'),
     heading: [L('Hablemos de tu', 'Let’s talk about your'), L('próximo proyecto', 'next project')],

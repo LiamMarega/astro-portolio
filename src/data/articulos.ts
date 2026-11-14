@@ -18,7 +18,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "que-es-una-landing-page",
     title: "Qué es una landing page y por qué convierte más que tu web",
-    metaTitle: "Qué es una Landing Page y Por Qué Convierte Más que tu Web (2026)",
+    metaTitle: "Qué es una landing page y por qué convierte más (2026)",
     description:
       "Qué es una landing page, en qué se diferencia de una página web tradicional y por qué es la herramienta más efectiva para convertir tráfico en clientes.",
     category: "Fundamentos",
@@ -37,7 +37,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "como-crear-una-landing-page-que-convierta",
     title: "Cómo crear una landing page que convierta: estructura paso a paso",
-    metaTitle: "Cómo Crear una Landing Page que Convierta en 2026 (Paso a Paso)",
+    metaTitle: "Cómo crear una landing page que convierta (paso a paso)",
     description:
       "La estructura exacta de una landing page de alta conversión: hero, prueba social, oferta, CTA y los errores que matan tus conversiones. Guía 2026.",
     category: "Conversión",
@@ -55,7 +55,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "cuanto-cuesta-una-landing-page",
     title: "Cuánto cuesta una landing page profesional en 2026 (precios reales)",
-    metaTitle: "Cuánto Cuesta una Landing Page Profesional en 2026 | Precios Reales",
+    metaTitle: "Cuánto cuesta una landing page profesional en 2026",
     description:
       "Precios reales de una landing page en 2026: plantillas, freelancers y agencias. Qué incluye cada rango y cómo evitar pagar dos veces por lo mismo.",
     category: "Inversión",
@@ -73,7 +73,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "tasa-de-conversion-landing-page",
     title: "Tasa de conversión de una landing page: benchmarks 2026 y cómo superarlos",
-    metaTitle: "Tasa de Conversión de Landing Pages: Benchmarks 2026 por Industria",
+    metaTitle: "Tasa de conversión de una landing page: benchmarks 2026",
     description:
       "¿Qué tasa de conversión es buena? Benchmarks 2026 por industria, cómo medir la tuya y las palancas concretas para pasar del promedio al top 10%.",
     category: "Datos",
@@ -91,7 +91,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "landing-page-vs-pagina-web",
     title: "Landing page vs página web: cuál necesita tu negocio (y cuándo)",
-    metaTitle: "Landing Page vs Página Web: Diferencias y Cuál Necesitás en 2026",
+    metaTitle: "Landing page vs página web: diferencias y cuál elegir",
     description:
       "Diferencias reales entre landing page y página web corporativa: objetivo, estructura, costo y resultados. Cuál conviene según tu modelo de negocio.",
     category: "Estrategia",
@@ -109,7 +109,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "optimizacion-cro-mejorar-conversion",
     title: "CRO: 15 optimizaciones probadas para mejorar la conversión de tu web",
-    metaTitle: "CRO en 2026: 15 Optimizaciones para Mejorar la Conversión de tu Web",
+    metaTitle: "CRO: 15 optimizaciones para mejorar la conversión web",
     description:
       "15 tácticas de optimización de conversión (CRO) aplicables hoy: copy, CTAs personalizados, prueba social, formularios y velocidad. Con datos y prioridades.",
     category: "Conversión",
@@ -128,7 +128,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "velocidad-web-core-web-vitals",
     title: "Velocidad web y Core Web Vitals: cómo afectan tu SEO y tus ventas",
-    metaTitle: "Core Web Vitals 2026: Cómo la Velocidad Web Afecta SEO y Conversión",
+    metaTitle: "Core Web Vitals 2026: velocidad web, SEO y conversión",
     description:
       "Qué son LCP, INP y CLS, por qué Google los usa para rankear y cuánto dinero pierde tu negocio por cada segundo de carga. Guía práctica 2026.",
     category: "Performance",
@@ -147,7 +147,7 @@ export const ARTICULOS: Articulo[] = [
   {
     slug: "contratar-desarrollador-web-freelance",
     title: "Cómo contratar un desarrollador web freelance sin equivocarte",
-    metaTitle: "Cómo Contratar un Desarrollador Web Freelance en 2026 (Sin Errores)",
+    metaTitle: "Cómo contratar un desarrollador web freelance (2026)",
     description:
       "Checklist para contratar un desarrollador web freelance: qué preguntar, señales de alerta, cómo comparar presupuestos y qué debe incluir la entrega.",
     category: "Negocio",

@@ -40,7 +40,8 @@ const tilt = [-6, 4, -3, 7, -5, 3, -8, 5, -2, 6];
       </span>
     </p>
 
-    <h1 class="hero__name" data-hero-name aria-label={site.name}>
+    <h1 class="hero__name" data-hero-name>
+      <span class="hero__sr">{site.name} ({site.brand})</span>
       <span class="hero__fit" data-hero-fit aria-hidden="true">
         {
           words.map((word, wi) => (
@@ -144,6 +145,20 @@ const tilt = [-6, 4, -3, 7, -5, 3, -8, 5, -2, 6];
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
+  }
+
+  /* Real, contiguous heading text for crawlers and screen readers; the per-letter art below is aria-hidden. Clip-based, not display:none. */
+  .hero__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 
   .hero__fit {
