@@ -41,6 +41,7 @@ const other = lang === 'es' ? 'en' : 'es';
   alternates={ecommercePath}
   jsonLd={ecommerceGraph(lang, { path: ecommercePath[lang], title: e.meta.title, description: e.meta.description })}
 >
+  <link slot="head" rel="preload" as="image" href={e.hero.visual.media.poster} type="image/webp" fetchpriority="high" />
   <Sky />
   <TopBlur />
   <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={ecommercePath[other]} />

@@ -64,6 +64,8 @@ const graphs = [jsonLd ?? (home ? homeGraph(lang) : [])].flat();
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+    {/* page-specific hints (e.g. the LCP image preload): <link slot="head" … /> */}
+    <slot name="head" />
 
     <meta property="og:type" content={home ? 'profile' : 'website'} />
     <meta property="og:site_name" content={site.brand} />

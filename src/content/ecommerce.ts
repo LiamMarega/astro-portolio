@@ -198,11 +198,28 @@ function build(lang: Locale) {
       ctaNote: L('Completás un formulario corto y te escribo por email.', 'Fill in a short form and I’ll email you back.'),
       secondary: L('Ver tiendas reales', 'See live stores'),
       trust: [L('Next.js + Vendure', 'Next.js + Vendure'), L('Storefront desacoplado del motor', 'Storefront decoupled from the engine'), L('Tiendas reales en producción', 'Real stores in production')],
+      /**
+       * Screen recording of "No Cool Hats", a limited-edition cap store Liam built (public/media/ecommerce/nochats-hero.*).
+       * Only what the recording shows: the store name, "limited edition", the 3D/visual hero. No public URL exists, so it is not linked.
+       */
       visual: {
-        label: L('Capturas de tiendas reales que construí: cada pocos segundos cambia la tienda', 'Screenshots of real stores I built: the store changes every few seconds'),
-        note: L('tiendas de verdad =)', 'real stores =)'),
-        badge: { value: '5', label: L('tiendas en producción', 'stores in production') },
-        live: L('Ver en vivo', 'Visit live'),
+        media: {
+          mp4: '/media/ecommerce/nochats-hero.mp4',
+          webm: '/media/ecommerce/nochats-hero.webm',
+          poster: '/media/ecommerce/nochats-hero-poster.webp',
+          w: 1280,
+          h: 680,
+        },
+        /** text alternative of the (decorative, silent) recording */
+        desc: L(
+          'Grabación de pantalla de No Cool Hats, una tienda de gorras en edición limitada: en la portada, una cara con gorra se transforma en una cara alienígena sobre un fondo de estrellas.',
+          'Screen recording of No Cool Hats, a limited-edition cap store: in its hero, a face wearing a cap morphs into an alien face over a starry background.',
+        ),
+        bar: 'No Cool Hats',
+        kicker: L('tienda a medida', 'custom store'),
+        name: 'No Cool Hats',
+        detail: L('Gorras en edición limitada', 'Limited-edition caps'),
+        note: L('así se ve una tienda a medida =)', 'this is what a custom store looks like =)'),
       },
     },
 

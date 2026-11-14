@@ -3,12 +3,12 @@ import StickerWord from '../StickerWord.astro';
 import Sticker from '../EcoSticker.astro';
 import Doodle from '../Doodle.astro';
 import Keycap from '../Keycap.astro';
-import { useEcommerce, SHOT } from '../../content/ecommerce';
+import { useEcommerce } from '../../content/ecommerce';
 
 const e = useEcommerce(Astro.currentLocale);
 const h = e.hero;
 const v = h.visual;
-const stores = e.stores;
+const m = v.media;
 ---
 
 <section class="ehero" data-ehero aria-labelledby="ehero-title">
@@ -23,17 +23,23 @@ const stores = e.stores;
         )
       }
 
-      <h1 id="ehero-title" class="ehero__title" data-ink>
-        <span class="ehero__lead">{h.titleLead}</span>{' '}
-        <span class="sr-only">{h.titleWord}</span>
-        <span class="ehero__row">
-          <StickerWord text={h.titleWord} stickers={h.stickers} uid="hw" class="ehero__word" />
-          <span class="ehero__note hand" aria-hidden="true">
-            <Doodle name="bigArrow" seed="hn" class="ehero__note-arrow" drawn />
-            {h.note}
+      {/*
+        The h1 holds one clean sentence (visually hidden, clip-based like the home hero); the per-letter sticker
+        markup is decorative and aria-hidden, and lives OUTSIDE the h1 so its textContent stays readable for crawlers.
+      */}
+      <div class="ehero__head" data-ink>
+        <h1 id="ehero-title" class="sr-only">{h.titleLead} {h.titleWord}</h1>
+        <div class="ehero__title" aria-hidden="true">
+          <span class="ehero__lead">{h.titleLead}</span>
+          <span class="ehero__row">
+            <StickerWord text={h.titleWord} stickers={h.stickers} uid="hw" class="ehero__word" />
+            <span class="ehero__note hand">
+              <Doodle name="bigArrow" seed="hn" class="ehero__note-arrow" drawn />
+              {h.note}
+            </span>
           </span>
-        </span>
-      </h1>
+        </div>
+      </div>
 
       <p class="ehero__sub">{h.sub}</p>
 
@@ -62,55 +68,46 @@ const stores = e.stores;
       </ul>
     </div>
 
-    <div class="ehero__visual" role="group" aria-label={v.label} data-ehero-visual data-stores={JSON.stringify(stores.map((s) => ({ host: s.host, name: s.name, url: s.url, alt: s.alt.site })))}>
-      <figure class="ehero__shot">
-        <div class="ehero__bar" aria-hidden="true">
+    {/*
+      Silent, decorative screen recording. The frame is aria-hidden (nothing to operate, no audio, no controls) and the
+      figcaption carries the text alternative: a visible caption plus a visually hidden description of the motion.
+      Poster = LCP candidate (<img>, intrinsic size, fetchpriority high); the video only loads from src/scripts/ehero.ts.
+    */}
+    <figure class="ehero__visual" data-ehero-visual>
+      <div class="ehero__shot" aria-hidden="true">
+        <div class="ehero__bar">
           <i /><i /><i />
-          <span class="ehero__url" data-ehero-url>{stores[0].host}</span>
+          <span class="ehero__url">{v.bar}</span>
         </div>
-        <div class="ehero__screen" style={`aspect-ratio:${SHOT.site.w}/${SHOT.site.h}`}>
-          {
-            stores.map((s, i) => (
-              <img
-                class:list={['ehero__img', { 'is-on': i === 0 }]}
-                src={`/img/ecommerce/${s.id}-site.webp`}
-                alt={i === 0 ? s.alt.site : ''}
-                data-store={s.host}
-                width={SHOT.site.w}
-                height={SHOT.site.h}
-                fetchpriority={i === 0 ? 'high' : 'low'}
-                decoding="async"
-                draggable="false"
-              />
-            ))
-          }
+        <div class="ehero__screen" style={`aspect-ratio:${m.w}/${m.h}`}>
+          <img class="ehero__poster" src={m.poster} width={m.w} height={m.h} alt="" fetchpriority="high" decoding="async" draggable="false" />
+          <video
+            class="ehero__video"
+            data-ehero-video
+            data-webm={m.webm}
+            data-mp4={m.mp4}
+            poster={m.poster}
+            width={m.w}
+            height={m.h}
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+            disableremoteplayback
+            preload="none"
+            tabindex="-1"
+          >
+          </video>
         </div>
-      </figure>
-
-      <figure class="ehero__phone">
-        <div class="ehero__phone-screen" style={`aspect-ratio:${SHOT.phone.w}/${SHOT.phone.h}`}>
-          {
-            stores.map((s, i) => (
-              <img
-                class:list={['ehero__img', { 'is-on': i === 0 }]}
-                src={`/img/ecommerce/${s.id}-phone.webp`}
-                alt=""
-                width={SHOT.phone.w}
-                height={SHOT.phone.h}
-                fetchpriority={i === 0 ? 'high' : 'low'}
-                decoding="async"
-                draggable="false"
-              />
-            ))
-          }
-        </div>
-      </figure>
-
-      <div class="ehero__counter">
-        <small>{v.badge.label}</small>
-        <b>{v.badge.value}</b>
-        <a class="ehero__live" href={stores[0].url} target="_blank" rel="noopener" data-ehero-live data-live={v.live}>{v.live} · {stores[0].name}</a>
       </div>
+      <span class="ehero__base" aria-hidden="true"></span>
+
+      <figcaption class="ehero__cap">
+        <span class="sr-only">{v.desc} </span>
+        <small>{v.kicker}</small>
+        <b>{v.name}</b>
+        <span class="ehero__cap-detail">{v.detail}</span>
+      </figcaption>
 
       <p class="ehero__vnote hand" aria-hidden="true">
         {v.note}
@@ -120,7 +117,7 @@ const stores = e.stores;
       <span class="ehero__stk ehero__stk--cart" aria-hidden="true"><Sticker type="cart" uid="hs-cart" /></span>
       <span class="ehero__stk ehero__stk--star" aria-hidden="true"><Sticker type="star" uid="hs-star" /></span>
       <span class="ehero__stk ehero__stk--tag" aria-hidden="true"><Sticker type="tag" uid="hs-tag" /></span>
-    </div>
+    </figure>
   </div>
 </section>
 
@@ -134,7 +131,7 @@ const stores = e.stores;
 
   .ehero__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr);
     align-items: center;
     gap: clamp(24px, 3.6vw, 70px);
     width: min(92vw, 1640px);
@@ -187,14 +184,14 @@ const stores = e.stores;
   .ehero__title {
     position: relative;
     margin-top: clamp(16px, 1.6vw, 26px);
-    font-size: clamp(36px, 4.25vw, 78px);
+    font-size: clamp(34px, 3.3vw, 62px);
     font-weight: 500;
     line-height: 1.02;
     letter-spacing: -0.035em;
   }
   .ehero__lead {
     display: block;
-    max-width: 12em;
+    max-width: 8.6em;
     text-wrap: balance;
   }
   .ehero__row {
@@ -203,7 +200,7 @@ const stores = e.stores;
     gap: 0.3em;
   }
   .ehero__title :global(.ehero__word) {
-    font-size: 2.35em;
+    font-size: 2.3em;
     line-height: 0.92;
     letter-spacing: -0.065em;
     margin-left: -0.04em;
@@ -295,38 +292,37 @@ const stores = e.stores;
     gap: 8px;
   }
 
-  /* ── visual: store + orders coming in ── */
+  /* ── visual: the screen recording is the star of the hero ── */
   .ehero__visual {
     position: relative;
-    aspect-ratio: 1 / 0.86;
+    align-self: start;
+    margin: clamp(48px, 5.6vw, 96px) 0 0;
     container-type: inline-size;
   }
 
-  /* browser window with a real store screenshot (cycles through the stores) */
+  /* browser window around the recording (poster underneath, video fades in on top) */
   .ehero__shot {
-    position: absolute;
-    left: 0;
-    top: 2%;
-    width: 86%;
-    margin: 0;
+    position: relative;
+    width: 100%;
     overflow: hidden;
-    border-radius: 2.2cqw;
-    background: #fff;
+    border-radius: 1.6cqw;
+    background: #05030d;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.06),
-      0 24px 60px rgba(140, 100, 0, 0.18);
-    transform: rotate(-2.2deg);
+      0 3cqw 7cqw rgba(110, 70, 0, 0.3),
+      0 0.6cqw 1.6cqw rgba(0, 0, 0, 0.18);
+    transform: rotate(-1.6deg);
   }
   .ehero__bar {
     display: flex;
     align-items: center;
-    gap: 0.9cqw;
-    padding: 1.5cqw 2cqw;
+    gap: 0.7cqw;
+    padding: 1.1cqw 1.6cqw;
     background: #f1f1f1;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
   .ehero__bar i {
-    width: 1.5cqw;
+    width: 1.1cqw;
     aspect-ratio: 1;
     border-radius: 50%;
     background: #d4d4d4;
@@ -342,112 +338,104 @@ const stores = e.stores;
   }
   .ehero__url {
     flex: 1;
-    max-width: 52%;
-    margin-left: 1.4cqw;
-    padding: 0.5cqw 1.6cqw;
+    max-width: 36%;
+    margin-left: 1.2cqw;
+    padding: 0.4cqw 1.4cqw;
     overflow: hidden;
     border-radius: 999px;
     background: #fff;
-    font-size: max(9.5px, 1.6cqw);
+    font-size: max(9.5px, 1.25cqw);
     color: #6d6d6d;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .ehero__screen,
-  .ehero__phone-screen {
+  .ehero__screen {
     position: relative;
     width: 100%;
     overflow: hidden;
-    background: #eee;
+    background: #05030d;
   }
-  .ehero__img {
+  .ehero__poster,
+  .ehero__video {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
+    display: block;
     width: 100%;
-    height: auto;
-    opacity: 0;
-    transition: opacity 0.7s ease;
+    height: 100%;
+    object-fit: cover;
     user-select: none;
   }
-  .ehero__screen .ehero__img {
-    aspect-ratio: 1440 / 900;
+  .ehero__video {
+    opacity: 0;
+    transition: opacity 0.7s ease;
   }
-  .ehero__phone-screen .ehero__img {
-    aspect-ratio: 600 / 1298;
-  }
-  .ehero__img.is-on {
+  .ehero__video.is-playing {
     opacity: 1;
   }
 
-  .ehero__phone {
-    position: absolute;
-    right: 4%;
-    bottom: 0;
-    z-index: 4;
-    width: 24%;
-    margin: 0;
-    padding: 0.9cqw;
-    border-radius: 4.2cqw;
-    background: #111;
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.12),
-      0 20px 44px rgba(0, 0, 0, 0.28);
-    transform: rotate(3deg);
+  /* laptop base under the window: a thin hinge and a lip */
+  .ehero__base {
+    position: relative;
+    display: block;
+    width: 112%;
+    height: 1.6cqw;
+    margin: 0.6cqw 0 0 -6%;
+    border-radius: 0 0 2.4cqw 2.4cqw;
+    background: linear-gradient(#e7e7ea, #b9b9c0);
+    box-shadow: 0 2cqw 3.4cqw rgba(110, 70, 0, 0.22);
+    transform: rotate(-1.6deg);
   }
-  .ehero__phone-screen {
-    border-radius: 3.4cqw;
+  .ehero__base::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 16%;
+    height: 55%;
+    border-radius: 0 0 1cqw 1cqw;
+    background: #a1a1a8;
+    transform: translateX(-50%);
   }
 
-  .ehero__counter {
+  .ehero__cap {
     position: absolute;
-    left: 3%;
-    bottom: 3%;
+    left: -2%;
+    bottom: -5%;
     z-index: 5;
     display: grid;
-    gap: 0.4cqw;
-    max-width: 44%;
-    padding: 2.2cqw 2.6cqw 2.4cqw;
-    border-radius: 3cqw;
+    gap: 0.3cqw;
+    max-width: 38%;
+    padding: 1.6cqw 2cqw 1.8cqw;
+    border-radius: 2cqw;
     background: #fff;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.06),
-      0 14px 34px rgba(0, 0, 0, 0.12);
+      0 14px 34px rgba(0, 0, 0, 0.14);
     transform: rotate(-2.4deg);
   }
-  .ehero__counter small {
-    font-size: max(11px, 1.9cqw);
+  .ehero__cap small {
+    font-size: max(11px, 1.4cqw);
     color: #8a8a8a;
   }
-  .ehero__counter b {
-    font-size: max(24px, 6cqw);
+  .ehero__cap b {
+    font-size: max(18px, 3cqw);
     font-weight: 600;
     line-height: 1;
     letter-spacing: -0.03em;
     color: #111;
   }
-  .ehero__live {
-    margin-top: 0.6cqw;
-    overflow: hidden;
-    font-size: max(11px, 1.9cqw);
+  .ehero__cap-detail {
+    font-size: max(11px, 1.4cqw);
     font-weight: 500;
-    color: #111;
-    text-decoration: underline;
-    text-decoration-color: rgba(0, 0, 0, 0.25);
-    text-underline-offset: 0.2em;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .ehero__live:hover {
-    text-decoration-color: currentColor;
+    color: #2b2b2b;
   }
 
   .ehero__vnote {
     position: absolute;
-    right: 3%;
-    top: -5%;
+    right: 2%;
+    top: -11%;
     z-index: 3;
-    font-size: max(20px, 4.2cqw);
+    font-size: max(20px, 3cqw);
     line-height: 1;
     color: #7d7d7d;
     transform: rotate(-4deg);
@@ -474,20 +462,20 @@ const stores = e.stores;
   }
   .ehero__stk--cart {
     left: -4%;
-    top: -6%;
-    width: 17%;
+    top: -9%;
+    width: 11%;
   }
   .ehero__stk--star {
-    left: 38%;
-    top: -9%;
-    width: 13%;
+    left: 40%;
+    top: -11%;
+    width: 9%;
     animation-duration: 7s;
     animation-delay: -2s;
   }
   .ehero__stk--tag {
-    left: 46%;
-    bottom: 0%;
-    width: 11%;
+    right: 2%;
+    bottom: -8%;
+    width: 8%;
     animation-duration: 5.4s;
     animation-delay: -1s;
   }
@@ -502,8 +490,14 @@ const stores = e.stores;
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {
+    .ehero__inner {
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+    }
+    .ehero__vnote {
+      display: none;
+    }
     .ehero__title {
-      font-size: 3.9vw;
+      font-size: 3.5vw;
     }
   }
 
@@ -515,10 +509,39 @@ const stores = e.stores;
     .ehero__inner {
       grid-template-columns: 1fr;
       width: calc(100% - 32px);
-      gap: 46px;
+      gap: 0;
+    }
+    /* phones: headline and intro first, then the recording, then the calls to action */
+    .ehero__copy {
+      display: contents;
+    }
+    .ehero__avail {
+      order: 1;
+      justify-self: start;
+    }
+    .ehero__head {
+      order: 2;
+    }
+    .ehero__sub {
+      order: 3;
+    }
+    .ehero__visual {
+      order: 4;
+    }
+    .ehero__ctas {
+      order: 5;
+    }
+    .ehero__ctanote {
+      order: 6;
+    }
+    .ehero__trust {
+      order: 7;
     }
     .ehero__title {
       font-size: clamp(34px, 8.6vw, 56px);
+    }
+    .ehero__lead {
+      max-width: 12em;
     }
     .ehero__title :global(.ehero__word) {
       font-size: 2.3em;
@@ -533,8 +556,8 @@ const stores = e.stores;
     }
     .ehero__visual {
       width: 100%;
-      max-width: 640px;
-      margin: 0 auto;
+      margin: 40px 0 clamp(54px, 15vw, 80px);
+      align-self: auto;
     }
   }
 
@@ -547,37 +570,50 @@ const stores = e.stores;
     .ehero__ctas :global(.key) {
       --w: min(calc(100vw - 60px), 310px) !important;
     }
-    .ehero__visual {
-      aspect-ratio: 1 / 1.02;
+    .ehero__bar {
+      padding: 2cqw 2.6cqw;
     }
-    .ehero__shot {
-      width: 94%;
+    .ehero__bar i {
+      width: 1.8cqw;
     }
-    .ehero__phone {
-      right: 0;
-      width: 31%;
+    .ehero__url {
+      font-size: max(9px, 2.2cqw);
     }
-    .ehero__counter {
-      left: -1%;
-      bottom: 2%;
+    .ehero__base {
+      width: 104%;
+      margin-left: -2%;
+    }
+    .ehero__cap {
+      left: 0;
+      bottom: -12%;
       max-width: 62%;
+      padding: 2.6cqw 3cqw 2.8cqw;
+    }
+    .ehero__cap small,
+    .ehero__cap-detail {
+      font-size: max(11px, 2.8cqw);
+    }
+    .ehero__cap b {
+      font-size: max(18px, 5cqw);
     }
     .ehero__vnote {
       display: none;
     }
     .ehero__stk--cart {
-      width: 19%;
+      width: 15%;
       left: -3%;
-      top: -9%;
+      top: -12%;
     }
     .ehero__stk--star {
-      width: 15%;
+      width: 12%;
       left: auto;
       right: -1%;
-      top: -8%;
+      top: -11%;
     }
     .ehero__stk--tag {
-      display: none;
+      width: 11%;
+      right: 3%;
+      bottom: -10%;
     }
   }
 
@@ -585,6 +621,9 @@ const stores = e.stores;
     .ehero__stk,
     .ehero__avail i::after {
       animation: none;
+    }
+    .ehero__video {
+      transition: none;
     }
   }
 </style>
