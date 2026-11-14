@@ -1,0 +1,29 @@
+---
+interface Props {
+  size?: number;
+  rotate?: string;
+  flip?: boolean;
+  drift?: boolean;
+  parallax?: number;
+  style?: string;
+}
+const {
+  size = 520,
+  rotate = "0deg",
+  flip = false,
+  drift = true,
+  parallax,
+  style = "",
+} = Astro.props;
+const transform = `rotate(${rotate})${flip ? " scaleX(-1)" : ""}`;
+---
+
+<div
+  class="big-blob"
+  data-drift={drift ? "1" : undefined}
+  data-parallax={parallax}
+  style={`width:${size}px;height:${size}px;${style}`}
+  aria-hidden="true"
+>
+  <img src="/images/uploads/blob.webp" alt="" loading="lazy" decoding="async" style={`transform:${transform}`} />
+</div>

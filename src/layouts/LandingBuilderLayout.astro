@@ -1,0 +1,166 @@
+---
+import "../styles/landing-builder.css";
+import "@fontsource/source-serif-4/400.css";
+import "@fontsource/source-serif-4/500.css";
+import "@fontsource/source-serif-4/600.css";
+import "@fontsource/source-serif-4/700.css";
+import "@fontsource/source-serif-4/400-italic.css";
+import "@fontsource/source-serif-4/500-italic.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/jetbrains-mono/600.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/caveat/500.css";
+import "@fontsource/caveat/600.css";
+import "@fontsource/caveat/700.css";
+import { SEO } from "astro-seo";
+import Analytics from "@vercel/analytics/astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = "Diseño y desarrollo de landing pages estratégicas que convierten tráfico en oportunidades reales. Para coaches, consultores, marcas personales y negocios digitales.",
+  image = "/images/og-landing-builder.jpg",
+} = Astro.props;
+
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  Astro.site || "https://www.liammarega.com",
+);
+---
+
+<!doctype html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL.href} />
+
+    <SEO
+      title={title}
+      description={description}
+      openGraph={{
+        basic: {
+          title: title,
+          type: "website",
+          image: image,
+        },
+        optional: {
+          locale: "es_AR",
+          siteName: "LiamDev",
+        },
+      }}
+      twitter={{
+        creator: "@liammdev",
+        card: "summary_large_image",
+      }}
+      extend={{
+        link: [{ rel: "icon", href: "/favicon.svg" }],
+        meta: [
+          { name: "twitter:image", content: image },
+          { name: "twitter:title", content: title },
+          { name: "twitter:description", content: description },
+          { name: "theme-color", content: "#fbfaf5" },
+        ],
+      }}
+    />
+
+    <!-- JSON-LD Structured Data -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        name: "LiamDev",
+        description: description,
+        url: canonicalURL.href,
+        priceRange: "$$",
+        serviceType: "Diseño y desarrollo de landing pages",
+        areaServed: "Worldwide",
+        knowsLanguage: ["es", "en"],
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "USD",
+          price: "600",
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            priceCurrency: "USD",
+            price: "600",
+            unitText: "desde",
+          },
+        },
+      })}
+    />
+    <Analytics />
+  </head>
+  <body>
+    <!-- ===== SVG filter bank (paper / torn / marker simulated in code) ===== -->
+    <svg
+      width="0"
+      height="0"
+      style="position:absolute;pointer-events:none"
+      aria-hidden="true"
+    >
+      <defs>
+        <filter id="lbRoughNote" x="-6%" y="-12%" width="112%" height="124%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014 0.02" numOctaves="3" seed="7" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="11" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbRoughNote2" x="-6%" y="-12%" width="112%" height="124%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.016 0.022" numOctaves="3" seed="23" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="10" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbMarker" x="-8%" y="-45%" width="116%" height="190%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.025 0.04" numOctaves="2" seed="3" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="6" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbRoughBand" x="-3%" y="-220%" width="106%" height="540%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.03" numOctaves="3" seed="11" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="18" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbDeckle" x="-4%" y="-4%" width="108%" height="108%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.022 0.026" numOctaves="2" seed="5" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="4" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbTapeEdge" x="-10%" y="-30%" width="120%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05 0.09" numOctaves="2" seed="9" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="3" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbPencil" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves="2" seed="4" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="lb-root">
+      <a href="#main-content" class="lb-skip btn btn-yellow">
+        Saltar al contenido principal
+      </a>
+      <main id="main-content" role="main">
+        <slot />
+      </main>
+    </div>
+
+    <style is:global>
+      .lb-skip {
+        position: absolute;
+        left: 16px;
+        top: -120px;
+        z-index: 100;
+        transition: top 0.2s ease;
+      }
+      .lb-skip:focus {
+        top: 16px;
+      }
+    </style>
+  </body>
+</html>

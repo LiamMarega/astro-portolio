@@ -1,0 +1,44 @@
+---
+import SketchBorder from "./SketchBorder.astro";
+
+const items = [
+  { n: "01", t: "Mensaje confuso", p: "Tu visitante no entiende rápido qué vendés ni por qué debe interesarle." },
+  { n: "02", t: "Diseño sin intención", p: "Se ve bien, pero no dirige. No hay una estructura alineada al objetivo." },
+  { n: "03", t: "Poca prueba social", p: "Sin casos, testimonios o autoridad, la confianza que necesitas no aparece." },
+  { n: "04", t: "CTA débil o ausente", p: 'Pedir “más info” no convence. Pierdes oportunidades todos los días.' },
+];
+---
+
+<section class="block">
+  <div class="section-head">
+    <div>
+      <div class="kicker reveal">El problema</div>
+      <h2 class="reveal d1" style="margin-top:16px">
+        Tu tráfico no es el problema.<br />
+        Tu <span class="scribble">página sí.
+          <svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4 8 Q 60 1 110 6 T 196 5"></path>
+          </svg>
+        </span>
+      </h2>
+      <p class="body reveal d2">
+        Muchos negocios invierten en contenido, anuncios y estrategia, pero
+        mandan a su audiencia a una web que no explica, no convence y no guía
+        hacia una acción clara.
+      </p>
+    </div>
+    <div class="problem-grid reveal d2">
+      {items.map((it, i) => (
+        <div
+          class="card problem-card reveal"
+          style={`transition-delay:${0.1 + i * 0.08}s;transform:rotate(${i % 2 ? -0.5 : 0.5}deg)`}
+        >
+          <SketchBorder pad={3} />
+          <span class="num-flag">{it.n}</span>
+          <h4>{it.t}</h4>
+          <p>{it.p}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+---
+interface Props {
+  up?: boolean;
+}
+const { up = false } = Astro.props;
+---
+
+<div class={`torn-divider${up ? " up" : ""}`} aria-hidden="true">
+  <div class="strip"></div>
+</div>

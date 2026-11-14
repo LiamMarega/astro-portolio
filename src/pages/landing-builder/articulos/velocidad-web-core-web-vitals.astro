@@ -1,0 +1,133 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Qué son los Core Web Vitals?",
+    a: "Son las tres métricas con las que Google mide la experiencia real de carga de tu web: LCP (velocidad de carga del contenido principal), INP (capacidad de respuesta a las interacciones) y CLS (estabilidad visual). Forman parte de los factores de ranking.",
+  },
+  {
+    q: "¿Cuáles son los valores buenos de Core Web Vitals?",
+    a: "LCP menor a 2,5 segundos, INP menor a 200 milisegundos y CLS menor a 0,1. Google los mide sobre usuarios reales (datos de campo), no solo sobre tests de laboratorio.",
+  },
+  {
+    q: "¿La velocidad web afecta las ventas?",
+    a: "Directamente. Los estudios muestran caídas de conversión medibles por cada segundo adicional de carga, y más de la mitad de los usuarios móviles abandona páginas que tardan más de 3 segundos.",
+  },
+];
+---
+
+<Layout slug="velocidad-web-core-web-vitals" faq={faq}>
+  <p>
+    La velocidad de tu web no es un detalle técnico:
+    <span class="hl">es un factor de ranking en Google y un multiplicador de
+    ventas</span>. Una página lenta pierde dos veces — posiciona peor y
+    convierte peor. Veamos qué medir y qué arreglar primero.
+  </p>
+
+  <h2>Los tres números que Google mira</h2>
+  <table>
+    <thead>
+      <tr><th>Métrica</th><th>Qué mide</th><th>Objetivo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>LCP</strong> (Largest Contentful Paint)</td>
+        <td>Cuánto tarda en verse el contenido principal</td>
+        <td>&lt; 2,5 s</td>
+      </tr>
+      <tr>
+        <td><strong>INP</strong> (Interaction to Next Paint)</td>
+        <td>Cuánto tarda la página en responder al tocar/clickear</td>
+        <td>&lt; 200 ms</td>
+      </tr>
+      <tr>
+        <td><strong>CLS</strong> (Cumulative Layout Shift)</td>
+        <td>Cuánto "salta" el contenido mientras carga</td>
+        <td>&lt; 0,1</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Medilos gratis con <strong>PageSpeed Insights</strong> (datos de usuarios
+    reales si tu sitio tiene tráfico suficiente) y con Lighthouse en Chrome
+    DevTools para diagnóstico de laboratorio.
+  </p>
+
+  <h2>Por qué impacta tus ventas (no solo tu SEO)</h2>
+  <ul>
+    <li>Más de la mitad de los usuarios móviles <strong>abandona</strong> si la página tarda más de 3 segundos.</li>
+    <li>Cada segundo extra de carga reduce la conversión de forma medible — en e-commerce se documentan caídas de hasta 7% por segundo.</li>
+    <li>El tráfico pago se encarece: Google Ads premia páginas rápidas con mejor Quality Score, lo que baja tu costo por clic.</li>
+  </ul>
+
+  <blockquote>
+    Pagás el anuncio cuando hacen clic, no cuando la página termina de cargar.
+    Todo lo que pasa en el medio es dinero tuyo evaporándose.
+  </blockquote>
+
+  <h2>Las 7 optimizaciones con más impacto</h2>
+  <h3>1. Imágenes: el 80% del problema</h3>
+  <p>
+    Formatos modernos (WebP/AVIF), dimensiones explícitas (evita CLS),
+    <code>loading="lazy"</code> para todo lo que está bajo el fold y
+    <code>fetchpriority="high"</code> solo para la imagen del hero.
+  </p>
+  <h3>2. Menos JavaScript</h3>
+  <p>
+    Cada librería que agregás se descarga, parsea y ejecuta en el teléfono de
+    tu cliente. Auditá: ¿ese carrusel necesita 90kb de JS o lo resuelve CSS?
+  </p>
+  <h3>3. Fuentes optimizadas</h3>
+  <p>
+    Self-hosting, <code>font-display: swap</code> y solo los pesos que usás.
+    Cuatro familias tipográficas con seis pesos cada una es un impuesto a cada
+    visita.
+  </p>
+  <h3>4. Generación estática (SSG)</h3>
+  <p>
+    Frameworks como <strong>Astro</strong> o Next.js en modo estático sirven
+    HTML pre-renderizado: el servidor no piensa, solo entrega. Es la
+    arquitectura más rápida posible para landings y sitios de contenido.
+  </p>
+  <h3>5. CDN y caché</h3>
+  <p>
+    Tu página debería servirse desde un servidor cercano al visitante (Vercel,
+    Cloudflare, Netlify lo hacen por defecto).
+  </p>
+  <h3>6. Reservar espacio para todo</h3>
+  <p>
+    Banners, embeds y anuncios que aparecen tarde y empujan el contenido son la
+    causa #1 de CLS. Definí alto y ancho de antemano.
+  </p>
+  <h3>7. Animaciones con cabeza</h3>
+  <p>
+    Animá solo <code>transform</code> y <code>opacity</code> (no disparan
+    re-layout), usá <code>prefers-reduced-motion</code> y cargá las librerías
+    de animación después del contenido crítico.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;left:18px;transform:rotate(-8deg)"></span>
+    <span class="an-hand">Mi stack ✏️</span>
+    Astro + CSS procedural + GSAP cargado diferido. Resultado típico: LCP
+    &lt; 1,5s y 100/100 en Lighthouse — incluso con animaciones por todos
+    lados, como en esta misma página.
+  </div>
+
+  <h2>Velocidad + estructura = conversión</h2>
+  <p>
+    Una página rápida con mal mensaje convierte poco; una página persuasiva
+    pero lenta nunca llega a mostrarse. Necesitás ambas: la estructura está en
+    <a href="/landing-builder/articulos/como-crear-una-landing-page-que-convierta">cómo crear una landing que convierta</a>
+    y el resto de las palancas en
+    <a href="/landing-builder/articulos/optimizacion-cro-mejorar-conversion">15 optimizaciones CRO</a>.
+  </p>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>

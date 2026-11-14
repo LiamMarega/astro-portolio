@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/LandingBuilderLayout.astro';
+import Footer from '../components/landingbuilder/Footer.astro';
+
+const currentYear = new Date().getFullYear();
+const lastUpdated = '26 de octubre de 2026';
+---
+
+<Layout
+  title="Política de Envíos, Entregas y Devoluciones — Liam Marega | Lucero y LiamDev"
+  description="Política de entrega digital inmediata y devoluciones/reembolsos para productos digitales (Lucero) y servicios de desarrollo web (LiamDev)."
+>
+  <header class="nav" id="top">
+    <a class="logo" href="/" aria-label="Inicio — Liam Marega">Liam Marega</a>
+    <span></span>
+    <a href="/" class="btn" style="padding:9px 16px;font-size:11px">&larr; Volver al inicio</a>
+  </header>
+
+  <section class="block privacy">
+    <div class="kicker">Transparencia y Garantía</div>
+    <h1>Política de Envíos y <span class="hl in">Devoluciones</span></h1>
+    <p class="lead">Última actualización: {lastUpdated}</p>
+
+    <div class="prose">
+      <article>
+        <h2>1. Información del Vendedor y Responsable Legal</h2>
+        <div class="note alt info">
+          <p><strong>Titular:</strong> Liam Marega (Persona Física)</p>
+          <p><strong>Identificación (DNI):</strong> 44.497.692</p>
+          <p><strong>Domicilio:</strong> Entre Ríos, República Argentina</p>
+          <p><strong>Correo Electrónico de Contacto y Soporte:</strong> <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a></p>
+          <p><strong>WhatsApp / Atención:</strong> <a href="https://api.whatsapp.com/send?phone=543436203341" target="_blank" rel="noopener">+54 343 620 3341</a></p>
+        </div>
+      </article>
+
+      <article class="card-block">
+        <h2>2. Política de Entrega y Envíos (Productos Digitales)</h2>
+        <p><strong>Naturaleza 100% Digital:</strong> Los productos comercializados bajo la marca <strong>Lucero</strong> (atlas y mapas bíblicos interactivos, software web interactivo, guías y recursos de estudio en formato PDF) y herramientas digitales asociadas son <strong>bienes exclusivamente digitales</strong>.</p>
+        <p><strong>Costos de Envío:</strong> Al no requerir despacho físico, los costos de envío son <strong>USD 0.00 / $0.00 (Envío Gratuito e Inmediato)</strong> a nivel mundial.</p>
+        <p><strong>Plazo y Método de Entrega:</strong></p>
+        <ul>
+          <li><strong>Inmediatez:</strong> La entrega se realiza de forma automática e inmediata una vez que la pasarela de pagos (dLocal Go, Stripe o Mercado Pago) confirma la transacción exitosa.</li>
+          <li><strong>Vía de Envío:</strong> El comprador recibe un correo electrónico en la casilla provista durante la compra, conteniendo el enlace directo de acceso al material, credenciales de usuario y/o links de descarga directa.</li>
+          <li><strong>Disponibilidad:</strong> El acceso a los recursos digitales adquiridos se encuentra disponible las 24 horas del día, los 365 días del año.</li>
+          <li><strong>Resolución de Problemas de Entrega:</strong> Si tras completar el pago no visualiza el correo de confirmación en su bandeja de entrada (incluyendo la carpeta de correo no deseado/spam), puede comunicarse de inmediato a <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a> indicando su comprobante de pago para reexpedir sus accesos en un plazo no mayor a 24 horas.</li>
+        </ul>
+      </article>
+
+      <article class="card-block">
+        <h2>3. Política de Devoluciones y Reembolsos (Productos Digitales - Lucero)</h2>
+        <p>Respaldamos la calidad de nuestros productos digitales con una política de satisfacción transparente:</p>
+        <p><strong>Garantía de Satisfacción de 10 Días:</strong></p>
+        <ul>
+          <li>El comprador cuenta con un período de <strong>10 (diez) días corridos</strong> desde la fecha de compra para solicitar el reembolso total de su dinero si el producto no cumple con sus expectativas o presenta incompatibilidad técnica insalvable.</li>
+          <li><strong>Cómo solicitar el reembolso:</strong> Para iniciar una devolución o reclamo, el cliente simplemente debe enviar un correo a <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a> con el asunto <em>"Solicitud de Reembolso - [Número de Orden o ID de Transacción]"</em>, indicando el email utilizado en la compra y el motivo de su solicitud.</li>
+          <li><strong>Procesamiento y Plazos de Acreditación:</strong> Una vez recibida la solicitud y verificada la compra en el sistema de dLocal Go, el reembolso se aprueba en un plazo máximo de 48 a 72 horas hábiles. La acreditación efectiva en la tarjeta o cuenta de origen demorará entre <strong>3 y 10 días hábiles</strong>, dependiendo de la entidad bancaria o método de pago seleccionado por el cliente.</li>
+          <li><strong>Reversión del Acceso:</strong> Tras emitirse el reembolso, las licencias y accesos a la plataforma o contenidos digitales serán dados de baja.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>4. Entrega y Cancelación de Servicios Profesionales (LiamDev / Landing PRO)</h2>
+        <p>Para servicios personalizados de desarrollo web, diseño de interfaces y consultoría:</p>
+        <ul>
+          <li><strong>Plazos de Entrega:</strong> Los tiempos de desarrollo y entrega final se estipulan en la propuesta comercial aprobada por el cliente, oscilando habitualmente entre 5 y 15 días hábiles a partir de la recepción de los contenidos y el anticipo convenido.</li>
+          <li><strong>Cancelación y Reembolso de Servicios:</strong> Si el cliente decide cancelar el proyecto antes del inicio de los trabajos de diseño o desarrollo, se reintegrará el 100% del importe abonado. Si el trabajo ya fue iniciado, el anticipo cubrirá las horas de diseño y arquitectura ya ejecutadas, no habiendo lugar a reembolso del anticipo inicial.</li>
+          <li><strong>Revisiones y Aprobación:</strong> El cliente cuenta con rondas de revisión técnica y de diseño especificadas en el contrato para asegurar que el producto final cumpla con el estándar acordado antes de su publicación definitiva.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>5. Medios de Contacto para Reclamaciones y Soporte</h2>
+        <p>Para cualquier inquietud sobre envíos, accesos o solicitudes de reintegro, nuestros canales directos son:</p>
+        <ul>
+          <li><strong>Email Oficial:</strong> <a href="mailto:liammaregadevelop@gmail.com">liammaregadevelop@gmail.com</a> (Atención de lunes a viernes de 9:00 a 18:00 hs ART).</li>
+          <li><strong>WhatsApp:</strong> <a href="https://api.whatsapp.com/send?phone=543436203341" target="_blank" rel="noopener">+54 343 620 3341</a>.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="privacy-foot">
+      <p>&copy; {currentYear} Liam Marega · DNI 44.497.692 · liammaregadevelop@gmail.com · Entre Ríos, Argentina.</p>
+      <div style="margin-top:12px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <a href="/terminos-y-condiciones">Términos y Condiciones</a>
+        <a href="/politica-de-reembolso">Política de Reembolsos y Envíos</a>
+        <a href="/politica-de-privacidad">Política de Privacidad</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .lb-root .privacy {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 100px 20px 60px;
+  }
+  .lb-root .privacy h1 {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    margin-top: 14px;
+    font-weight: 700;
+  }
+  .lb-root .privacy .lead {
+    margin-top: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .lb-root .privacy .prose {
+    margin-top: 40px;
+    display: grid;
+    gap: 36px;
+  }
+  .lb-root .privacy article h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .lb-root .privacy article p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    color: var(--ink-2);
+  }
+  .lb-root .privacy article p strong {
+    color: var(--ink);
+  }
+  .lb-root .privacy article ul {
+    margin: 6px 0 12px;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+  }
+  .lb-root .privacy article li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .lb-root .privacy .info {
+    display: grid;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .lb-root .privacy .info p {
+    margin: 0;
+  }
+  .lb-root .privacy .card-block {
+    background: rgba(226, 255, 0, 0.06);
+    border: 1px solid rgba(169, 135, 0, 0.25);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .lb-root .privacy .privacy-foot {
+    margin-top: 56px;
+    border-top: 1px dashed rgba(120, 105, 70, 0.3);
+    padding-top: 24px;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .lb-root .privacy .privacy-foot a {
+    color: var(--ink-2);
+    text-decoration: underline;
+  }
+  .lb-root .privacy .privacy-foot a:hover {
+    color: var(--ink);
+  }
+</style>

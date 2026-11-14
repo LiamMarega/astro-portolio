@@ -1,0 +1,36 @@
+---
+import BigBlob from "./BigBlob.astro";
+
+const stats = [
+  { v: "+214%", l: "Aumento en conversiones" },
+  { v: "-62%", l: "Reducción en costo por lead" },
+  { v: "3.7×", l: "Más leads calificados" },
+  { v: "+28%", l: "Más ventas en el primer mes" },
+];
+---
+
+<div id="resultados" class="caso-wrap reveal">
+  <BigBlob size={300} parallax={0.14} rotate="-40deg" flip style="position:absolute;left:-110px;bottom:-80px;opacity:.95;z-index:3" />
+  <BigBlob size={230} parallax={0.1} drift={false} rotate="130deg" style="position:absolute;right:60px;bottom:-70px;opacity:.9;z-index:3" />
+  <div class="caso">
+    <div class="row">
+      <div>
+        <div class="kicker">Caso real</div>
+        <h2 style="margin-top:16px">De más tráfico a<br />más oportunidades.</h2>
+        <p class="lead">
+          Rediseñamos su landing enfocada en claridad, confianza y conversión.
+          Este fue el resultado.
+        </p>
+      </div>
+      <div class="stats">
+        {stats.map((s) => (
+          <div class="it"><strong>{s.v}</strong><span>{s.l}</span></div>
+        ))}
+      </div>
+    </div>
+  </div>
+  <div class="note caso-side-note">
+    <span class="tape sm" style="top:-10px;right:26px;transform:rotate(10deg)"></span>
+    <p>Misma oferta.<br />Más claridad.<br />Mejores resultados.</p>
+  </div>
+</div>

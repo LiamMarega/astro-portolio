@@ -1,0 +1,118 @@
+---
+import Layout from "../../../layouts/ArticleLayout.astro";
+const faq = [
+  {
+    q: "¿Qué es una landing page en pocas palabras?",
+    a: "Es una página web diseñada con un único objetivo: que el visitante realice una acción concreta, como comprar, agendar una llamada o dejar sus datos. A diferencia de una web tradicional, elimina distracciones y guía al usuario hacia esa acción.",
+  },
+  {
+    q: "¿Cuál es la diferencia entre landing page y página web?",
+    a: "Una página web informa y tiene múltiples destinos (menú, secciones, enlaces). Una landing page convierte: tiene un solo mensaje, un solo público y una sola llamada a la acción.",
+  },
+  {
+    q: "¿Necesito una landing page si ya tengo sitio web?",
+    a: "Si invertís en publicidad, lanzamientos o captación de leads, sí. Enviar tráfico pago a una home genérica suele convertir 2 a 5 veces menos que enviarlo a una landing específica para esa campaña.",
+  },
+];
+---
+
+<Layout slug="que-es-una-landing-page" faq={faq}>
+  <p>
+    Una <strong>landing page</strong> (o página de aterrizaje) es una página web
+    creada con <span class="hl">un único objetivo de conversión</span>: que la
+    persona que llega haga una acción concreta. Comprar. Agendar una llamada.
+    Dejar su email. Nada más.
+  </p>
+  <p>
+    Esa es la gran diferencia con tu sitio web tradicional, que intenta hacer
+    muchas cosas a la vez: contar tu historia, mostrar servicios, tener un blog,
+    un menú con ocho opciones… Y cuando una página intenta lograr todo, no logra
+    nada.
+  </p>
+
+  <blockquote>
+    Una web informa. Una landing page convierte. Son herramientas distintas para
+    trabajos distintos.
+  </blockquote>
+
+  <h2>Para qué sirve una landing page</h2>
+  <p>
+    Cada vez que dirigís tráfico hacia tu negocio — anuncios de Meta o Google,
+    un link en tu bio de Instagram, una campaña de email, un lanzamiento — ese
+    tráfico necesita aterrizar en algún lado. La landing page es ese lugar, y su
+    trabajo es transformar visitantes en oportunidades reales:
+  </p>
+  <ul>
+    <li><strong>Captar leads:</strong> personas interesadas que dejan sus datos a cambio de algo de valor.</li>
+    <li><strong>Vender un producto o servicio:</strong> presentar una oferta concreta y cerrar la venta.</li>
+    <li><strong>Agendar llamadas o consultas:</strong> el formato típico de coaches, consultores y servicios premium.</li>
+    <li><strong>Validar una idea:</strong> medir interés real antes de construir el producto completo.</li>
+  </ul>
+
+  <h2>Por qué convierte más que tu web</h2>
+  <p>
+    Los datos de la industria son consistentes año tras año: las landing pages
+    dedicadas convierten significativamente más que las páginas genéricas de un
+    sitio. Hay tres razones de fondo:
+  </p>
+  <h3>1. Un solo mensaje, cero distracciones</h3>
+  <p>
+    Sin menú de navegación, sin enlaces que se lleven al usuario a otra parte.
+    Cada elemento de la página empuja hacia la misma acción. En una home
+    tradicional, el visitante tiene veinte caminos posibles; en una landing,
+    tiene uno.
+  </p>
+  <h3>2. Coherencia con el origen del tráfico</h3>
+  <p>
+    Si tu anuncio promete "diagnóstico gratuito de tu web", la landing repite
+    exactamente esa promesa. Esa coherencia entre anuncio y página (el famoso
+    <em>message match</em>) es uno de los factores que más impacta la
+    conversión, y es imposible de lograr con una página genérica.
+  </p>
+  <h3>3. Estructura persuasiva, no informativa</h3>
+  <p>
+    Una buena landing sigue una secuencia psicológica: capta la atención,
+    agita el problema, presenta la solución, demuestra con prueba social y
+    cierra con una llamada a la acción clara. Es una conversación de ventas en
+    formato página.
+  </p>
+
+  <h2>Los elementos de una landing page efectiva</h2>
+  <ul>
+    <li><strong>Hero:</strong> titular que comunica el beneficio principal en menos de 5 segundos.</li>
+    <li><strong>Prueba social:</strong> testimonios, casos, logos, resultados medibles.</li>
+    <li><strong>Oferta clara:</strong> qué obtengo, qué cuesta, qué pasa después.</li>
+    <li><strong>CTA visible y repetido:</strong> la acción que querés que ocurra, imposible de ignorar.</li>
+    <li><strong>Velocidad:</strong> si tarda más de 3 segundos en cargar, perdiste a la mitad de tus visitantes.</li>
+  </ul>
+  <p>
+    Si querés ver la estructura completa sección por sección, te la desarmo en
+    <a href="/landing-builder/articulos/como-crear-una-landing-page-que-convierta">cómo crear una landing page que convierta</a>.
+  </p>
+
+  <div class="art-note">
+    <span class="tape sm" style="top:-10px;left:18px;transform:rotate(-8deg)"></span>
+    <span class="an-hand">Nota al margen ✏️</span>
+    El error más común que veo: invertir USD 1.000/mes en anuncios y mandar ese
+    tráfico a una home que nunca fue pensada para vender. Es como contratar un
+    vendedor estrella y hacerlo atender el teléfono.
+  </div>
+
+  <h2>¿Cuándo NO necesitás una landing page?</h2>
+  <p>
+    Si no tenés tráfico ni planes de generarlo, una landing sola no hace magia.
+    Primero necesitás una fuente de visitantes (anuncios, contenido, referidos)
+    y una oferta clara. La landing es el puente entre ese tráfico y tus ventas
+    — pero el puente necesita gente que lo cruce. Sobre la decisión entre web
+    completa o landing, profundizo en
+    <a href="/landing-builder/articulos/landing-page-vs-pagina-web">landing page vs página web</a>.
+  </p>
+
+  <h2>Preguntas frecuentes</h2>
+  {faq.map((f) => (
+    <>
+      <h3>{f.q}</h3>
+      <p>{f.a}</p>
+    </>
+  ))}
+</Layout>
