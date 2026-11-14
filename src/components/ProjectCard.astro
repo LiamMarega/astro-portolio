@@ -1,0 +1,257 @@
+---
+import Doodle from './Doodle.astro';
+import VideoFrame from './VideoFrame.astro';
+import Brand from './Brand.astro';
+import { useContent, type Project } from '../content/site';
+
+interface Props {
+  project: Project;
+  index: number;
+}
+const { project, index } = Astro.props;
+const { site } = useContent(Astro.currentLocale);
+---
+
+<article class="pcard" data-reveal data-pcard={project.slug} style={`--i:${index}`}>
+  <a class="pcard__hit" href={`#work/${project.slug}`} data-open-case={project.slug} aria-label={`${site.ui.openCase} ${project.name}`}></a>
+  <div class="pcard__glow" aria-hidden="true"></div>
+
+  <header class="pcard__head">
+    <Brand slug={project.slug} uid="card" fallback={project.icon} class="pcard__logo" data-vt-logo={project.slug} />
+    <h3 class="pcard__title">{project.name}</h3>
+    <span class="pcard__arrow" aria-hidden="true">
+      <Doodle name="arrow" seed={index} drawn duration={0.62} delay={0.12} />
+    </span>
+  </header>
+
+  <p class="pcard__desc">{project.summary}</p>
+  {project.credit && <p class="pcard__credit hand">{project.credit}</p>}
+
+  <div class="pcard__media" aria-hidden="true">
+    {
+      project.media.map((m) => (
+        <figure
+          class:list={['pcard__img', { 'pcard__img--video': !!m.video }]}
+          style={`--l:${m.left}%;--w:${m.width}%;--t:${m.top};--r:${m.rotate}deg;--hx:${m.hover?.x ?? 0}px;--hy:${m.hover?.y ?? -60}px;--hr:${m.hover?.rotate ?? m.rotate * 2}deg;--hs:${m.hover?.scale ?? 1.05}`}
+        >
+          {m.video ? (
+            <VideoFrame src={m.video.src} poster={m.src} w={m.w} h={m.h} url={m.video.url} dark={m.video.dark} />
+          ) : (
+            <img src={m.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" draggable="false" />
+          )}
+        </figure>
+      ))
+    }
+    {project.badge && (
+      <span class="pcard__badge" data-tone={project.badge.tone}>
+        {project.badge.text}
+      </span>
+    )}
+  </div>
+</article>
+
+<style>
+  .pcard {
+    --pad: clamp(20px, 3.27vw, 56px);
+    --stack: 0;
+    /* scroll stack: every card sticks a little lower than the previous one */
+    position: sticky;
+    top: calc(var(--stack-top, 84px) + var(--i, 0) * var(--stack-step, 12px));
+    scale: calc(1 - var(--stack) * 0.045);
+    transform-origin: 50% 0%;
+    isolation: isolate;
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: var(--pad) var(--pad) 0;
+    border-radius: var(--radius-card);
+    background: var(--card);
+    overflow: hidden;
+    cursor: pointer;
+    contain: layout paint;
+  }
+
+  .pcard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    border-radius: inherit;
+    background: #000;
+    opacity: calc(var(--stack) * 0.045);
+    pointer-events: none;
+  }
+  @media (max-height: 560px) {
+    .pcard {
+      position: relative;
+      top: auto;
+    }
+  }
+
+  .pcard__hit {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border-radius: inherit;
+  }
+  .pcard__hit:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: -4px;
+  }
+
+  .pcard__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    background:
+      radial-gradient(ellipse 66% 86% at 100% 0%, #fec81a 0%, #fcd13a 14%, #fbdc5a 28%, #f7e590 46%, #f2ebbd 64%, rgba(238, 237, 224, 0) 92%),
+      #eeede0;
+    transition: opacity 0.5s ease;
+  }
+
+  .pcard__head {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 1.16vw, 20px);
+  }
+
+  .pcard__head :global(.pcard__logo) {
+    flex: none;
+    width: clamp(34px, 3.41vw, 58px);
+    aspect-ratio: 1;
+    border-radius: 24%;
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+      0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .pcard__title {
+    font-size: clamp(26px, 3.14vw, 54px);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .pcard__arrow {
+    margin-left: auto;
+    width: clamp(30px, 3.1vw, 52px);
+    color: #0a0a0a;
+    transform: translateX(4%);
+  }
+  .pcard__arrow :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+
+  .pcard__desc {
+    margin-top: clamp(14px, 1.84vw, 32px);
+    max-width: 27em;
+    font-size: clamp(16px, 1.733vw, 28px);
+    line-height: 1.36;
+    color: var(--ink-soft);
+  }
+
+  .pcard__credit {
+    margin-top: 0.28em;
+    font-size: clamp(16px, 1.87vw, 32px);
+    color: #8d8d8d;
+    transform: translateX(0.14vw);
+  }
+
+  .pcard__media {
+    position: relative;
+    margin-top: clamp(28px, 3.55vw, 60px);
+    height: clamp(210px, 24.7vw, 420px);
+    margin-inline: calc(var(--pad) * -0.02);
+  }
+
+  .pcard__img {
+    position: absolute;
+    left: var(--l);
+    width: var(--w);
+    top: calc(var(--t) * 0.0682vw);
+    margin: 0;
+    padding: clamp(3px, 0.41vw, 7px);
+    border-radius: clamp(10px, 1.1vw, 18px);
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 8px 30px rgba(0, 0, 0, 0.08);
+    transform: rotate(var(--r));
+    transform-origin: 50% 30%;
+    transition: transform 0.7s cubic-bezier(0.3, 1.18, 0.4, 1);
+    will-change: transform;
+  }
+  .pcard__img img {
+    width: 100%;
+    border-radius: clamp(7px, 0.75vw, 12px);
+    user-select: none;
+  }
+
+  /* die-cut badge sticker */
+  .pcard__badge {
+    position: absolute;
+    right: 2.2%;
+    top: calc(var(--badge-top, -14) * 0.0682vw);
+    z-index: 3;
+    padding: 0.42em 0.95em 0.5em;
+    border-radius: 999px;
+    font-size: clamp(12px, 1.1vw, 19px);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    color: #111;
+    background: #ffd60a;
+    box-shadow:
+      0 0 0 0.28em #fff,
+      0 0.5em 1.2em rgba(0, 0, 0, 0.18);
+    transform: rotate(6deg);
+    transition: transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .pcard__badge[data-tone='mint'] {
+    background: #5ee39a;
+  }
+  .pcard__badge[data-tone='blue'] {
+    background: #a9edff;
+  }
+  .pcard__badge[data-tone='pink'] {
+    background: #ffc2dd;
+  }
+  .pcard__badge[data-tone='black'] {
+    background: #111;
+    color: #ffd84a;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pcard:hover .pcard__glow,
+    .pcard:focus-within .pcard__glow {
+      opacity: 1;
+    }
+    .pcard:hover .pcard__img,
+    .pcard:focus-within .pcard__img {
+      transform: translate(var(--hx), var(--hy)) rotate(var(--hr)) scale(var(--hs));
+    }
+    .pcard:hover .pcard__badge,
+    .pcard:focus-within .pcard__badge {
+      transform: translateY(-0.6em) rotate(-4deg) scale(1.08);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .pcard {
+      --pad: 20px;
+      width: calc(100% - 32px);
+      border-radius: 22px;
+    }
+    .pcard__desc {
+      font-size: 16px;
+    }
+    .pcard__media {
+      height: 56vw;
+      margin-top: 26px;
+    }
+    .pcard__img {
+      top: calc(var(--t) * 0.16vw);
+    }
+  }
+</style>

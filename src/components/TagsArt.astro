@@ -1,0 +1,235 @@
+---
+import Doodle from './Doodle.astro';
+import { icon } from '../lib/icons';
+import { useContent } from '../content/site';
+const { site } = useContent(Astro.currentLocale);
+
+// pose: [cx%, cy%, width%, rotate] spread  |  stacked
+const poses = [
+  { spread: [30.2, 33.6, 35.6, -38], stack: [45.5, 47.5, 37, -7], z: 5 },
+  { spread: [58.9, 39.8, 40.6, 8], stack: [47.5, 45.5, 40, 3], z: 2 },
+  { spread: [49.2, 52.6, 37.8, -4], stack: [46, 50.5, 37.8, -2], z: 1 },
+  { spread: [25.7, 61.7, 43.2, 6], stack: [44, 52, 40, 4], z: 3 },
+  { spread: [64.8, 65.6, 44.4, -14], stack: [47, 53, 41, -5], z: 4 },
+];
+---
+
+<div class="tags" data-tags aria-label={`${site.story.tagsLabel}: ${site.story.tags.map((t) => t.label).join(', ')}`} role="img">
+  <div class="tags__window">
+    <Doodle name="window" seed="tw" drawn width={5} />
+  </div>
+  <Doodle name="tagsStar" seed="ts" class="tags__d tags__star" drawn />
+  <Doodle name="tagsSwoosh" seed="tw2" class="tags__d tags__swoosh" drawn />
+  <Doodle name="tagsScribble" seed="tsc" class="tags__d tags__scribble" drawn />
+
+  {
+    site.story.tags.map((t, i) => {
+      const p = poses[i % poses.length];
+      return (
+        <span
+          class:list={['tag', `tag--${t.tone}`]}
+          style={`--cx:${p.spread[0]}%;--cy:${p.spread[1]}%;--w:${p.spread[2]}%;--rot:${p.spread[3]}deg;--sx:${p.stack[0]}%;--sy:${p.stack[1]}%;--sw:${p.stack[2]}%;--srot:${p.stack[3]}deg;--z:${p.z};--i:${i}`}
+        >
+          <span class="tag__icon" set:html={icon(t.icon)} />
+          <span>{t.label}</span>
+        </span>
+      );
+    })
+  }
+
+  <span class="tags__cursor" aria-hidden="true">
+    <svg viewBox="0 0 40 44"><path d="M3 3l33 14.5-14.2 4.4L14.6 40z" /></svg>
+  </span>
+  <span class="tags__name hand" aria-hidden="true">{site.handle}</span>
+</div>
+
+<style>
+  .tags {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    --spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  }
+
+  .tags__window {
+    position: absolute;
+    left: 14.6%;
+    top: 20.3%;
+    width: 61.3%;
+    color: #111;
+    transform-origin: 50% 50%;
+    transition: transform 0.75s var(--spring);
+  }
+  .tags__window :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+
+  .tags :global(.tags__d) {
+    position: absolute;
+    color: #111;
+    transition:
+      opacity 0.35s ease,
+      transform 0.6s var(--spring);
+  }
+  .tags :global(.tags__star) {
+    left: 4.2%;
+    top: 25.8%;
+    width: 7.4%;
+  }
+  .tags :global(.tags__swoosh) {
+    left: 59.6%;
+    top: 22%;
+    width: 30%;
+  }
+  .tags :global(.tags__scribble) {
+    left: 7.4%;
+    top: 66.5%;
+    width: 30%;
+  }
+
+  .tag {
+    position: absolute;
+    left: var(--cx);
+    top: var(--cy);
+    width: var(--w);
+    z-index: var(--z);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.22em;
+    padding: 0.28em 0.5em 0.34em;
+    border-radius: 0.36em;
+    font-size: 7.1cqw;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--top), var(--bot));
+    box-shadow:
+      inset 0 0.05em 0 rgba(255, 255, 255, 0.85),
+      inset 0 -0.07em 0 var(--edge),
+      0 0.06em 0.02em rgba(0, 0, 0, 0.06),
+      0 0.18em 0.32em -0.08em var(--shadow);
+    transform: translate(-50%, -50%) rotate(var(--rot));
+    transition:
+      left 0.8s var(--spring),
+      top 0.8s var(--spring),
+      width 0.8s var(--spring),
+      transform 0.8s var(--spring);
+    transition-delay: calc(var(--i) * 0.05s);
+  }
+  .tag__icon {
+    display: grid;
+    flex: none;
+  }
+  .tag__icon :global(svg) {
+    width: 0.86em;
+    height: 0.86em;
+    stroke-width: 2.1;
+    opacity: 0.9;
+  }
+
+  .tag--blue {
+    --top: #dcebff;
+    --bot: #a9cffd;
+    --ink: #3d86ea;
+    --edge: rgba(46, 116, 214, 0.22);
+    --shadow: rgba(55, 120, 220, 0.35);
+  }
+  .tag--mint {
+    --top: #d9fbe9;
+    --bot: #9becc3;
+    --ink: #1fae6b;
+    --edge: rgba(24, 150, 92, 0.2);
+    --shadow: rgba(30, 160, 100, 0.32);
+  }
+  .tag--lime {
+    --top: #f1ffb0;
+    --bot: #cdee5c;
+    --ink: #6a9f12;
+    --edge: rgba(110, 150, 10, 0.22);
+    --shadow: rgba(120, 160, 20, 0.32);
+  }
+  .tag--violet {
+    --top: #f6e3ff;
+    --bot: #dfb2fb;
+    --ink: #a24bd6;
+    --edge: rgba(150, 70, 200, 0.2);
+    --shadow: rgba(160, 80, 210, 0.32);
+  }
+  .tag--orange {
+    --top: #ffeeb0;
+    --bot: #ffcb64;
+    --ink: #ee8715;
+    --edge: rgba(220, 130, 20, 0.22);
+    --shadow: rgba(230, 140, 30, 0.35);
+  }
+
+  .tags__cursor {
+    position: absolute;
+    left: 73.4%;
+    top: 70.6%;
+    width: 6.4%;
+    z-index: 7;
+    transition: transform 0.8s var(--spring);
+  }
+  .tags__cursor svg {
+    width: 100%;
+    height: auto;
+    fill: #0b0b0b;
+    stroke: #0b0b0b;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  .tags__name {
+    position: absolute;
+    left: 77%;
+    top: 77%;
+    z-index: 7;
+    padding: 0.05em 0.24em 0.12em;
+    border: 0.08em solid #0b0b0b;
+    border-radius: 0.2em;
+    background: #fff;
+    font-size: 4.6cqw;
+    line-height: 1;
+    white-space: nowrap;
+    color: #0b0b0b;
+    -webkit-text-stroke: 0.025em currentColor;
+    transform: rotate(7deg);
+    transition: transform 0.8s var(--spring);
+  }
+
+  /* ── collapsed pose (toggled by JS on a loop) ── */
+  .tags.is-stacked .tag {
+    left: var(--sx);
+    top: var(--sy);
+    width: var(--sw);
+    transform: translate(-50%, -50%) rotate(var(--srot));
+    transition-delay: calc((4 - var(--i)) * 0.035s);
+  }
+  .tags.is-stacked .tags__window {
+    transform: scale(0.62) translate(-1%, -2%);
+  }
+  .tags.is-stacked :global(.tags__d) {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  .tags.is-stacked .tags__cursor {
+    transform: translate(-80%, -150%);
+  }
+  .tags.is-stacked .tags__name {
+    transform: translate(-48%, -128%) rotate(3deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tags.is-stacked .tag {
+      left: var(--cx);
+      top: var(--cy);
+      width: var(--w);
+      transform: translate(-50%, -50%) rotate(var(--rot));
+    }
+  }
+</style>

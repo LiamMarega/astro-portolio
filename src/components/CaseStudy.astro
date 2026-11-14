@@ -1,0 +1,541 @@
+---
+import Brand from './Brand.astro';
+import { storeLogos } from '../lib/logos';
+import VideoFrame from './VideoFrame.astro';
+import { icon } from '../lib/icons';
+import { useContent } from '../content/site';
+
+const { site, projects } = useContent(Astro.currentLocale);
+
+const lum = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+    const x = v / 255;
+    return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+};
+const ink = (hex: string) => (lum(hex) > 0.36 ? '#111' : '#fff');
+const external = icon('ArrowUpRight');
+---
+
+<div class="case" data-case aria-hidden="true" inert>
+  <div class="case__scroller" data-case-scroller data-lenis-prevent tabindex="-1">
+    {
+      projects.map((p, i) => {
+        const next = projects[(i + 1) % projects.length];
+        const [a, b] = p.media;
+        const [dark, accent, light, mid] = p.palette;
+        const rows = [light, accent, mid, dark];
+        const chips = p.stack ?? p.keywords ?? [];
+        return (
+          <article class="case__panel" data-case-panel={p.slug} role="dialog" aria-modal="true" aria-labelledby={`case-${p.slug}`} hidden>
+            <div class="case__wrap">
+              <Brand slug={p.slug} uid="case" fallback={p.icon} class="case__logo" data-vt-logo={p.slug} />
+              <h2 id={`case-${p.slug}`} class="case__title">
+                {p.name}
+              </h2>
+              <div class="case__intro">
+                {p.intro.map((t) => (
+                  <p>{t}</p>
+                ))}
+              </div>
+              <ul class="case__tags" aria-label={site.ui.role}>
+                <li class="case__role">{p.role}</li>
+                {chips.slice(0, 6).map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+              <div class="case__links">
+                <a class="case__live" href={p.url} target="_blank" rel="noopener">
+                  {site.ui.visit} · {p.urlLabel}
+                  <span set:html={external} />
+                </a>
+                {p.links?.map((l) => {
+                  const logo = storeLogos[l.url];
+                  return (
+                    <a class:list={['case__store', { 'case__store--logo': !!logo }]} href={l.url} target="_blank" rel="noopener" aria-label={logo ? l.label : undefined}>
+                      {logo ? <img src={logo.src} alt="" width={logo.w} height={logo.h} loading="lazy" decoding="async" /> : l.label}
+                      <span set:html={external} />
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div class="case__grid">
+                <figure class="case__fig case__fig--wide">
+                  <img src={p.cover.src} alt={p.cover.alt} width={p.cover.w} height={p.cover.h} loading="lazy" decoding="async" />
+                </figure>
+
+                <figure class="case__fig" style={`background:${dark}`}>
+                  <img class="case__float" src={a.src} alt={a.alt} width={a.w} height={a.h} loading="lazy" decoding="async" />
+                </figure>
+
+                <div class="case__metrics" role="list" aria-label={site.ui.metrics}>
+                  {p.metrics.map((m, k) => (
+                    <div role="listitem" style={`background:${rows[k % 4]};color:${ink(rows[k % 4])}`}>
+                      <b>{m.value}</b>
+                      <span>{m.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div class="case__stack" style={`background:${light};color:${ink(light)}`}>
+                  <span class="case__label">{p.stack ? site.ui.stack : site.ui.product}</span>
+                  <ul>
+                    {chips.map((t, k) => (
+                      <li style={k % 3 === 0 ? `background:${dark};color:${ink(dark)}` : k % 3 === 1 ? `background:${accent};color:${ink(accent)}` : `background:#fff;color:#111`}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="case__features" style={`background:${accent};color:${ink(accent)}`}>
+                  <span class="case__label">{site.ui.features}</span>
+                  <ul>
+                    {p.features.map((f) => (
+                      <li>
+                        <span set:html={icon(f.icon)} />
+                        {f.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <figure class="case__fig" style={`background:${dark}`}>
+                  {b.video ? (
+                    <div class="case__video">
+                      <VideoFrame src={b.video.src} poster={b.src} w={b.w} h={b.h} url={b.video.url} dark={b.video.dark} label={b.alt} />
+                    </div>
+                  ) : (
+                    <img class="case__float case__float--b" src={b.src} alt={b.alt} width={b.w} height={b.h} loading="lazy" decoding="async" />
+                  )}
+                </figure>
+              </div>
+
+              <a class="case__next" href={`#work/${next.slug}`} data-open-case={next.slug}>
+                <span class="case__next-label">{site.ui.nextProject}</span>
+                <span class="case__next-name">
+                  <Brand slug={next.slug} uid={`next-${p.slug}`} fallback={next.icon} class="case__next-logo" />
+                  {next.name}
+                  <svg viewBox="0 0 56 44" aria-hidden="true">
+                    <path d="M4 22.5C18 21.6 32 22.4 50 21.8M37 9c5 4.6 9.5 8.8 13.5 12.8C46.4 26 42 30.4 37.6 35" />
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+  <div class="case__blur" aria-hidden="true"><i></i><i></i><i></i></div>
+</div>
+
+<style>
+  .case {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: var(--page);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.22s ease,
+      visibility 0s linear 0.22s;
+  }
+  :global(.is-case) .case {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.24s ease,
+      visibility 0s;
+  }
+
+  /* the sheet stays docked under the nav; its content scrolls inside it */
+  .case__scroller {
+    --sheet-top: 69px;
+    position: absolute;
+    inset: var(--sheet-top) 8px 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    outline: none;
+    border-radius: clamp(18px, 1.64vw, 28px) clamp(18px, 1.64vw, 28px) 0 0;
+    background: var(--card);
+    transform: translateY(26px);
+    transition: transform 0.6s var(--ease-out);
+  }
+  .case__scroller::-webkit-scrollbar {
+    display: none;
+  }
+  :global(.is-case) .case__scroller {
+    transform: none;
+  }
+
+  .case__panel {
+    min-height: 100%;
+  }
+
+  /* soft fade where the content slides under the sheet's top edge */
+  .case__blur {
+    position: absolute;
+    top: 69px;
+    left: 8px;
+    right: 8px;
+    height: clamp(36px, 3.6vw, 60px);
+    border-radius: clamp(18px, 1.64vw, 28px) clamp(18px, 1.64vw, 28px) 0 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateY(26px);
+    transition: transform 0.6s var(--ease-out);
+  }
+  :global(.is-case) .case__blur {
+    transform: none;
+  }
+  .case__blur i {
+    position: absolute;
+    inset: 0;
+    -webkit-backdrop-filter: blur(var(--b));
+    backdrop-filter: blur(var(--b));
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent var(--e));
+    mask-image: linear-gradient(to bottom, #000 0%, transparent var(--e));
+  }
+  .case__blur i:nth-child(1) {
+    --b: 1.5px;
+    --e: 100%;
+  }
+  .case__blur i:nth-child(2) {
+    --b: 3.5px;
+    --e: 62%;
+  }
+  .case__blur i:nth-child(3) {
+    --b: 7px;
+    --e: 32%;
+  }
+
+  .case__wrap {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: clamp(36px, 4.9vw, 84px) 0 clamp(40px, 5vw, 90px);
+  }
+
+  .case__wrap > :global(.case__logo) {
+    width: clamp(48px, 4.8vw, 82px);
+    aspect-ratio: 1;
+    border-radius: 22%;
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+      0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .case__title {
+    margin-top: clamp(28px, 4.3vw, 72px);
+    font-size: clamp(40px, 4.78vw, 84px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .case__intro {
+    margin-top: clamp(18px, 2.4vw, 40px);
+    max-width: 38em;
+    font-size: clamp(16px, 1.56vw, 26px);
+    line-height: 1.43;
+    color: #555;
+  }
+  .case__intro p + p {
+    margin-top: 0.9em;
+  }
+
+  .case__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 8px;
+    margin: clamp(22px, 2.6vw, 44px) 0 0;
+    padding: 0;
+    max-width: 44em;
+    list-style: none;
+  }
+  .case__tags li {
+    padding: 0.42em 0.85em;
+    border-radius: 999px;
+    background: #e3e3e3;
+    font-size: clamp(12px, 1.02vw, 17px);
+    font-weight: 500;
+    color: #111;
+  }
+  .case__tags li.case__role {
+    background: #111;
+    color: var(--sun-text);
+  }
+
+  .case__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: clamp(16px, 1.6vw, 26px);
+  }
+  .case__live,
+  .case__store {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.62em 1.05em;
+    border-radius: 999px;
+    font-size: clamp(13px, 1.1vw, 18px);
+    font-weight: 550;
+    transition:
+      transform 0.35s var(--ease-spring),
+      background 0.25s ease;
+  }
+  .case__live {
+    background: var(--sun);
+    color: #111;
+  }
+  .case__store {
+    background: #fff;
+    color: #111;
+    box-shadow: inset 0 0 0 1px #dedede;
+  }
+  .case__live :global(svg),
+  .case__store :global(svg) {
+    width: 1.1em;
+    height: 1.1em;
+    stroke-width: 2.2;
+  }
+  .case__store--logo img {
+    display: block;
+    width: auto;
+    height: 1.55em;
+    margin: -0.25em 0;
+  }
+  .case__live:hover,
+  .case__store:hover {
+    transform: translateY(-2px) rotate(-1.5deg);
+  }
+
+  .case__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(6px, 0.55vw, 10px);
+    margin-top: clamp(40px, 5.2vw, 90px);
+  }
+
+  .case__fig,
+  .case__metrics,
+  .case__stack,
+  .case__features {
+    margin: 0;
+    border-radius: clamp(10px, 0.9vw, 16px);
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .case__fig--wide {
+    grid-column: 1 / -1;
+  }
+  .case__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .case__fig:not(.case__fig--wide) {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1 / 0.82;
+    padding: 7%;
+  }
+  .case__fig img.case__float {
+    width: auto;
+    height: auto;
+    max-width: 82%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    transform: rotate(-3deg);
+  }
+  .case__fig img.case__float--b {
+    max-width: 100%;
+    transform: rotate(2deg);
+  }
+  .case__video {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    transform: rotate(2deg);
+    overflow: hidden;
+  }
+
+  .case__label {
+    display: block;
+    font-size: clamp(12px, 1vw, 16px);
+    font-weight: 550;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* numbers, laid out like a colour palette */
+  .case__metrics {
+    display: grid;
+    grid-template-rows: 1.3fr 1fr 1fr 0.9fr;
+    aspect-ratio: 1 / 0.82;
+  }
+  .case__metrics div {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 0 clamp(14px, 1.3vw, 22px) clamp(10px, 1vw, 16px);
+  }
+  .case__metrics b {
+    font-size: clamp(18px, 2.1vw, 36px);
+    font-weight: 550;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .case__metrics span {
+    font-size: clamp(12px, 1vw, 16px);
+    opacity: 0.72;
+    text-align: right;
+  }
+
+  .case__stack {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(14px, 1.8vw, 30px);
+    padding: clamp(22px, 3.4vw, 60px);
+    min-height: clamp(220px, 24vw, 420px);
+  }
+  .case__stack ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 0.9vw, 14px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .case__stack li {
+    padding: 0.38em 0.9em 0.46em;
+    border-radius: 999px;
+    font-size: clamp(18px, 2.4vw, 42px);
+    font-weight: 550;
+    letter-spacing: -0.02em;
+    box-shadow:
+      0 0 0 0.12em #fff,
+      0 0.3em 0.8em rgba(0, 0, 0, 0.08);
+  }
+  .case__stack li:nth-child(odd) {
+    transform: rotate(-1.4deg);
+  }
+  .case__stack li:nth-child(even) {
+    transform: rotate(1.6deg);
+  }
+
+  .case__features {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.6vw, 26px);
+    padding: clamp(18px, 2.4vw, 40px);
+    aspect-ratio: 1 / 0.82;
+  }
+  .case__features ul {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-content: space-evenly;
+    gap: clamp(10px, 1.2vw, 20px) clamp(10px, 1.4vw, 24px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .case__features li {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: clamp(13px, 1.25vw, 21px);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .case__features li :global(svg) {
+    flex: none;
+    width: 1.55em;
+    height: 1.55em;
+    stroke-width: 1.7;
+  }
+
+  .case__next {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: clamp(48px, 6vw, 110px);
+    padding: clamp(20px, 2.4vw, 40px);
+    border-radius: clamp(14px, 1.3vw, 22px);
+    background: #e9e9e9;
+    transition: background 0.3s ease;
+  }
+  .case__next:hover {
+    background: #f1eccb;
+  }
+  .case__next-label {
+    font-size: clamp(14px, 1.1vw, 18px);
+    color: #777;
+  }
+  .case__next-name {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: clamp(26px, 3.14vw, 54px);
+    font-weight: 500;
+  }
+  .case__next-name :global(.case__next-logo) {
+    flex: none;
+    width: 1.1em;
+    aspect-ratio: 1;
+    border-radius: 24%;
+  }
+  .case__next-name > svg {
+    width: 1em;
+    margin-left: auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.4s var(--ease-spring);
+  }
+  .case__next:hover .case__next-name > svg {
+    transform: translateX(8px);
+  }
+
+  @media (max-width: 760px) {
+    .case__scroller {
+      inset: 62px 6px 0;
+    }
+    .case__blur {
+      top: 62px;
+      left: 6px;
+      right: 6px;
+    }
+    .case__wrap {
+      width: calc(100% - 40px);
+    }
+    .case__grid {
+      grid-template-columns: 1fr;
+    }
+    .case__features,
+    .case__metrics {
+      aspect-ratio: auto;
+    }
+    .case__metrics {
+      grid-template-rows: none;
+    }
+    .case__metrics div {
+      min-height: 72px;
+    }
+  }
+</style>

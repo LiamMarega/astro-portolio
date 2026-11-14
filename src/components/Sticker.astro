@@ -1,0 +1,269 @@
+---
+/**
+ * Die-cut stickers that pop over the hero letters on hover.
+ * All artwork is original SVG — swap or add types freely.
+ */
+export type StickerType = 'bubble' | 'laptop' | 'phone' | 'hello' | 'mate' | 'sun' | 'terminal' | 'rocket' | 'star' | 'heart' | 'bolt';
+
+interface Props {
+  type: StickerType;
+  char?: string;
+  uid: string;
+  lang?: 'es' | 'en';
+}
+const { type, char = 'A', uid, lang = 'es' } = Astro.props;
+const id = (s: string) => `${uid}-${s}`;
+const upper = char === char.toUpperCase();
+const hello = lang === 'es' ? ['HOLA', 'ME LLAMO'] : ['HELLO', 'MY NAME IS'];
+---
+
+{
+  type === 'bubble' && (
+    <svg viewBox="0 0 320 320" class="stk stk--bubble">
+      <defs>
+        <linearGradient id={id('g')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" />
+          <stop offset="1" stop-color="#ececec" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(-7 160 160)" font-family="Modak, 'Inter Variable', sans-serif" font-size={upper ? 318 : 330} text-anchor="middle">
+        <text x="160" y={upper ? 262 : 254} fill="#fff" stroke="#fff" stroke-width="54" stroke-linejoin="round">{char}</text>
+        <text x="171" y={upper ? 274 : 266} fill="#111" stroke="#111" stroke-width="12" stroke-linejoin="round">{char}</text>
+        <text x="160" y={upper ? 262 : 254} fill={`url(#${id('g')})`} stroke="#111" stroke-width="11" stroke-linejoin="round" paint-order="stroke">{char}</text>
+      </g>
+      <path d="M262 52c3 16 8 22 24 25-16 3-21 9-24 25-3-16-8-22-24-25 16-3 21-9 24-25z" fill="#ffd60a" stroke="#111" stroke-width="5" stroke-linejoin="round" />
+    </svg>
+  )
+}
+
+{
+  type === 'laptop' && (
+    <svg viewBox="0 0 340 240" class="stk stk--laptop">
+      <defs>
+        <linearGradient id={id('base')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#d9dadf" />
+          <stop offset="1" stop-color="#8e9098" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(-6 170 120)">
+        <rect x="36" y="10" width="268" height="186" rx="16" fill="#fff" />
+        <path d="M14 192h312l-16 22c-3 4-8 6-13 6H43c-5 0-10-2-13-6z" fill="#fff" />
+        <rect x="44" y="18" width="252" height="170" rx="12" fill="#0b0b0d" />
+        <rect x="52" y="26" width="236" height="152" rx="5" fill="#15161c" />
+        <circle cx="62" cy="36" r="3.2" fill="#ff5f57" />
+        <circle cx="72" cy="36" r="3.2" fill="#febc2e" />
+        <circle cx="82" cy="36" r="3.2" fill="#28c840" />
+        <g stroke-linecap="round" stroke-width="7">
+          <path d="M66 58h34" stroke="#ff7ab6" />
+          <path d="M108 58h58" stroke="#7fd8ff" />
+          <path d="M82 76h46" stroke="#ffd60a" />
+          <path d="M136 76h40" stroke="#c8ccd8" />
+          <path d="M82 94h28" stroke="#5ee39a" />
+          <path d="M118 94h70" stroke="#7fd8ff" />
+          <path d="M98 112h52" stroke="#c8ccd8" />
+          <path d="M82 130h38" stroke="#ff7ab6" />
+          <path d="M66 148h24" stroke="#ffd60a" />
+        </g>
+        <text x="236" y="160" text-anchor="middle" font-family="'Inter Variable', Inter, sans-serif" font-weight="800" font-size="34" fill="#ffd60a">&lt;/&gt;</text>
+        <path d="M22 196h296l-14 16c-3 3-7 5-11 5H47c-4 0-8-2-11-5z" fill={`url(#${id('base')})`} />
+        <rect x="146" y="196" width="48" height="5" rx="2.5" fill="#6b6d74" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'phone' && (
+    <svg viewBox="0 0 260 320" class="stk stk--phone">
+      <defs>
+        <linearGradient id={id('scr')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2f5843" />
+          <stop offset="1" stop-color="#173126" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(9 130 160)">
+        <rect x="62" y="20" width="134" height="276" rx="30" fill="#fff" stroke="#fff" stroke-width="28" />
+        <rect x="62" y="20" width="134" height="276" rx="30" fill="#111" />
+        <rect x="70" y="28" width="118" height="260" rx="23" fill={`url(#${id('scr')})`} />
+        <rect x="108" y="36" width="42" height="11" rx="5.5" fill="#050505" />
+        <rect x="82" y="60" width="54" height="9" rx="4.5" fill="#46c293" />
+        <rect x="82" y="80" width="94" height="70" rx="10" fill="#e9f5ee" />
+        <path d="M92 138l20-26 14 16 10-11 22 21z" fill="#46c293" />
+        <circle cx="160" cy="98" r="7" fill="#ffd60a" />
+        <rect x="82" y="160" width="44" height="44" rx="8" fill="#e9f5ee" opacity=".9" />
+        <rect x="132" y="160" width="44" height="44" rx="8" fill="#e9f5ee" opacity=".6" />
+        <rect x="82" y="210" width="44" height="44" rx="8" fill="#e9f5ee" opacity=".6" />
+        <rect x="132" y="210" width="44" height="44" rx="8" fill="#e9f5ee" opacity=".9" />
+        <g transform="rotate(-12 192 74)">
+          <circle cx="192" cy="74" r="40" fill="#fff" />
+          <circle cx="192" cy="74" r="32" fill="#ffd60a" stroke="#111" stroke-width="5" />
+          <text x="192" y="81" text-anchor="middle" font-family="'Inter Variable', Inter, sans-serif" font-weight="850" font-size="21" letter-spacing="-1" fill="#111">60K+</text>
+        </g>
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'hello' && (
+    <svg viewBox="0 0 300 260" class="stk stk--hello">
+      <g transform="rotate(-14 150 130)">
+        <rect x="26" y="34" width="248" height="190" rx="18" fill="#fff" />
+        <path d="M26 52a18 18 0 0 1 18-18h212a18 18 0 0 1 18 18v52H26z" fill="#e8402f" />
+        <text x="150" y="80" text-anchor="middle" font-family="'Inter Variable', Inter, sans-serif" font-weight="800" font-size="40" letter-spacing="6" fill="#fff">{hello[0]}</text>
+        <text x="150" y="98" text-anchor="middle" font-family="'Inter Variable', Inter, sans-serif" font-weight="600" font-size="13" letter-spacing="2.4" fill="#fff" opacity="0.92">{hello[1]}</text>
+        <text x="150" y="190" text-anchor="middle" font-family="'Caveat Variable', Caveat, cursive" font-weight="700" font-size="64" fill="#111" transform="rotate(-4 150 170)">Liam :)</text>
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'mate' && (
+    <svg viewBox="0 0 300 300" class="stk stk--mate">
+      <defs>
+        <linearGradient id={id('gourd')} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#7a4a2b" />
+          <stop offset="0.45" stop-color="#a8683d" />
+          <stop offset="1" stop-color="#6b3f24" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(-8 150 160)">
+        <g fill="#fff" stroke="#fff" stroke-width="30" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M84 128c-10 52 2 112 66 122 64-10 76-70 66-122z" />
+          <path d="M176 120l44-92" />
+        </g>
+        <path d="M176 120l44-92" stroke="#111" stroke-width="15" stroke-linecap="round" />
+        <path d="M176 120l44-92" stroke="#d9dbe2" stroke-width="8" stroke-linecap="round" />
+        <rect x="211" y="20" width="22" height="13" rx="5" transform="rotate(25 222 26)" fill="#d9dbe2" stroke="#111" stroke-width="5" />
+        <path d="M84 128c-10 52 2 112 66 122 64-10 76-70 66-122z" fill={`url(#${id('gourd')})`} stroke="#111" stroke-width="7" stroke-linejoin="round" />
+        <path d="M98 176c34 10 70 10 104 0" stroke="#5a321b" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7" />
+        <path d="M104 206c30 8 62 8 92 0" stroke="#5a321b" stroke-width="5" fill="none" stroke-linecap="round" opacity=".55" />
+        <ellipse cx="150" cy="128" rx="68" ry="20" fill="#cfd2da" stroke="#111" stroke-width="7" />
+        <ellipse cx="150" cy="128" rx="54" ry="13" fill="#6f9a2f" />
+        <path d="M118 126c10-6 20 4 30-2s20 4 32-1" stroke="#4c7420" stroke-width="5" fill="none" stroke-linecap="round" />
+        <path d="M176 120l9-18" stroke="#d9dbe2" stroke-width="8" stroke-linecap="round" />
+        <path d="M106 150c-4 18-2 40 8 56" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" opacity=".5" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'sun' && (
+    <svg viewBox="0 0 300 300" class="stk stk--sun">
+      <g transform="rotate(10 150 150)">
+        <circle cx="150" cy="150" r="128" fill="#fff" />
+        <g fill="#ffd60a" stroke="#111" stroke-width="5" stroke-linejoin="round">
+          {Array.from({ length: 16 }, (_, i) => {
+            const a = (i / 16) * Math.PI * 2;
+            const r0 = 64;
+            const r1 = i % 2 === 0 ? 118 : 104;
+            const w = 0.15;
+            const p = (ang: number, r: number) => `${(150 + Math.cos(ang) * r).toFixed(1)} ${(150 + Math.sin(ang) * r).toFixed(1)}`;
+            return i % 2 === 0 ? (
+              <path d={`M${p(a - w, r0)}L${p(a, r1)}L${p(a + w, r0)}z`} />
+            ) : (
+              <path
+                d={`M${p(a - w, r0)}Q${p(a - w * 1.6, (r0 + r1) / 2)} ${p(a, r1)}Q${p(a + w * 1.6, (r0 + r1) / 2)} ${p(a + w, r0)}z`}
+              />
+            );
+          })}
+        </g>
+        <circle cx="150" cy="150" r="62" fill="#ffd60a" stroke="#111" stroke-width="7" />
+        <ellipse cx="130" cy="142" rx="7" ry="10" fill="#111" />
+        <ellipse cx="170" cy="142" rx="7" ry="10" fill="#111" />
+        <path d="M128 168c12 14 32 14 44 0" stroke="#111" stroke-width="7" fill="none" stroke-linecap="round" />
+        <ellipse cx="116" cy="162" rx="9" ry="6" fill="#ff8a65" opacity=".7" />
+        <ellipse cx="184" cy="162" rx="9" ry="6" fill="#ff8a65" opacity=".7" />
+        <path d="M118 112c8-8 20-12 30-12" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".75" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'terminal' && (
+    <svg viewBox="0 0 320 260" class="stk stk--terminal">
+      <g transform="rotate(-9 160 130)">
+        <rect x="22" y="30" width="276" height="200" rx="22" fill="#fff" />
+        <rect x="34" y="42" width="252" height="176" rx="14" fill="#101114" />
+        <circle cx="54" cy="62" r="5.5" fill="#ff5f57" />
+        <circle cx="72" cy="62" r="5.5" fill="#febc2e" />
+        <circle cx="90" cy="62" r="5.5" fill="#28c840" />
+        <g font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace" font-weight="700" font-size="21">
+          <text x="54" y="108" fill="#5ee39a">~</text>
+          <text x="74" y="108" fill="#f2f2f2">git push</text>
+          <text x="54" y="142" fill="#7fd8ff">✓</text>
+          <text x="78" y="142" fill="#f2f2f2">deployed</text>
+          <text x="54" y="176" fill="#ffd60a">$</text>
+          <text x="76" y="176" fill="#f2f2f2">ship it</text>
+        </g>
+        <rect x="160" y="160" width="13" height="20" fill="#ffd60a" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'rocket' && (
+    <svg viewBox="0 0 300 300" class="stk stk--rocket">
+      <g transform="rotate(38 150 150)">
+        <g fill="#fff" stroke="#fff" stroke-width="30" stroke-linejoin="round">
+          <path d="M150 22c40 30 56 80 46 146h-92c-10-66 6-116 46-146z" />
+          <path d="M104 150l-34 40 4 44 36-34zM196 150l34 40-4 44-36-34z" />
+          <path d="M122 200h56l-10 70h-36z" />
+        </g>
+        <path d="M128 196c-6 26 6 52 22 72 16-20 28-46 22-72z" fill="#ff7a2f" stroke="#111" stroke-width="6" stroke-linejoin="round" />
+        <path d="M138 198c-2 16 4 32 12 44 8-12 14-28 12-44z" fill="#ffd60a" />
+        <path d="M104 150l-34 40 4 44 36-34zM196 150l34 40-4 44-36-34z" fill="#e8402f" stroke="#111" stroke-width="6" stroke-linejoin="round" />
+        <path d="M150 22c40 30 56 80 46 146 0 14-10 30-46 30s-46-16-46-30c-10-66 6-116 46-146z" fill="#f4f4f6" stroke="#111" stroke-width="7" stroke-linejoin="round" />
+        <path d="M150 22c18 13 32 31 39 52h-78c7-21 21-39 39-52z" fill="#e8402f" stroke="#111" stroke-width="6" stroke-linejoin="round" />
+        <circle cx="150" cy="114" r="22" fill="#7fd8ff" stroke="#111" stroke-width="7" />
+        <path d="M140 104c4-4 10-6 15-5" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'star' && (
+    <svg viewBox="0 0 300 300" class="stk stk--star">
+      <g transform="rotate(-10 150 150)">
+        <path d="M150 22l24 50 54-14-14 54 50 24-50 24 14 54-54-14-24 50-24-50-54 14 14-54-50-24 50-24-14-54 54 14z" fill="#fff" stroke="#fff" stroke-width="30" stroke-linejoin="round" />
+        <path d="M150 22l24 50 54-14-14 54 50 24-50 24 14 54-54-14-24 50-24-50-54 14 14-54-50-24 50-24-14-54 54 14z" fill="#ffd60a" stroke="#111" stroke-width="7" stroke-linejoin="round" />
+        <text x="150" y="168" text-anchor="middle" font-family="'Inter Variable', Inter, sans-serif" font-weight="900" font-size="54" letter-spacing="-2" fill="#111">WOW!</text>
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'heart' && (
+    <svg viewBox="0 0 300 300" class="stk stk--heart">
+      <defs>
+        <linearGradient id={id('h')} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff7aa8" />
+          <stop offset="1" stop-color="#e5285c" />
+        </linearGradient>
+      </defs>
+      <g transform="rotate(-12 150 150)">
+        <path d="M150 252C70 196 34 152 48 102c12-42 70-54 102-12 32-42 90-30 102 12 14 50-22 94-102 150z" fill="#fff" stroke="#fff" stroke-width="34" stroke-linejoin="round" />
+        <path d="M150 252C70 196 34 152 48 102c12-42 70-54 102-12 32-42 90-30 102 12 14 50-22 94-102 150z" fill={`url(#${id('h')})`} stroke="#111" stroke-width="7" stroke-linejoin="round" />
+        <path d="M86 108c4-16 18-26 34-24" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.75" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  type === 'bolt' && (
+    <svg viewBox="0 0 300 300" class="stk stk--bolt">
+      <g transform="rotate(8 150 150)">
+        <path d="M170 18L64 168h76l-22 114 118-160h-80z" fill="#fff" stroke="#fff" stroke-width="34" stroke-linejoin="round" />
+        <path d="M170 18L64 168h76l-22 114 118-160h-80z" fill="#ffd60a" stroke="#111" stroke-width="7" stroke-linejoin="round" />
+        <path d="M150 54l-48 72" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.7" />
+      </g>
+    </svg>
+  )
+}

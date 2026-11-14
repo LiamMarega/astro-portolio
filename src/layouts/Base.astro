@@ -1,0 +1,73 @@
+---
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource-variable/caveat/wght.css';
+import '@fontsource/modak/400.css';
+import '../styles/global.css';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url';
+import { useContent, homeHref, LOCALES } from '../content/site';
+
+const { site, lang } = useContent(Astro.currentLocale);
+const base = Astro.site ?? new URL(site.url);
+const canonical = new URL(homeHref(lang), base).toString();
+const ogImage = new URL('/og.jpg', base).toString();
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  alternateName: site.brand,
+  jobTitle: site.role,
+  description: site.description,
+  url: canonical,
+  email: `mailto:${site.email}`,
+  image: ogImage,
+  address: { '@type': 'PostalAddress', addressRegion: 'Entre Ríos', addressCountry: 'AR' },
+  knowsAbout: ['Flutter', 'Dart', 'React', 'Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Node.js', 'Headless commerce', 'AI SaaS'],
+  sameAs: site.socials.map((s) => s.href),
+};
+---
+
+<!doctype html>
+<html lang={lang} class="js-off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(homeHref(l), base).toString()} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', base).toString()} />
+    <meta name="theme-color" content="#ffd60a" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={site.brand} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_AR' : 'en_US'} />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+
+    <script is:inline>
+      document.documentElement.classList.remove('js-off');
+      document.documentElement.classList.add('js');
+      // coming from the ES/EN switch: skip the sunrise so the page transition stays calm
+      try {
+        if (sessionStorage.getItem('lang-switch')) {
+          sessionStorage.removeItem('lang-switch');
+          document.documentElement.classList.add('no-intro');
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

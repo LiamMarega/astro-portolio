@@ -1,0 +1,40 @@
+---
+/** A project's logo tile (real brand marks from lib/logos), with the lucide icon as a fallback. */
+import { projectLogo } from '../lib/logos';
+import { icon } from '../lib/icons';
+
+interface Props {
+  slug: string;
+  uid?: string;
+  fallback?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const { slug, uid = '', fallback = 'Box', class: cls = '', ...rest } = Astro.props;
+const logo = projectLogo(slug, uid);
+---
+
+{
+  logo ? (
+    <span class:list={['brand', cls]} style={`--brand-bg:${logo.bg};--brand-size:${logo.size}`} set:html={logo.html} {...rest} />
+  ) : (
+    <span class:list={['brand', 'brand--icon', cls]} set:html={icon(fallback)} {...rest} />
+  )
+}
+
+<style>
+  .brand {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--brand-bg, #000);
+    color: #fff;
+  }
+  .brand :global(svg),
+  .brand :global(img) {
+    display: block;
+    width: var(--brand-size, 76%);
+    height: var(--brand-size, 76%);
+    object-fit: contain;
+  }
+</style>

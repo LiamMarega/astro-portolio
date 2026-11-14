@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Sky from './Sky.astro';
+import TopBlur from './TopBlur.astro';
+import Nav from './Nav.astro';
+import Hero from './Hero.astro';
+import Work from './Work.astro';
+import Story from './Story.astro';
+import Chat from './Chat.astro';
+import CaseStudy from './CaseStudy.astro';
+---
+
+<Base>
+  <Sky />
+  <TopBlur />
+  <Nav />
+  <main id="top">
+    <Hero />
+    <Work />
+    <Story />
+    <Chat />
+  </main>
+  <CaseStudy />
+</Base>
+
+<script>
+  import '../scripts/main';
+</script>

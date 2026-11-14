@@ -1,0 +1,219 @@
+---
+/**
+ * "Little experiments" — a contact sheet (vanilla port of React Bits' ContactSheet, see scripts/sheet.ts):
+ * mockups and looping clips stream out of the centre, develop like prints, and open big on click.
+ * Without WebGL 2 it falls back to a static collage of the same pieces.
+ */
+import { useContent } from '../content/site';
+const { site, sheet, lang } = useContent(Astro.currentLocale);
+const items = sheet.map(({ src, video, alt, title, subtitle }) => ({ src, video, alt, title, subtitle }));
+const hint = lang === 'es' ? 'Arrastrá para girar · tocá una pieza para verla' : 'Drag to spin · tap a piece to open it';
+const label =
+  lang === 'es'
+    ? 'Galería de experimentos. Las piezas salen del centro; arrastrá para moverlas y hacé clic en una para abrirla.'
+    : 'Gallery of experiments. Pieces stream out of the centre; drag to move them and click one to open it.';
+---
+
+<div class="gal" data-gallery>
+  <div class="gal__sheet" data-sheet tabindex="0" role="region" aria-roledescription={lang === 'es' ? 'galería' : 'gallery'} aria-label={label}>
+    <div class="gal__stage" data-sheet-stage></div>
+
+    <ul class="sr-only">
+      {items.map((it) => <li>{`${it.title}, ${it.subtitle}`}</li>)}
+    </ul>
+    <div class="gal__cap" data-sheet-cap aria-hidden="true">
+      <span class="gal__cap-title" data-sheet-title></span>
+      <span class="gal__cap-sub" data-sheet-sub></span>
+    </div>
+
+    <div class="gal__fallback" aria-hidden="true">
+      {items.slice(0, 12).map((it) => <img src={it.src} alt="" loading="lazy" decoding="async" />)}
+    </div>
+  </div>
+
+  <div class="gal__text" data-gal-text>
+    <h2 class="gal__title" data-ink>{site.gallery.title.map((l) => <span>{l}</span>)}</h2>
+    <p class="gal__note hand">{site.gallery.note}</p>
+  </div>
+  <p class="gal__hint" aria-hidden="true">{hint}</p>
+
+  <script type="application/json" data-sheet-items set:html={JSON.stringify(items)} />
+</div>
+
+<style>
+  .gal {
+    position: relative;
+    margin: clamp(10px, 1.09vw, 18px) var(--gutter) 0;
+    /* wide board, but never taller than the screen (aspect-ratio + max-height would shrink the width) */
+    height: clamp(520px, calc((100vw - 2 * var(--gutter)) * 0.6414), calc(100svh - 96px));
+    border-radius: var(--radius-bento);
+    background: var(--card);
+    overflow: hidden;
+    contain: layout paint;
+  }
+
+  .gal__sheet {
+    position: absolute;
+    inset: 0;
+    outline: none;
+  }
+  .gal__sheet:focus-visible {
+    outline: 2px solid rgba(0, 0, 0, 0.35);
+    outline-offset: -2px;
+    border-radius: inherit;
+  }
+  .gal__stage {
+    position: absolute;
+    inset: 0;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .gal__text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    width: 90%;
+    transform: translate(-50%, -54%);
+    text-align: center;
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      filter 0.35s ease;
+  }
+  .gal.is-open .gal__text {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  .gal__title {
+    font-size: clamp(30px, 4.25vw, 76px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-shadow:
+      0 0 18px var(--card),
+      0 0 36px var(--card);
+  }
+  .gal__title span {
+    display: block;
+  }
+  .gal__note {
+    margin-top: 0.48em;
+    font-size: clamp(18px, 2.49vw, 44px);
+    color: #858585;
+    transform: translate(0.2vw, 0.2vw) rotate(1.8deg);
+    text-shadow: 0 0 14px var(--card);
+  }
+
+  .gal__hint {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(12px, 1.4vw, 22px);
+    z-index: 2;
+    padding: 0.45em 0.95em 0.5em;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(6px);
+    font-size: clamp(11px, 0.85vw, 14px);
+    color: #6a6a6a;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .gal.sheet-on .gal__hint {
+    opacity: 1;
+  }
+  .gal.is-open .gal__hint {
+    opacity: 0;
+  }
+
+  .gal__cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0 16px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .gal__cap-title {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(15px, 1.2vw, 20px);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+    color: #111;
+  }
+  .gal__cap-sub {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(12px, 0.95vw, 15px);
+    line-height: 1.4;
+    color: #777;
+  }
+
+  /* static collage: no JS, no WebGL 2 */
+  .gal__fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(8px, 1vw, 16px);
+    padding: clamp(14px, 2vw, 32px);
+    align-content: center;
+    opacity: 0.38;
+  }
+  .gal__fallback img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  :global(html.js) .gal__fallback {
+    display: none;
+  }
+  :global(html.js) .gal.sheet-failed .gal__fallback {
+    display: grid;
+  }
+
+  @media (max-width: 1100px) {
+    .gal {
+      height: clamp(480px, calc((100vw - 2 * var(--gutter)) * 0.92), calc(100svh - 96px));
+    }
+  }
+  @media (max-width: 760px) {
+    .gal {
+      height: clamp(420px, calc((100vw - 2 * var(--gutter)) / 0.74), calc(100svh - 110px));
+    }
+    .gal__text {
+      width: 94%;
+    }
+    .gal__title {
+      font-size: 8.4vw;
+    }
+    .gal__note {
+      font-size: 5.6vw;
+    }
+    .gal__fallback {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

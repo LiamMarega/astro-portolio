@@ -1,0 +1,91 @@
+---
+/** A looping, muted clip inside a tiny browser window. Plays only while visible (see scripts/media.ts). */
+interface Props {
+  src: string;
+  poster: string;
+  w: number;
+  h: number;
+  url: string;
+  dark?: boolean;
+  label?: string;
+}
+const { src, poster, w, h, url, dark = false, label } = Astro.props;
+---
+
+<div class:list={['vf', { 'vf--dark': dark }]}>
+  <div class="vf__bar" aria-hidden="true">
+    <i></i><i></i><i></i>
+    <span>{url}</span>
+  </div>
+  <video
+    class="vf__video"
+    muted
+    loop
+    playsinline
+    preload="none"
+    data-poster={poster}
+    width={w}
+    height={h}
+    style={`aspect-ratio:${w}/${h}`}
+    aria-label={label}
+    data-autoplay
+  >
+    <source src={src} type="video/mp4" />
+  </video>
+</div>
+
+<style>
+  .vf {
+    overflow: hidden;
+    border-radius: clamp(7px, 0.75vw, 12px);
+    background: #f2f3f5;
+  }
+  .vf__bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.42em;
+    height: 2.2em;
+    padding: 0 0.85em;
+    font-size: clamp(8px, 0.72vw, 12px);
+    color: #6f7076;
+  }
+  .vf__bar i {
+    width: 0.78em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+  .vf__bar i:nth-child(2) {
+    background: #febc2e;
+  }
+  .vf__bar i:nth-child(3) {
+    background: #28c840;
+  }
+  .vf__bar span {
+    position: absolute;
+    left: 50%;
+    padding: 0.25em 1.6em;
+    border-radius: 0.5em;
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(-50%);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .vf--dark {
+    background: #18181b;
+  }
+  .vf--dark .vf__bar {
+    color: #8d8d95;
+  }
+  .vf--dark .vf__bar span {
+    background: rgba(255, 255, 255, 0.07);
+  }
+  .vf__video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: #000;
+  }
+</style>

@@ -1,0 +1,137 @@
+---
+/**
+ * Rotating wheel of polaroids (a vanilla take on React Bits' RotatingCards): the cards sit on a big
+ * circle whose centre is below the card, so an arc of them sweeps across. It turns on its own,
+ * slows to a stop under the pointer and can be dragged (with inertia). Project polaroids open
+ * their case study. Script: initRing() in scripts/story.ts.
+ */
+import Doodle from './Doodle.astro';
+import { useContent } from '../content/site';
+const { polaroids, lang } = useContent(Astro.currentLocale);
+const tilts = [-3, 2.4, -1.6, 3.2, -2.6, 1.8, -2.2, 2.8];
+const label = lang === 'es' ? 'Proyectos y momentos de build' : 'Projects and build moments';
+---
+
+<div class="ring" data-ring role="region" aria-roledescription="carousel" aria-label={label} style={`--n:${polaroids.length}`}>
+  <div class="ring__wheel" data-ring-wheel>
+    {
+      polaroids.map((p, i) => (
+        <figure class:list={['pol', { 'pol--link': !!p.case }]} style={`--i:${i};--tilt:${tilts[i % tilts.length]}deg`} data-open-case={p.case}>
+          <div class="pol__photo">
+            <img src={p.src} alt={p.alt} width="480" height="480" loading="lazy" decoding="async" draggable="false" />
+          </div>
+          <figcaption class="pol__cap hand">{p.caption}</figcaption>
+        </figure>
+      ))
+    }
+  </div>
+  <Doodle name="plane" seed="ring-a" class="ring__d ring__d--a" duration={0.9} />
+  <Doodle name="heart" seed="ring-b" class="ring__d ring__d--b" duration={0.9} delay={0.3} />
+</div>
+
+<style>
+  .ring {
+    --cw: 220px;
+    --R: 600px;
+    --cy: 900px;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .ring.is-dragging {
+    cursor: grabbing;
+  }
+
+  .ring__wheel {
+    position: absolute;
+    left: 50%;
+    top: var(--cy);
+    width: 0;
+    height: 0;
+    transform: rotate(var(--rot, 0deg));
+    will-change: transform;
+  }
+
+  .pol {
+    position: absolute;
+    left: calc(var(--cw) * -0.5);
+    top: calc(var(--cw) * -0.6);
+    width: var(--cw);
+    margin: 0;
+    padding: calc(var(--cw) * 0.052) calc(var(--cw) * 0.052) 0;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 12px 30px rgba(0, 0, 0, 0.1);
+    transform: rotate(calc(var(--i) * 360deg / var(--n))) translateY(calc(var(--R) * -1)) rotate(var(--tilt));
+    transition:
+      scale 0.45s cubic-bezier(0.3, 1.5, 0.5, 1),
+      box-shadow 0.3s ease;
+  }
+  .pol--link {
+    cursor: pointer;
+  }
+  .ring.is-dragging .pol {
+    cursor: grabbing;
+  }
+  @media (hover: hover) {
+    .pol:hover {
+      z-index: 2;
+      scale: 1.07;
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 22px 44px rgba(0, 0, 0, 0.16);
+    }
+  }
+
+  .pol__photo {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #e9e9e9;
+  }
+  .pol__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .pol__cap {
+    display: grid;
+    place-items: center;
+    height: calc(var(--cw) * 0.25);
+    font-size: calc(var(--cw) * 0.094);
+    color: #151515;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .ring :global(.ring__d) {
+    position: absolute;
+    z-index: 3;
+    width: clamp(56px, 7vw, 120px);
+    height: auto;
+    color: #0c0c0c;
+    pointer-events: none;
+  }
+  .ring :global(.ring__d--a) {
+    left: 5%;
+    top: 6%;
+  }
+  .ring :global(.ring__d--b) {
+    right: 5%;
+    top: 5%;
+  }
+
+  @media (max-width: 760px) {
+    .ring :global(.ring__d) {
+      width: 15vw;
+    }
+  }
+</style>

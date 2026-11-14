@@ -1,0 +1,47 @@
+---
+import { getDoodle } from '../lib/doodles';
+
+interface Props {
+  name: string;
+  class?: string;
+  seed?: string | number;
+  /** total draw duration in seconds (split across strokes) */
+  duration?: number;
+  /** delay before the first stroke */
+  delay?: number;
+  /** start already drawn (e.g. icons) */
+  drawn?: boolean;
+  width?: number;
+  label?: string;
+  style?: string;
+  /** draw automatically when scrolled into view */
+  onView?: boolean;
+}
+
+const { name, class: className = '', seed = '', duration = 0.8, delay = 0, drawn = false, width, label, style, onView = false } = Astro.props;
+const d = getDoodle(name, String(seed));
+const n = d.strokes.length;
+const per = duration / Math.max(1, n * 0.85);
+---
+
+<svg
+  class:list={['doodle', className, { 'is-drawn': drawn }]}
+  viewBox={d.viewBox}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+  style={style}
+  data-draw={onView ? '' : undefined}
+>
+  {
+    d.strokes.map((s, i) => (
+      <path
+        d={s}
+        pathLength="1"
+        stroke-width={width ?? d.width}
+        style={`--d:${(delay + i * per * 0.85).toFixed(3)}s;--dur:${per.toFixed(3)}s`}
+      />
+    ))
+  }
+</svg>
