@@ -67,6 +67,23 @@ const tilt = [-6, 4, -3, 7, -5, 3, -8, 5, -2, 6];
         }
       </span>
     </h1>
+    {/*
+      First fit of the giant name, before the first paint. src/scripts/hero.ts (initHero → fitName) does the same maths
+      once modules run, but that is after the page has already painted at the CSS default size, which shifted the name
+      (CLS). Keep FIT / the clamps in sync with hero.ts; it still re-fits when the fonts are in and on resize.
+    */}
+    <script is:inline>
+      (function () {
+        var n = document.querySelector('[data-hero-name]');
+        var f = document.querySelector('[data-hero-fit]');
+        if (!n || !f) return;
+        n.style.setProperty('--name-size', '100px');
+        var w = f.getBoundingClientRect().width;
+        if (!w) return;
+        var s = Math.min((100 * document.documentElement.clientWidth * 0.9535) / w, window.innerHeight * 0.5, 620);
+        n.style.setProperty('--name-size', s.toFixed(2) + 'px');
+      })();
+    </script>
   </div>
 </section>
 
@@ -136,6 +153,7 @@ const tilt = [-6, 4, -3, 7, -5, 3, -8, 5, -2, 6];
     z-index: 3;
     /* room for the descender of the "g" so the whole name stays on screen */
     margin: 0 0 0.19em;
+    font-family: var(--font-name);
     font-size: var(--name-size, 23.53vw);
     font-weight: 500;
     line-height: 1;

@@ -1,3 +1,16 @@
+/* Metric-compatible stand-in for Inter Variable on the hero name (weight 500, opsz 32, letter-spacing -0.07em).
+   The text "Liam Marega" measures 0.986x as wide in Inter as in Arial, hence size-adjust; the vertical overrides are
+   Inter's hhea ascent/descent (1984 / 494 of 2048) divided by size-adjust. Without it the font swap re-fits the name
+   (src/scripts/hero.ts fitName) and shifts it (CLS 0.08 on desktop). */
+@font-face {
+  font-family: "Inter Name Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  size-adjust: 98.56%;
+  ascent-override: 98.29%;
+  descent-override: 24.47%;
+  line-gap-override: 0%;
+}
+
 /* ------------------------------------------------------------------
    Design tokens — measured from the reference video (1466 × 829 viewport)
    ------------------------------------------------------------------ */
@@ -18,6 +31,8 @@
   --font-sans: "Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-hand: "Caveat Variable", "Caveat", "Segoe Print", "Bradley Hand", cursive;
   --font-bubble: "Modak", "Inter Variable", sans-serif;
+  /* the giant hero name: Inter first, then a metric-matched Arial so the first fit() is already (almost) the final one */
+  --font-name: "Inter Variable", "Inter Name Fallback", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   /* layout */
   --gutter: clamp(16px, 3.27vw, 48px);       /* story / gallery side padding */
