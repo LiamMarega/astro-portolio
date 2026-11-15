@@ -15,6 +15,15 @@ export const C = {
   green: '#4ade80',
 } as const;
 
+/** Palette of the preserved legacy pages (/newspaper, /gallery, /linktree): neon on black, kept as on those pages. */
+export const L = {
+  neon: '#E2FF00',
+  black: '#000000',
+  galleryBg: '#121212',
+  galleryCard: '#1a1a1a',
+  violet: '#6633ee',
+} as const;
+
 export const W = 1200;
 export const H = 630;
 /** Safe margin: nothing important sits closer than this to an edge. */

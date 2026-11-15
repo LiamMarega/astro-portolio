@@ -3,7 +3,7 @@ import { site as siteInfo } from './brand';
 import { h, span, img, type VNode, type Style } from './h';
 import { fitSize } from './fit';
 import { photo, brandMark } from './assets';
-import { C, W, H, M } from './tokens';
+import { C, L, W, H, M } from './tokens';
 
 const INNER = W - M * 2;
 
@@ -234,6 +234,115 @@ async function legal(e: OgEntry): Promise<VNode> {
   );
 }
 
+/* ───────────────────────── legacy pages: newspaper, gallery, hub ───────────────────────── */
+
+/** /newspaper: black page, neon ticker strip + the LIAM_TIMES masthead. */
+async function newspaper(e: OgEntry): Promise<VNode> {
+  const word = (size: number, nowrap = false) =>
+    h(
+      { fontFamily: 'Helvetica Neue', fontWeight: 700, fontSize: size, letterSpacing: '-0.06em', lineHeight: 0.9, color: '#fff', flexWrap: nowrap ? 'nowrap' : 'wrap', ...(nowrap && { whiteSpace: 'nowrap' }) },
+      span({}, 'LIAM'),
+      span({ color: L.neon }, '_'),
+      span({}, 'TIMES'),
+    );
+  const size = await fitSize((s) => word(s), { width: INNER, lineHeight: 0.9, max: 250, min: 120, maxLines: 1 });
+  return root(
+    { backgroundColor: L.black },
+    // ticker strip
+    h(
+      { position: 'absolute', left: 0, right: 0, top: 0, height: 64, alignItems: 'center', padding: `0 ${M}px`, backgroundColor: 'rgba(226,255,0,0.06)', borderBottom: '1px solid rgba(226,255,0,0.3)' },
+      span({ fontFamily: 'Helvetica Neue', fontWeight: 700, fontSize: 22, letterSpacing: '0.22em', color: 'rgba(226,255,0,0.75)', whiteSpace: 'nowrap' }, (e.meta ?? '').toUpperCase()),
+    ),
+    h(
+      { position: 'absolute', left: M, top: 118 },
+      span({ fontFamily: 'JetBrains Mono', fontWeight: 700, fontSize: 24, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.38)' }, e.eyebrow.toUpperCase()),
+    ),
+    h({ position: 'absolute', left: M, top: 176 }, word(size, true)),
+    // rule + deck
+    h({ position: 'absolute', left: M, right: M, top: 176 + Math.round(size * 0.9) + 40, height: 2, backgroundColor: 'rgba(255,255,255,0.12)' }),
+    e.subtitle
+      ? h(
+          { position: 'absolute', left: M, top: 176 + Math.round(size * 0.9) + 68 },
+          span({ fontFamily: 'Helvetica Neue', fontWeight: 700, fontSize: 34, color: 'rgba(255,255,255,0.55)' }, e.subtitle),
+        )
+      : false,
+    footer({ color: '#fff', bottom: 40 }),
+  );
+}
+
+/** The six photos of the gallery page, as one tilted mosaic on the right of the card. */
+const GALLERY_SHOTS = ['analytics-dashboard', 'mobile-banking', 'ecommerce-platform', 'data-visualization', '3d-web', 'brand-identity'];
+
+/** /gallery: #121212 page, Bebas Neue title and the gallery's own project cards. */
+async function gallery(e: OgEntry): Promise<VNode> {
+  const [tw, th, gap] = [196, 147, 16];
+  const shots = await Promise.all(GALLERY_SHOTS.map((n) => photo(`/images/gallery/${n}.webp`, tw, th, 2, 'centre')));
+  const card = (src: string, i: number) =>
+    h(
+      { width: tw, height: th, borderRadius: 12, overflow: 'hidden', backgroundColor: L.galleryCard, boxShadow: '0 8px 25px rgba(0,198,255,0.12)', marginRight: i % 2 === 0 ? gap : 0, marginBottom: gap },
+      img(src, tw, th, { objectFit: 'cover' }),
+    );
+  const words = e.title.toUpperCase().split(' ');
+  return root(
+    { backgroundColor: L.galleryBg },
+    h(
+      { position: 'absolute', left: M, top: 64, alignItems: 'center' },
+      h({ width: 44, height: 4, backgroundColor: L.neon, marginRight: 16 }),
+      span({ fontFamily: 'Inter', fontWeight: 700, fontSize: 24, color: 'rgba(255,255,255,0.6)' }, e.eyebrow),
+    ),
+    h(
+      { position: 'absolute', left: M, top: 128, flexDirection: 'column' },
+      ...words.map((w) => span({ fontFamily: 'Bebas Neue', fontSize: 184, lineHeight: 0.92, letterSpacing: '0.01em', color: '#fff' }, w)),
+    ),
+    e.subtitle
+      ? h(
+          { position: 'absolute', left: M, bottom: 116, alignItems: 'center', border: `1.5px solid ${L.neon}`, borderRadius: 999, padding: '10px 24px' },
+          span({ fontFamily: 'Inter', fontWeight: 500, fontSize: 26, color: L.neon }, e.subtitle),
+        )
+      : false,
+    h(
+      { position: 'absolute', right: M, top: 70, width: tw * 2 + gap, flexWrap: 'wrap', transform: 'rotate(3deg)' },
+      ...shots.map(card),
+    ),
+    footer({ color: '#fff', bottom: 40 }),
+  );
+}
+
+/** /linktree and /en/linktree: the hub's black-to-violet radial background, avatar with neon glow, name and chips. */
+async function hub(e: OgEntry): Promise<VNode> {
+  const avatar = await photo(e.image!, 164, 164, 2, 'top');
+  const chips = (e.meta ?? '').split(' · ').filter(Boolean);
+  return root(
+    {
+      backgroundColor: L.black,
+      backgroundImage: `radial-gradient(ellipse 125% 125% at 50% 10%, #000000 40%, ${L.violet} 100%)`,
+      alignItems: 'center',
+      flexDirection: 'column',
+    },
+    h(
+      { marginTop: 40, width: 176, height: 176, borderRadius: 999, padding: 6, backgroundColor: 'rgba(255,255,255,0.12)', boxShadow: '0 0 60px rgba(226,255,0,0.3)' },
+      img(avatar, 164, 164, { borderRadius: 999 }),
+    ),
+    span({ fontFamily: 'Helvetica Neue', fontWeight: 700, fontSize: 76, letterSpacing: '-0.03em', color: '#fff', marginTop: 16 }, e.title),
+    span({ fontFamily: 'Inter', fontWeight: 500, fontSize: 32, color: 'rgba(255,255,255,0.6)', marginTop: 4 }, e.subtitle ?? ''),
+    h(
+      { alignItems: 'center', marginTop: 18, border: '1px solid rgba(226,255,0,0.3)', backgroundColor: 'rgba(226,255,0,0.07)', borderRadius: 999, padding: '8px 22px' },
+      h({ width: 14, height: 14, borderRadius: 999, backgroundColor: L.neon, marginRight: 12 }),
+      span({ fontFamily: 'Inter', fontWeight: 700, fontSize: 24, color: 'rgba(255,255,255,0.75)' }, e.eyebrow),
+    ),
+    h(
+      { marginTop: 18 },
+      ...chips.map((c, i) =>
+        h(
+          { border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 999, padding: '8px 22px', marginRight: i < chips.length - 1 ? 12 : 0 },
+          span({ fontFamily: 'Inter', fontWeight: 700, fontSize: 24, color: 'rgba(255,255,255,0.85)' }, c),
+        ),
+      ),
+    ),
+    footer({ color: '#fff', bottom: 36 }),
+  );
+}
+
 export function buildCard(e: OgEntry): Promise<VNode> {
   switch (e.theme) {
     case 'portfolio': return portfolio(e);
@@ -241,5 +350,8 @@ export function buildCard(e: OgEntry): Promise<VNode> {
     case 'contact': return contact(e);
     case 'paper': return paper(e);
     case 'legal': return legal(e);
+    case 'newspaper': return newspaper(e);
+    case 'gallery': return gallery(e);
+    case 'hub': return hub(e);
   }
 }

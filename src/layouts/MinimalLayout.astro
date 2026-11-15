@@ -1,0 +1,73 @@
+---
+// Standalone layout of the preserved /newspaper page (original design, no Base.astro).
+// Tailwind v3 is precompiled to src/styles/legacy/newspaper.css (npm run legacy:css), so it never reaches the new pages.
+import "lenis/dist/lenis.css";
+import "../styles/legacy/newspaper.css";
+import LegacyHead from "../components/ui/LegacyHead.astro";
+import type { Locale } from "../content/site";
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: Locale;
+  /** JSON-LD graph(s) of the page (builders in src/content/seo.ts). */
+  jsonLd: object | object[];
+}
+
+const { title, description, lang = "es", jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <LegacyHead title={title} description={description} lang={lang} jsonLd={jsonLd} />
+
+    <link
+      rel="preload"
+      href="/fonts/HelveticaNeueBold.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+  </head>
+
+  <body class="overflow-x-hidden bg-black text-white min-h-screen">
+    <slot />
+  </body>
+
+  <style is:global>
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("/fonts/HelveticaNeueBold.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("/fonts/HelveticaBlkIt.ttf") format("truetype");
+      font-style: italic;
+      font-display: swap;
+      font-weight: 800;
+    }
+    ::selection {
+      background: rgba(226, 255, 0, 0.3);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "HelveticaNeue", system-ui, sans-serif;
+    }
+  </style>
+
+  <script>
+    import Lenis from "lenis";
+    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  </script>
+</html>

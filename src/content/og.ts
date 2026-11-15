@@ -2,7 +2,8 @@ import { useContent, type Locale } from './site';
 import { useEcommerce } from './ecommerce';
 import { useContact } from './contact';
 import { ARTICULOS } from '../data/articulos';
-import { homeSeo, stripBrand, abs } from './seo';
+import { homeSeo, legacySeo, stripBrand, abs } from './seo';
+import { getLinktreeCopy } from '../i18n/linktree';
 
 /**
  * ─────────────────────────────────────────────────────────────────────
@@ -28,8 +29,10 @@ export const OG_TYPE = 'image/jpeg';
  * portfolio: yellow sunrise + giant wordmark · ecommerce: sunrise + device frames with real screenshots
  * contact: friendly hand-written accent · paper: Landing PRO paper/serif/marker (funnel + articles)
  * legal: calmer paper variant (legal pages)
+ * newspaper / gallery / hub: the preserved legacy pages, each with its own original look (neon on black, #121212 + Bebas Neue,
+ * black-to-violet hub background)
  */
-export type OgTheme = 'portfolio' | 'ecommerce' | 'contact' | 'paper' | 'legal';
+export type OgTheme = 'portfolio' | 'ecommerce' | 'contact' | 'paper' | 'legal' | 'newspaper' | 'gallery' | 'hub';
 
 export interface OgEntry {
   lang: Locale;
@@ -101,6 +104,22 @@ const contact = (lang: Locale): OgEntry => {
 
 const PAPER = 'Landing PRO';
 
+/** Hub cards (/linktree/, /en/linktree/): copy comes from the hub's own dictionary (src/i18n/linktree.ts). */
+const hub = (lang: Locale): OgEntry => {
+  const t = getLinktreeCopy(lang);
+  const { site } = useContent(lang);
+  return {
+    lang,
+    theme: 'hub',
+    eyebrow: t.hero.availability,
+    title: site.name,
+    subtitle: t.hero.tagline.split(' — ')[0],
+    meta: [t.paths.company.cta, t.paths.client.cta, t.builder.title, t.socials.title].join(' · '),
+    image: '/images/avatar.webp',
+    alt: t.meta.title,
+  };
+};
+
 /** Article cards: one per entry of src/data/articulos.ts. */
 const articles = Object.fromEntries(
   ARTICULOS.map((a): [string, OgEntry] => [
@@ -145,6 +164,27 @@ export const OG_ROUTES: Record<string, OgEntry> = {
     image: '/images/uploads/liam.jpg',
   },
   ...articles,
+
+  // preserved legacy pages (original design): LIAM TIMES, project gallery and the links hub
+  '/newspaper/': {
+    lang: 'es',
+    theme: 'newspaper',
+    eyebrow: 'liammarega.com/newspaper',
+    title: 'LIAM_TIMES',
+    subtitle: legacySeo.newspaper.title.split(' — ')[1],
+    meta: 'Frontend — Tecnología — Diseño digital — Estrategia',
+    alt: legacySeo.newspaper.title,
+  },
+  '/gallery/': {
+    lang: 'en',
+    theme: 'gallery',
+    eyebrow: 'Liam Marega · Frontend Developer',
+    title: 'Project Gallery',
+    subtitle: 'Featured projects and creative works',
+    alt: legacySeo.gallery.title,
+  },
+  '/linktree/': hub('es'),
+  '/en/linktree/': hub('en'),
 
   // legal pages (titles = the page titles without the brand suffix)
   '/politica-de-privacidad/': { lang: 'es', theme: 'legal', eyebrow: 'Legal', title: 'Política de privacidad y protección de datos' },

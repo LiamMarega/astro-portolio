@@ -2,13 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": true,
   "redirects": [
-    { "source": "/es{/}?", "destination": "/", "statusCode": 301 },
+    { "source": "/es{/}?", "destination": "/linktree/", "statusCode": 301 },
     { "source": "/es/portfolio{/}?", "destination": "/", "statusCode": 301 },
     { "source": "/portfolio{/}?", "destination": "/", "statusCode": 301 },
     { "source": "/en/portfolio{/}?", "destination": "/en/", "statusCode": 301 },
-    { "source": "/gallery{/}?", "destination": "/", "statusCode": 301 },
-    { "source": "/linktree{/}?", "destination": "/", "statusCode": 301 },
-    { "source": "/newspaper{/}?", "destination": "/", "statusCode": 301 },
     { "source": "/privacidad{/}?", "destination": "/politica-de-privacidad/", "statusCode": 301 },
     { "source": "/terminos{/}?", "destination": "/terminos-y-condiciones/", "statusCode": 301 },
     { "source": "/reembolsos{/}?", "destination": "/politica-de-reembolso/", "statusCode": 301 }

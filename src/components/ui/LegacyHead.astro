@@ -1,0 +1,67 @@
+---
+import Analytics from '@vercel/analytics/astro';
+import { useContent, type Locale } from '../../content/site';
+import { canonicalUrl, abs, ldJson } from '../../content/seo';
+import { ogImageFor } from '../../content/og';
+
+/**
+ * <head> SEO block shared by the preserved legacy pages (/newspaper, /gallery, /linktree, /en/linktree).
+ * They keep their original design and standalone layouts (they do not use Base.astro), but they get the same
+ * SEO surface as the rest of the site: one canonical with trailing slash, hreflang + x-default, robots,
+ * Open Graph / Twitter with the per-route card (src/content/og.ts) and JSON-LD built in src/content/seo.ts.
+ */
+interface Props {
+  title: string;
+  description: string;
+  lang: Locale;
+  /** Counterparts per language (paths with trailing slash). Omitted = single-language page (self + x-default). */
+  alternates?: Partial<Record<Locale, string>>;
+  /** One JSON-LD object or a list (each becomes its own script). */
+  jsonLd: object | object[];
+  /** og:type. */
+  ogType?: 'website' | 'profile';
+  /** Vercel Analytics (the original gallery page never had it). */
+  analytics?: boolean;
+}
+
+const { title, description, lang, alternates, jsonLd, ogType = 'website', analytics = true } = Astro.props;
+const { site } = useContent(lang);
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const canonical = canonicalUrl(path);
+const og = ogImageFor(path);
+const alt: [string, string][] =
+  alternates && Object.keys(alternates).length
+    ? [...(Object.entries(alternates) as [Locale, string][]), ['x-default', alternates.es ?? path]]
+    : [[lang, path], ['x-default', path]];
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={site.name} />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#000000" />
+<link rel="canonical" href={canonical} />
+{alt.map(([hreflang, href]) => <link rel="alternate" hreflang={hreflang} href={abs(href)} />)}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.brand} />
+<meta property="og:locale" content={lang === 'es' ? 'es_AR' : 'en_US'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={og.url} />
+<meta property="og:image:width" content={String(og.width)} />
+<meta property="og:image:height" content={String(og.height)} />
+<meta property="og:image:type" content={og.type} />
+<meta property="og:image:alt" content={og.alt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content={site.handle} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={og.url} />
+<meta name="twitter:image:alt" content={og.alt} />
+{[jsonLd].flat().map((graph) => <script type="application/ld+json" set:html={ldJson(graph)} />)}
+{analytics && <Analytics />}

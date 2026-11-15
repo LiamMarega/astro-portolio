@@ -223,3 +223,72 @@ export function landingServiceNode(image?: string) {
     },
   };
 }
+
+/* ───────────────────────── Preserved legacy pages (/newspaper, /gallery, /linktree) ───────────────────────── */
+
+/**
+ * <title> and meta description of the legacy pages that keep their original design. The hub titles/descriptions
+ * live next to its copy in src/i18n/linktree.ts. Kept here: newspaper and gallery (single-language pages).
+ */
+export const legacySeo = {
+  newspaper: {
+    lang: 'es' as Locale,
+    title: 'LIAM TIMES — El periódico digital de Liam Marega',
+    description:
+      'Editorial de frontend, tecnología y desarrollo digital: artículos, opiniones y recursos escritos por Liam Marega. Próximamente, con ediciones nuevas.',
+  },
+  gallery: {
+    lang: 'en' as Locale,
+    title: 'Project Gallery — Liam Marega | Frontend Developer',
+    description:
+      "Explore Liam Marega's featured projects and creative works. An interactive gallery showcasing modern web development and design.",
+  },
+};
+
+/** /newspaper/: the LIAM TIMES blog (published by the Person) + breadcrumb. */
+export function newspaperGraph(page: { path: string; title: string; description: string; image?: string }) {
+  const url = abs(page.path);
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        '@id': `${url}#blog`,
+        name: 'LIAM TIMES',
+        description: page.description,
+        url,
+        inLanguage: 'es',
+        isPartOf: { '@id': WEBSITE_ID },
+        author: { '@id': PERSON_ID },
+        publisher: { '@id': PERSON_ID },
+        ...(page.image && { image: page.image }),
+      },
+      breadcrumbNode('es', 'LIAM TIMES', page.path),
+    ],
+  };
+}
+
+/** /gallery/ and the /linktree/ hub: a plain WebPage about the Person + breadcrumb. */
+export function legacyPageGraph(
+  lang: Locale,
+  page: { path: string; title: string; description: string; crumb: string; type?: 'CollectionPage' | 'WebPage'; image?: string },
+) {
+  const url = abs(page.path);
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': page.type ?? 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
+        name: stripBrand(page.title),
+        description: page.description,
+        inLanguage: lang,
+        isPartOf: { '@id': WEBSITE_ID },
+        about: { '@id': PERSON_ID },
+        ...(page.image && { primaryImageOfPage: { '@type': 'ImageObject', url: page.image, width: 1200, height: 630 } }),
+      },
+      breadcrumbNode(lang, page.crumb, page.path),
+    ],
+  };
+}

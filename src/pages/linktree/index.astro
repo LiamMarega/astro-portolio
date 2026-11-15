@@ -1,0 +1,13 @@
+---
+// Preserved linktree hub, Spanish (default locale): /linktree/. English twin: /en/linktree/.
+// Fully static: the old geo/cookie redirect and server-side ?ref= handling are gone (the ?ref= re-order is CSS, see LinktreeLayout).
+import LinktreeLayout from "../../layouts/LinktreeLayout.astro";
+import LinktreePage from "../../components/linktree/LinktreePage.astro";
+import { getLinktreeCopy } from "../../i18n/linktree";
+
+const t = getLinktreeCopy("es");
+---
+
+<LinktreeLayout title={t.meta.title} description={t.meta.description} lang="es">
+  <LinktreePage locale="es" />
+</LinktreeLayout>

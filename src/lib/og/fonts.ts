@@ -16,6 +16,9 @@ export interface OgFont {
   style: 'normal' | 'italic';
 }
 
+/** Fonts of the preserved legacy pages: Helvetica Neue Bold ships in /public (TTF), Bebas Neue comes from @fontsource. */
+const helvetica = readFileSync(join(process.cwd(), 'public', 'fonts', 'HelveticaNeueBold.ttf'));
+
 let cache: OgFont[] | undefined;
 
 export function loadFonts(): OgFont[] {
@@ -29,6 +32,8 @@ export function loadFonts(): OgFont[] {
     { name: 'JetBrains Mono', data: woff('jetbrains-mono', '700-normal'), weight: 700, style: 'normal' },
     { name: 'Caveat', data: woff('caveat', '700-normal'), weight: 700, style: 'normal' },
     { name: 'Modak', data: woff('modak', '400-normal'), weight: 400, style: 'normal' },
+    { name: 'Helvetica Neue', data: helvetica, weight: 700, style: 'normal' },
+    { name: 'Bebas Neue', data: woff('bebas-neue', '400-normal'), weight: 400, style: 'normal' },
   ];
   return cache;
 }

@@ -25,6 +25,13 @@ Public handles: GitHub https://github.com/liamMarega · LinkedIn https://www.lin
 - [Landing PRO (Spanish)](https://www.liammarega.com/landing-builder/): design and development of landing pages that turn traffic into real opportunities, for coaches, consultants, personal brands and digital businesses.
 - [Landing PRO articles (Spanish)](https://www.liammarega.com/landing-builder/articulos/): guides on landing pages, conversion (CRO), web speed, pricing and hiring a web developer.
 
+## Other pages
+
+- [Links hub (Spanish)](https://www.liammarega.com/linktree/): Liam's link hub: portfolio, Landing PRO, his apps and social profiles.
+- [Links hub (English)](https://www.liammarega.com/en/linktree/): the same hub in English.
+- [LIAM TIMES](https://www.liammarega.com/newspaper/): his upcoming digital newspaper on frontend, technology and digital strategy (Spanish, coming soon).
+- [Project gallery](https://www.liammarega.com/gallery/): an interactive gallery of featured project cards (English).
+
 ## Contact
 
 - [Contact (Spanish)](https://www.liammarega.com/contact/): a short form to describe the project (online store, landing page, Flutter mobile app, SaaS or custom web product). Liam reads every message himself and replies by email.

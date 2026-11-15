@@ -1,0 +1,126 @@
+---
+// Standalone layout of the preserved linktree hub (/linktree/ in Spanish, /en/linktree/ in English).
+// Original design, no Base.astro. Tailwind v3 is precompiled to src/styles/legacy/linktree.css (npm run legacy:css).
+import "lenis/dist/lenis.css";
+import "../styles/legacy/linktree.css";
+import LegacyHead from "../components/ui/LegacyHead.astro";
+import { legacyPageGraph } from "../content/seo";
+import { ogUrlFor } from "../content/og";
+import type { Locale } from "../content/site";
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: Locale;
+}
+
+const { title, description, lang = "es" } = Astro.props;
+
+// hreflang pair: Spanish is the default locale (x-default), English lives under /en/
+const alternates = { es: "/linktree/", en: "/en/linktree/" };
+const path = alternates[lang];
+const jsonLd = legacyPageGraph(lang, {
+  path,
+  title,
+  description,
+  crumb: "Links",
+  image: ogUrlFor(path),
+});
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <LegacyHead
+      title={title}
+      description={description}
+      lang={lang}
+      alternates={alternates}
+      jsonLd={jsonLd}
+    />
+
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="/fonts/HelveticaNeueBold.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="preload" href="/images/avatar.webp" as="image" />
+
+    <!-- ?ref=ig re-orders the sections for visitors coming from Instagram (CSS below), before first paint -->
+    <script is:inline>
+      if (/[?&]ref=(ig|instagram)(&|$)/i.test(location.search)) document.documentElement.dataset.seg = "client";
+    </script>
+  </head>
+
+  <body class="overflow-x-hidden bg-black text-white min-h-screen cursor-none">
+    <!-- Radial gradient background -->
+    <div
+      class="fixed inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
+    >
+    </div>
+    <slot />
+  </body>
+
+  <style is:global>
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("/fonts/HelveticaNeueBold.ttf") format("truetype");
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: "HelveticaNeue";
+      src: url("/fonts/HelveticaBlkIt.ttf") format("truetype");
+      font-style: italic;
+      font-display: swap;
+      font-weight: 800;
+    }
+
+    ::selection {
+      background: rgba(226, 255, 0, 0.3);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "HelveticaNeue", system-ui, sans-serif;
+    }
+
+    /* Glow pulse animation for Working on section */
+    @keyframes glow-pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(226, 255, 0, 0.08);
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(226, 255, 0, 0.2);
+      }
+    }
+    .animate-glow-pulse {
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+
+    /* ?ref=ig segment: lead with the client path (same order the old server-rendered page used) */
+    html[data-seg="client"] [data-sec="landingPro"] { order: 2; }
+    html[data-seg="client"] [data-sec="paths"] { order: 3; }
+    html[data-seg="client"] [data-sec="projects"] { order: 4; }
+    html[data-seg="client"] [data-sec="builder"] { order: 5; }
+    html[data-seg="client"] [data-sec="socials"] { order: 6; }
+    html[data-seg="client"] [data-sec="footer"] { order: 7; }
+    html[data-seg="client"] [data-path="client"] { order: 1; }
+    html[data-seg="client"] [data-path="company"] { order: 2; }
+  </style>
+
+  <script>
+    import Lenis from "lenis";
+    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  </script>
+</html>
