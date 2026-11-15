@@ -3,6 +3,7 @@ import Doodle from './Doodle.astro';
 import VideoFrame from './VideoFrame.astro';
 import Brand from './Brand.astro';
 import { useContent, type Project } from '../content/site';
+import { responsiveImage } from '../lib/responsive';
 
 interface Props {
   project: Project;
@@ -10,6 +11,19 @@ interface Props {
 }
 const { project, index } = Astro.props;
 const { site } = useContent(Astro.currentLocale);
+// rendered width = media width % of the card content box (see --wrap / --pad in the styles below)
+const media = await Promise.all(
+  project.media.map(async (m) => ({
+    ...m,
+    img: m.video
+      ? undefined
+      : await responsiveImage(
+          m.src,
+          `calc(${m.width / 100} * (min(84vw, 1440px) - 2 * clamp(20px, 3.27vw, 56px)))`,
+          m.w,
+        ),
+  })),
+);
 ---
 
 <article class="pcard" data-reveal data-pcard={project.slug} style={`--i:${index}`}>
@@ -29,7 +43,7 @@ const { site } = useContent(Astro.currentLocale);
 
   <div class="pcard__media" aria-hidden="true">
     {
-      project.media.map((m) => (
+      media.map((m) => (
         <figure
           class:list={['pcard__img', { 'pcard__img--video': !!m.video }]}
           style={`--l:${m.left}%;--w:${m.width}%;--t:${m.top};--r:${m.rotate}deg;--hx:${m.hover?.x ?? 0}px;--hy:${m.hover?.y ?? -60}px;--hr:${m.hover?.rotate ?? m.rotate * 2}deg;--hs:${m.hover?.scale ?? 1.05}`}
@@ -37,7 +51,7 @@ const { site } = useContent(Astro.currentLocale);
           {m.video ? (
             <VideoFrame src={m.video.src} poster={m.src} w={m.w} h={m.h} url={m.video.url} dark={m.video.dark} />
           ) : (
-            <img src={m.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" draggable="false" />
+            <img {...m.img} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" draggable="false" />
           )}
         </figure>
       ))

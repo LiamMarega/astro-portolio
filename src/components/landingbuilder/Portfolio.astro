@@ -1,4 +1,7 @@
 ---
+import { responsiveImage } from "../../lib/responsive";
+
+const photo = await responsiveImage("/images/uploads/liam.jpg", "330px");
 const items = [
   "Desarrollo 100% a cargo mío",
   "Comunicación directa y transparente",
@@ -37,7 +40,7 @@ const stats = [
       <div class="photo-card">
         <div class="backing"></div>
         <div class="frame">
-          <img src="/images/uploads/liam.jpg" width="340" height="380" alt="Liam" loading="lazy" decoding="async" />
+          <img {...photo} width="340" height="380" alt="Liam" loading="lazy" decoding="async" />
         </div>
         <span class="tape lg" style="top:-14px;left:40%;transform:rotate(-4deg)"></span>
         <span class="tape sm" style="bottom:-10px;right:20px;transform:rotate(8deg)"></span>

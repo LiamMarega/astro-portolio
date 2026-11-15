@@ -1,5 +1,6 @@
 ---
 import { getProjects } from "../../data/projects";
+import { responsiveImage } from "../../lib/responsive";
 
 interface Props {
   techSuffix?: string;
@@ -13,7 +14,11 @@ const {
   portfolioHref = "/en/",
 } = Astro.props;
 
-const projects = getProjects().slice(0, 4);
+const projects = await Promise.all(
+  getProjects()
+    .slice(0, 4)
+    .map(async (p) => ({ ...p, thumb: await responsiveImage(p.images[0].src, "180px") })),
+);
 ---
 
 <div
@@ -31,7 +36,7 @@ const projects = getProjects().slice(0, 4);
         >
           <div class="relative h-[120px] overflow-hidden">
             <img
-              src={p.images[0].src}
+              {...p.thumb}
               alt={p.images[0].alt}
               width="180"
               height="120"

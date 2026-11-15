@@ -1,4 +1,7 @@
 ---
+import { responsiveImage } from "../../lib/responsive";
+
+const photo = await responsiveImage("/images/uploads/liam.jpg", "(max-width: 480px) 270px, 410px");
 // Precompute the yellow scallop seal path (deterministic).
 const cx = 50,
   cy = 50,
@@ -49,7 +52,7 @@ scallop += "Z";
       <div class="backing"></div>
       <div class="frame">
         <img
-          src="/images/uploads/liam.jpg"
+          {...photo}
           width="500"
           height="560"
           alt="Liam, desarrollador detrás de LiamDev"

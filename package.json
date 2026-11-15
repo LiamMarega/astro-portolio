@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "legacy:css": "node tools/legacy/build-css.mjs",
-    "perf:article-css": "node tools/perf/split-article-css.mjs"
+    "perf:article-css": "node tools/perf/split-article-css.mjs",
+    "perf:images": "node tools/perf/optimize-images.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.9",
