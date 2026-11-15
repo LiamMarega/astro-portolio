@@ -80,6 +80,29 @@ const jsonLd = legacyPageGraph(lang, {
       font-weight: 800;
     }
 
+    /* Metric-matched stand-ins (Arial Bold ~ Helvetica Neue Bold, size-adjust from the hmtx advances) so the swap
+       to the woff2 does not reflow the page now that the CSS is inlined and paints before the font arrives. */
+    @font-face {
+      font-family: "HelveticaNeue Fallback";
+      src: local("Arial Bold"), local("Arial-BoldMT");
+      font-style: normal;
+      font-weight: 700;
+      size-adjust: 99.96%;
+      ascent-override: 97.53%;
+      descent-override: 21.81%;
+      line-gap-override: 5.7%;
+    }
+    @font-face {
+      font-family: "HelveticaNeue Fallback";
+      src: local("Arial Bold Italic"), local("Arial-BoldItalicMT");
+      font-style: italic;
+      font-weight: 800;
+      size-adjust: 109.84%;
+      ascent-override: 88.31%;
+      descent-override: 20.03%;
+      line-gap-override: 0%;
+    }
+
     ::selection {
       background: rgba(226, 255, 0, 0.3);
     }
@@ -87,7 +110,7 @@ const jsonLd = legacyPageGraph(lang, {
       scroll-behavior: smooth;
     }
     body {
-      font-family: "HelveticaNeue", system-ui, sans-serif;
+      font-family: "HelveticaNeue", "HelveticaNeue Fallback", system-ui, sans-serif;
     }
 
     /* Glow pulse animation for Working on section */
