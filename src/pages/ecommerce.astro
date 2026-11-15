@@ -27,6 +27,7 @@ import EcoSticky from '../components/eco/EcoSticky.astro';
 import { useEcommerce, ecommercePath } from '../content/ecommerce';
 import { useContent } from '../content/site';
 import { ecommerceGraph } from '../content/seo';
+import { ogUrlFor } from '../content/og';
 import '../styles/ecommerce.css';
 
 const { lang, site } = useContent(Astro.currentLocale);
@@ -37,9 +38,8 @@ const other = lang === 'es' ? 'en' : 'es';
 <Base
   title={e.meta.title}
   description={e.meta.description}
-  ogImage={e.meta.og}
   alternates={ecommercePath}
-  jsonLd={ecommerceGraph(lang, { path: ecommercePath[lang], title: e.meta.title, description: e.meta.description })}
+  jsonLd={ecommerceGraph(lang, { path: ecommercePath[lang], title: e.meta.title, description: e.meta.description, image: ogUrlFor(ecommercePath[lang]) })}
 >
   <link slot="head" rel="preload" as="image" href={e.hero.visual.media.poster} type="image/webp" fetchpriority="high" />
   <Sky />

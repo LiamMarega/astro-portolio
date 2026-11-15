@@ -169,7 +169,6 @@ function build(lang: Locale) {
         'Tiendas online a medida con Next.js y Vendure: storefront desacoplado, catálogo, checkout y pagos. 5 tiendas reales en producción. Remoto desde Argentina.',
         'Custom online stores with Next.js and Vendure: decoupled storefront, catalog, checkout and payments. 5 live stores in production. Remote, from Argentina.',
       ),
-      og: '/og-ecommerce.png',
     },
 
     nav: {

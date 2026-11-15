@@ -31,9 +31,6 @@ export const canonicalUrl = (pathname: string) => abs(pathname.replace(/\/?$/, '
 /** JSON for an inline <script type="application/ld+json">: `<` is escaped so the data can never close the tag. */
 export const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, '\\u003c');
 
-/** Share card used by the Landing PRO funnel and its articles (1200x630). */
-export const OG_LANDING = { path: '/images/og-landing-builder.jpg', width: 1200, height: 630 } as const;
-
 /* ───────────────────────── Home (/ and /en/) ───────────────────────── */
 
 /**
@@ -92,7 +89,7 @@ export function websiteNode(lang: Locale) {
 }
 
 /** Home pages: Person + WebSite + the profile page itself, as one graph. */
-export function homeGraph(lang: Locale) {
+export function homeGraph(lang: Locale, image?: string) {
   const url = abs(homeHref(lang));
   const { title, description } = homeSeo[lang];
   return {
@@ -109,6 +106,7 @@ export function homeGraph(lang: Locale) {
         inLanguage: lang,
         isPartOf: { '@id': WEBSITE_ID },
         mainEntity: { '@id': PERSON_ID },
+        ...(image && { primaryImageOfPage: { '@type': 'ImageObject', url: image, width: 1200, height: 630 } }),
       },
     ],
   };
@@ -145,7 +143,7 @@ const SERVICE_TYPE: Record<Locale, string> = {
 };
 
 /** /ecommerce and /en/ecommerce: the e-commerce development Service (no prices or offers) + breadcrumb. */
-export function ecommerceGraph(lang: Locale, page: { path: string; title: string; description: string }) {
+export function ecommerceGraph(lang: Locale, page: { path: string; title: string; description: string; image?: string }) {
   const url = abs(page.path);
   return {
     '@context': 'https://schema.org',
@@ -158,6 +156,7 @@ export function ecommerceGraph(lang: Locale, page: { path: string; title: string
         description: page.description,
         url,
         inLanguage: lang,
+        ...(page.image && { image: page.image }),
         provider: personRef(lang),
       },
       breadcrumbNode(lang, CRUMB.ecommerce[lang], page.path),
@@ -166,7 +165,7 @@ export function ecommerceGraph(lang: Locale, page: { path: string; title: string
 }
 
 /** /contact and /en/contact: ContactPage + breadcrumb. */
-export function contactGraph(lang: Locale, page: { path: string; title: string; description: string }) {
+export function contactGraph(lang: Locale, page: { path: string; title: string; description: string; image?: string }) {
   const url = abs(page.path);
   return {
     '@context': 'https://schema.org',
@@ -178,6 +177,7 @@ export function contactGraph(lang: Locale, page: { path: string; title: string; 
         name: stripBrand(page.title),
         description: page.description,
         inLanguage: lang,
+        ...(page.image && { primaryImageOfPage: { '@type': 'ImageObject', url: page.image, width: 1200, height: 630 } }),
         isPartOf: { '@id': WEBSITE_ID },
         about: { '@id': PERSON_ID },
       },
@@ -195,7 +195,7 @@ export const LANDING_DESCRIPTION =
  * The Landing PRO service as it already appeared on every funnel page, now with a stable @id
  * (one entity for the whole funnel instead of one per URL) and the founder linked to the Person.
  */
-export function landingServiceNode() {
+export function landingServiceNode(image?: string) {
   const url = abs('/landing-builder/');
   return {
     '@context': 'https://schema.org',
@@ -204,6 +204,7 @@ export function landingServiceNode() {
     name: 'LiamDev',
     description: LANDING_DESCRIPTION,
     url,
+    ...(image && { image }),
     priceRange: '$$',
     serviceType: 'Diseño y desarrollo de landing pages',
     areaServed: 'Worldwide',

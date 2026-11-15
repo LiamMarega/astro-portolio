@@ -15,23 +15,21 @@ import "@fontsource/caveat/600.css";
 import "@fontsource/caveat/700.css";
 import { SEO } from "astro-seo";
 import Analytics from "@vercel/analytics/astro";
-import { abs, canonicalUrl, ldJson, landingServiceNode, LANDING_DESCRIPTION, OG_LANDING } from "../content/seo";
+import { canonicalUrl, ldJson, landingServiceNode, LANDING_DESCRIPTION } from "../content/seo";
+import { ogImageFor } from "../content/og";
 
 interface Props {
   title: string;
   description?: string;
-  image?: string;
 }
 
-const {
-  title,
-  description = LANDING_DESCRIPTION,
-  image = OG_LANDING.path,
-} = Astro.props;
+const { title, description = LANDING_DESCRIPTION } = Astro.props;
 
 // one canonical per page, trailing-slash form (vercel.json redirects the slash-less URL to it)
 const canonical = canonicalUrl(Astro.url.pathname);
-const ogImage = abs(image);
+// share card: generated per route at build time (src/content/og.ts)
+const og = ogImageFor(Astro.url.pathname);
+const funnelCard = ogImageFor("/landing-builder/");
 ---
 
 <!doctype html>
@@ -51,22 +49,23 @@ const ogImage = abs(image);
         { hrefLang: "x-default", href: canonical },
       ]}
       openGraph={{
-        basic: { title, type: "website", image: ogImage, url: canonical },
+        basic: { title, type: "website", image: og.url, url: canonical },
         optional: { description, locale: "es_AR", siteName: "LiamDev" },
-        image: { width: OG_LANDING.width, height: OG_LANDING.height, alt: "LiamDev: landing pages que convierten" },
+        image: { width: og.width, height: og.height, alt: og.alt, type: og.type },
       }}
       twitter={{
         card: "summary_large_image",
         creator: "@liammdev",
         title,
         description,
-        image: ogImage,
+        image: og.url,
+        imageAlt: og.alt,
       }}
       extend={{ meta: [{ name: "theme-color", content: "#fbfaf5" }] }}
     />
 
     {/* JSON-LD: the Landing PRO service, founded by the Person in the home graph */}
-    <script is:inline type="application/ld+json" set:html={ldJson(landingServiceNode())} />
+    <script is:inline type="application/ld+json" set:html={ldJson(landingServiceNode(funnelCard.url))} />
     <Analytics />
   </head>
   <body>

@@ -14,6 +14,7 @@ import ContactBar from '../components/ContactBar.astro';
 import { useContact, contactPath } from '../content/contact';
 import { useContent } from '../content/site';
 import { contactGraph } from '../content/seo';
+import { ogUrlFor } from '../content/og';
 
 const { lang } = useContent(Astro.currentLocale);
 const c = useContact(lang);
@@ -25,7 +26,7 @@ const other = lang === 'es' ? 'en' : 'es';
   title={c.title}
   description={c.description}
   alternates={contactPath}
-  jsonLd={contactGraph(lang, { path: contactPath[lang], title: c.title, description: c.description })}
+  jsonLd={contactGraph(lang, { path: contactPath[lang], title: c.title, description: c.description, image: ogUrlFor(contactPath[lang]) })}
 >
   <Sky />
   <TopBlur />
