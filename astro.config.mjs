@@ -18,6 +18,8 @@ export default defineConfig({
       },
     }),
   ],
+  // Hover-intent prefetch of internal links (HTML only: no JS runs, so no extra Analytics page views).
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   compressHTML: true,
   i18n: {
     locales: ['es', 'en'],

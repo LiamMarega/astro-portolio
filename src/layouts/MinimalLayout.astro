@@ -24,9 +24,9 @@ const { title, description, lang = "es", jsonLd } = Astro.props;
 
     <link
       rel="preload"
-      href="/fonts/HelveticaNeueBold.ttf"
+      href="/fonts/helvetica-neue-bold.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
   </head>
@@ -38,14 +38,14 @@ const { title, description, lang = "es", jsonLd } = Astro.props;
   <style is:global>
     @font-face {
       font-family: "HelveticaNeue";
-      src: url("/fonts/HelveticaNeueBold.ttf") format("truetype");
+      src: url("/fonts/helvetica-neue-bold.woff2") format("woff2");
       font-style: normal;
       font-display: swap;
       font-weight: 700;
     }
     @font-face {
       font-family: "HelveticaNeue";
-      src: url("/fonts/HelveticaBlkIt.ttf") format("truetype");
+      src: url("/fonts/helvetica-blk-it.woff2") format("woff2");
       font-style: italic;
       font-display: swap;
       font-weight: 800;
