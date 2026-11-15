@@ -1,18 +1,22 @@
 ---
 import "../styles/landing-builder.css";
-import "@fontsource/source-serif-4/400.css";
-import "@fontsource/source-serif-4/500.css";
-import "@fontsource/source-serif-4/600.css";
-import "@fontsource/source-serif-4/700.css";
-import "@fontsource/source-serif-4/400-italic.css";
-import "@fontsource/source-serif-4/500-italic.css";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/500.css";
-import "@fontsource/jetbrains-mono/600.css";
-import "@fontsource/jetbrains-mono/700.css";
-import "@fontsource/caveat/500.css";
-import "@fontsource/caveat/600.css";
-import "@fontsource/caveat/700.css";
+import "../styles/serif-fallback.css";
+import "@fontsource/source-serif-4/latin-400.css";
+import "@fontsource/source-serif-4/latin-500.css";
+import "@fontsource/source-serif-4/latin-600.css";
+import "@fontsource/source-serif-4/latin-700.css";
+import "@fontsource/source-serif-4/latin-400-italic.css";
+import "@fontsource/source-serif-4/latin-500-italic.css";
+import "@fontsource/jetbrains-mono/latin-400.css";
+import "@fontsource/jetbrains-mono/latin-500.css";
+import "@fontsource/jetbrains-mono/latin-600.css";
+import "@fontsource/jetbrains-mono/latin-700.css";
+import "@fontsource/caveat/latin-500.css";
+import "@fontsource/caveat/latin-600.css";
+import "@fontsource/caveat/latin-700.css";
+import serif400 from "@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url";
+import serif600 from "@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url";
+import serif700 from "@fontsource/source-serif-4/files/source-serif-4-latin-700-normal.woff2?url";
 import { SEO } from "astro-seo";
 import Analytics from "@vercel/analytics/astro";
 import { canonicalUrl, ldJson, landingServiceNode, LANDING_DESCRIPTION } from "../content/seo";
@@ -38,6 +42,10 @@ const funnelCard = ogImageFor("/landing-builder/");
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {/* the three serif weights the first screen paints with: fetched in parallel with the CSS, not after it */}
+    {[serif400, serif600, serif700].map((href) => (
+      <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
+    ))}
 
     {/* title, description, canonical, robots, hreflang, Open Graph and Twitter come from astro-seo, once */}
     <SEO

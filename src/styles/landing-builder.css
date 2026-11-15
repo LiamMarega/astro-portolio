@@ -276,7 +276,7 @@ html {
 .lb-root {
   background-color: var(--paper);
   color: var(--ink);
-  font-family: "Source Serif 4", Georgia, serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", Georgia, serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -340,7 +340,7 @@ html {
 .lb-root h4,
 .lb-root h5,
 .lb-root h6 {
-  font-family: "Source Serif 4", Georgia, serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", Georgia, serif;
   font-weight: 600;
   color: var(--ink);
   margin: 0;
@@ -592,7 +592,7 @@ html {
   border-bottom: 1px solid rgba(120, 105, 70, 0.1);
 }
 .lb-root .nav .logo {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-weight: 600;
   font-size: 22px;
   letter-spacing: -0.01em;
@@ -855,13 +855,13 @@ html {
   z-index: 5;
 }
 .lb-root .note-usd .desde {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-style: italic;
   font-size: 13px;
   color: var(--ink-3);
 }
 .lb-root .note-usd .amt {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 28px;
   font-weight: 600;
   line-height: 1;
@@ -869,7 +869,7 @@ html {
   letter-spacing: -0.01em;
 }
 .lb-root .note-usd .per {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 12px;
   color: var(--ink-3);
   margin-top: 4px;
@@ -884,7 +884,7 @@ html {
   z-index: 5;
 }
 .lb-root .note-dev p {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 14.5px;
   line-height: 1.7;
   color: var(--ink-2);
@@ -1085,7 +1085,7 @@ html {
 .lb-root .svc-note p {
   font-size: 13.5px;
   line-height: 1.55;
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   color: var(--ink-2);
 }
 
@@ -1271,7 +1271,7 @@ html {
   z-index: 2;
 }
 .lb-root .about .right blockquote {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 22px;
   line-height: 1.4;
   font-style: italic;
@@ -1303,7 +1303,7 @@ html {
 }
 .lb-root .about .right .stats .it strong {
   display: block;
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 4px;
@@ -1422,7 +1422,7 @@ html {
 }
 .lb-root .caso .stats .it strong {
   display: block;
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(30px, 3.4vw, 46px);
   color: var(--yellow);
   font-weight: 600;
@@ -1444,7 +1444,7 @@ html {
   z-index: 5;
 }
 .lb-root .caso-side-note p {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--ink-2);
@@ -2449,7 +2449,7 @@ html.lb-introing .lb-intro {
   color: var(--yellow-deep);
 }
 .lbi-mini-t {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(28px, 5vw, 38px);
   font-weight: 600;
   color: var(--ink);
@@ -2542,7 +2542,7 @@ html.lb-introing .lb-intro {
   color: var(--yellow-deep);
 }
 .lbi-t {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(30px, 5vw, 40px);
   font-weight: 600;
   color: var(--ink);
@@ -2755,7 +2755,7 @@ html.lb-introing .lb-intro {
 }
 .art-hero .kicker { margin-bottom: 14px; }
 .art-hero h1 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(34px, 5vw, 58px);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -2804,7 +2804,7 @@ html.lb-introing .lb-intro {
   color: var(--yellow-deep);
 }
 .art-card h2 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 21px;
   font-weight: 600;
   line-height: 1.2;
@@ -2852,7 +2852,7 @@ html.lb-introing .lb-intro {
 .article .crumbs a { color: var(--yellow-deep); text-decoration: none; }
 .article .crumbs a:hover { text-decoration: underline; }
 .article h1 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(30px, 4.6vw, 48px);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -2879,7 +2879,7 @@ html.lb-introing .lb-intro {
   color: var(--ink-2);
 }
 .art-body h2 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(23px, 2.6vw, 30px);
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -2888,7 +2888,7 @@ html.lb-introing .lb-intro {
   margin: 44px 0 14px;
 }
 .art-body h3 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: 20px;
   font-weight: 600;
   color: var(--ink);
@@ -2965,7 +2965,7 @@ html.lb-introing .lb-intro {
   transform: rotate(-0.4deg);
 }
 .art-cta h2 {
-  font-family: "Source Serif 4", serif;
+  font-family: "Source Serif 4", "Source Serif 4 Fallback", serif;
   font-size: clamp(22px, 3vw, 30px);
   font-weight: 600;
   color: var(--ink);
