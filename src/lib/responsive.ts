@@ -51,3 +51,10 @@ export async function responsiveImage(src: string, sizes: string, width?: number
   const srcset = [...variants.map((v) => `${v.url} ${v.w}w`), `${master} ${max}w`].join(', ');
   return { src: master, srcset, sizes };
 }
+
+/**
+ * `sizes` of the /ecommerce hero poster, shared by the <img> and its preload so both resolve to the same file.
+ * Phones intentionally claim 80vw (the frame is ~94vw wide): a 2x phone then takes the 640 px file, which is what the
+ * 704 px video that replaces it is made of anyway; 3x phones and every wider layout still get the 1280 px original.
+ */
+export const ECO_HERO_POSTER_SIZES = '(max-width: 760px) 80vw, (max-width: 1100px) 50vw, 56vw';

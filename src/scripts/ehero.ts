@@ -26,11 +26,13 @@ export function initEcoHero() {
 
   const attach = () => {
     attached = true;
+    // phones get the ~700 px rendition (the frame is ~360 css px wide there); everything else the full one
+    const small = window.matchMedia('(max-width: 700px)').matches;
     // WebM (VP9) first: it is the smaller file; MP4 (H.264) covers Safari and older browsers
     (
       [
-        [video.dataset.webm, 'video/webm; codecs="vp9"'],
-        [video.dataset.mp4, 'video/mp4; codecs="avc1.640028"'],
+        [(small && video.dataset.webmSm) || video.dataset.webm, 'video/webm; codecs="vp9"'],
+        [(small && video.dataset.mp4Sm) || video.dataset.mp4, 'video/mp4; codecs="avc1.640028"'],
       ] as const
     ).forEach(([src, type]) => {
       if (!src) return;
@@ -43,9 +45,24 @@ export function initEcoHero() {
     video.load();
   };
 
-  const play = () => {
+  // The recording is an enhancement over the poster: it never competes with the page's own first-load requests
+  // (fonts, poster, scripts), so the first attach waits for `load` plus an idle moment.
+  const idle = () =>
+    new Promise<void>((resolve) => {
+      const go = () => ('requestIdleCallback' in window ? window.requestIdleCallback(() => resolve(), { timeout: 1500 }) : setTimeout(resolve, 200));
+      if (document.readyState === 'complete') go();
+      else window.addEventListener('load', go, { once: true });
+    });
+  let settled: Promise<void> | undefined;
+
+  const play = async () => {
     if (!onScreen || document.hidden || motion.matches) return;
-    if (!attached) attach();
+    if (!attached) {
+      await (settled ??= idle());
+      // conditions may have changed while waiting
+      if (!onScreen || document.hidden || motion.matches || attached) return;
+      attach();
+    }
     // autoplay can still be refused (iOS low-power mode): the poster simply stays
     video.play().catch(() => {});
   };

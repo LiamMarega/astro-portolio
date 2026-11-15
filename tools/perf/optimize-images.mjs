@@ -16,6 +16,8 @@ const WIDTHS = [400, 800];
 const GROUPS = [
   // the *-cover images are only referenced by structured data, never rendered responsively
   { dir: 'public/img/work', match: /^(?!.*-cover\.).*\.webp$/, widths: WIDTHS },
+  // /ecommerce hero poster (the LCP element); a phone-sized video rendition sits next to it (see EcoHero.astro)
+  { dir: 'public/media/ecommerce', match: /-poster\.webp$/, widths: [640] },
   { dir: 'public/images/works', match: /\.webp$/, widths: WIDTHS },
   { dir: 'public/images/uploads', match: /^liam\.jpg$/, widths: [600], format: 'webp' },
 ];

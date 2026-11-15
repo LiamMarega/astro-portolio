@@ -3,12 +3,22 @@ import StickerWord from '../StickerWord.astro';
 import Sticker from '../EcoSticker.astro';
 import Doodle from '../Doodle.astro';
 import Keycap from '../Keycap.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { useEcommerce } from '../../content/ecommerce';
+import { responsiveImage, ECO_HERO_POSTER_SIZES } from '../../lib/responsive';
 
 const e = useEcommerce(Astro.currentLocale);
 const h = e.hero;
 const v = h.visual;
 const m = v.media;
+// Phone rendition by naming convention (nochats-hero.mp4 -> nochats-hero-704.mp4), only when the file exists.
+// The poster gets its srcset from the same helper (nochats-hero-poster-640.webp).
+const small = (file: string) => {
+  const f = file.replace(/(\.[a-z0-9]+)$/i, '-704$1');
+  return existsSync(join(process.cwd(), 'public', f)) ? f : undefined;
+};
+const poster = await responsiveImage(m.poster, ECO_HERO_POSTER_SIZES, m.w);
 ---
 
 <section class="ehero" data-ehero aria-labelledby="ehero-title">
@@ -80,13 +90,14 @@ const m = v.media;
           <span class="ehero__url">{v.bar}</span>
         </div>
         <div class="ehero__screen" style={`aspect-ratio:${m.w}/${m.h}`}>
-          <img class="ehero__poster" src={m.poster} width={m.w} height={m.h} alt="" fetchpriority="high" decoding="async" draggable="false" />
+          <img class="ehero__poster" {...poster} width={m.w} height={m.h} alt="" fetchpriority="high" decoding="async" draggable="false" />
           <video
             class="ehero__video"
             data-ehero-video
             data-webm={m.webm}
             data-mp4={m.mp4}
-            poster={m.poster}
+            data-webm-sm={small(m.webm)}
+            data-mp4-sm={small(m.mp4)}
             width={m.w}
             height={m.h}
             muted

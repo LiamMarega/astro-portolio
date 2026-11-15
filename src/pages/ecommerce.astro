@@ -28,11 +28,14 @@ import { useEcommerce, ecommercePath } from '../content/ecommerce';
 import { useContent } from '../content/site';
 import { ecommerceGraph } from '../content/seo';
 import { ogUrlFor } from '../content/og';
+import { responsiveImage, ECO_HERO_POSTER_SIZES } from '../lib/responsive';
 import '../styles/ecommerce.css';
 
 const { lang, site } = useContent(Astro.currentLocale);
 const e = useEcommerce(lang);
 const other = lang === 'es' ? 'en' : 'es';
+// same candidates + sizes as the hero poster <img>, so the preload fetches the file the image will pick
+const heroPoster = await responsiveImage(e.hero.visual.media.poster, ECO_HERO_POSTER_SIZES, e.hero.visual.media.w);
 ---
 
 <Base
@@ -41,7 +44,7 @@ const other = lang === 'es' ? 'en' : 'es';
   alternates={ecommercePath}
   jsonLd={ecommerceGraph(lang, { path: ecommercePath[lang], title: e.meta.title, description: e.meta.description, image: ogUrlFor(ecommercePath[lang]) })}
 >
-  <link slot="head" rel="preload" as="image" href={e.hero.visual.media.poster} type="image/webp" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" href={heroPoster.src} imagesrcset={heroPoster.srcset} imagesizes={heroPoster.sizes} type="image/webp" fetchpriority="high" />
   <Sky />
   <TopBlur />
   <Nav items={e.nav.items} active="" cta={e.nav.cta} langHref={ecommercePath[other]} />
