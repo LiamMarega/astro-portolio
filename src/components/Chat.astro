@@ -63,6 +63,7 @@ const mail = `mailto:${site.email}`;
     min-height: calc(100svh + 7vw);
     padding: clamp(110px, 15.9vw, 276px) 0 clamp(14px, 1.64vw, 28px);
     overflow: hidden;
+    contain: layout style;
   }
 
   .chat__stage {
@@ -258,7 +259,7 @@ const mail = `mailto:${site.email}`;
 
   .cbtn:active .cbtn__top,
   .cbtn.is-pressed .cbtn__top {
-    transform: translateY(calc(var(--depth) * 0.7));
+    transform: translate3d(0, calc(var(--depth) * 0.7), 0);
   }
 
   /* ── contact bar ── */
@@ -455,7 +456,7 @@ const mail = `mailto:${site.email}`;
     color: #111;
     white-space: nowrap;
     opacity: 0;
-    transform: translate(-50%, 35%);
+    transform: translate3d(-50%, 35%, 0);
     transition:
       opacity 0.18s ease,
       transform 0.35s var(--ease-out);
@@ -477,7 +478,7 @@ const mail = `mailto:${site.email}`;
   .soc:hover .soc__label,
   .soc:focus-visible .soc__label {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate3d(-50%, 0, 0);
   }
 
   /* tall portrait tablets: keep the key and the bar together instead of a full-height stage */

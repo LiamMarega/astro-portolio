@@ -1,0 +1,567 @@
+---
+import SketchBorder from "./SketchBorder.astro";
+
+const total = 6;
+---
+
+<div class="qf card" data-no-pencil data-qf-root>
+  <SketchBorder pad={4} />
+  <span class="tape sm" data-qf-tape style="top:-11px;right:28px;transform:rotate(7deg)"></span>
+  <div class="qf-top" data-qf-top>
+    <span class="qf-count" data-qf-count>
+      01<i>/</i>06
+    </span>
+    <div class="qf-dots" data-qf-dots>
+      {Array.from({ length: total }).map((_, i) => (
+        <span class={i === 0 ? "on" : undefined}></span>
+      ))}
+    </div>
+  </div>
+  <div class="qf-body" data-qf-body>
+    <h4 class="qf-q">¿Cuál es tu web, landing o perfil actual?</h4>
+    <p class="qf-hint">
+      Pegá tu sitio, una landing o tu Instagram — necesito ver dónde estás parado hoy.
+    </p>
+    <div class="qf-textwrap">
+      <input
+        class="qf-input"
+        type="text"
+        value=""
+        placeholder="tudominio.com  ·  instagram.com/tuusuario"
+        aria-label="¿Cuál es tu web, landing o perfil actual?"
+        data-qf-initial-input
+      />
+      <button class="btn btn-yellow" type="button" disabled data-qf-initial-next>
+        Siguiente
+        <span class="arr">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+  <div class="qf-nav" data-qf-nav>
+    <span class="qf-tiny">Respondo en menos de 24h</span>
+  </div>
+</div>
+
+<script>
+  type Question =
+    | { id: string; type: "text"; q: string; hint?: string; placeholder?: string }
+    | { id: string; type: "choice"; q: string; hint?: string; opts: string[] };
+
+  const QF_QUESTIONS: Question[] = [
+    {
+      id: "web",
+      type: "text",
+      q: "¿Cuál es tu web, landing o perfil actual?",
+      hint: "Pegá tu sitio, una landing o tu Instagram — necesito ver dónde estás parado hoy.",
+      placeholder: "tudominio.com  ·  instagram.com/tuusuario",
+    },
+    {
+      id: "vende",
+      type: "choice",
+      q: "¿Qué vendés actualmente?",
+      opts: [
+        "Servicios / consultoría",
+        "Coaching / mentoría",
+        "Infoproducto / curso",
+        "SaaS / software",
+        "Ecommerce",
+        "Todavía estoy validando una idea",
+      ],
+    },
+    {
+      id: "etapa",
+      type: "choice",
+      q: "¿En qué etapa está tu negocio?",
+      opts: [
+        "Ya vendo y quiero mejorar conversión",
+        "Ya tengo tráfico pero pocas consultas",
+        "Estoy lanzando una nueva oferta",
+        "Estoy armando mi primera landing",
+        "Estoy en idea / validación inicial",
+      ],
+    },
+    {
+      id: "trafico",
+      type: "choice",
+      q: "¿Estás invirtiendo en tráfico o captación?",
+      opts: [
+        "Sí, Meta Ads",
+        "Sí, Google Ads",
+        "Sí, tráfico orgánico constante",
+        "Sí, referidos / comunidad / email",
+        "No todavía",
+      ],
+    },
+    {
+      id: "problema",
+      type: "choice",
+      q: "¿Cuál es tu principal problema hoy?",
+      opts: [
+        "Tengo visitas pero pocas consultas",
+        "Mi landing no explica bien mi oferta",
+        "Mi página se ve poco profesional",
+        "Necesito lanzar rápido una oferta",
+        "No sé qué está fallando en mi embudo",
+        "Todavía no tengo claro qué vender",
+      ],
+    },
+    {
+      id: "presupuesto",
+      type: "choice",
+      q: "Las landings estratégicas arrancan desde USD 600. ¿Tenés presupuesto para invertir si el diagnóstico tiene sentido?",
+      opts: [
+        "Sí, tengo USD 600–1.000",
+        "Sí, tengo USD 1.000+",
+        "Quiero evaluarlo primero",
+        "No tengo presupuesto ahora",
+      ],
+    },
+  ];
+
+  type Verdict = "hot" | "warm" | "cold";
+
+  function qfVerdict(a: Record<string, string>): Verdict {
+    const cold =
+      a.vende === "Todavía estoy validando una idea" ||
+      a.etapa === "Estoy en idea / validación inicial" ||
+      a.problema === "Todavía no tengo claro qué vender" ||
+      a.presupuesto === "No tengo presupuesto ahora";
+    if (cold) return "cold";
+    const hotBudget =
+      a.presupuesto === "Sí, tengo USD 600–1.000" || a.presupuesto === "Sí, tengo USD 1.000+";
+    const goodStage = [
+      "Ya vendo y quiero mejorar conversión",
+      "Ya tengo tráfico pero pocas consultas",
+      "Estoy lanzando una nueva oferta",
+    ].includes(a.etapa);
+    if (hotBudget && goodStage) return "hot";
+    return "warm";
+  }
+
+  const QF_RESULT: Record<Verdict, { k: string; t: string; p: string }> = {
+    hot: {
+      k: "Sos un buen match",
+      t: "Tu proyecto tiene todo para escalar.",
+      p: "Por lo que me contás, una landing estratégica puede mover la aguja ya. Dejá tus datos y te respondo en menos de 24h.",
+    },
+    warm: {
+      k: "Hay potencial",
+      t: "Puede funcionar muy bien.",
+      p: "Tu caso tiene buena base. Veamos juntos si una landing es la mejor inversión ahora o el siguiente paso.",
+    },
+    cold: {
+      k: "Quizás es temprano",
+      t: "Primero, claridad de oferta.",
+      p: "Todavía conviene validar la oferta antes de invertir en una landing. Igual dejá tus datos y te oriento sin compromiso.",
+    },
+  };
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const ARROW_SVG =
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>';
+
+  document.querySelectorAll<HTMLElement>("[data-qf-root]").forEach((root) => {
+    const tapeEl = root.querySelector<HTMLElement>("[data-qf-tape]")!;
+    const topEl = root.querySelector<HTMLElement>("[data-qf-top]")!;
+    const countEl = root.querySelector<HTMLElement>("[data-qf-count]")!;
+    const dotsEl = root.querySelector<HTMLElement>("[data-qf-dots]")!;
+    const navEl = root.querySelector<HTMLElement>("[data-qf-nav]")!;
+    let bodyEl = root.querySelector<HTMLElement>("[data-qf-body]")!;
+    let verdictEl: HTMLElement | null = null;
+
+    const total = QF_QUESTIONS.length;
+    let step = 0;
+    let ans: Record<string, string> = {};
+    let name = "";
+    let email = "";
+    let whatsapp = "";
+    let consent = false;
+    let status: "idle" | "sending" | "ok" | "error" = "idle";
+    let errorMsg = "";
+    let chooseTimer = 0;
+
+    const setTape = (mode: "step" | "verdict") => {
+      if (mode === "step") {
+        tapeEl.className = "tape sm";
+        tapeEl.style.cssText = "top:-11px;right:28px;transform:rotate(7deg)";
+      } else {
+        tapeEl.className = "tape lg";
+        tapeEl.style.cssText = "top:-12px;left:42%;transform:rotate(-3deg)";
+      }
+    };
+
+    const updateTopAndNav = () => {
+      const cur = String(step + 1).padStart(2, "0");
+      const tot = String(total).padStart(2, "0");
+      countEl.innerHTML = `${cur}<i>/</i>${tot}`;
+      const spans = dotsEl.children;
+      for (let i = 0; i < spans.length; i++) {
+        spans[i].className = i < step ? "done" : i === step ? "on" : "";
+      }
+      navEl.innerHTML = "";
+      if (step > 0) {
+        const backBtn = document.createElement("button");
+        backBtn.className = "qf-back";
+        backBtn.type = "button";
+        backBtn.textContent = "← Atrás";
+        backBtn.addEventListener("click", () => {
+          clearTimeout(chooseTimer);
+          step = Math.max(step - 1, 0);
+          renderStep(true);
+        });
+        navEl.appendChild(backBtn);
+      } else {
+        const tiny = document.createElement("span");
+        tiny.className = "qf-tiny";
+        tiny.textContent = "Respondo en menos de 24h";
+        navEl.appendChild(tiny);
+      }
+    };
+
+    const next = () => {
+      clearTimeout(chooseTimer);
+      step = Math.min(step + 1, total);
+      if (step >= total) renderVerdict();
+      else renderStep(true);
+    };
+
+    const reset = () => {
+      clearTimeout(chooseTimer);
+      step = 0;
+      ans = {};
+      name = "";
+      email = "";
+      whatsapp = "";
+      consent = false;
+      status = "idle";
+      errorMsg = "";
+      if (verdictEl) {
+        verdictEl.remove();
+        verdictEl = null;
+      }
+      topEl.hidden = false;
+      topEl.style.display = "";
+      navEl.hidden = false;
+      navEl.style.display = "";
+      setTape("step");
+      renderStep(true);
+    };
+
+    const renderStep = (shouldFocus: boolean) => {
+      const q = QF_QUESTIONS[step];
+      if (verdictEl) {
+        verdictEl.remove();
+        verdictEl = null;
+      }
+      topEl.hidden = false;
+      topEl.style.display = "";
+      navEl.hidden = false;
+      navEl.style.display = "";
+      setTape("step");
+      updateTopAndNav();
+
+      const nextBody = document.createElement("div");
+      nextBody.className = "qf-body";
+      nextBody.setAttribute("data-qf-body", "");
+
+      const h4 = document.createElement("h4");
+      h4.className = "qf-q";
+      h4.textContent = q.q;
+      nextBody.appendChild(h4);
+
+      if (q.hint) {
+        const p = document.createElement("p");
+        p.className = "qf-hint";
+        p.textContent = q.hint;
+        nextBody.appendChild(p);
+      }
+
+      if (q.type === "text") {
+        const wrap = document.createElement("div");
+        wrap.className = "qf-textwrap";
+
+        const input = document.createElement("input");
+        input.className = "qf-input";
+        input.type = "text";
+        input.value = ans[q.id] || "";
+        if (q.placeholder) input.placeholder = q.placeholder;
+        input.setAttribute("aria-label", q.q);
+
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "btn btn-yellow";
+        nextBtn.type = "button";
+        nextBtn.disabled = !(ans[q.id] || "").trim();
+        nextBtn.innerHTML = `Siguiente <span class="arr">${ARROW_SVG}</span>`;
+
+        input.addEventListener("input", () => {
+          ans[q.id] = input.value;
+          nextBtn.disabled = !input.value.trim();
+        });
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && (ans[q.id] || "").trim()) next();
+        });
+        nextBtn.addEventListener("click", next);
+
+        wrap.append(input, nextBtn);
+        nextBody.appendChild(wrap);
+
+        bodyEl.replaceWith(nextBody);
+        bodyEl = nextBody;
+        if (shouldFocus) input.focus();
+      } else {
+        const optsWrap = document.createElement("div");
+        optsWrap.className = "qf-opts";
+        const buttons: HTMLButtonElement[] = [];
+        for (const opt of q.opts) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "qf-opt" + (ans[q.id] === opt ? " sel" : "");
+          const mk = document.createElement("span");
+          mk.className = "qf-mk";
+          const txt = document.createElement("span");
+          txt.textContent = opt;
+          btn.append(mk, txt);
+          btn.addEventListener("click", () => {
+            ans[q.id] = opt;
+            for (const b of buttons) b.classList.toggle("sel", b === btn);
+            clearTimeout(chooseTimer);
+            chooseTimer = window.setTimeout(next, 240);
+          });
+          buttons.push(btn);
+          optsWrap.appendChild(btn);
+        }
+        nextBody.appendChild(optsWrap);
+        bodyEl.replaceWith(nextBody);
+        bodyEl = nextBody;
+      }
+    };
+
+    const renderOk = (verdict: Verdict) => {
+      const r = QF_RESULT[verdict];
+      const box = document.createElement("div");
+      box.className = "qf-verdict";
+
+      const stamp = document.createElement("span");
+      stamp.className = "qf-stamp";
+      stamp.textContent = "Solicitud enviada";
+
+      const h4 = document.createElement("h4");
+      h4.className = "qf-q";
+      h4.style.marginTop = "14px";
+      h4.textContent = `Gracias, ${name.split(" ")[0]}.`;
+
+      const p = document.createElement("p");
+      p.className = "qf-hint";
+      p.style.marginTop = "10px";
+      p.append(
+        document.createTextNode(`Recibí tu diagnóstico (${r.k.toLowerCase()}). Te escribo por WhatsApp a `),
+      );
+      const strong = document.createElement("strong");
+      strong.textContent = whatsapp;
+      p.append(strong, document.createTextNode(" en menos de 24h."));
+
+      const actions = document.createElement("div");
+      actions.className = "qf-actions";
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "qf-back";
+      resetBtn.type = "button";
+      resetBtn.textContent = "↺ Empezar de nuevo";
+      resetBtn.addEventListener("click", reset);
+      actions.appendChild(resetBtn);
+
+      box.append(stamp, h4, p, actions);
+      if (verdictEl) verdictEl.replaceWith(box);
+      else root.appendChild(box);
+      verdictEl = box;
+    };
+
+    const renderVerdict = () => {
+      const verdict = qfVerdict(ans);
+      const r = QF_RESULT[verdict];
+      topEl.hidden = true;
+      topEl.style.display = "none";
+      bodyEl.hidden = true;
+      bodyEl.style.display = "none";
+      navEl.hidden = true;
+      navEl.style.display = "none";
+      setTape("verdict");
+
+      const box = document.createElement("div");
+      box.className = `qf-verdict v-${verdict}`;
+
+      const stamp = document.createElement("span");
+      stamp.className = "qf-stamp";
+      stamp.textContent = r.k;
+
+      const h4 = document.createElement("h4");
+      h4.className = "qf-q";
+      h4.style.marginTop = "14px";
+      h4.textContent = r.t;
+
+      const p = document.createElement("p");
+      p.className = "qf-hint";
+      p.style.marginTop = "10px";
+      p.textContent = r.p;
+
+      const textWrap = document.createElement("div");
+      textWrap.className = "qf-textwrap";
+      textWrap.style.marginTop = "18px";
+
+      const nameIn = document.createElement("input");
+      nameIn.className = "qf-input";
+      nameIn.type = "text";
+      nameIn.value = name;
+      nameIn.placeholder = "Tu nombre";
+      nameIn.autocomplete = "name";
+      nameIn.setAttribute("aria-label", "Tu nombre");
+      nameIn.addEventListener("input", () => { name = nameIn.value; });
+
+      const emailIn = document.createElement("input");
+      emailIn.className = "qf-input";
+      emailIn.type = "email";
+      emailIn.value = email;
+      emailIn.placeholder = "tu@email.com";
+      emailIn.autocomplete = "email";
+      emailIn.setAttribute("aria-label", "Tu email");
+      emailIn.addEventListener("input", () => { email = emailIn.value; });
+
+      const waIn = document.createElement("input");
+      waIn.className = "qf-input";
+      waIn.type = "tel";
+      waIn.value = whatsapp;
+      waIn.placeholder = "WhatsApp (+54 9 11 ...)";
+      waIn.autocomplete = "tel";
+      waIn.inputMode = "tel";
+      waIn.setAttribute("aria-label", "Tu WhatsApp");
+      waIn.addEventListener("input", () => { whatsapp = waIn.value; });
+
+      textWrap.append(nameIn, emailIn, waIn);
+
+      const consentLabel = document.createElement("label");
+      consentLabel.className = "qf-consent";
+      consentLabel.style.cssText =
+        "margin-top:14px;display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.4;cursor:pointer";
+      const consentIn = document.createElement("input");
+      consentIn.type = "checkbox";
+      consentIn.checked = consent;
+      consentIn.setAttribute("aria-label", "Acepto que me escriban por WhatsApp");
+      consentIn.style.cssText = "margin-top:2px;flex-shrink:0";
+      consentIn.addEventListener("change", () => { consent = consentIn.checked; });
+      const consentSpan = document.createElement("span");
+      consentSpan.textContent =
+        "Acepto que Liam me escriba por WhatsApp para conversar sobre mi proyecto.";
+      consentLabel.append(consentIn, consentSpan);
+
+      const errEl = document.createElement("p");
+      errEl.className = "qf-error";
+      errEl.setAttribute("role", "alert");
+      errEl.hidden = true;
+      errEl.style.display = "none";
+
+      const actions = document.createElement("div");
+      actions.className = "qf-actions";
+
+      const submitBtn = document.createElement("button");
+      submitBtn.className = "btn btn-yellow magnet";
+      submitBtn.type = "button";
+      submitBtn.innerHTML = `Solicitar diagnóstico <span class="arr">${ARROW_SVG}</span>`;
+
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "qf-back";
+      resetBtn.type = "button";
+      resetBtn.textContent = "↺ Empezar de nuevo";
+      resetBtn.addEventListener("click", reset);
+
+      actions.append(submitBtn, resetBtn);
+
+      const showError = (msg: string) => {
+        status = "error";
+        errorMsg = msg;
+        errEl.textContent = errorMsg;
+        errEl.hidden = false;
+        errEl.style.display = "";
+      };
+
+      const setSending = (sending: boolean) => {
+        submitBtn.disabled = sending;
+        resetBtn.disabled = sending;
+        submitBtn.innerHTML = sending
+          ? 'Enviando <span class="qf-spin" aria-hidden="true"></span>'
+          : `Solicitar diagnóstico <span class="arr">${ARROW_SVG}</span>`;
+      };
+
+      const submit = async () => {
+        if (status === "sending") return;
+        if (!name.trim() || !EMAIL_RE.test(email)) {
+          showError("Completá tu nombre y un email válido para que pueda responderte.");
+          return;
+        }
+        if ((whatsapp.match(/\d/g) || []).length < 8) {
+          showError("Dejá tu WhatsApp con código de país para que te escriba.");
+          return;
+        }
+        if (!consent) {
+          showError("Necesito que aceptes que te escriba por WhatsApp.");
+          return;
+        }
+        status = "sending";
+        errorMsg = "";
+        errEl.hidden = true;
+        errEl.style.display = "none";
+        setSending(true);
+        try {
+          const res = await fetch("/api/diagnostico/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              whatsapp,
+              consent,
+              verdict,
+              answers: ans,
+              questions: QF_QUESTIONS.map((x) => ({ id: x.id, q: x.q })),
+            }),
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || "No se pudo enviar la solicitud.");
+          }
+          status = "ok";
+          renderOk(verdict);
+        } catch (e) {
+          setSending(false);
+          showError(e instanceof Error ? e.message : "Error de conexión. Probá de nuevo.");
+        }
+      };
+
+      submitBtn.addEventListener("click", submit);
+      waIn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") submit();
+      });
+
+      box.append(stamp, h4, p, textWrap, consentLabel, errEl, actions);
+      if (verdictEl) verdictEl.replaceWith(box);
+      else root.appendChild(box);
+      verdictEl = box;
+    };
+
+    // Hydrate the SSR-rendered step 0 in place without re-rendering or stealing focus.
+    const initialInput = root.querySelector<HTMLInputElement>("[data-qf-initial-input]");
+    const initialNext = root.querySelector<HTMLButtonElement>("[data-qf-initial-next]");
+    if (initialInput && initialNext) {
+      initialInput.addEventListener("input", () => {
+        ans[QF_QUESTIONS[0].id] = initialInput.value;
+        initialNext.disabled = !initialInput.value.trim();
+      });
+      initialInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && (ans[QF_QUESTIONS[0].id] || "").trim()) next();
+      });
+      initialNext.addEventListener("click", next);
+    }
+  });
+</script>

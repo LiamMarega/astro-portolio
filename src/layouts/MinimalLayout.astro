@@ -76,9 +76,6 @@ const { title, description, lang = "es", jsonLd } = Astro.props;
     ::selection {
       background: rgba(226, 255, 0, 0.3);
     }
-    html {
-      scroll-behavior: smooth;
-    }
     body {
       font-family: "HelveticaNeue", "HelveticaNeue Fallback", system-ui, sans-serif;
     }
@@ -86,11 +83,35 @@ const { title, description, lang = "es", jsonLd } = Astro.props;
 
   <script>
     import Lenis from "lenis";
-    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+
+      let rafId = 0;
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+
+      const start = () => {
+        if (!rafId) rafId = requestAnimationFrame(raf);
+      };
+      const stop = () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      };
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          stop();
+        } else {
+          start();
+        }
+      });
+
+      if (!document.hidden) start();
     }
-    requestAnimationFrame(raf);
   </script>
 </html>

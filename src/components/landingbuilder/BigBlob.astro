@@ -5,6 +5,7 @@ interface Props {
   flip?: boolean;
   drift?: boolean;
   parallax?: number;
+  blur?: string;
   style?: string;
 }
 const {
@@ -13,9 +14,10 @@ const {
   flip = false,
   drift = true,
   parallax,
+  blur,
   style = "",
 } = Astro.props;
-const transform = `rotate(${rotate})${flip ? " scaleX(-1)" : ""}`;
+const imgStyle = `transform:rotate(${rotate})${flip ? " scaleX(-1)" : ""}${blur ? `;filter:blur(${blur})` : ""}`;
 ---
 
 <div
@@ -25,5 +27,5 @@ const transform = `rotate(${rotate})${flip ? " scaleX(-1)" : ""}`;
   style={`width:${size}px;height:${size}px;${style}`}
   aria-hidden="true"
 >
-  <img src="/images/uploads/blob.webp" alt="" loading="lazy" decoding="async" style={`transform:${transform}`} />
+  <img src="/images/uploads/blob.webp" width={size} height={size} alt="" loading="lazy" decoding="async" style={imgStyle} />
 </div>

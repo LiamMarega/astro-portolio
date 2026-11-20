@@ -21,7 +21,7 @@ const small = (file: string) => {
 const poster = await responsiveImage(m.poster, ECO_HERO_POSTER_SIZES, m.w);
 ---
 
-<section class="ehero" data-ehero aria-labelledby="ehero-title">
+<section class="ehero" data-ehero data-pause-offscreen aria-labelledby="ehero-title">
   <div class="ehero__inner">
     <div class="ehero__copy">
       {
@@ -138,6 +138,7 @@ const poster = await responsiveImage(m.poster, ECO_HERO_POSTER_SIZES, m.w);
     z-index: 2;
     min-height: 100svh;
     padding: clamp(100px, 9.6vw, 150px) 0 clamp(30px, 4vw, 70px);
+    contain: layout style;
   }
 
   .ehero__inner {
@@ -626,6 +627,11 @@ const poster = await responsiveImage(m.poster, ECO_HERO_POSTER_SIZES, m.w);
       right: 3%;
       bottom: -10%;
     }
+  }
+
+  .ehero.is-offscreen .ehero__stk,
+  .ehero.is-offscreen .ehero__avail i::after {
+    animation-play-state: paused;
   }
 
   @media (prefers-reduced-motion: reduce) {

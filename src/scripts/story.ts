@@ -1,4 +1,5 @@
 import { $, $$, draw, inView, reduceMotion } from './util';
+import { isPagePaused, onPagePause } from './smooth';
 
 /* ── rotating wheel of polaroids (RotatingCards-style) ── */
 export function initRing() {
@@ -32,10 +33,11 @@ export function initRing() {
   new ResizeObserver(layout).observe(ring);
 
   const kick = () => {
-    if (!raf && visible) raf = requestAnimationFrame(frame);
+    if (!raf && visible && !isPagePaused()) raf = requestAnimationFrame(frame);
   };
   function frame(t: number) {
     raf = 0;
+    if (!visible || isPagePaused()) return;
     const dt = last ? Math.min((t - last) / 1000, 0.1) : 1 / 60;
     last = t;
     factor += (target - factor) * (1 - Math.exp(-dt / (target < factor ? 0.16 : 0.45)));
@@ -59,15 +61,13 @@ export function initRing() {
   ring.addEventListener('focusout', () => (target = 1));
 
   /* drag to spin, with a flick */
-  let drag: { id: number; x: number; y: number; ang: number; moved: boolean; samples: { t: number; d: number }[] } | null = null;
+  let drag: { id: number; x: number; y: number; cx: number; cy: number; ang: number; moved: boolean; samples: { t: number; d: number }[] } | null = null;
   let suppressClick = false;
-  const angleAt = (x: number, y: number) => {
-    const c = wheel.getBoundingClientRect();
-    return (Math.atan2(y - c.top, x - c.left) * 180) / Math.PI;
-  };
+  const angleFrom = (cx: number, cy: number, x: number, y: number) => (Math.atan2(y - cy, x - cx) * 180) / Math.PI;
   ring.addEventListener('pointerdown', (e) => {
     if (!e.isPrimary || e.button > 0) return;
-    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, ang: angleAt(e.clientX, e.clientY), moved: false, samples: [] };
+    const c = wheel.getBoundingClientRect();
+    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, cx: c.left, cy: c.top, ang: angleFrom(c.left, c.top, e.clientX, e.clientY), moved: false, samples: [] };
   });
   ring.addEventListener('pointermove', (e) => {
     if (!drag || e.pointerId !== drag.id) return;
@@ -80,7 +80,7 @@ export function initRing() {
         ring.setPointerCapture(e.pointerId);
       } catch {}
     }
-    const a = angleAt(e.clientX, e.clientY);
+    const a = angleFrom(drag.cx, drag.cy, e.clientX, e.clientY);
     const d = ((a - drag.ang + 540) % 360) - 180;
     drag.ang = a;
     rot += d;
@@ -149,34 +149,62 @@ export function initRing() {
     },
     () => {
       visible = false;
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      last = 0;
     },
   );
+  onPagePause((paused) => {
+    if (paused) {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      last = 0;
+    } else {
+      last = 0;
+      kick();
+    }
+  });
 }
 
 export function initTags() {
   const tags = $('[data-tags]');
   if (!tags || reduceMotion()) return;
   let t = 0;
+  let visible = false;
   let running = false;
   const loop = (stacked: boolean) => {
     if (!running) return;
     tags.classList.toggle('is-stacked', stacked);
     t = window.setTimeout(() => loop(!stacked), stacked ? 1500 : 3300);
   };
+  const sync = () => {
+    const active = visible && !isPagePaused();
+    if (active && !running) {
+      running = true;
+      t = window.setTimeout(() => loop(true), 2200);
+    } else if (!active && running) {
+      running = false;
+      clearTimeout(t);
+      if (!visible) tags.classList.remove('is-stacked');
+    }
+  };
   inView(
     tags,
     () => {
-      if (running) return;
-      running = true;
-      t = window.setTimeout(() => loop(true), 2200);
+      visible = true;
+      sync();
     },
     () => {
-      running = false;
-      clearTimeout(t);
-      tags.classList.remove('is-stacked');
+      visible = false;
+      sync();
     },
     { threshold: 0.3 },
   );
+  onPagePause(sync);
 }
 
 /* ── peelable stickers on the text cards (WebGL, mounted lazily) ── */
@@ -185,6 +213,7 @@ export function initStickers() {
   if (!zones.length) return;
   let mod: Promise<typeof import('./peel')> | null = null;
   const load = () => (mod ??= import('./peel'));
+  const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
   {
     const sizeFor = (w: number) => {
       const vw = window.innerWidth;
@@ -199,18 +228,23 @@ export function initStickers() {
           if (!peelSupported()) return;
           const imgs = $$<HTMLImageElement>('img[data-peel]', zone);
           let ready = 0;
-          const made = imgs.map((img) => {
+          const made: { base: number; peel: ReturnType<typeof createPeel> }[] = [];
+          // Stagger WebGL context + texture/hull initialization across separate frames
+          for (let i = 0; i < imgs.length; i++) {
+            if (i > 0) await nextFrame();
+            const img = imgs[i];
             const W = zone.clientWidth;
             const H = zone.clientHeight;
             const fx = parseFloat(img.dataset.x || '0');
             const fy = parseFloat(img.dataset.y || '0');
             const narrow = window.innerWidth < 900;
             const y = narrow ? Math.max(90, Math.min(140, window.innerWidth * 0.19)) - H / 2 : fy * H;
-            return {
-              base: parseFloat(img.dataset.width || '130'),
+            const base = parseFloat(img.dataset.width || '130');
+            made.push({
+              base,
               peel: createPeel(zone, {
                 imageSrc: img.currentSrc || img.src,
-                width: sizeFor(parseFloat(img.dataset.width || '130')),
+                width: sizeFor(base),
                 rotate: parseFloat(img.dataset.rotate || '0'),
                 initialPosition: { x: fx * W, y },
                 label: img.alt,
@@ -222,11 +256,19 @@ export function initStickers() {
                   if (++ready === imgs.length) zone.classList.add('peel-on');
                 },
               }),
-            };
-          });
-          window.addEventListener('resize', () => made.forEach((m) => m.peel?.setWidth(sizeFor(m.base))));
+            });
+          }
+          let rzRaf = 0;
+          window.addEventListener(
+            'resize',
+            () => {
+              cancelAnimationFrame(rzRaf);
+              rzRaf = requestAnimationFrame(() => made.forEach((m) => m.peel?.setWidth(sizeFor(m.base))));
+            },
+            { passive: true },
+          );
         },
-        { rootMargin: '200px 0px' },
+        { rootMargin: '500px 0px' },
       );
       io.observe(zone);
     });

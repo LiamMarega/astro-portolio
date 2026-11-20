@@ -8,11 +8,23 @@ export function initSky() {
   const fade = $('[data-hero-tagline]');
 
   if (sky) {
+    let lastSky = '';
+    let lastFade = '';
     onScroll((y, vh) => {
       const p = clamp(y / (vh * 0.34));
       const e = 1 - p * p * (3 - 2 * p);
-      sky.style.setProperty('--sky-o', e.toFixed(3));
-      if (fade) fade.style.opacity = (1 - clamp(y / (vh * 0.22))).toFixed(3);
+      const skyVal = e.toFixed(3);
+      if (skyVal !== lastSky) {
+        lastSky = skyVal;
+        sky.style.setProperty('--sky-o', skyVal);
+      }
+      if (fade) {
+        const fadeVal = (1 - clamp(y / (vh * 0.22))).toFixed(3);
+        if (fadeVal !== lastFade) {
+          lastFade = fadeVal;
+          fade.style.opacity = fadeVal;
+        }
+      }
     });
   }
 

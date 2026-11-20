@@ -1,4 +1,4 @@
-import { $, $$, onScroll } from './util';
+import { $, $$, onScroll, refreshScroll } from './util';
 import { scrollToY } from './smooth';
 
 export function initNav() {
@@ -13,20 +13,41 @@ export function initNav() {
   // links that track an in-page section while scrolling
   const links = all.filter((l) => l.dataset.navLink && document.getElementById(l.dataset.navLink));
   const sections = links.map((l) => document.getElementById(l.dataset.navLink!)!);
+  const sectionKeys = links.map((l) => keyOf(l));
   // key of the item marked active in the markup ('' = none yet)
   const initial = keyOf(all.find((l) => l.classList.contains('is-active')) ?? nav);
 
   let active = '';
+  const linkMetrics = new Map<string, { x: number; w: number }>();
+  const sectionTops = new Float64Array(sections.length);
+  let docHeight = 0;
+
+  const measureIndicator = () => {
+    linkMetrics.clear();
+    for (const link of all) {
+      const w = link.offsetWidth;
+      if (w === 0) continue;
+      const list = link.offsetParent as HTMLElement | null;
+      const x = link.offsetLeft + (list?.offsetLeft ?? 0);
+      linkMetrics.set(keyOf(link), { x, w });
+    }
+  };
+
+  const measureSections = () => {
+    const sy = window.scrollY;
+    docHeight = document.documentElement.scrollHeight;
+    for (let i = 0; i < sections.length; i++) {
+      sectionTops[i] = sections[i].getBoundingClientRect().top + sy;
+    }
+  };
 
   const place = (key: string, animate = true) => {
-    const link = all.find((l) => keyOf(l) === key);
-    indicator.classList.toggle('is-off', !link || link.offsetWidth === 0);
-    if (!link || link.offsetWidth === 0) return;
-    const list = link.offsetParent as HTMLElement;
-    const x = link.offsetLeft + (list?.offsetLeft ?? 0);
+    const m = linkMetrics.get(key);
+    indicator.classList.toggle('is-off', !m);
+    if (!m) return;
     if (!animate) indicator.classList.add('no-anim');
-    indicator.style.setProperty('--ind-x', `${x}px`);
-    indicator.style.setProperty('--ind-w', `${link.offsetWidth}px`);
+    indicator.style.setProperty('--ind-x', `${m.x}px`);
+    indicator.style.setProperty('--ind-w', `${m.w}px`);
     if (!animate) {
       void indicator.offsetWidth;
       indicator.classList.remove('no-anim');
@@ -47,13 +68,15 @@ export function initNav() {
 
   const measure = () => {
     const w = Math.ceil(main.scrollWidth);
-    pill.style.setProperty('--w-main', `${w}px`);
-    // the case-study layer only exists on the home nav
     const close = $('.nav__close', nav);
     const cta = $('.nav__cta:not(.nav__cta--main)', nav);
-    if (close && cta) {
-      const min = close.offsetWidth + cta.offsetWidth + 7 + 70;
-      pill.style.setProperty('--w-case', `${Math.max(w + 82, min)}px`);
+    const caseMin = close && cta ? close.offsetWidth + cta.offsetWidth + 7 + 70 : 0;
+    measureIndicator();
+    if (sections.length) measureSections();
+
+    pill.style.setProperty('--w-main', `${w}px`);
+    if (caseMin) {
+      pill.style.setProperty('--w-case', `${Math.max(w + 82, caseMin)}px`);
     }
     if (active) place(active, false);
   };
@@ -64,14 +87,28 @@ export function initNav() {
       if (document.documentElement.classList.contains('is-case')) return;
       // before the first tracked section, fall back to the item marked active in the markup
       let current = initial;
-      const line = vh * 0.6;
-      sections.forEach((s, i) => {
-        if (s.getBoundingClientRect().top <= line) current = keyOf(links[i]);
-      });
+      const threshold = y + vh * 0.6;
+      for (let i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i] <= threshold) current = sectionKeys[i];
+      }
       // bottom of the page always means the last section
-      if (y + vh >= document.documentElement.scrollHeight - 4) current = keyOf(links[links.length - 1]);
+      if (y + vh >= docHeight - 4) current = sectionKeys[sectionKeys.length - 1];
       setActive(current, true);
     });
+
+    let secRaf = 0;
+    const queueSections = () => {
+      if (secRaf) return;
+      secRaf = requestAnimationFrame(() => {
+        secRaf = 0;
+        measureSections();
+        refreshScroll();
+      });
+    };
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(queueSections).observe(document.body);
+    }
+    window.addEventListener('load', queueSections, { once: true });
   }
 
   links.forEach((l) =>
@@ -89,7 +126,15 @@ export function initNav() {
   measure();
   setActive(initial, false);
   document.fonts?.ready.then(measure);
-  window.addEventListener('resize', measure);
+  let rzRaf = 0;
+  window.addEventListener(
+    'resize',
+    () => {
+      cancelAnimationFrame(rzRaf);
+      rzRaf = requestAnimationFrame(measure);
+    },
+    { passive: true },
+  );
 }
 
 /** Remember a language switch so the next page skips the sunrise intro (see Base.astro). */

@@ -186,7 +186,7 @@ function setup(form: HTMLFormElement, utm: Record<string, string>) {
   form.addEventListener('input', (e) => {
     const field = (e.target as Element).closest<HTMLElement>('[data-lf-field]');
     if (field && $('[data-lf-err]', field)?.textContent && !check(field)) setError(field, '');
-    saveDraft();
+    queueDraft();
   });
   form.addEventListener('change', (e) => {
     const field = (e.target as Element).closest<HTMLElement>('[data-lf-field]');
@@ -303,18 +303,29 @@ function setup(form: HTMLFormElement, utm: Record<string, string>) {
   });
 
   /* ── draft (kept only for this browser tab session) ── */
+  const draftControls = $$<HTMLInputElement | HTMLTextAreaElement>('input[name], textarea[name]', form).filter((el) => el.name !== 'company_site');
+  let draftTimer = 0;
   function saveDraft() {
+    clearTimeout(draftTimer);
+    draftTimer = 0;
     const data: Record<string, string | string[]> = {};
-    $$<HTMLInputElement | HTMLTextAreaElement>('input[name], textarea[name]', form).forEach((el) => {
-      if (el.name === 'company_site') return;
+    for (let i = 0; i < draftControls.length; i++) {
+      const el = draftControls[i];
       if (el instanceof HTMLInputElement && (el.type === 'radio' || el.type === 'checkbox')) {
-        if (!el.checked) return;
+        if (!el.checked) continue;
         const prev = data[el.name];
         data[el.name] = el.type === 'checkbox' ? [...((prev as string[]) ?? []), el.value] : el.value;
       } else if (el.value) data[el.name] = el.value;
-    });
+    }
     store.set(draftKey, { data, step: current });
   }
+  function queueDraft() {
+    clearTimeout(draftTimer);
+    draftTimer = window.setTimeout(saveDraft, 150);
+  }
+  window.addEventListener('pagehide', () => {
+    if (draftTimer) saveDraft();
+  });
   const restore = () => {
     const draft = store.get(draftKey) as { data: Record<string, string | string[]>; step: number } | null;
     if (!draft?.data) return;

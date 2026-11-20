@@ -110,22 +110,7 @@
   const html = document.documentElement;
   const intro = document.getElementById("lbIntro");
 
-  function finish(immediate = false) {
-    try {
-      sessionStorage.setItem("lbIntroSeen", "1");
-    } catch (e) {}
-    const done = () => {
-      intro?.remove();
-      html.classList.remove("lb-introing");
-      (window as any).__lbIntroDone = true;
-      window.dispatchEvent(new CustomEvent("lb:introDone"));
-    };
-    if (immediate || !intro) done();
-    else gsap.to(intro, { opacity: 0, duration: 0.45, ease: "power1.out", onComplete: done });
-  }
-
   if (!html.classList.contains("lb-introing") || !intro) {
-    // Sin intro: avisamos igual para que el hero haga su entrada.
     (window as any).__lbIntroDone = true;
     window.dispatchEvent(new CustomEvent("lb:introDone"));
     intro?.remove();
@@ -140,62 +125,90 @@
     const shadow = q(".lbi-shadow")!;
     const shades = (root: HTMLElement) => root.querySelectorAll<HTMLElement>(".lbi-shade");
 
-    // Sombreado dinámico de una cara mientras rota.
-    const shadeTo = (el: HTMLElement, v: number, d: number) =>
-      gsap.to(shades(el), { opacity: v, duration: d, ease: "power1.inOut" });
+    let finished = false;
+    const delayedCalls: gsap.core.Tween[] = [];
+    const activeTweens: gsap.core.Tween[] = [];
+
+    const shadeTo = (el: HTMLElement, v: number, d: number) => {
+      const tw = gsap.to(shades(el), { opacity: v, duration: d, ease: "power1.inOut" });
+      activeTweens.push(tw);
+      return tw;
+    };
+
+    const cleanupTweens = () => {
+      tl.kill();
+      for (const dc of delayedCalls) dc.kill();
+      for (const tw of activeTweens) tw.kill();
+      gsap.killTweensOf(intro.querySelectorAll("*"));
+      window.removeEventListener("keydown", onKeyDown);
+      clearTimeout(failsafeTimer);
+    };
+
+    const finish = (immediate = false) => {
+      if (finished) return;
+      finished = true;
+      try {
+        sessionStorage.setItem("lbIntroSeen", "1");
+      } catch (e) {}
+      cleanupTweens();
+      const done = () => {
+        intro.remove();
+        html.classList.remove("lb-introing");
+        (window as any).__lbIntroDone = true;
+        window.dispatchEvent(new CustomEvent("lb:introDone"));
+      };
+      if (immediate) done();
+      else gsap.to(intro, { opacity: 0, duration: 0.45, ease: "power1.out", onComplete: done });
+    };
 
     const tl = gsap.timeline({
       defaults: { ease: "power3.inOut" },
       onComplete: () => finish(),
     });
 
-    // 0 — el libro "cae" sobre el escritorio
     tl.fromTo(
       book,
       { y: 90, z: 120, rotateX: 38, rotateZ: -7, opacity: 0 },
       { y: 0, z: 0, rotateX: 26, rotateZ: -4, opacity: 1, duration: 0.75, ease: "power2.out" },
     )
       .fromTo(shadow, { opacity: 0, scaleX: 0.55 }, { opacity: 1, scaleX: 0.9, duration: 0.75, ease: "power2.out" }, "<")
-      // 1 — la tapa se abre
       .addLabel("open", "+=0.18")
       .to(cover, { rotateY: -178, duration: 1.05 }, "open")
       .to(book, { rotateZ: 0, rotateX: 16, xPercent: 24, duration: 1.05 }, "open")
       .to(shadow, { scaleX: 1.55, xPercent: 12, opacity: 0.85, duration: 1.05 }, "open")
       .add(() => {}, "open+=0.5");
-    shadeTo(cover, 1, 0.5).then(() => shadeTo(cover, 0.25, 0.5));
 
-    // 2 — pasan dos hojas
+    shadeTo(cover, 1, 0.5).then(() => {
+      if (!finished) shadeTo(cover, 0.25, 0.5);
+    });
+
     tl.addLabel("p1", "open+=0.78")
       .to(s1, { rotateY: -176, duration: 0.7, ease: "power2.inOut" }, "p1")
       .addLabel("p2", "p1+=0.34")
       .to(s2, { rotateY: -174, duration: 0.66, ease: "power2.inOut" }, "p2")
-      // 3 — zoom hacia la página derecha → se funde con el hero
       .addLabel("zoom", "p2+=0.5")
       .to(book, { rotateX: 0, duration: 0.85 }, "zoom")
       .to(scene, { scale: 3.4, xPercent: -34, yPercent: 16, duration: 0.85, ease: "power2.in" }, "zoom")
       .to(shadow, { opacity: 0, duration: 0.4 }, "zoom");
 
     [s1, s2].forEach((s, i) => {
-      gsap.delayedCall(1.7 + i * 0.34, () => {
-        shadeTo(s, 0.85, 0.3).then(() => shadeTo(s, 0, 0.3));
-      });
+      delayedCalls.push(
+        gsap.delayedCall(1.7 + i * 0.34, () => {
+          if (finished) return;
+          shadeTo(s, 0.85, 0.3).then(() => {
+            if (!finished) shadeTo(s, 0, 0.3);
+          });
+        }),
+      );
     });
 
-    // Saltar
-    const skip = () => {
-      tl.kill();
-      finish();
+    const skip = () => finish();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") skip();
     };
     intro.addEventListener("click", skip, { once: true });
-    window.addEventListener(
-      "keydown",
-      (e) => {
-        if (e.key === "Escape" || e.key === "Enter" || e.key === " ") skip();
-      },
-      { once: true },
-    );
-    // Failsafe por si algo bloquea la animación.
-    setTimeout(() => {
+    window.addEventListener("keydown", onKeyDown);
+    const failsafeTimer = window.setTimeout(() => {
       if (document.getElementById("lbIntro")) finish(true);
     }, 6500);
   }

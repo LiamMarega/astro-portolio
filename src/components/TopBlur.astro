@@ -9,20 +9,23 @@
     height: clamp(84px, 14.5vh, 130px);
     z-index: 50;
     pointer-events: none;
+    contain: size style;
+    transform: translateZ(0);
   }
   .topblur i {
     position: absolute;
-    inset: 0;
+    inset: 0 0 auto 0;
+    height: var(--e);
     -webkit-backdrop-filter: blur(var(--b));
     backdrop-filter: blur(var(--b));
-    -webkit-mask-image: linear-gradient(to bottom, #000 var(--s), transparent var(--e));
-    mask-image: linear-gradient(to bottom, #000 var(--s), transparent var(--e));
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
   }
-  .topblur i:nth-child(1) { --b: 1px;  --s: 0%; --e: 100%; }
-  .topblur i:nth-child(2) { --b: 2.5px; --s: 0%; --e: 78%; }
-  .topblur i:nth-child(3) { --b: 5px;  --s: 0%; --e: 58%; }
-  .topblur i:nth-child(4) { --b: 9px;  --s: 0%; --e: 40%; }
-  .topblur i:nth-child(5) { --b: 16px; --s: 0%; --e: 24%; }
+  .topblur i:nth-child(1) { --b: 1px;  --e: 100%; }
+  .topblur i:nth-child(2) { --b: 2.5px; --e: 78%; }
+  .topblur i:nth-child(3) { --b: 5px;  --e: 58%; }
+  .topblur i:nth-child(4) { --b: 9px;  --e: 40%; }
+  .topblur i:nth-child(5) { --b: 16px; --e: 24%; }
 
   /* the case sheet brings its own edge blur */
   :global(.is-case) .topblur {

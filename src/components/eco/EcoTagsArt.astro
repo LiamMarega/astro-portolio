@@ -43,10 +43,13 @@ const poses = [
   {
     tags.map((t, i) => {
       const p = poses[i % poses.length];
+      const dx = +(p.stack[0] - p.spread[0]).toFixed(2);
+      const dy = +(p.stack[1] - p.spread[1]).toFixed(2);
+      const sc = +(p.stack[2] / p.spread[2]).toFixed(4);
       return (
         <span
           class:list={['tag', `tag--${t.tone}`]}
-          style={`--cx:${p.spread[0]}%;--cy:${p.spread[1]}%;--w:${p.spread[2]}%;--rot:${p.spread[3]}deg;--sx:${p.stack[0]}%;--sy:${p.stack[1]}%;--sw:${p.stack[2]}%;--srot:${p.stack[3]}deg;--z:${p.z};--i:${i}`}
+          style={`--cx:${p.spread[0]}%;--cy:${p.spread[1]}%;--w:${p.spread[2]}%;--rot:${p.spread[3]}deg;--dx:${dx}cqw;--dy:${dy}cqh;--sc:${sc};--srot:${p.stack[3]}deg;--z:${p.z};--i:${i}`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d={icons[t.icon]} />
@@ -67,7 +70,7 @@ const poses = [
   .tags {
     position: absolute;
     inset: 0;
-    container-type: inline-size;
+    container-type: size;
     --spring: cubic-bezier(0.34, 1.4, 0.5, 1);
   }
 
@@ -132,12 +135,8 @@ const poses = [
       inset 0 -0.07em 0 var(--edge),
       0 0.06em 0.02em rgba(0, 0, 0, 0.06),
       0 0.18em 0.32em -0.08em var(--shadow);
-    transform: translate(-50%, -50%) rotate(var(--rot));
-    transition:
-      left 0.8s var(--spring),
-      top 0.8s var(--spring),
-      width 0.8s var(--spring),
-      transform 0.8s var(--spring);
+    transform: translate3d(0px, 0px, 0) translate(-50%, -50%) rotate(var(--rot)) scale(1);
+    transition: transform 0.8s var(--spring);
     transition-delay: calc(var(--i) * 0.05s);
   }
   .tag svg {
@@ -225,10 +224,7 @@ const poses = [
 
   /* ── collapsed pose (toggled by JS on a loop) ── */
   .tags.is-stacked .tag {
-    left: var(--sx);
-    top: var(--sy);
-    width: var(--sw);
-    transform: translate(-50%, -50%) rotate(var(--srot));
+    transform: translate3d(var(--dx), var(--dy), 0) translate(-50%, -50%) rotate(var(--srot)) scale(var(--sc));
     transition-delay: calc((4 - var(--i)) * 0.035s);
   }
   .tags.is-stacked .tags__window {
@@ -239,18 +235,15 @@ const poses = [
     transform: scale(0.6);
   }
   .tags.is-stacked .tags__cursor {
-    transform: translate(-80%, -150%);
+    transform: translate3d(-80%, -150%, 0);
   }
   .tags.is-stacked .tags__name {
-    transform: translate(-48%, -128%) rotate(3deg);
+    transform: translate3d(-48%, -128%, 0) rotate(3deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .tags.is-stacked .tag {
-      left: var(--cx);
-      top: var(--cy);
-      width: var(--w);
-      transform: translate(-50%, -50%) rotate(var(--rot));
+      transform: translate3d(0px, 0px, 0) translate(-50%, -50%) rotate(var(--rot)) scale(1);
     }
   }
 </style>

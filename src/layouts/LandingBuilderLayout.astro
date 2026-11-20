@@ -1,26 +1,35 @@
 ---
 import "../styles/landing-builder.css";
 import "../styles/serif-fallback.css";
-import "@fontsource/source-serif-4/latin-400.css";
-import "@fontsource/source-serif-4/latin-500.css";
-import "@fontsource/source-serif-4/latin-600.css";
-import "@fontsource/source-serif-4/latin-700.css";
-import "@fontsource/source-serif-4/latin-400-italic.css";
-import "@fontsource/source-serif-4/latin-500-italic.css";
-import "@fontsource/jetbrains-mono/latin-400.css";
-import "@fontsource/jetbrains-mono/latin-500.css";
-import "@fontsource/jetbrains-mono/latin-600.css";
-import "@fontsource/jetbrains-mono/latin-700.css";
-import "@fontsource/caveat/latin-500.css";
-import "@fontsource/caveat/latin-600.css";
-import "@fontsource/caveat/latin-700.css";
 import serif400 from "@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url";
+import serif500 from "@fontsource/source-serif-4/files/source-serif-4-latin-500-normal.woff2?url";
 import serif600 from "@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url";
 import serif700 from "@fontsource/source-serif-4/files/source-serif-4-latin-700-normal.woff2?url";
+import serif400i from "@fontsource/source-serif-4/files/source-serif-4-latin-400-italic.woff2?url";
+import serif500i from "@fontsource/source-serif-4/files/source-serif-4-latin-500-italic.woff2?url";
+import mono400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url";
+import mono500 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2?url";
+import mono600 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2?url";
+import mono700 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2?url";
+import caveatVar from "@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2?url";
 import { SEO } from "astro-seo";
 import Analytics from "@vercel/analytics/astro";
 import { canonicalUrl, ldJson, landingServiceNode, LANDING_DESCRIPTION } from "../content/seo";
 import { ogImageFor } from "../content/og";
+
+const fontFaceCss = [
+  `@font-face{font-family:'Source Serif 4';font-style:normal;font-display:swap;font-weight:400;src:url(${serif400}) format('woff2')}`,
+  `@font-face{font-family:'Source Serif 4';font-style:normal;font-display:swap;font-weight:500;src:url(${serif500}) format('woff2')}`,
+  `@font-face{font-family:'Source Serif 4';font-style:normal;font-display:swap;font-weight:600;src:url(${serif600}) format('woff2')}`,
+  `@font-face{font-family:'Source Serif 4';font-style:normal;font-display:swap;font-weight:700;src:url(${serif700}) format('woff2')}`,
+  `@font-face{font-family:'Source Serif 4';font-style:italic;font-display:swap;font-weight:400;src:url(${serif400i}) format('woff2')}`,
+  `@font-face{font-family:'Source Serif 4';font-style:italic;font-display:swap;font-weight:500;src:url(${serif500i}) format('woff2')}`,
+  `@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:400;src:url(${mono400}) format('woff2')}`,
+  `@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:500;src:url(${mono500}) format('woff2')}`,
+  `@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:600;src:url(${mono600}) format('woff2')}`,
+  `@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:700;src:url(${mono700}) format('woff2')}`,
+  `@font-face{font-family:'Caveat';font-style:normal;font-display:swap;font-weight:400 700;src:url(${caveatVar}) format('woff2')}`,
+].join("");
 
 interface Props {
   title: string;
@@ -42,10 +51,11 @@ const funnelCard = ogImageFor("/landing-builder/");
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {/* the three serif weights the first screen paints with: fetched in parallel with the CSS, not after it */}
-    {[serif400, serif600, serif700].map((href) => (
+    {/* the two serif weights the first screen paints with: fetched in parallel with the CSS, not after it */}
+    {[serif400, serif600].map((href) => (
       <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
     ))}
+    <style is:inline set:html={fontFaceCss} />
 
     {/* title, description, canonical, robots, hreflang, Open Graph and Twitter come from astro-seo, once */}
     <SEO
@@ -85,31 +95,35 @@ const funnelCard = ogImageFor("/landing-builder/");
       aria-hidden="true"
     >
       <defs>
-        <filter id="lbRoughNote" x="-6%" y="-12%" width="112%" height="124%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.014 0.02" numOctaves="3" seed="7" result="t" />
+        <filter id="lbRoughNote" x="-6%" y="-12%" width="112%" height="124%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014 0.02" numOctaves="2" seed="7" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="11" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbRoughNote2" x="-6%" y="-12%" width="112%" height="124%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.016 0.022" numOctaves="3" seed="23" result="t" />
+        <filter id="lbRoughNote2" x="-6%" y="-12%" width="112%" height="124%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.016 0.022" numOctaves="2" seed="23" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="10" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbMarker" x="-8%" y="-45%" width="116%" height="190%">
+        <filter id="lbMarker" x="-6%" y="-45%" width="112%" height="190%" color-interpolation-filters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.025 0.04" numOctaves="2" seed="3" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbRoughBand" x="-3%" y="-220%" width="106%" height="540%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.03" numOctaves="3" seed="11" result="t" />
+        <filter id="lbRoughBand" x="-3%" y="-40%" width="106%" height="200%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.03" numOctaves="2" seed="11" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="18" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbDeckle" x="-4%" y="-4%" width="108%" height="108%">
+        <filter id="lbRoughCaso" x="-2%" y="-8%" width="104%" height="122%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.03" numOctaves="2" seed="11" result="t" />
+          <feDisplacementMap in="SourceGraphic" in2="t" scale="18" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="lbDeckle" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.022 0.026" numOctaves="2" seed="5" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="4" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbTapeEdge" x="-10%" y="-30%" width="120%" height="160%">
+        <filter id="lbTapeEdge" x="-6%" y="-20%" width="112%" height="140%" color-interpolation-filters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.05 0.09" numOctaves="2" seed="9" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="3" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="lbPencil" x="-5%" y="-5%" width="110%" height="110%">
+        <filter id="lbPencil" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves="2" seed="4" result="t" />
           <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
         </filter>

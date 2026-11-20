@@ -245,6 +245,7 @@ const isLoneChoice = (fields: FormField[]) => fields.length === 1 && fields[0].k
     background: var(--card);
     padding: var(--lf-pad);
     scroll-margin-top: 90px;
+    contain: layout style;
   }
 
   .lf__form[hidden],
@@ -275,11 +276,12 @@ const isLoneChoice = (fields: FormField[]) => fields.length === 1 && fields[0].k
   }
   .lf__bar i {
     position: absolute;
-    inset: 0 auto 0 0;
-    width: calc(var(--p, 0.25) * 100%);
+    inset: 0;
+    width: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, #fec81a, #ffd60a 60%, #ffe24d);
-    transition: width 0.6s var(--ease-spring);
+    transform: translate3d(calc((var(--p, 0.25) - 1) * 100%), 0, 0);
+    transition: transform 0.6s var(--ease-spring);
   }
 
   /* chip for values picked elsewhere on the page (e.g. the plan) */

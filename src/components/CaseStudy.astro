@@ -186,6 +186,7 @@ const external = icon('ArrowUpRight');
     border-radius: clamp(18px, 1.64vw, 28px) clamp(18px, 1.64vw, 28px) 0 0;
     overflow: hidden;
     pointer-events: none;
+    contain: size style;
     transform: translateY(26px);
     transition: transform 0.6s var(--ease-out);
   }
@@ -194,11 +195,12 @@ const external = icon('ArrowUpRight');
   }
   .case__blur i {
     position: absolute;
-    inset: 0;
+    inset: 0 0 auto 0;
+    height: var(--e);
     -webkit-backdrop-filter: blur(var(--b));
     backdrop-filter: blur(var(--b));
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent var(--e));
-    mask-image: linear-gradient(to bottom, #000 0%, transparent var(--e));
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
   }
   .case__blur i:nth-child(1) {
     --b: 1.5px;

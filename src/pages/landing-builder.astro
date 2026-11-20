@@ -50,6 +50,7 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rectInvalidators: Array<() => void> = [];
 
   // ---------- Reveal on scroll ----------
   const io = new IntersectionObserver(
@@ -97,19 +98,39 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
     globalThis.addEventListener('resize', () => sketches.forEach(sizeSketch));
   }
 
-  // ---------- GSAP: magnetic buttons + parallax + drift ----------
+  // ---------- Hero collage parallax entries (driven by unified scroll rAF below) ----------
+  const heroConfig: Record<string, [number, number]> = {
+    photo: [1.2, -0.04], usd: [2.5, 0.05], dev: [-1.6, 0.07], seal: [-14, 0.03],
+  };
+  const heroEls: Array<[HTMLElement, number, number]> = [];
+  if (!reduce) {
+    for (const [k, [rot, mul]] of Object.entries(heroConfig)) {
+      const el = document.querySelector<HTMLElement>(`[data-hero="${k}"]`);
+      if (el) heroEls.push([el, rot, mul]);
+    }
+  }
+
+  // ---------- GSAP: magnetic buttons + scroll triggers + offscreen-paused drift ----------
+  const driftTweens = new Map<Element, gsap.core.Tween>();
+  const visibleDriftEls = new Set<Element>();
+  const visibleAnimEls = new Set<Element>();
+
   if (!reduce) {
     const fine = window.matchMedia('(pointer: fine)').matches;
     if (fine) {
       document.querySelectorAll<HTMLElement>('.magnet').forEach((el) => {
         const qx = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3' });
         const qy = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3' });
+        let rect: DOMRect | null = null;
+        rectInvalidators.push(() => { rect = null; });
+        const enter = () => { rect = el.getBoundingClientRect(); };
         const move = (e: MouseEvent) => {
-          const r = el.getBoundingClientRect();
+          const r = rect || (rect = el.getBoundingClientRect());
           qx((e.clientX - (r.left + r.width / 2)) * 0.3);
           qy((e.clientY - (r.top + r.height / 2)) * 0.3);
         };
-        const leave = () => { qx(0); qy(0); };
+        const leave = () => { rect = null; qx(0); qy(0); };
+        el.addEventListener('mouseenter', enter);
         el.addEventListener('mousemove', move);
         el.addEventListener('mouseleave', leave);
       });
@@ -117,7 +138,7 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // ---------- Stickers / sellos: entran con "slap" ----------
+    // Stickers / stamps entrance
     document.querySelectorAll<HTMLElement>('.seal, .vsl-badge, .num-flag, .qual-arrow').forEach((el) => {
       gsap.from(el, {
         scale: 1.9, opacity: 0, duration: 0.5, ease: 'back.out(2.2)',
@@ -125,40 +146,65 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
       });
     });
 
-    // ---------- Cintas: se "apoyan" sobre el papel ----------
+    // Tape strips entrance (GPU composited)
     document.querySelectorAll<HTMLElement>('.tape').forEach((el, i) => {
       gsap.from(el, {
         opacity: 0, scale: 1.4, duration: 0.38, delay: (i % 3) * 0.07, ease: 'power2.out',
+        force3D: true,
         scrollTrigger: { trigger: el.parentElement || el, start: 'top 90%', once: true },
       });
     });
 
-    // ---------- Tilt 3D en tarjetas (hover, desktop) ----------
+    // 3D hover tilt on cards (cached rect on mouseenter + rAF-coalesced writes)
     if (fine) {
       document.querySelectorAll<HTMLElement>('.card, .photo-card, .note, .faq-item, .art-card').forEach((el) => {
         if (el.closest('.hero .collage')) return;
         const max = 3.4;
-        const move = (e: MouseEvent) => {
-          const r = el.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
+        let rect: DOMRect | null = null;
+        let tiltRaf = 0;
+        let resetTimer = 0;
+        let lastX = 0;
+        let lastY = 0;
+        rectInvalidators.push(() => { rect = null; });
+
+        const applyTilt = () => {
+          tiltRaf = 0;
+          const r = rect || (rect = el.getBoundingClientRect());
+          if (!r.width || !r.height) return;
+          const px = (lastX - r.left) / r.width - 0.5;
+          const py = (lastY - r.top) / r.height - 0.5;
           el.style.transition = 'transform 0.12s ease-out, box-shadow 0.2s ease';
           el.style.transform =
             `perspective(700px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateZ(8px)`;
           el.classList.add('tilting');
         };
+        const enter = () => {
+          clearTimeout(resetTimer);
+          rect = el.getBoundingClientRect();
+        };
+        const move = (e: MouseEvent) => {
+          lastX = e.clientX;
+          lastY = e.clientY;
+          if (!tiltRaf) tiltRaf = requestAnimationFrame(applyTilt);
+        };
         const leave = () => {
+          if (tiltRaf) { cancelAnimationFrame(tiltRaf); tiltRaf = 0; }
+          rect = null;
           el.style.transition = 'transform 0.45s ease, box-shadow 0.3s ease';
           el.style.transform = '';
           el.classList.remove('tilting');
-          setTimeout(() => { if (!el.classList.contains('tilting')) el.style.transition = ''; }, 480);
+          clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => {
+            if (!el.classList.contains('tilting')) el.style.transition = '';
+          }, 480);
         };
+        el.addEventListener('mouseenter', enter);
         el.addEventListener('mousemove', move);
         el.addEventListener('mouseleave', leave);
       });
     }
 
-    // ---------- Contadores del caso real ----------
+    // Case study counters
     document.querySelectorAll<HTMLElement>('#resultados .stats strong').forEach((el) => {
       const raw = (el.textContent || '').trim();
       const m = raw.match(/^([+\-]?)(\d+(?:\.\d+)?)(.*)$/);
@@ -173,7 +219,7 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
       });
     });
 
-    // ---------- Escritura a mano: las notas Caveat se "escriben" ----------
+    // Handwritten reveal wipe
     document
       .querySelectorAll<HTMLElement>('.note p, .side, .qual-side, .signature, .hero-handwrite, .lbl-hand')
       .forEach((el) => {
@@ -199,43 +245,205 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
         },
       });
     });
-    document.querySelectorAll<HTMLElement>('[data-drift]').forEach((el, i) => {
-      gsap.to(el, { y: '+=18', x: '+=12', rotation: '+=4', duration: 6 + i, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    });
-    ScrollTrigger.refresh();
 
-    // ---------- Hero collage parallax on scroll ----------
-    const hero: Record<string, [number, number]> = {
-      photo: [1.2, -0.04], usd: [2.5, 0.05], dev: [-1.6, 0.07], seal: [-14, 0.03],
-    };
-    const heroEls = Object.entries(hero)
-      .map(([k, v]) => [document.querySelector<HTMLElement>(`[data-hero="${k}"]`), v] as const)
-      .filter(([el]) => el);
-    if (heroEls.length) {
-      const onScroll = () => {
-        const y = window.scrollY;
-        for (const [el, [rot, mul]] of heroEls) {
-          (el as HTMLElement).style.transform = `rotate(${rot}deg) translateY(${y * mul}px)`;
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+    // Infinite [data-drift] tweens: paused when offscreen or tab hidden
+    const driftEls = document.querySelectorAll<HTMLElement>('[data-drift]');
+    if (driftEls.length) {
+      driftEls.forEach((el, i) => {
+        const tw = gsap.to(el, {
+          y: '+=18', x: '+=12', rotation: '+=4',
+          duration: 6 + i, ease: 'sine.inOut', yoyo: true, repeat: -1,
+          paused: true,
+        });
+        driftTweens.set(el, tw);
+      });
+      const driftIO = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const tw = driftTweens.get(e.target);
+            if (!tw) continue;
+            if (e.isIntersecting) {
+              visibleDriftEls.add(e.target);
+              e.target.classList.add('is-visible');
+              if (!document.hidden) tw.play();
+            } else {
+              visibleDriftEls.delete(e.target);
+              e.target.classList.remove('is-visible');
+              tw.pause();
+            }
+          }
+        },
+        { rootMargin: '120px 0px' },
+      );
+      driftEls.forEach((el) => driftIO.observe(el));
     }
 
-    // ---------- Entrada del hero (después de la intro del libro) ----------
+    // Pause infinite CSS animations when outside viewport or tab hidden
+    const cssAnimEls = document.querySelectorAll<HTMLElement>('.particle, .vsl-play, .btn-yellow, .hero-cue');
+    if (cssAnimEls.length) {
+      const cssAnimIO = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              visibleAnimEls.add(e.target);
+              if (!document.hidden) e.target.classList.remove('lb-anim-paused');
+            } else {
+              visibleAnimEls.delete(e.target);
+              e.target.classList.add('lb-anim-paused');
+            }
+          }
+        },
+        { rootMargin: '80px 0px' },
+      );
+      cssAnimEls.forEach((el) => {
+        el.classList.add('lb-anim-paused');
+        cssAnimIO.observe(el);
+      });
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        visibleDriftEls.forEach((el) => driftTweens.get(el)?.pause());
+        visibleAnimEls.forEach((el) => el.classList.add('lb-anim-paused'));
+      } else {
+        visibleDriftEls.forEach((el) => driftTweens.get(el)?.play());
+        visibleAnimEls.forEach((el) => el.classList.remove('lb-anim-paused'));
+      }
+    });
+
+    ScrollTrigger.refresh();
+  }
+
+  // ---------- Unified rAF-coalesced scroll UI (zero layout reads per scroll frame) ----------
+  {
+    const prog = document.getElementById('navProgress');
+    const sticky = document.getElementById('stickyCta');
+    const floatNote = document.getElementById('floatNote');
+    const qual = document.getElementById('calificar');
+    const heroSection = document.querySelector<HTMLElement>('.hero');
+    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.book-tabs .bt'));
+    const tabTargets = tabs.map((tab) => ({
+      tab,
+      el: document.getElementById(tab.dataset.tab || ''),
+      top: 0,
+    }));
+
+    let viewportH = window.innerHeight;
+    let maxScroll = 0;
+    let hasQual = false;
+    let qualTop = 0;
+    let qualBottom = 0;
+    let heroBottom = 900;
+
+    let lastStickyShow: boolean | null = null;
+    let lastFloatShow: boolean | null = null;
+    let lastCur = -2;
+    let lastHeroY = -1;
+    let scrollRaf = 0;
+    let measureRaf = 0;
+
+    const measureLayout = () => {
+      measureRaf = 0;
+      const sy = window.scrollY;
+      viewportH = window.innerHeight;
+      maxScroll = Math.max(0, document.documentElement.scrollHeight - viewportH);
+      if (qual) {
+        const qr = qual.getBoundingClientRect();
+        qualTop = qr.top + sy;
+        qualBottom = qr.bottom + sy;
+        hasQual = true;
+      } else {
+        hasQual = false;
+      }
+      if (heroSection) {
+        const hr = heroSection.getBoundingClientRect();
+        heroBottom = hr.bottom + sy + 120;
+      }
+      for (const item of tabTargets) {
+        if (item.el) item.top = item.el.getBoundingClientRect().top + sy;
+      }
+    };
+
+    const applyScroll = () => {
+      scrollRaf = 0;
+      const y = window.scrollY;
+
+      if (prog) {
+        const ratio = maxScroll > 0 ? Math.min(1, Math.max(0, y / maxScroll)) : 0;
+        prog.style.transform = `scaleX(${ratio.toFixed(4)})`;
+      }
+
+      if (heroEls.length) {
+        const clampedY = y <= heroBottom ? y : heroBottom;
+        if (clampedY !== lastHeroY) {
+          for (let i = 0; i < heroEls.length; i++) {
+            const [el, rot, mul] = heroEls[i];
+            el.style.transform = `rotate(${rot}deg) translateY(${(clampedY * mul).toFixed(2)}px)`;
+          }
+          lastHeroY = clampedY;
+        }
+      }
+
+      const onForm = hasQual && qualTop < y + viewportH && qualBottom > y;
+      const stickyShow = y > 650 && !onForm;
+      if (sticky && stickyShow !== lastStickyShow) {
+        sticky.classList.toggle('show', stickyShow);
+        lastStickyShow = stickyShow;
+      }
+      const floatShow = y > 900 && !onForm;
+      if (floatNote && floatShow !== lastFloatShow) {
+        floatNote.classList.toggle('show', floatShow);
+        lastFloatShow = floatShow;
+      }
+
+      if (tabTargets.length) {
+        const cutoff = y + viewportH * 0.45;
+        let cur = -1;
+        for (let i = 0; i < tabTargets.length; i++) {
+          if (tabTargets[i].el && tabTargets[i].top < cutoff) cur = i;
+        }
+        if (cur !== lastCur) {
+          for (let i = 0; i < tabTargets.length; i++) {
+            tabTargets[i].tab.classList.toggle('on', i === cur);
+          }
+          lastCur = cur;
+        }
+      }
+    };
+
+    const scheduleScroll = () => {
+      for (let i = 0; i < rectInvalidators.length; i++) rectInvalidators[i]();
+      if (!scrollRaf) scrollRaf = requestAnimationFrame(applyScroll);
+    };
+
+    const scheduleMeasure = () => {
+      if (!measureRaf) {
+        measureRaf = requestAnimationFrame(() => {
+          measureLayout();
+          applyScroll();
+        });
+      }
+    };
+
+    window.addEventListener('scroll', scheduleScroll, { passive: true });
+    window.addEventListener('resize', scheduleMeasure, { passive: true });
+    window.addEventListener('load', scheduleMeasure, { once: true });
+    if ('ResizeObserver' in window) {
+      const layoutRO = new ResizeObserver(scheduleMeasure);
+      layoutRO.observe(document.body);
+      if (qual) layoutRO.observe(qual);
+    }
+
+    measureLayout();
+    applyScroll();
+  }
+
+  // ---------- Hero entrance after BookIntro finishes ----------
+  if (!reduce) {
     const playHero = () => {
-      // Revela los elementos que SOLO dependen del CSS .reveal (eyebrow, collage,
-      // CTA inferior). Los animados por GSAP abajo se controlan con fromTo.
       document
         .querySelectorAll('.hero .reveal')
         .forEach((el) => el.classList.add('in'));
-      // Cada item: [sel, from, to?].
-      // - Con `to` => fromTo: fin explícito en opacity:1. Necesario para los
-      //   elementos .reveal (h1, lead, actions, meta): su base CSS es opacity:0
-      //   con transición de 0.8s, así que .from leería ~0 como fin y los dejaría
-      //   invisibles. Tienen transform identidad, por eso y:0 es seguro.
-      // - Sin `to` => from clásico: para photo-card/note/seal, que NO son
-      //   .reveal (base opacity:1) y conservan su rotación CSS de reposo.
       const items: [string, gsap.TweenVars, gsap.TweenVars?][] = [
         ['.hero .photo-card', { y: 60, rotation: -6, opacity: 0, scale: 0.94, duration: 0.7, ease: 'back.out(1.6)' }],
         ['.hero h1', { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' }],
@@ -258,37 +466,9 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
     if ((window as any).__lbIntroDone) playHero();
     else window.addEventListener('lb:introDone', playHero, { once: true });
   }
-
-  // ---------- UI de scroll: progreso, sticky CTA, nota flotante, pestañas ----------
-  {
-    const prog = document.getElementById('navProgress');
-    const sticky = document.getElementById('stickyCta');
-    const floatNote = document.getElementById('floatNote');
-    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.book-tabs .bt'));
-    const qual = document.getElementById('calificar');
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      if (prog) prog.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + '%';
-      // Ocultamos los CTAs flotantes cuando el formulario ya está a la vista.
-      const qr = qual?.getBoundingClientRect();
-      const onForm = !!qr && qr.top < innerHeight && qr.bottom > 0;
-      if (sticky) sticky.classList.toggle('show', scrollY > 650 && !onForm);
-      if (floatNote) floatNote.classList.toggle('show', scrollY > 900 && !onForm);
-      if (tabs.length) {
-        let cur = -1;
-        tabs.forEach((t, i) => {
-          const el = document.getElementById(t.dataset.tab || '');
-          if (el && el.getBoundingClientRect().top < innerHeight * 0.45) cur = i;
-        });
-        tabs.forEach((t, i) => t.classList.toggle('on', i === cur));
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
 </script>
 
-<!-- Pencil cursor drawing (vanilla, desktop fine-pointer only) -->
+<!-- Pencil cursor drawing (vanilla, desktop fine-pointer only, demand-driven rAF) -->
 <script>
   (function () {
     if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
@@ -299,18 +479,37 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
     const LIFESPAN = 15000, ERASE_DUR = 1700, MOVE_MIN = 4, INK = '26, 22, 16';
     const canvas = document.createElement('canvas');
     canvas.id = 'lb-pencil-layer';
-    let ctx: CanvasRenderingContext2D;
+    let ctx: CanvasRenderingContext2D | null = null;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let mounted = false;
+    let lastW = 0;
+    let lastH = 0;
+    let rafId = 0;
 
     function size() {
-      canvas.width = Math.floor(innerWidth * dpr);
-      canvas.height = Math.floor(innerHeight * dpr);
-      canvas.style.width = innerWidth + 'px';
-      canvas.style.height = innerHeight + 'px';
+      const w = innerWidth;
+      const h = innerHeight;
+      if (ctx && w === lastW && h === lastH) return;
+      lastW = w;
+      lastH = h;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
       ctx = canvas.getContext('2d')!;
       ctx.scale(dpr, dpr);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
+    }
+
+    function ensureCanvas() {
+      if (!mounted) {
+        document.body.appendChild(canvas);
+        mounted = true;
+      } else if (canvas.style.display === 'none') {
+        canvas.style.display = '';
+      }
+      size();
     }
 
     type Pt = { x: number; y: number };
@@ -324,9 +523,26 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
         'a, button, input, textarea, select, label, [role="button"], .btn, .qf-opt, .vsl-frame, [data-no-pencil]'));
     }
 
-    document.body.appendChild(canvas);
-    size();
-    window.addEventListener('resize', size);
+    function startLoop() {
+      if (rafId || document.hidden) return;
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function stopLoop() {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (mounted && canvas.style.display !== 'none') size();
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopLoop();
+      else if (strokes.length > 0 || drawing) startLoop();
+    });
 
     // Points are stored in DOCUMENT coordinates (clientX + scroll) so the
     // drawing stays anchored to the page and scrolls away with it.
@@ -348,6 +564,8 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
       if (moved > MOVE_MIN && strokes.indexOf(current) === -1) {
         strokes.push(current);
         root.classList.add('pencil-drawing');
+        ensureCanvas();
+        startLoop();
       }
     }, true);
 
@@ -361,49 +579,55 @@ import StickyCTA from '../components/landingbuilder/StickyCTA.astro';
     window.addEventListener('pointercancel', end, true);
     window.addEventListener('blur', end);
 
-    function drawRange(pts: Pt[], from: number, to: number) {
+    function drawRange(c: CanvasRenderingContext2D, pts: Pt[], from: number, to: number) {
       if (to - from < 2) {
         if (to - from === 1) {
           const p = pts[from];
-          ctx.beginPath(); ctx.arc(p.x, p.y, 0.8, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(' + INK + ',0.85)'; ctx.fill();
+          c.beginPath(); c.arc(p.x, p.y, 0.8, 0, Math.PI * 2);
+          c.fillStyle = 'rgba(' + INK + ',0.85)'; c.fill();
         }
         return;
       }
-      ctx.beginPath();
-      ctx.moveTo(pts[from].x, pts[from].y);
+      c.beginPath();
+      c.moveTo(pts[from].x, pts[from].y);
       for (let i = from + 1; i < to - 1; i++) {
         const mx = (pts[i].x + pts[i + 1].x) / 2;
         const my = (pts[i].y + pts[i + 1].y) / 2;
-        ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
+        c.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
       }
-      ctx.lineTo(pts[to - 1].x, pts[to - 1].y);
-      ctx.strokeStyle = 'rgba(' + INK + ',0.82)'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.strokeStyle = 'rgba(' + INK + ',0.18)'; ctx.lineWidth = 2.6; ctx.stroke();
+      c.lineTo(pts[to - 1].x, pts[to - 1].y);
+      c.strokeStyle = 'rgba(' + INK + ',0.82)'; c.lineWidth = 1.5; c.stroke();
+      c.strokeStyle = 'rgba(' + INK + ',0.18)'; c.lineWidth = 2.6; c.stroke();
     }
 
     function loop(now: number) {
-      ctx.clearRect(0, 0, innerWidth, innerHeight);
-      ctx.save();
-      // Shift document-space points into the current viewport.
-      ctx.translate(-window.scrollX, -window.scrollY);
-      for (let s = strokes.length - 1; s >= 0; s--) {
-        const st = strokes[s];
-        const n = st.pts.length;
-        let from = 0;
-        if (st.done) {
-          const age = now - st.finishedAt;
-          if (age > LIFESPAN) {
-            const f = (age - LIFESPAN) / ERASE_DUR;
-            from = Math.floor(f * (n - 1));
-            if (from >= n - 1) { strokes.splice(s, 1); continue; }
+      rafId = 0;
+      if (document.hidden || !ctx) return;
+      ctx.clearRect(0, 0, lastW, lastH);
+      if (strokes.length > 0) {
+        ctx.save();
+        ctx.translate(-window.scrollX, -window.scrollY);
+        for (let s = strokes.length - 1; s >= 0; s--) {
+          const st = strokes[s];
+          const n = st.pts.length;
+          let from = 0;
+          if (st.done) {
+            const age = now - st.finishedAt;
+            if (age > LIFESPAN) {
+              const f = (age - LIFESPAN) / ERASE_DUR;
+              from = Math.floor(f * (n - 1));
+              if (from >= n - 1) { strokes.splice(s, 1); continue; }
+            }
           }
+          drawRange(ctx, st.pts, from, n);
         }
-        drawRange(st.pts, from, n);
+        ctx.restore();
       }
-      ctx.restore();
-      requestAnimationFrame(loop);
+      if (strokes.length > 0 || drawing) {
+        rafId = requestAnimationFrame(loop);
+      } else {
+        canvas.style.display = 'none';
+      }
     }
-    requestAnimationFrame(loop);
   })();
 </script>

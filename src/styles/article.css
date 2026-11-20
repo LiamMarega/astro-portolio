@@ -241,14 +241,13 @@ html {
   height: 26px;
   z-index: 6;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.06) 45%, rgba(255, 255, 255, 0.22)),
-    rgba(248, 244, 232, 0.28);
-  backdrop-filter: blur(1.5px) saturate(1.05) brightness(1.03);
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.05) brightness(1.03);
-  border-left: 1px solid rgba(255, 255, 255, 0.35);
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 1px 2px rgba(40, 30, 10, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.25);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.28)),
+    rgba(248, 244, 232, 0.42);
+  border-left: 1px solid rgba(255, 255, 255, 0.38);
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 2px rgba(40, 30, 10, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.3);
   filter: url(#lbTapeEdge);
+  contain: layout style;
   pointer-events: none;
 }
 .lb-root .tape::after {

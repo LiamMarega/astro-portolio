@@ -5,6 +5,7 @@ import SectionHeader from "./SectionHeader.astro";
 import LandingProCard from "./LandingProCard.astro";
 import ProjectsPreview from "./ProjectsPreview.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
+import TargetCursor from "../ui/TargetCursor.astro";
 import { getLinktreeCopy, type Locale } from "../../i18n/linktree";
 
 interface Project {
@@ -271,6 +272,8 @@ const socials: Project[] = [
                   alt={`${project.title} icon`}
                   width="48"
                   height="48"
+                  loading="lazy"
+                  decoding="async"
                   class="relative h-12 w-12 rounded-lg object-cover border border-white/10"
                 />
               ) : (
@@ -364,19 +367,7 @@ const socials: Project[] = [
   </footer>
 </main>
 
-<script>
-  // Custom target cursor: React + the cursor chunk are only fetched on devices with a real pointer. Phones and
-  // tablets never download them (the component rendered nothing there anyway: it bails out on touch/mobile UAs).
-  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    Promise.all([import("react"), import("react-dom/client"), import("../ui/TargetCursor")]).then(
-      ([{ createElement }, { createRoot }, { default: TargetCursor }]) => {
-        const host = document.createElement("div");
-        document.body.append(host);
-        createRoot(host).render(createElement(TargetCursor, { color: "#E2FF00" }));
-      },
-    );
-  }
-</script>
+<TargetCursor color="#E2FF00" />
 
 <script>
   import gsap from "gsap";

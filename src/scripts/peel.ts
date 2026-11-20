@@ -5,6 +5,8 @@
  * peeled on hover, grabbed, swung around and thrown inside it.
  */
 
+import { isPagePaused, onPagePause } from './smooth';
+
 export type PeelFinish = 'gloss' | 'matte' | 'holo';
 
 export interface PeelOptions {
@@ -44,7 +46,11 @@ type Press = {
   samples: { x: number; y: number; t: number }[];
 };
 
-const GRID = 96;
+const lowPower =
+  (typeof navigator !== 'undefined' && (navigator.hardwareConcurrency || 8) <= 4) ||
+  (typeof window !== 'undefined' && window.innerWidth < 761);
+const GRID = lowPower ? 36 : 48;
+const MAX_DPR = lowPower ? 1.5 : 2;
 const PAD = 0.18;
 const MAX_TEXTURE = 1024;
 const MASK_SIZE = 96;
@@ -425,8 +431,12 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
       const b = a + 1;
       const c = a + GRID + 1;
       const d = c + 1;
-      indices.set([a, b, d, a, d, c], cursor);
-      cursor += 6;
+      indices[cursor++] = a;
+      indices[cursor++] = b;
+      indices[cursor++] = d;
+      indices[cursor++] = a;
+      indices[cursor++] = d;
+      indices[cursor++] = c;
     }
   }
   const vao = gl.createVertexArray();
@@ -630,8 +640,16 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
     }
   };
 
+  let rectLeft = 0;
+  let rectTop = 0;
+  let rectDirty = true;
+  const invalidateRect = () => {
+    rectDirty = true;
+  };
+
   const applyLayout = () => {
-    view.ratio = Math.min(window.devicePixelRatio || 1, 2);
+    rectDirty = true;
+    view.ratio = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     const prevW = bounds.width;
     const prevH = bounds.height;
     bounds.width = Math.max(1, parent.clientWidth);
@@ -668,8 +686,13 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
   };
 
   const toParent = (e: PointerEvent): Point => {
-    const rect = parent.getBoundingClientRect();
-    return { x: e.clientX - rect.left - parent.clientLeft, y: e.clientY - rect.top - parent.clientTop };
+    if (rectDirty) {
+      const rect = parent.getBoundingClientRect();
+      rectLeft = rect.left + parent.clientLeft;
+      rectTop = rect.top + parent.clientTop;
+      rectDirty = false;
+    }
+    return { x: e.clientX - rectLeft, y: e.clientY - rectTop };
   };
 
   const toLocal = (p: Point): Point => {
@@ -796,7 +819,7 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
       resizePending = false;
       applyLayout();
     }
-    if (!visible || document.hidden) return;
+    if (!visible || isPagePaused()) return;
     const dt = last ? clamp((now - last) / 1000, 0.001, 1 / 30) : 1 / 60;
     last = now;
     const h = height();
@@ -878,7 +901,7 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
   };
 
   function wake() {
-    if (!raf && visible && !document.hidden && alive) raf = requestAnimationFrame(frame);
+    if (!raf && visible && !isPagePaused() && alive) raf = requestAnimationFrame(frame);
   }
 
   const updateHover = (e: PointerEvent) => {
@@ -889,6 +912,7 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
   };
 
   const onPointerMove = (e: PointerEvent) => {
+    if (!visible || isPagePaused()) return;
     const p = toParent(e);
     const was = state.pointer.inside;
     state.pointer.x = p.x;
@@ -962,24 +986,42 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
     state.pointer.inside = false;
     wake();
   };
-  const onVisibility = () => {
-    last = 0;
-    wake();
-  };
+  const unsubPause = onPagePause((paused) => {
+    if (paused) {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      last = 0;
+    } else {
+      rectDirty = true;
+      last = 0;
+      wake();
+    }
+  });
 
   const resizeObserver = new ResizeObserver(layout);
   resizeObserver.observe(parent);
   const intersection = new IntersectionObserver((entries) => {
     visible = entries.some((en) => en.isIntersecting);
     if (visible) {
+      rectDirty = true;
       last = 0;
       wake();
+    } else {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      last = 0;
     }
   });
   intersection.observe(parent);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('scroll', invalidateRect, { passive: true });
+  window.addEventListener('resize', invalidateRect, { passive: true });
+  parent.addEventListener('pointerenter', invalidateRect, { passive: true });
   document.documentElement.addEventListener('pointerleave', onLeaveWindow);
-  document.addEventListener('visibilitychange', onVisibility);
   hit.addEventListener('pointermove', onHitMove);
   hit.addEventListener('pointerleave', onHitLeave);
   hit.addEventListener('pointerdown', onHitDown);
@@ -999,11 +1041,14 @@ export function createPeel(parent: HTMLElement, options: PeelOptions) {
     destroy() {
       alive = false;
       cancelAnimationFrame(raf);
+      unsubPause();
       resizeObserver.disconnect();
       intersection.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('scroll', invalidateRect);
+      window.removeEventListener('resize', invalidateRect);
+      parent.removeEventListener('pointerenter', invalidateRect);
       document.documentElement.removeEventListener('pointerleave', onLeaveWindow);
-      document.removeEventListener('visibilitychange', onVisibility);
       gl.deleteTexture(texture);
       targets.forEach((t) => {
         gl.deleteTexture(t.texture);

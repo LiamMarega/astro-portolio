@@ -1,5 +1,5 @@
 import { $, $$, reduceMotion } from './util';
-import { pauseScroll } from './smooth';
+import { pauseScroll, setTransitionPaused } from './smooth';
 
 export function initCase() {
   const root = document.documentElement;
@@ -26,6 +26,7 @@ export function initCase() {
 
   /* ── view transitions: the card grows into the case-study sheet while its logo and title fly to the header ── */
   type Trio = { sheet?: Element | null; logo?: Element | null; title?: Element | null };
+  const KEYS = ['sheet', 'logo', 'title'] as const;
   const NAMES = { sheet: 'vt-sheet', logo: 'vt-logo', title: 'vt-title' } as const;
   const named: HTMLElement[] = [];
   const hidden: HTMLElement[] = [];
@@ -34,11 +35,18 @@ export function initCase() {
     const r = el.getBoundingClientRect();
     return r.width > 0 && r.bottom > 0 && r.top < innerHeight;
   };
-  const name = (t: Trio, onlyVisible = false) => {
-    for (const k of ['sheet', 'logo', 'title'] as const) {
+  const pickVisible = (t: Trio, onlyVisible = false) => {
+    const out: { el: HTMLElement; vtName: string }[] = [];
+    for (const k of KEYS) {
       const el = t[k];
-      if (!(el instanceof HTMLElement) || (onlyVisible && !visibleEnough(el))) continue;
-      el.style.viewTransitionName = NAMES[k];
+      if (!(el instanceof HTMLElement)) continue;
+      if (!onlyVisible || visibleEnough(el)) out.push({ el, vtName: NAMES[k] });
+    }
+    return out;
+  };
+  const applyNames = (entries: { el: HTMLElement; vtName: string }[]) => {
+    for (const { el, vtName } of entries) {
+      el.style.viewTransitionName = vtName;
       named.push(el);
     }
   };
@@ -60,15 +68,24 @@ export function initCase() {
   let current = 0;
   const morph = (from: Trio, update: () => void, to: () => Trio, mode: 'case' | 'swap', hide?: Element | null) => {
     const doc = document as Document & { startViewTransition?: (cb: () => void) => { finished: Promise<void> } };
-    if (!doc.startViewTransition || reduceMotion() || !Object.values(from).some(visibleEnough)) {
+    if (!doc.startViewTransition || reduceMotion()) {
+      update();
+      return;
+    }
+    // Read phase: measure source elements before any DOM mutations
+    const fromEntries = pickVisible(from, true);
+    if (!fromEntries.length) {
       update();
       return;
     }
     const token = ++current;
+    // Pause background WebGL/rAF work during the transition morph
+    setTransitionPaused(true);
+    // Write phase
     unname();
     root.classList.remove('vt-case', 'vt-swap');
     root.classList.add(`vt-${mode}`);
-    name(from, true);
+    applyNames(fromEntries);
     const vt = doc.startViewTransition(() => {
       unname();
       update();
@@ -77,13 +94,16 @@ export function initCase() {
         hide.style.visibility = 'hidden';
         hidden.push(hide);
       }
-      name(to(), true);
+      // Batched read phase, then batched write phase for destination elements
+      const toEntries = pickVisible(to(), true);
+      applyNames(toEntries);
     });
     vt.finished.finally(() => {
       if (token !== current) return; // a newer transition took over (it cleans up after itself)
       unname();
       hidden.splice(0).forEach((el) => (el.style.visibility = ''));
       root.classList.remove(`vt-${mode}`);
+      setTransitionPaused(false);
     });
   };
 

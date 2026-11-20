@@ -1,4 +1,5 @@
 import { reduceMotion } from './util';
+import { isPagePaused, onPagePause } from './smooth';
 
 /**
  * Plays muted looping clips only while they are on screen and loads them lazily
@@ -24,16 +25,23 @@ export function autoplayVideos(root: ParentNode = document) {
 
   if (reduceMotion()) return; // posters only
 
+  const visible = new Set<HTMLVideoElement>();
+  const playVideo = (v: HTMLVideoElement) => {
+    if (v.preload === 'none') v.preload = 'auto';
+    const p = v.play();
+    if (p) p.catch(() => {});
+  };
+
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
         const v = e.target as HTMLVideoElement;
         if (e.isIntersecting) {
-          if (v.preload === 'none') v.preload = 'auto';
-          const p = v.play();
-          if (p) p.catch(() => {});
-        } else if (!v.paused) {
-          v.pause();
+          visible.add(v);
+          if (!isPagePaused()) playVideo(v);
+        } else {
+          visible.delete(v);
+          if (!v.paused) v.pause();
         }
       }
     },
@@ -41,7 +49,13 @@ export function autoplayVideos(root: ParentNode = document) {
   );
   videos.forEach((v) => io.observe(v));
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) videos.forEach((v) => v.pause());
+  onPagePause((paused) => {
+    if (paused) {
+      videos.forEach((v) => {
+        if (!v.paused) v.pause();
+      });
+    } else {
+      visible.forEach((v) => playVideo(v));
+    }
   });
 }

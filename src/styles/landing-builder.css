@@ -451,14 +451,13 @@ html {
   height: 26px;
   z-index: 6;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.06) 45%, rgba(255, 255, 255, 0.22)),
-    rgba(248, 244, 232, 0.28);
-  backdrop-filter: blur(1.5px) saturate(1.05) brightness(1.03);
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.05) brightness(1.03);
-  border-left: 1px solid rgba(255, 255, 255, 0.35);
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 1px 2px rgba(40, 30, 10, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.25);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.28)),
+    rgba(248, 244, 232, 0.42);
+  border-left: 1px solid rgba(255, 255, 255, 0.38);
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 2px rgba(40, 30, 10, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.3);
   filter: url(#lbTapeEdge);
+  contain: layout style;
   pointer-events: none;
 }
 .lb-root .tape::after {
@@ -674,6 +673,8 @@ html {
   background: var(--paper-band);
   filter: url(#lbRoughBand);
   box-shadow: 0 -1px 1px rgba(255, 255, 255, 0.6) inset, 0 10px 16px -12px rgba(60, 45, 18, 0.25);
+  contain: layout style;
+  transform: translateZ(0);
 }
 .lb-root .torn-divider.up .strip {
   background: var(--paper);
@@ -819,6 +820,8 @@ html {
   background: var(--card-2);
   filter: url(#lbDeckle);
   box-shadow: 0 20px 26px -22px rgba(40, 28, 10, 0.35);
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .lb-root .photo-card .frame {
   position: relative;
@@ -826,6 +829,8 @@ html {
   background: #fffdf6;
   padding: 14px 14px 18px;
   filter: url(#lbDeckle) drop-shadow(0 26px 28px rgba(40, 28, 10, 0.22));
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .lb-root .photo-card .frame img {
   display: block;
@@ -926,11 +931,18 @@ html {
   position: absolute;
   width: 18px;
   height: 14px;
+  opacity: 0.5;
+  animation: lbFloat 15s ease-in-out infinite;
+  will-change: transform;
+}
+.lb-root .particle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: var(--card);
   filter: url(#lbRoughNote);
-  opacity: 0.5;
   box-shadow: 0 6px 8px -5px rgba(40, 30, 10, 0.25);
-  animation: lbFloat 15s ease-in-out infinite;
+  transform: translateZ(0);
 }
 @keyframes lbFloat {
   0%,
@@ -1374,8 +1386,10 @@ html {
   inset: 0;
   z-index: 0;
   background: var(--black);
-  filter: url(#lbRoughBand);
+  filter: url(#lbRoughCaso);
   box-shadow: 0 30px 36px -26px rgba(0, 0, 0, 0.5);
+  contain: layout style;
+  transform: translateZ(0);
 }
 .lb-root .caso::after {
   content: "";
@@ -1559,8 +1573,10 @@ html {
 .lb-root .big-blob {
   position: absolute;
   pointer-events: none;
-  will-change: transform;
   z-index: 0;
+}
+.lb-root .big-blob.is-visible {
+  will-change: transform;
 }
 .lb-root .big-blob img {
   width: 100%;
@@ -2258,6 +2274,8 @@ html.lb-introing .lb-intro {
   height: 3px;
   border-radius: 50%;
   background: rgba(255, 236, 180, 0.4);
+}
+html.lb-introing .lbi-dust span {
   animation: lbiDust 9s linear infinite;
 }
 .lbi-dust span:nth-child(1) { top: 18%; left: 14%; animation-delay: -1s; }
@@ -2381,6 +2399,8 @@ html.lb-introing .lb-intro {
 .lbi-arrow {
   width: 40px;
   color: var(--yellow-deep);
+}
+html.lb-introing .lbi-arrow {
   animation: lbiBounce 1.6s ease-in-out infinite;
 }
 @keyframes lbiBounce {
@@ -2585,6 +2605,8 @@ html.lb-introing .lb-intro {
   background: none;
   border: 0;
   cursor: pointer;
+}
+html.lb-introing .lbi-skip {
   animation: lbiSkip 2s ease-in-out infinite;
 }
 @keyframes lbiSkip {
@@ -2601,11 +2623,14 @@ html.lb-introing .lb-intro {
   left: 0;
   bottom: -1px;
   height: 3px;
-  width: 0;
+  width: 100%;
   background: linear-gradient(90deg, var(--yellow-2), var(--yellow));
   box-shadow: 0 1px 0 rgba(120, 100, 30, 0.3);
   z-index: 5;
   pointer-events: none;
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
 }
 
 /* ---------- Pestañas de libro ---------- */
@@ -3152,4 +3177,12 @@ html.lb-introing .lb-intro {
   .lb-root .hero-handwrite {
     font-size: 20px;
   }
+}
+
+/* Pause infinite decorative animations when offscreen or tab is hidden */
+.lb-root .lb-anim-paused,
+.lb-root .lb-anim-paused::after,
+.lb-root .lb-anim-paused .arr,
+.lb-root .lb-anim-paused svg {
+  animation-play-state: paused !important;
 }

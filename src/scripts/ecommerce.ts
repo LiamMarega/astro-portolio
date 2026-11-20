@@ -1,4 +1,4 @@
-import { initSmooth } from './smooth';
+import { initSmooth, isPagePaused, onPagePause } from './smooth';
 import { initNav, initAnchors } from './nav';
 import { initSky } from './sky';
 import { initReveal } from './reveal';
@@ -92,6 +92,29 @@ function initFaq() {
   });
 }
 
+/** Pause infinite CSS animations when sections are offscreen or the tab is hidden. */
+function initOffscreenPause() {
+  const els = $$('[data-pause-offscreen]');
+  if (!els.length) return;
+  const visible = new Set<Element>();
+  const sync = () => {
+    const paused = isPagePaused();
+    els.forEach((el) => el.classList.toggle('is-offscreen', paused || !visible.has(el)));
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      }
+      sync();
+    },
+    { rootMargin: '80px 0px' },
+  );
+  els.forEach((el) => io.observe(el));
+  onPagePause(sync);
+}
+
 const boot = () => {
   initSmooth();
   initNav();
@@ -102,6 +125,7 @@ const boot = () => {
   initKeycaps();
   initTags();
   initEcoHero();
+  initOffscreenPause();
   initPains();
   initSticky();
   initFaq();

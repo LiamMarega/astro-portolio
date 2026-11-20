@@ -65,11 +65,21 @@ export function initHero() {
   else setTimeout(warm, 1500);
 
   /* ── sky + tagline fade as you scroll away ── */
+  let lastSky = '';
+  let lastTag = '';
   onScroll((y, vh) => {
     const p = clamp(y / (vh * 0.34));
     const e = 1 - p * p * (3 - 2 * p);
-    sky?.style.setProperty('--sky-o', e.toFixed(3));
-    tagline.style.opacity = (1 - clamp(y / (vh * 0.22))).toFixed(3);
+    const skyVal = e.toFixed(3);
+    if (sky && skyVal !== lastSky) {
+      lastSky = skyVal;
+      sky.style.setProperty('--sky-o', skyVal);
+    }
+    const tagVal = (1 - clamp(y / (vh * 0.22))).toFixed(3);
+    if (tagVal !== lastTag) {
+      lastTag = tagVal;
+      tagline.style.opacity = tagVal;
+    }
   });
 
   /* ── replay the sunrise from the nav sun ── */

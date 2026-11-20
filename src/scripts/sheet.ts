@@ -8,6 +8,8 @@
  * mouse wheel is left alone so the page keeps scrolling.
  */
 
+import { isPagePaused, onPagePause } from './smooth';
+
 export interface SheetItem {
   src: string; // image, or poster when `video` is set
   video?: string;
@@ -59,6 +61,7 @@ const smooth = (e0: number, e1: number, v: number) => {
   const t = clamp((v - e0) / (e1 - e0), 0, 1);
   return t * t * (3 - 2 * t);
 };
+const springOut: [number, number] = [0, 0];
 const springTo = (value: number, velocity: number, target: number, dt: number, response: number, ratio: number) => {
   const omega = TAU / Math.max(response, 0.02);
   const sub = Math.max(1, Math.ceil(dt / (1 / 240)));
@@ -69,7 +72,9 @@ const springTo = (value: number, velocity: number, target: number, dt: number, r
     v += (omega * omega * (target - x) - 2 * ratio * omega * v) * h;
     x += v * h;
   }
-  return [x, v] as const;
+  springOut[0] = x;
+  springOut[1] = v;
+  return springOut;
 };
 const advance = (w: number, distance: number, rush: number) => {
   if (rush < 1e-3) return w * Math.exp(-distance);
@@ -194,6 +199,7 @@ interface Picture {
   used: number;
   inUse: boolean; // on a card that is in the stream
   wanted: boolean; // and visible enough to deserve live video frames
+  promoted: boolean; // whether video preload has been promoted to auto
   size: number; // biggest card currently showing it (video upload priority)
   lastUp: number;
 }
@@ -369,14 +375,18 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   const pictures: Picture[] = items.map((item) => {
     const video = !!item.video;
     const el = video ? document.createElement('video') : new Image();
-    const pic: Picture = { el, video, tex: makeTexture(), aspect: 1, ready: false, uploaded: false, dirty: false, fade: 0, used: -1, inUse: false, wanted: false, size: 0, lastUp: 0 };
+    const pic: Picture = { el, video, tex: makeTexture(), aspect: 1, ready: false, uploaded: false, dirty: false, fade: 0, used: -1, inUse: false, wanted: false, promoted: false, size: 0, lastUp: 0 };
     if (el instanceof HTMLVideoElement) {
       el.muted = true;
       el.loop = true;
       el.playsInline = true;
       el.setAttribute('playsinline', '');
-      el.preload = 'auto';
+      el.preload = 'metadata';
       el.style.cssText = 'display:block;width:2px;height:2px';
+      el.addEventListener('loadedmetadata', () => {
+        if (destroyed) return;
+        if (el.videoWidth && el.videoHeight) pic.aspect = el.videoWidth / el.videoHeight;
+      });
       el.addEventListener('loadeddata', () => {
         if (destroyed) return;
         pic.aspect = el.videoWidth / Math.max(el.videoHeight, 1);
@@ -450,6 +460,7 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   let openV = 0;
   let shownCaption = -1;
   let captionOpacity = -1;
+  let captionY = -1;
   let raf = 0;
   let last = 0;
   let visible = false;
@@ -457,7 +468,18 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   let held = false;
   let consumed = false;
   let clock = 0;
-  let order: Card[] = [];
+  const order: Card[] = [];
+  const draws: Card[] = [];
+  const onScreenBuf = new Uint8Array(pictures.length);
+  const dueBuf: Picture[] = [];
+  const byWDesc = (a: Card, b: Card) => b.w - a.w;
+  const lowEnd = typeof navigator !== 'undefined' && (navigator.hardwareConcurrency || 8) <= 4;
+  let rectLeft = 0;
+  let rectTop = 0;
+  let rectDirty = true;
+  const invalidateRect = () => {
+    rectDirty = true;
+  };
   let press: { id: number; x: number; y: number; moved: boolean; radius: number; angle: number; samples: { t: number; zoom: number; angle: number }[] } | null = null;
 
   let seed = (Math.random() * 4294967296) | 0;
@@ -475,13 +497,15 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   const aspectOf = (card: Card) => clamp(pictures[card.image]?.aspect ?? AREF, 0.55, 1.9);
 
   const readSize = () => {
+    rectDirty = true;
     const w = Math.round(root.clientWidth);
     const h = Math.round(root.clientHeight);
     if (w < 2 || h < 2) {
       sized = false;
       return false;
     }
-    const d = Math.min(window.devicePixelRatio || 1, Math.max(o.dpr, 0.5));
+    const maxDpr = Math.max(lowEnd ? Math.min(o.dpr, 1.5) : o.dpr, 0.5);
+    const d = Math.min(window.devicePixelRatio || 1, maxDpr);
     if (sized && w === width && h === height && d === dpr) return false;
     sized = true;
     width = w;
@@ -496,16 +520,16 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   const pickImage = () => {
     const n = pictures.length;
     if (!n) return 0;
-    const onScreen = new Uint8Array(n);
+    onScreenBuf.fill(0);
     for (let i = 0; i < count(); i++) {
       const c = cards[i];
-      if (c.shown && c.image < n) onScreen[c.image] += 1;
+      if (c.shown && c.image < n) onScreenBuf[c.image] += 1;
     }
     let best = 0;
     let score = Infinity;
     for (let k = 0; k < n; k++) {
       const p = pictures[k];
-      const s = onScreen[k] * 1000 + p.used + random() * 0.5 + (p.ready ? 0 : 500);
+      const s = onScreenBuf[k] * 1000 + p.used + random() * 0.5 + (p.ready ? 0 : 500);
       if (s < score) {
         score = s;
         best = k;
@@ -585,7 +609,7 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   };
 
   const schedule = () => {
-    if (destroyed || lost || !visible || raf) return;
+    if (destroyed || lost || !visible || isPagePaused() || raf) return;
     raf = requestAnimationFrame(frame);
   };
 
@@ -668,11 +692,17 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
     }
     tick++;
     const now = performance.now();
-    const due: Picture[] = [];
+    const paused = isPagePaused();
+    dueBuf.length = 0;
     for (const p of pictures) {
       if (!p.video) continue;
       const v = p.el as HTMLVideoElement;
-      if (p.wanted && visible && !o.reduced) {
+      if (p.inUse && visible && !paused && !p.promoted) {
+        p.promoted = true;
+        v.preload = 'auto';
+        if (v.readyState < 2) v.load();
+      }
+      if (p.wanted && visible && !paused && !o.reduced) {
         if (v.paused) v.play().catch(() => {});
       } else if (!v.paused) v.pause();
       if (!p.ready || v.readyState < 2) continue;
@@ -687,11 +717,15 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
       }
       if (!p.wanted) continue;
       busy = true;
-      if (p.dirty || (!('requestVideoFrameCallback' in v) && !v.paused && tick % 2 === 0)) due.push(p);
+      if (p.dirty || (!('requestVideoFrameCallback' in v) && !v.paused && tick % 2 === 0)) dueBuf.push(p);
     }
     const focusPic = openId >= 0 ? pictures[cards[openId].image] : null;
-    due.sort((a, b) => (b === focusPic ? 1e12 : b.size * (now - b.lastUp)) - (a === focusPic ? 1e12 : a.size * (now - a.lastUp)));
-    for (const p of due.slice(0, VIDEO_BUDGET)) {
+    if (dueBuf.length > 1) {
+      dueBuf.sort((a, b) => (b === focusPic ? 1e12 : b.size * (now - b.lastUp)) - (a === focusPic ? 1e12 : a.size * (now - a.lastUp)));
+    }
+    const limit = Math.min(dueBuf.length, VIDEO_BUDGET);
+    for (let i = 0; i < limit; i++) {
+      const p = dueBuf[i];
       upload(p, false);
       p.dirty = false;
     }
@@ -700,7 +734,7 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
 
   function frame(time: number) {
     raf = 0;
-    if (destroyed || lost) return;
+    if (destroyed || lost || !visible || isPagePaused()) return;
     if (!sized) {
       readSize();
       if (!sized) return;
@@ -711,7 +745,6 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
     const reduced = o.reduced;
     let busy = false;
 
-    readSize();
     if (!seeded) seedStream();
 
     const active = count();
@@ -812,7 +845,9 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
       card.alpha = (p ? p.fade : 0) * giant;
     }
 
-    order = cards.slice(0, active).sort((a, b) => b.w - a.w);
+    order.length = active;
+    for (let i = 0; i < active; i++) order[i] = cards[i];
+    order.sort(byWDesc);
     if (pointerInside && !press) refreshHover();
 
     const focus = openId >= 0 ? cards[openId] : null;
@@ -830,11 +865,12 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
     gl.uniform1f(u.shadow, clamp(o.shadow, 0, 1));
     gl.activeTexture(gl.TEXTURE0);
 
-    const draws = [...order];
-    if (focus) {
-      draws.splice(draws.indexOf(focus), 1);
-      draws.push(focus);
+    draws.length = 0;
+    for (let i = 0; i < order.length; i++) {
+      const c = order[i];
+      if (c !== focus) draws.push(c);
     }
+    if (focus) draws.push(focus);
     for (const card of draws) {
       const isFocus = card === focus;
       let x = card.x;
@@ -904,12 +940,13 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
       cap.subtitle.textContent = item?.subtitle ?? '';
       cap.subtitle.style.display = item?.subtitle ? '' : 'none';
     }
-    cap.box.style.top = `${(rect.y + rect.h / 2 + 22).toFixed(1)}px`;
     const opacity = smooth(0.55, 1, ease);
-    if (Math.abs(opacity - captionOpacity) > 0.002) {
+    const y = rect.y + rect.h / 2 + 22 + (1 - opacity) * 8;
+    if (Math.abs(opacity - captionOpacity) > 0.002 || Math.abs(y - captionY) > 0.05) {
       captionOpacity = opacity;
+      captionY = y;
       cap.box.style.opacity = opacity.toFixed(3);
-      cap.box.style.transform = `translate3d(0, ${((1 - opacity) * 8).toFixed(2)}px, 0)`;
+      cap.box.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
     }
   }
 
@@ -941,8 +978,13 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   }
 
   const local = (e: PointerEvent | MouseEvent) => {
-    const r = root.getBoundingClientRect();
-    return { x: e.clientX - r.left, y: e.clientY - r.top };
+    if (rectDirty) {
+      const r = root.getBoundingClientRect();
+      rectLeft = r.left;
+      rectTop = r.top;
+      rectDirty = false;
+    }
+    return { x: e.clientX - rectLeft, y: e.clientY - rectTop };
   };
 
   const onMove = (e: PointerEvent) => {
@@ -1078,11 +1120,13 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
     ([entry]) => {
       visible = entry.isIntersecting;
       if (visible) {
+        rectDirty = true;
         last = 0;
         schedule();
       } else {
         if (raf) cancelAnimationFrame(raf);
         raf = 0;
+        last = 0;
         for (const p of pictures) if (p.video) (p.el as HTMLVideoElement).pause();
       }
     },
@@ -1090,12 +1134,22 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
   );
   io.observe(root);
 
-  const onVisibility = () => {
-    if (document.hidden) {
+  window.addEventListener('scroll', invalidateRect, { passive: true });
+  window.addEventListener('resize', invalidateRect, { passive: true });
+  stage.addEventListener('pointerenter', invalidateRect, { passive: true });
+
+  const unsubPause = onPagePause((paused) => {
+    if (paused) {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      last = 0;
       for (const p of pictures) if (p.video) (p.el as HTMLVideoElement).pause();
-    } else schedule();
-  };
-  document.addEventListener('visibilitychange', onVisibility);
+    } else {
+      rectDirty = true;
+      last = 0;
+      schedule();
+    }
+  });
 
   const onLost = (e: Event) => {
     e.preventDefault();
@@ -1114,9 +1168,12 @@ export function createSheet(dom: SheetDom, items: SheetItem[], options: SheetOpt
     destroy: () => {
       destroyed = true;
       if (raf) cancelAnimationFrame(raf);
+      unsubPause();
       io.disconnect();
       resizer.disconnect();
-      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('scroll', invalidateRect);
+      window.removeEventListener('resize', invalidateRect);
+      stage.removeEventListener('pointerenter', invalidateRect);
       stage.removeEventListener('pointerdown', onDown);
       stage.removeEventListener('pointermove', onMove);
       stage.removeEventListener('pointerup', finish);

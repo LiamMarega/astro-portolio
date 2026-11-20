@@ -103,6 +103,7 @@ const {
     display: flex;
     justify-content: center;
     pointer-events: none;
+    contain: layout style;
   }
 
   .nav__pill {
@@ -231,7 +232,7 @@ const {
     left: 0;
     height: calc(var(--h) - var(--pad) * 2);
     width: var(--ind-w, 58px);
-    transform: translateX(var(--ind-x, 40px));
+    transform: translate3d(var(--ind-x, 40px), 0, 0);
     border-radius: 999px;
     background: var(--sun-pill);
     transition:

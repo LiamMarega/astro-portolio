@@ -12,7 +12,7 @@ const [creative, sell, ops] = m.pillars;
 const rows = [78, 54, 66, 40];
 ---
 
-<section class="esec emethod" aria-labelledby="method-title">
+<section class="esec emethod" data-pause-offscreen aria-labelledby="method-title">
   <SectionHead note={m.note} title={m.title} id="method-title" />
   <p class="emethod__intro" data-fade>
     {intro[0]}<b class="emethod__name">{intro[1]}</b>{intro[2]}
@@ -75,6 +75,9 @@ const rows = [78, 54, 66, 40];
 </section>
 
 <style>
+  .emethod {
+    contain: layout style;
+  }
   .emethod__intro {
     max-width: 40em;
     margin-top: clamp(18px, 2vw, 32px);
@@ -360,6 +363,10 @@ const rows = [78, 54, 66, 40];
       height: auto;
       aspect-ratio: 1.6;
     }
+  }
+
+  .emethod.is-offscreen .flow__dot {
+    animation-play-state: paused;
   }
 
   @media (prefers-reduced-motion: reduce) {

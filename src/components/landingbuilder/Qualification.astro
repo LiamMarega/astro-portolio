@@ -1,6 +1,6 @@
 ---
 import BigBlob from "./BigBlob.astro";
-import QualForm from "./QualForm.tsx";
+import QualForm from "./QualForm.astro";
 ---
 
 <section id="calificar" class="block qual-block" style="padding-top:60px">
@@ -9,7 +9,8 @@ import QualForm from "./QualForm.tsx";
     parallax={0.22}
     rotate="170deg"
     flip
-    style="position:absolute;left:-160px;bottom:-80px;opacity:.5;filter:blur(2px);z-index:0"
+    blur="2px"
+    style="position:absolute;left:-160px;bottom:-80px;opacity:.5;z-index:0"
   />
   <div class="qual">
     <div class="qual-intro">
@@ -33,7 +34,7 @@ import QualForm from "./QualForm.tsx";
       </div>
     </div>
     <div class="qf-wrap reveal d2">
-      <QualForm client:visible />
+      <QualForm />
     </div>
   </div>
 </section>

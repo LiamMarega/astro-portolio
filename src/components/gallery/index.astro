@@ -101,6 +101,9 @@
             src="/images/gallery/3d-web.webp"
             alt="3D Web Experience"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
@@ -118,6 +121,9 @@
             src="/images/gallery/brand-identity.webp"
             alt="Brand Identity"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div class="card-overlay">
             <div class="card-content">
@@ -133,55 +139,60 @@
 </section>
 
 <script>
-  // Optimized scroll reveal with performance improvements
-  let isObserverActive = true;
+  const initGalleryReveal = () => {
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>(".project-card[data-reveal]"),
+    );
+    if (cards.length === 0) return;
 
-  const observerOptions = {
-    threshold: 0.15,
-    rootMargin: "0px 0px -100px 0px",
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    if (!isObserverActive) return;
-
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const element = entry.target as HTMLElement;
-        const delay = parseInt(element.dataset.delay || "0");
-
-        // Use requestAnimationFrame for smooth animations
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            element.classList.add("revealed");
-          }, delay);
-        });
-
-        // Stop observing once revealed to prevent re-triggering
-        observer.unobserve(element);
-      }
-    });
-  }, observerOptions);
-
-  // Initialize when DOM is ready
-  document.addEventListener("DOMContentLoaded", () => {
-    const cards = document.querySelectorAll(".project-card[data-reveal]");
-
-    // Only observe if cards exist
-    if (cards.length > 0) {
-      cards.forEach((card) => observer.observe(card));
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      cards.forEach((card) => card.classList.add("revealed"));
+      return;
     }
 
-    // Cleanup observer when all cards are revealed
-    setTimeout(() => {
-      isObserverActive = false;
-    }, 3000); // Stop after 3 seconds max
-  });
+    let remaining = cards.length;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const element = entry.target as HTMLElement;
+          const delay = parseInt(element.dataset.delay || "0", 10);
 
-  // Cleanup on page unload
-  window.addEventListener("beforeunload", () => {
-    observer.disconnect();
-    isObserverActive = false;
-  });
+          observer.unobserve(element);
+          remaining -= 1;
+
+          requestAnimationFrame(() => {
+            if (delay > 0) {
+              setTimeout(() => {
+                element.classList.add("revealed");
+              }, delay);
+            } else {
+              element.classList.add("revealed");
+            }
+          });
+
+          if (remaining <= 0) {
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -100px 0px",
+      },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    window.addEventListener("pagehide", () => observer.disconnect(), { once: true });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initGalleryReveal, { once: true });
+  } else {
+    initGalleryReveal();
+  }
 </script>
 
 <style is:global>
@@ -235,7 +246,7 @@
     overflow: hidden;
     background: #1a1a1a;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0;
     transform: translateY(30px) scale(0.98);
     will-change: transform, opacity;
@@ -282,7 +293,7 @@
     padding: 1.5rem; /* Reduced padding */
     transform: translateY(15px); /* Reduced movement */
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); /* Faster transition */
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1); /* Compositor-only transition */
   }
 
   .project-card:hover .card-overlay {
@@ -314,7 +325,7 @@
     padding: 0.4rem 0.8rem; /* Reduced padding */
     border: 1px solid #eaff00;
     border-radius: 20px; /* Reduced radius */
-    transition: all 0.25s ease; /* Faster transition */
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
     background: rgba(0, 198, 255, 0.1);
     backdrop-filter: blur(8px); /* Reduced blur */
   }

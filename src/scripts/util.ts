@@ -38,9 +38,11 @@ export const refreshScroll = queue;
 export function draw(svg: Element | null, on = true) {
   if (!svg) return;
   if (on) {
-    svg.classList.remove('is-drawn');
-    // force style flush so the strokes restart from hidden
-    void (svg as SVGElement).getBoundingClientRect();
+    if (svg.classList.contains('is-drawn')) {
+      svg.classList.remove('is-drawn');
+      // force style flush so the strokes restart from hidden
+      void (svg as SVGElement).getBoundingClientRect();
+    }
     requestAnimationFrame(() => svg.classList.add('is-drawn'));
   } else {
     svg.classList.remove('is-drawn');

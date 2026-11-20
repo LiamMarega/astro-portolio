@@ -106,23 +106,30 @@ const jsonLd = legacyPageGraph(lang, {
     ::selection {
       background: rgba(226, 255, 0, 0.3);
     }
-    html {
-      scroll-behavior: smooth;
-    }
     body {
       font-family: "HelveticaNeue", "HelveticaNeue Fallback", system-ui, sans-serif;
     }
 
-    /* Glow pulse animation for Working on section */
+    /* Glow pulse animation for Working on section (GPU-composited opacity on ::after) */
     @keyframes glow-pulse {
       0%, 100% {
-        box-shadow: 0 0 20px rgba(226, 255, 0, 0.08);
+        opacity: 0.4;
       }
       50% {
-        box-shadow: 0 0 28px rgba(226, 255, 0, 0.2);
+        opacity: 1;
       }
     }
     .animate-glow-pulse {
+      position: relative;
+    }
+    .animate-glow-pulse::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: 0 0 28px rgba(226, 255, 0, 0.2);
+      will-change: opacity;
       animation: glow-pulse 3s ease-in-out infinite;
     }
 
@@ -138,12 +145,41 @@ const jsonLd = legacyPageGraph(lang, {
   </style>
 
   <script>
+    import gsap from "gsap";
     import Lenis from "lenis";
-    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    import ScrollTrigger from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+
+      let rafId = 0;
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+
+      const start = () => {
+        if (!rafId) rafId = requestAnimationFrame(raf);
+      };
+      const stop = () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      };
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          stop();
+        } else {
+          start();
+        }
+      });
+
+      if (!document.hidden) start();
     }
-    requestAnimationFrame(raf);
   </script>
 </html>
